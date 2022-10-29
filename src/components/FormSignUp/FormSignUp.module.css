@@ -1,0 +1,89 @@
+.svg {
+  width: 160px;
+  height: 160px;
+  margin: 0 auto;
+}
+
+.svg path:last-child {
+  fill: var(--blue-li);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: 15px;
+  text-align: center;
+  margin: 170px auto 50px;
+  width: 100%;
+  max-width: 360px;
+  padding: 30px;
+}
+.head {
+  margin-top: 30px;
+  font-size: 30px;
+  cursor: default;
+}
+.text {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--gray-li);
+  cursor: default;
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  gap: 30px;
+}
+
+.button {
+  padding: 18px 0;
+  font-size: 17px;
+  font-weight: 600;
+  color: #fff;
+  background-color: var(--blue-li);
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.button:hover {
+  transition: all 0.3s;
+  background-color: var(--blue-dark-li);
+}
+
+.errorInput {
+  border-color: var(--error);
+}
+.error {
+  font-size: 13px;
+  margin-top: -20px;
+  color: var(--error);
+}
+.link {
+  font-size: 14px;
+  margin-top: -15px;
+  color: var(--gray-li);
+  cursor: default;
+  pointer-events: none;
+}
+.reg {
+  color: var(--blue-li);
+  cursor: pointer;
+  pointer-events: all;
+}
+
+@media screen and (max-width: 1000px) {
+  .form {
+    margin-top: 100px;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .form {
+    margin-top: 50px;
+  }
+}

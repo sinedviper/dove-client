@@ -1,26 +1,40 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2016",
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
-    "allowJs": true,
+    "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
+    "strictPropertyInitialization": false,
     "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "preserve",
+    "noImplicitAny": false,
+    "incremental": true,
+    "baseUrl": "src",
+    "paths": {
+      "components":["components"],
+      "assets":["assets"],
+      "hooks":["hooks"],
+      "interface":["interface"],
+      "page":["page"],
+      "store":["store"],
+      "pages-components":["pages-components"],
+    },
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
   },
   "include": [
-    "src"
+    "./src"
   ]
 }
