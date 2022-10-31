@@ -1,5 +1,5 @@
 :root {
-  --light-li: #e7ebf0;
+  --light-li: #f0f0f0;
   --dark-li: #222;
   --gray-li: #999;
   --blue-li: #3390ec;
@@ -21,6 +21,12 @@
   text-decoration: none;
   list-style: none;
   font-family: "Roboto", sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
 }
 
 body {

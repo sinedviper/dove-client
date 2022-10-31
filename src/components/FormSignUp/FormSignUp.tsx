@@ -116,7 +116,7 @@ export const FormSignUp = ({
         <input type='submit' value={"Sign Up"} className={styles.button} />
         <p className={styles.link}>
           <span className={styles.reg} onClick={() => navigate("/login")}>
-            HERE LOGIN
+            LOGIN
           </span>
         </p>
       </form>

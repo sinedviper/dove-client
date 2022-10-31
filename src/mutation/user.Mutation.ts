@@ -29,6 +29,7 @@ export const loginUser = gql`
   mutation loginUser($input: LoginInput!) {
     loginUser(input: $input) {
       status
+      message
       access_token
     }
   }

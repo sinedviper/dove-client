@@ -22,6 +22,7 @@ export const Input = forwardRef(
           })}
         >
           {placeholderName}
+          {error && " Invalid"}
         </label>
         <input
           className={cn(className, styles.input, {
@@ -29,13 +30,9 @@ export const Input = forwardRef(
             [styles.error]: error == true,
           })}
           ref={ref}
-          onFocus={() => setType(true)}
+          onFocus={(e) => setType(true)}
           value={value}
-          onBlurCapture={() => {
-            if (value == "") {
-              setType(false);
-            }
-          }}
+          onBlurCapture={() => setType(false)}
           {...props}
           onChange={(e) => {
             setValue(e.target.value);

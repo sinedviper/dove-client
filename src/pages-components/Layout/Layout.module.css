@@ -1,4 +1,179 @@
 .main {
   width: 100%;
   height: 100%;
+  display: flex;
+}
+
+.chatWrapper {
+  position: relative;
+  width: 625px;
+  height: 100vh;
+  border-right: 1px solid var(--gray-li);
+}
+
+.menuWrapper {
+  padding: 10px 15px;
+  border-bottom: 1px solid var(--gray-li);
+  display: flex;
+}
+.menu {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background-color: inherit;
+  transition: all 0.3s;
+  position: relative;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.menu:hover {
+  transition: all 0.3s;
+  background-color: var(--light-li);
+}
+
+.line {
+  pointer-events: none;
+  width: 20px;
+  height: 2.5px;
+  border-radius: 30px;
+  background-color: var(--gray-li);
+  display: block;
+  position: absolute;
+  top: 13px;
+  left: 10px;
+}
+
+.line::after {
+  pointer-events: none;
+  position: absolute;
+  top: 10px;
+  content: "";
+  width: 20px;
+  height: 2.5px;
+  border-radius: 30px;
+  background-color: var(--gray-li);
+  display: block;
+}
+
+.line::before {
+  pointer-events: none;
+  position: absolute;
+  top: 5px;
+  content: "";
+  width: 20px;
+  height: 2.5px;
+  border-radius: 30px;
+  background-color: var(--gray-li);
+  display: block;
+}
+
+.search {
+  border-radius: 40px;
+  border: 1px solid var(--gray-li);
+  padding: 9px 45px;
+  width: 85%;
+  font-size: 16px;
+  color: var(--dark-gray-da);
+  transition: all 0.3s;
+}
+
+.search:hover {
+  transition: all 0.3s;
+  border: 1px solid var(--dark-gray-da);
+}
+
+.search:focus {
+  transition: all 0.3s;
+  border: 1px solid var(--blue-li);
+  outline: 1px solid var(--blue-li);
+}
+
+.serchWrapper {
+  position: relative;
+}
+
+.iconSearch {
+  position: absolute;
+  top: 8px;
+  left: 14px;
+  width: 24px;
+  height: 24px;
+  fill: var(--gray-li);
+  transition: all 0.3s;
+}
+
+.focusSearch {
+  transition: all 0.3s;
+  fill: var(--blue-li);
+}
+
+.iconRemove {
+  width: 30px;
+  height: 30px;
+  fill: var(--blue-li);
+  pointer-events: none;
+}
+
+.buttonRemove {
+  opacity: 0;
+  padding: 2.5px;
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  top: 1px;
+  right: -48px;
+  border: none;
+  cursor: pointer;
+  background: none;
+  border-radius: 50%;
+}
+
+.buttonRemove:hover {
+  background-color: rgba(51, 144, 236, 0.3);
+}
+
+.focusRemove {
+  opacity: 1;
+}
+
+.contactsList {
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.contacts {
+  width: 100%;
+  height: 75px;
+  border-radius: 15px;
+  transition: all 0.3s;
+  display: flex;
+  cursor: pointer;
+  justify-content: left;
+  align-items: center;
+}
+
+.contacts:hover {
+  transition: all 0.3s;
+  background-color: var(--light-li);
+}
+
+.contactsPhoto {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-left: 10px;
+  background: linear-gradient(var(--blue-li), var(--blue-dark-li));
+}
+
+.contactsPhoto span {
+  display: block;
+  color: var(--light-li);
+  font-weight: 600;
 }

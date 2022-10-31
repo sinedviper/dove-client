@@ -16,10 +16,11 @@ import {
   REGISTER,
 } from "redux-persist";
 
-import { userReducer } from "./features";
+import { contactReducer, userReducer } from "./features";
 
 const reducer = combineReducers({
   user: userReducer,
+  contacts: contactReducer,
 });
 
 const persistConfig = {

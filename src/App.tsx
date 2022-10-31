@@ -1,12 +1,16 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 import { LoginPage, SignUpPage } from "page";
 import { Home, Layout } from "pages-components";
 
+import "react-toastify/dist/ReactToastify.css";
+
 function App(): JSX.Element {
   return (
     <>
+      <ToastContainer />
       <Router>
         <Routes>
           <Route path='/' element={<Layout />}>
