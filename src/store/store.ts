@@ -16,11 +16,12 @@ import {
   REGISTER,
 } from "redux-persist";
 
-import { contactReducer, userReducer } from "./features";
+import { chatsReducer, contactReducer, userReducer } from "./features";
 
 const reducer = combineReducers({
   user: userReducer,
   contacts: contactReducer,
+  chats: chatsReducer,
 });
 
 const persistConfig = {

@@ -8,12 +8,12 @@
   position: relative;
   width: 625px;
   height: 100vh;
-  border-right: 1px solid var(--gray-li);
+  border-right: 1px solid var(--gray-light);
 }
 
 .menuWrapper {
-  padding: 10px 15px;
-  border-bottom: 1px solid var(--gray-li);
+  padding: 8px 15px;
+  border-bottom: 1px solid var(--gray-light);
   display: flex;
 }
 .menu {
@@ -24,25 +24,25 @@
   background-color: inherit;
   transition: all 0.3s;
   position: relative;
-  margin-right: 10px;
+  margin-right: 7px;
   cursor: pointer;
 }
 
 .menu:hover {
   transition: all 0.3s;
-  background-color: var(--light-li);
+  background-color: var(--light);
 }
 
 .line {
   pointer-events: none;
-  width: 20px;
-  height: 2.5px;
+  width: 18px;
+  height: 2px;
   border-radius: 30px;
-  background-color: var(--gray-li);
+  background-color: var(--gray);
   display: block;
   position: absolute;
-  top: 13px;
-  left: 10px;
+  top: 14px;
+  left: 11px;
 }
 
 .line::after {
@@ -50,10 +50,10 @@
   position: absolute;
   top: 10px;
   content: "";
-  width: 20px;
-  height: 2.5px;
+  width: 18px;
+  height: 2px;
   border-radius: 30px;
-  background-color: var(--gray-li);
+  background-color: var(--gray);
   display: block;
 }
 
@@ -62,32 +62,32 @@
   position: absolute;
   top: 5px;
   content: "";
-  width: 20px;
-  height: 2.5px;
+  width: 18px;
+  height: 2px;
   border-radius: 30px;
-  background-color: var(--gray-li);
+  background-color: var(--gray);
   display: block;
 }
 
 .search {
   border-radius: 40px;
-  border: 1px solid var(--gray-li);
-  padding: 9px 45px;
+  border: 1px solid var(--gray-light);
+  padding: 11px 45px;
   width: 85%;
   font-size: 16px;
-  color: var(--dark-gray-da);
+  color: var(--dark);
   transition: all 0.3s;
 }
 
 .search:hover {
   transition: all 0.3s;
-  border: 1px solid var(--dark-gray-da);
+  border: 1px solid var(--gray-dark);
 }
 
 .search:focus {
   transition: all 0.3s;
-  border: 1px solid var(--blue-li);
-  outline: 1px solid var(--blue-li);
+  border: 1px solid var(--blue);
+  outline: 1px solid var(--blue);
 }
 
 .serchWrapper {
@@ -100,19 +100,19 @@
   left: 14px;
   width: 24px;
   height: 24px;
-  fill: var(--gray-li);
+  fill: var(--gray-dark);
   transition: all 0.3s;
 }
 
 .focusSearch {
   transition: all 0.3s;
-  fill: var(--blue-li);
+  fill: var(--blue);
 }
 
 .iconRemove {
   width: 30px;
   height: 30px;
-  fill: var(--blue-li);
+  fill: var(--blue);
   pointer-events: none;
 }
 
@@ -158,7 +158,21 @@
 
 .contacts:hover {
   transition: all 0.3s;
-  background-color: var(--light-li);
+  background-color: var(--light);
+}
+
+.contactActive {
+  transition: all 0.3s;
+  color: white;
+  background-color: var(--blue);
+}
+.contactActive span {
+  color: white;
+}
+.contactActive:hover {
+  transition: all 0.3s;
+  color: white;
+  background-color: var(--blue);
 }
 
 .contactsPhoto {
@@ -169,11 +183,43 @@
   height: 50px;
   border-radius: 50%;
   margin-left: 10px;
-  background: linear-gradient(var(--blue-li), var(--blue-dark-li));
+  background: linear-gradient(rgb(100, 2, 165), rgb(58, 23, 185));
 }
 
 .contactsPhoto span {
   display: block;
-  color: var(--light-li);
+  color: var(--light);
   font-weight: 600;
+}
+
+.contactInfo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-left: 5px;
+  width: 300px;
+}
+
+.contactName {
+  font-weight: 600;
+  padding: 0 5px 0 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.contactMessage {
+  margin-top: 5px;
+  color: var(--gray);
+  padding: 0 5px 0 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.contactDate {
+  position: absolute;
+  right: -30px;
+  font-size: 12px;
+  color: var(--gray);
 }

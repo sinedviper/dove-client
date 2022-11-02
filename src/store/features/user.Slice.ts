@@ -3,11 +3,10 @@ import { client } from "index";
 
 import { IUserResponse } from "interface";
 import { getMe } from "mutation";
+import { RootState } from "store";
 
 export const loadUser = createAsyncThunk("@@user/load-user", async () => {
-  let data: any = await client.query({ query: getMe });
-  let dataSet = data.data.getMe;
-  return dataSet;
+  return await client.query({ query: getMe }).then((res) => res.data.getMe);
 });
 
 interface IUserState {
@@ -45,4 +44,4 @@ export const userReducer = userSlice.reducer;
 
 export const { logout } = userSlice.actions;
 
-export const getUser = (state) => state.user?.user;
+export const getUser = (state: RootState) => state.user.user;

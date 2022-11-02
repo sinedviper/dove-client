@@ -6,21 +6,27 @@ import { toast } from "react-toastify";
 
 import { LayoutProps } from "./Layout.props";
 import { useAppDispatch, useAppSelector } from "hooks";
-import { getContacts, getUser, loadContacts } from "store";
+import { getChat, getContacts, getUser, loadChats, loadContacts } from "store";
 import { RemoveIcon, SearchIcon } from "assets";
-import { IUser } from "interface";
+import { IChat, IChatResponse, IUser } from "interface";
 
 import styles from "./Layout.module.css";
+import { formateDate } from "helpers";
 
 export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   const [focus, setFocus] = useState<boolean>(false);
+  const [click, setClick] = useState<boolean>(false);
   const [value, setValue] = useState<string>("");
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const user = useAppSelector(getUser);
-  const { data, message, status } = useAppSelector(getContacts);
-  const token = localStorage.getItem("token");
+  const chats: IChatResponse | null = useAppSelector(getChat);
+  const token: string | null = localStorage.getItem("token");
+
+  const handleFocus = () => {
+    setClick(!click);
+  };
 
   useEffect(() => {
     if (user != null) {
@@ -30,10 +36,12 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
 
   useEffect(() => {
     dispatch(loadContacts());
-    if (status === "Invallid") {
-      toast.error(message);
-    }
-  }, [data]);
+    dispatch(loadChats());
+    if (chats)
+      if (chats.status === "Invalid") {
+        toast.error(chats.message);
+      }
+  }, []);
 
   if (!token) {
     return <Navigate to='login' />;
@@ -72,19 +80,30 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
           </div>
         </nav>
         <ul className={styles.contactsList}>
-          {data.map((contact: IUser) => (
-            <li key={contact.id} className={styles.contacts} onFocus={() => {}}>
+          {chats?.data.map((contact: IChat) => (
+            <li
+              key={contact.id}
+              className={cn(styles.contacts, {
+                [styles.contactActive]: click === true,
+              })}
+              onClick={handleFocus}
+            >
               <div className={styles.contactsPhoto}>
                 <span>
-                  {contact.name.toUpperCase().split("")[0] +
-                    contact.surname.toUpperCase().split("")[0]}
+                  {contact.user.name.toUpperCase().split("")[0] +
+                    contact.user.surname.toUpperCase().split("")[0]}
                 </span>
               </div>
               <div className={styles.contactInfo}>
                 <span className={styles.contactName}>
-                  {contact.name} {contact.surname}
+                  {contact.user.name} {contact.user.surname}
                 </span>
-                <span className={styles.contactMessage}>...</span>
+                <span className={styles.contactMessage}>
+                  {contact.lastMessage.text}
+                </span>
+                <span className={styles.contactDate}>
+                  {formateDate(new Date(contact.lastMessage.createdAt))}
+                </span>
               </div>
             </li>
           ))}

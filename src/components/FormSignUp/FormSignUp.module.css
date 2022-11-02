@@ -5,7 +5,7 @@
 }
 
 .svg path:last-child {
-  fill: var(--blue-li);
+  fill: var(--blue);
 }
 
 .form {
@@ -27,7 +27,7 @@
 .text {
   font-size: 15px;
   line-height: 1.5;
-  color: var(--gray-li);
+  color: var(--gray);
   cursor: default;
 }
 
@@ -43,7 +43,7 @@
   font-size: 17px;
   font-weight: 600;
   color: #fff;
-  background-color: var(--blue-li);
+  background-color: var(--blue);
   border-radius: 10px;
   border: none;
   cursor: pointer;
@@ -52,7 +52,7 @@
 
 .button:hover {
   transition: all 0.3s;
-  background-color: var(--blue-dark-li);
+  background-color: var(--blue-dark);
 }
 
 .errorInput {
@@ -66,12 +66,12 @@
 .link {
   font-size: 14px;
   margin-top: -15px;
-  color: var(--gray-li);
+  color: var(--gray);
   cursor: default;
   pointer-events: none;
 }
 .reg {
-  color: var(--blue-li);
+  color: var(--blue);
   cursor: pointer;
   pointer-events: all;
 }

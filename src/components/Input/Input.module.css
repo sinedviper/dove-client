@@ -4,7 +4,7 @@
 
 .placeholder {
   position: absolute;
-  color: var(--gray-li);
+  color: var(--gray);
   font-size: 13px;
   cursor: text;
   top: -8px;
@@ -17,7 +17,7 @@
 }
 
 .labelOn {
-  color: var(--blue-li);
+  color: var(--blue);
   transition: all 0.1s;
   font-weight: 600;
 }
@@ -31,18 +31,18 @@
   text-indent: 15px;
   background: inherit;
   transition: all 0.1s;
-  border: 1px solid var(--gray-li);
+  border: 1px solid var(--gray);
 }
 
 .input:hover {
-  border: 1px solid var(--blue-li);
+  border: 1px solid var(--blue);
   transition: all 0.1s;
 }
 
 .input:focus {
   transition: all 0.1s;
-  border: 1px solid var(--blue-li);
-  outline: var(--blue-li) solid 1px;
+  border: 1px solid var(--blue);
+  outline: var(--blue) solid 1px;
 }
 
 .error {

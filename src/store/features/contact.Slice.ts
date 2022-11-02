@@ -3,14 +3,14 @@ import { client } from "index";
 
 import { IContactResponse } from "interface";
 import { getContact } from "mutation";
+import { RootState } from "store";
 
 export const loadContacts = createAsyncThunk(
   "@@contacts/load-contacts",
   async () => {
-    let data: any = await client
+    return await client
       .query({ query: getContact })
       .then((res) => res.data.getContacts);
-    return data;
   }
 );
 
@@ -49,4 +49,4 @@ export const contactReducer = contactsSlice.reducer;
 
 export const { actionClearContact } = contactsSlice.actions;
 
-export const getContacts = (state) => state.contacts.contacts;
+export const getContacts = (state: RootState) => state.contacts.contacts;
