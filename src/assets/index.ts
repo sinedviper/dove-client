@@ -1,7 +1,25 @@
 import { ReactComponent as Telegram } from "./telegram.svg";
 import { ReactComponent as Search } from "./search.svg";
 import { ReactComponent as Remove } from "./remove.svg";
+import { ReactComponent as Settings } from "./settings.svg";
+import { ReactComponent as Contacts } from "./contacts.svg";
+import { ReactComponent as Back } from "./back.svg";
+import { ReactComponent as Logout } from "./logout.svg";
+import { ReactComponent as Mail } from "./mail.svg";
+import { ReactComponent as Username } from "./username.svg";
+import { ReactComponent as Edit } from "./edit.svg";
+import { ReactComponent as EyeClose } from "./eyeClose.svg";
+import { ReactComponent as Eye } from "./eye.svg";
 
 export const TelegramIcon = Telegram;
 export const SearchIcon = Search;
 export const RemoveIcon = Remove;
+export const SettingsIcon = Settings;
+export const ContactsIcon = Contacts;
+export const BackIcon = Back;
+export const LogoutIcon = Logout;
+export const MailIcon = Mail;
+export const UsernameIcon = Username;
+export const EditIcon = Edit;
+export const EyeCloseIcon = EyeClose;
+export const EyeIcon = Eye;

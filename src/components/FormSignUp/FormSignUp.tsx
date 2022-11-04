@@ -10,6 +10,7 @@ import { client } from "index";
 import { signUp } from "mutation";
 
 import styles from "./FormSignUp.module.css";
+import { toast } from "react-toastify";
 
 interface IFormInput {
   name: string;
@@ -31,10 +32,17 @@ export const FormSignUp = ({
   } = useForm<IFormInput>();
 
   const onSubmit = async (input: IFormInput): Promise<void> => {
-    await client
+    const data = await client
       .mutate({ mutation: signUp, variables: { input } })
       .catch((err) => console.log(err));
-    navigate("login");
+
+    if (data?.data.signupUser.status === "Invalid") {
+      toast.error(data?.data.signupUser.message);
+    }
+    if (data?.data.signupUser.status === "Success") {
+      toast.success("Account created");
+      navigate("/login");
+    }
   };
 
   return (

@@ -1,0 +1,68 @@
+.search {
+  border-radius: 40px;
+  border: 1px solid var(--gray-light);
+  padding: 9px 45px;
+  width: 330px;
+  font-size: 16px;
+  color: var(--dark);
+  transition: all 0.3s;
+}
+
+.search:hover {
+  transition: all 0.3s;
+  border: 1px solid var(--gray-dark);
+}
+
+.search:focus {
+  transition: all 0.3s;
+  border: 1px solid var(--blue);
+  outline: 1px solid var(--blue);
+}
+
+.searchWrapper {
+  position: relative;
+}
+
+.iconSearch {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  width: 21px;
+  height: 21px;
+  fill: var(--gray-dark);
+  transition: all 0.3s;
+}
+
+.focusSearch {
+  transition: all 0.3s;
+  fill: var(--blue);
+}
+
+.iconRemove {
+  width: 30px;
+  height: 30px;
+  fill: var(--blue);
+  pointer-events: none;
+}
+
+.buttonRemove {
+  opacity: 0;
+  padding: 2.5px;
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  top: 2px;
+  right: 1px;
+  border: none;
+  cursor: pointer;
+  background: none;
+  border-radius: 50%;
+}
+
+.buttonRemove:hover {
+  background-color: rgba(51, 144, 236, 0.3);
+}
+
+.focusRemove {
+  opacity: 1;
+}

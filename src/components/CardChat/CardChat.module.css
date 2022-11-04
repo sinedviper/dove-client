@@ -1,0 +1,78 @@
+.contacts {
+  width: 100%;
+  height: 75px;
+  border-radius: 15px;
+  transition: all 0.3s;
+  display: flex;
+  cursor: pointer;
+  justify-content: left;
+  align-items: center;
+}
+
+.contacts:hover {
+  transition: all 0.3s;
+  background-color: var(--light);
+}
+
+.contactActive {
+  transition: all 0.3s;
+  color: white;
+  background-color: var(--blue);
+}
+.contactActive span {
+  color: white;
+}
+.contactActive:hover {
+  transition: all 0.3s;
+  color: white;
+  background-color: var(--blue);
+}
+
+.contactsPhoto {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-left: 10px;
+  background: linear-gradient(rgb(100, 2, 165), rgb(58, 23, 185));
+}
+
+.contactsPhoto span {
+  display: block;
+  color: var(--light);
+  font-weight: 600;
+}
+
+.contactInfo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-left: 5px;
+  width: 300px;
+}
+
+.contactName {
+  font-weight: 600;
+  padding: 0 5px 0 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.contactMessage {
+  margin-top: 5px;
+  color: var(--gray);
+  padding: 0 5px 0 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.contactDate {
+  position: absolute;
+  right: -30px;
+  font-size: 12px;
+  color: var(--gray);
+}

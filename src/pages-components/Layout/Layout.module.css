@@ -6,7 +6,9 @@
 
 .chatWrapper {
   position: relative;
-  width: 625px;
+  overflow: hidden;
+  max-width: 420px;
+  width: 100%;
   height: 100vh;
   border-right: 1px solid var(--gray-light);
 }
@@ -69,157 +71,327 @@
   display: block;
 }
 
-.search {
-  border-radius: 40px;
-  border: 1px solid var(--gray-light);
-  padding: 11px 45px;
-  width: 85%;
-  font-size: 16px;
-  color: var(--dark);
-  transition: all 0.3s;
+.contactsList {
+  padding: 5px 5px 0 5px;
+  height: 95vh;
+  overflow-y: hidden;
+}
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gray-light);
+  border-radius: 10px;
 }
 
-.search:hover {
-  transition: all 0.3s;
-  border: 1px solid var(--gray-dark);
+.swiper {
+  padding-right: 0px;
+  overflow-y: scroll;
 }
 
-.search:focus {
-  transition: all 0.3s;
-  border: 1px solid var(--blue);
-  outline: 1px solid var(--blue);
-}
-
-.serchWrapper {
-  position: relative;
-}
-
-.iconSearch {
+.menuClose {
+  display: flex;
+  flex-direction: column;
   position: absolute;
-  top: 8px;
-  left: 14px;
-  width: 24px;
-  height: 24px;
-  fill: var(--gray-dark);
-  transition: all 0.3s;
-}
-
-.focusSearch {
-  transition: all 0.3s;
-  fill: var(--blue);
-}
-
-.iconRemove {
-  width: 30px;
-  height: 30px;
-  fill: var(--blue);
-  pointer-events: none;
-}
-
-.buttonRemove {
+  z-index: -1;
+  width: 300px;
+  background-color: white;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  padding: 5px;
+  border-radius: 10px;
+  top: 55px;
+  left: 15px;
+  text-align: center;
   opacity: 0;
-  padding: 2.5px;
-  position: absolute;
-  width: 35px;
-  height: 35px;
-  top: 1px;
-  right: -48px;
-  border: none;
-  cursor: pointer;
-  background: none;
-  border-radius: 50%;
+  transition: all 0.2s;
+}
+.creator {
+  margin: 10px 0 5px;
+  font-size: 15px;
+  color: var(--gray);
 }
 
-.buttonRemove:hover {
-  background-color: rgba(51, 144, 236, 0.3);
-}
-
-.focusRemove {
+.menuOpen {
+  transition: all 0.2s;
+  z-index: 10;
   opacity: 1;
 }
 
-.contactsList {
-  padding: 5px;
+.menuCard {
+  background-color: white;
+  border: none;
+  padding: 5px 0;
+  cursor: pointer;
+  width: 100%;
+  color: var(--dark);
+  text-align: left;
+  transition: all 0.3s;
+  border-radius: 7px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.menuCard:hover {
+  transition: all 0.3s;
+  background-color: var(--light);
+}
+.cardIcon {
+  width: 23px;
+  height: 23px;
+  margin: 0 15px 0 13px;
+}
+
+.contact {
+  width: 22px;
+  height: 22px;
+}
+
+.logout {
+  width: 23px;
+  height: 21px;
+}
+
+.cardIcon path {
+  fill: var(--dark);
+}
+
+.contactsWrapper {
+  position: absolute;
+  top: 0;
+  left: 420px;
+  width: 420px;
+  height: 100vh;
+  background-color: white;
+  display: flex;
+  transition: all 0.3s;
+  z-index: -1;
+  display: flex;
+  flex-direction: column;
+}
+
+.contactWrapperOpen {
+  left: 0px;
+  z-index: 11;
+  transition: all 0.3s;
+}
+
+.contactSearch {
+  display: flex;
+  padding: 10px 15px 5px;
+}
+
+.back {
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  border-radius: 50%;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.back:hover {
+  transition: all 0.3s;
+  background-color: var(--light);
+}
+
+.back path {
+  fill: var(--gray);
+}
+
+.settingsWrapper {
+  position: absolute;
+  top: 0;
+  left: 425px;
+  width: 420px;
+  height: 100vh;
+  background-color: var(--light);
+  display: flex;
+  transition: all 0.3s;
+  z-index: -1;
+  display: flex;
+  flex-direction: column;
+}
+
+.settingsWrapperOpen {
+  left: 0px;
+  z-index: 11;
+  transition: all 0.3s;
+}
+
+.settingsHead {
+  display: flex;
+  padding: 5px 15px;
+  background-color: white;
+  justify-content: space-between;
+  align-items: center;
+}
+.settingsHead div {
+  display: flex;
+  align-items: center;
+}
+
+.settingsHead h2 {
+  margin-left: 15px;
+  font-size: 19px;
+  pointer-events: none;
+}
+
+.edit {
+  width: 45px;
+  height: 45px;
+  padding: 10px 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.edit:hover {
+  transition: all 0.3s;
+  background-color: var(--light);
+}
+
+.edit path {
+  fill: var(--gray);
+}
+
+.userPhoto {
+  position: relative;
+  width: 100%;
+  background: linear-gradient(rgb(255, 115, 0), rgb(0, 128, 255));
+  height: 240px;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  font-size: 30px;
+}
+
+.photoFIO {
+  position: absolute;
+  font-size: 19px;
+  display: flex;
+  gap: 5px;
+  font-weight: 600;
+  bottom: 30px;
+  left: 25px;
+}
+
+.infoLast {
+  background-color: white;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.info {
+  display: flex;
+  width: 100%;
+  padding: 10px 15px;
+  gap: 20px;
+  border-radius: 10px;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.info:hover {
+  transition: all 0.3s;
+  background-color: var(--light);
+}
+
+.iconInfo {
+  stroke: var(--gray);
+}
+
+.info > span {
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
 
-.contacts {
-  width: 100%;
-  height: 75px;
-  border-radius: 15px;
-  transition: all 0.3s;
+.firstInfo {
+  color: var(--dark);
+  font-size: 17px;
+}
+.secondInfo {
+  font-size: 14px;
+  color: var(--gray);
+}
+
+.editWrapper {
+  position: absolute;
+  top: 0;
+  left: 425px;
+  width: 420px;
+  height: 100vh;
+  background-color: var(--light);
   display: flex;
-  cursor: pointer;
-  justify-content: left;
+  transition: all 0.3s;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+}
+
+.editWrapperOpen {
+  left: 0px;
+  z-index: 12;
+  transition: all 0.3s;
+}
+
+.editHead {
+  display: flex;
+  padding: 5px 15px;
+  background-color: white;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1;
+}
+.editHead div {
+  display: flex;
   align-items: center;
 }
 
-.contacts:hover {
-  transition: all 0.3s;
-  background-color: var(--light);
+.editHead h2 {
+  margin-left: 15px;
+  font-size: 19px;
+  pointer-events: none;
 }
 
-.contactActive {
-  transition: all 0.3s;
-  color: white;
-  background-color: var(--blue);
-}
-.contactActive span {
-  color: white;
-}
-.contactActive:hover {
-  transition: all 0.3s;
-  color: white;
-  background-color: var(--blue);
-}
-
-.contactsPhoto {
+.editPhoto {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  margin-left: 10px;
-  background: linear-gradient(rgb(100, 2, 165), rgb(58, 23, 185));
-}
-
-.contactsPhoto span {
-  display: block;
-  color: var(--light);
+  font-size: 25px;
   font-weight: 600;
+  margin: 10px auto;
+  color: white;
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(rgb(196, 93, 209), rgb(58, 83, 221));
+  border-radius: 50%;
 }
 
-.contactInfo {
-  position: relative;
+.editUser {
   display: flex;
   flex-direction: column;
-  margin-left: 5px;
-  width: 300px;
+  gap: 25px;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.contactName {
-  font-weight: 600;
-  padding: 0 5px 0 0;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.contactMessage {
-  margin-top: 5px;
+.editInfo {
+  text-align: left;
   color: var(--gray);
-  padding: 0 5px 0 0;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
+  font-size: 13px;
+  padding: 10px 20px;
+  margin-bottom: 10px;
 }
 
-.contactDate {
-  position: absolute;
-  right: -30px;
-  font-size: 12px;
-  color: var(--gray);
+.usernameEdit {
+  font-size: 15px;
+  color: var(--blue);
 }
