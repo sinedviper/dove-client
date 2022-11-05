@@ -26,9 +26,8 @@
   width: 100%;
   border-radius: 10px;
   border: none;
-  padding: 15px 0;
+  padding: 15px;
   font-size: 17px;
-  text-indent: 15px;
   background: inherit;
   transition: all 0.1s;
   border: 1px solid var(--gray-middle);
@@ -64,4 +63,29 @@
 .errorLabel {
   color: var(--error);
   transition: all 0.1s;
+}
+
+.password {
+  padding-right: 50px;
+}
+
+.eyeWrapper {
+  position: absolute;
+  right: 10px;
+  top: 12px;
+}
+
+.eye {
+  width: 30px;
+  height: 30px;
+  stroke: var(--gray);
+  cursor: pointer;
+}
+
+.eyeOn {
+  stroke: var(--blue);
+}
+
+.errorOn {
+  stroke: var(--error);
 }

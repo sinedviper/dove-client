@@ -4,7 +4,7 @@ import cn from "classnames";
 import { CardChatProps } from "./CardChat.props";
 
 import styles from "./CardChat.module.css";
-import { formateDate } from "helpers";
+import { colorCard, formateDate } from "helpers";
 
 export const CardChat = ({
   className,
@@ -17,6 +17,8 @@ export const CardChat = ({
     setClick(!click);
   };
 
+  const color = colorCard(contact?.user.name.toUpperCase().split("")[0]);
+
   return (
     <li
       className={cn(className, styles.contacts, {
@@ -25,7 +27,12 @@ export const CardChat = ({
       onClick={handleFocus}
       {...props}
     >
-      <div className={styles.contactsPhoto}>
+      <div
+        className={styles.contactsPhoto}
+        style={{
+          background: `linear-gradient(${color?.color1}, ${color?.color2})`,
+        }}
+      >
         <span>
           {contact?.user.name.toUpperCase().split("")[0] +
             contact?.user.surname.toUpperCase().split("")[0]}

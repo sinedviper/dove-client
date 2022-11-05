@@ -4,7 +4,7 @@ import cn from "classnames";
 import { CardContactProps } from "./CardContact.props";
 
 import styles from "./CardContact.module.css";
-import { formateDate } from "helpers";
+import { formateDate, colorCard } from "helpers";
 
 export const CardContact = ({
   className,
@@ -17,6 +17,8 @@ export const CardContact = ({
     setClick(!click);
   };
 
+  const color = colorCard(contact?.name.toUpperCase().split("")[0]);
+
   return (
     <li
       {...props}
@@ -25,7 +27,12 @@ export const CardContact = ({
       })}
       onClick={handleFocus}
     >
-      <div className={styles.contactsPhoto}>
+      <div
+        className={styles.contactsPhoto}
+        style={{
+          background: `linear-gradient(${color?.color1}, ${color?.color2})`,
+        }}
+      >
         <span>
           {contact?.name.toUpperCase().split("")[0] +
             contact?.surname.toUpperCase().split("")[0]}

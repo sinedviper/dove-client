@@ -1,0 +1,139 @@
+.settingsWrapper {
+  position: absolute;
+  top: 0;
+  left: 425px;
+  width: 420px;
+  height: 100vh;
+  background-color: var(--light);
+  display: flex;
+  transition: all 0.3s;
+  z-index: -1;
+  display: flex;
+  flex-direction: column;
+}
+
+.settingsWrapperOpen {
+  left: 0px;
+  z-index: 11;
+  transition: all 0.3s;
+}
+
+.settingsHead {
+  display: flex;
+  padding: 10px 15px;
+  background-color: white;
+  justify-content: space-between;
+  align-items: center;
+}
+.settingsHead div {
+  display: flex;
+  align-items: center;
+}
+
+.settingsHead h2 {
+  margin-left: 15px;
+  font-size: 19px;
+  pointer-events: none;
+}
+
+.back {
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  border-radius: 50%;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.back:hover {
+  transition: all 0.3s;
+  background-color: var(--light);
+}
+
+.back path {
+  fill: var(--gray);
+}
+
+.edit {
+  width: 40px;
+  height: 40px;
+  padding: 7.5px 3.5px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.edit:hover {
+  transition: all 0.3s;
+  background-color: var(--light);
+}
+
+.edit path {
+  fill: var(--gray);
+}
+
+.userPhoto {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  font-size: 40px;
+}
+
+.photoFIO {
+  position: absolute;
+  font-size: 19px;
+  display: flex;
+  gap: 5px;
+  font-weight: 600;
+  bottom: 30px;
+  left: 25px;
+}
+
+.infoLast {
+  background-color: white;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.info {
+  display: flex;
+  width: 100%;
+  padding: 10px 15px;
+  gap: 20px;
+  border-radius: 10px;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.info:hover {
+  transition: all 0.3s;
+  background-color: var(--light);
+}
+
+.iconInfo {
+  stroke: var(--gray);
+}
+
+.info > span {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.firstInfo {
+  color: var(--dark);
+  font-size: 17px;
+}
+
+.secondInfo {
+  font-size: 14px;
+  color: var(--gray);
+}

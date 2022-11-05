@@ -4,12 +4,22 @@ import cn from "classnames";
 
 import styles from "./Input.module.css";
 import { InputProps } from "./Input.props";
+import { EyeCloseIcon, EyeIcon } from "assets";
 
 export const Input = forwardRef(
   (
-    { error, placeholderName, className, ...props }: InputProps,
+    {
+      password = false,
+      error,
+      text,
+      setText,
+      placeholderName,
+      className,
+      ...props
+    }: InputProps,
     ref: ForwardedRef<HTMLInputElement>
   ): JSX.Element => {
+    const [eye, setEye] = useState<boolean>(true);
     const [type, setType] = useState<boolean>(false);
     const [value, setValue] = useState<string>("");
 
@@ -28,16 +38,41 @@ export const Input = forwardRef(
           className={cn(className, styles.input, {
             [styles.inputOn]: type == true,
             [styles.error]: error == true,
+            [styles.password]: password == true,
           })}
           ref={ref}
-          onFocus={(e) => setType(true)}
-          value={value}
-          onBlurCapture={() => setType(false)}
+          onFocus={() => setType(true)}
+          type={password && eye ? "password" : "text"}
+          value={text ? text : value}
+          onBlur={() => setType(false)}
           {...props}
           onChange={(e) => {
-            setValue(e.target.value);
+            setText ? setText(e.target.value) : setValue(e.target.value);
           }}
         />
+        <span className={styles.eyeWrapper}>
+          {password == true ? (
+            eye ? (
+              <EyeIcon
+                className={cn(styles.eye, {
+                  [styles.eyeOn]: type == true,
+                  [styles.errorOn]: error == true,
+                })}
+                onClick={() => setEye(false)}
+              />
+            ) : (
+              <EyeCloseIcon
+                className={cn(styles.eye, {
+                  [styles.eyeOn]: type == true,
+                  [styles.errorOn]: error == true,
+                })}
+                onClick={() => setEye(true)}
+              />
+            )
+          ) : (
+            ""
+          )}
+        </span>
       </div>
     );
   }

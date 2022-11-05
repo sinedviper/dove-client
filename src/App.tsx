@@ -10,7 +10,14 @@ import "react-toastify/dist/ReactToastify.css";
 function App(): JSX.Element {
   return (
     <>
-      <ToastContainer />
+      <ToastContainer
+        autoClose={1200}
+        pauseOnFocusLoss
+        newestOnTop
+        draggable
+        hideProgressBar={false}
+        closeOnClick={false}
+      />
       <Router>
         <Routes>
           <Route path='/' element={<Layout />}>

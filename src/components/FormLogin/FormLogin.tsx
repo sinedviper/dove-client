@@ -82,6 +82,7 @@ export const FormLogin = ({
               minLength: 8,
               maxLength: 40,
             })}
+            password={true}
           />
           {errors.password && (
             <span className={styles.error}>

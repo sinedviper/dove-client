@@ -7,4 +7,7 @@ export interface InputProps
   > {
   placeholderName: string;
   error?: boolean;
+  password?: boolean;
+  text?: string;
+  setText?: Function;
 }

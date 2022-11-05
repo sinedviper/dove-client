@@ -1,0 +1,145 @@
+.menuWrapper {
+  padding: 8px 15px;
+  border-bottom: 1px solid var(--gray-light);
+  display: flex;
+}
+
+.menu {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background-color: inherit;
+  transition: all 0.3s;
+  position: relative;
+  margin-right: 7px;
+  cursor: pointer;
+}
+
+.menu:hover {
+  transition: all 0.3s;
+  background-color: var(--light);
+}
+
+.line {
+  pointer-events: none;
+  width: 18px;
+  height: 2px;
+  border-radius: 30px;
+  background-color: var(--gray);
+  display: block;
+  position: absolute;
+  top: 14px;
+  left: 11px;
+}
+
+.line::after {
+  pointer-events: none;
+  position: absolute;
+  top: 10px;
+  content: "";
+  width: 18px;
+  height: 2px;
+  border-radius: 30px;
+  background-color: var(--gray);
+  display: block;
+}
+
+.line::before {
+  pointer-events: none;
+  position: absolute;
+  top: 5px;
+  content: "";
+  width: 18px;
+  height: 2px;
+  border-radius: 30px;
+  background-color: var(--gray);
+  display: block;
+}
+
+.menuClose {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  z-index: -1;
+  width: 300px;
+  background-color: white;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  padding: 5px;
+  border-radius: 10px;
+  top: 55px;
+  left: 15px;
+  text-align: center;
+  opacity: 0;
+  transition: all 0.2s;
+}
+
+.menuOpen {
+  transition: all 0.2s;
+  z-index: 10;
+  opacity: 1;
+}
+
+.menuCard {
+  background-color: white;
+  border: none;
+  padding: 5px 0;
+  cursor: pointer;
+  width: 100%;
+  color: var(--dark);
+  text-align: left;
+  transition: all 0.3s;
+  border-radius: 7px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.menuCard:hover {
+  transition: all 0.3s;
+  background-color: var(--light);
+}
+
+.cardIcon {
+  width: 23px;
+  height: 23px;
+  margin: 0 15px 0 13px;
+}
+
+.contact {
+  width: 22px;
+  height: 22px;
+}
+
+.logout {
+  width: 23px;
+  height: 21px;
+}
+
+.cardIcon path {
+  fill: var(--dark);
+}
+
+.creator {
+  margin: 10px 0 5px;
+  font-size: 15px;
+  color: var(--gray);
+}
+
+.contactsList {
+  padding: 6px 6px 0 6px;
+  height: 95vh;
+  overflow-y: hidden;
+}
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gray-light);
+  border-radius: 10px;
+}
+
+.swiper {
+  padding-right: 0px;
+  overflow-y: scroll;
+}

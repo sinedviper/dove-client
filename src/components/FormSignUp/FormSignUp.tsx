@@ -66,10 +66,10 @@ export const FormSignUp = ({
           </span>
         )}
         <Input
-          placeholderName={"Surname"}
+          placeholderName={"Surname(optional)"}
           error={Boolean(errors.surname)}
           {...register("surname", {
-            required: true,
+            required: false,
             minLength: 1,
             maxLength: 40,
           })}
@@ -115,6 +115,7 @@ export const FormSignUp = ({
             minLength: 8,
             maxLength: 40,
           })}
+          password={true}
         />
         {errors.password && (
           <span className={styles.error}>

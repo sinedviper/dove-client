@@ -10,6 +10,7 @@ import { ReactComponent as Username } from "./username.svg";
 import { ReactComponent as Edit } from "./edit.svg";
 import { ReactComponent as EyeClose } from "./eyeClose.svg";
 import { ReactComponent as Eye } from "./eye.svg";
+import { ReactComponent as Supheed } from "./supheed.svg";
 
 export const TelegramIcon = Telegram;
 export const SearchIcon = Search;
@@ -23,3 +24,4 @@ export const UsernameIcon = Username;
 export const EditIcon = Edit;
 export const EyeCloseIcon = EyeClose;
 export const EyeIcon = Eye;
+export const SupheedIcon = Supheed;

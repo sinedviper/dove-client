@@ -1,0 +1,61 @@
+.contactsWrapper {
+  position: absolute;
+  top: 0;
+  left: 420px;
+  width: 420px;
+  height: 100vh;
+  background-color: white;
+  display: flex;
+  transition: all 0.3s;
+  z-index: -1;
+  display: flex;
+  flex-direction: column;
+}
+
+.contactWrapperOpen {
+  left: 0px;
+  z-index: 11;
+  transition: all 0.3s;
+}
+
+.contactSearch {
+  display: flex;
+  padding: 10px 15px 5px;
+}
+
+.back {
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  border-radius: 50%;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.back:hover {
+  transition: all 0.3s;
+  background-color: var(--light);
+}
+
+.back path {
+  fill: var(--gray);
+}
+
+.contactsList {
+  padding: 3px 6px 0 8px;
+  height: 95vh;
+  overflow-y: hidden;
+}
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gray-light);
+  border-radius: 10px;
+}
+
+.swiper {
+  padding-right: 1px;
+  overflow-y: scroll;
+}
