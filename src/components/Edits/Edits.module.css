@@ -93,21 +93,64 @@
 
 .supheed {
   display: flex;
+  pointer-events: none;
   width: 50px;
   height: 50px;
   border: none;
-  border-radius: 50%;
-  background-color: var(--blue);
   position: absolute;
   bottom: 20px;
   right: 20px;
+  border-radius: 50%;
+  background-color: var(--blue);
   justify-content: center;
   align-items: center;
-  cursor: pointer;
-  fill: white;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  fill: white;
+  transition: opacity 0.3s;
 }
+
 .supheed svg {
   width: 35px;
   height: 35px;
+}
+
+.error {
+  font-size: 13px;
+  margin-top: -20px;
+  color: var(--error);
+}
+
+.submit {
+  cursor: pointer;
+  pointer-events: all;
+  opacity: 1;
+  transition: all 0.3s;
+}
+
+.contactsList {
+  overflow-y: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gray-light);
+  border-radius: 10px;
+}
+
+.swiper {
+  padding-right: 0px;
+  overflow-y: scroll;
+}
+
+.info {
+  padding-bottom: 20px;
+}
+
+@media screen and (min-height: 1250px) {
+  .contactsList {
+    overflow-y: hidden;
+  }
 }

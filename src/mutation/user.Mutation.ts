@@ -48,6 +48,14 @@ export const updateUser = gql`
     updateUser(input: $input) {
       status
       message
+      data {
+        username
+        email
+        name
+        surname
+        createdAt
+        id
+      }
     }
   }
 `;

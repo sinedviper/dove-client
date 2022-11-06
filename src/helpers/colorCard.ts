@@ -5,7 +5,7 @@ export const colorCard = (alpha: string) => {
   const color4 = "t u v w x y z";
 
   if (color1.includes(alpha.toLowerCase())) {
-    return { color1: "#845EC2", color2: "#c45dd1" };
+    return { color2: "#845EC2", color1: "#c45dd1" };
   }
   if (color2.includes(alpha.toLowerCase())) {
     return { color1: "#0081CF", color2: "#008F7A" };

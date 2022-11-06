@@ -47,8 +47,8 @@ export const Settings = ({
             background: `linear-gradient(${color?.color1}, ${color?.color2})`,
           }}
         >
-          {user?.data.surname.toUpperCase().slice()[0]}
           {user?.data.name.toUpperCase().slice()[0]}
+          {user?.data.surname.toUpperCase().slice()[0]}
           <div className={styles.photoFIO}>
             <p>{user?.data.name}</p>
             <p>{user?.data.surname}</p>

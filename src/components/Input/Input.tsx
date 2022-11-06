@@ -44,7 +44,7 @@ export const Input = forwardRef(
           onFocus={() => setType(true)}
           type={password && eye ? "password" : "text"}
           value={text ? text : value}
-          onBlur={() => setType(false)}
+          onBlurCapture={() => setType(false)}
           {...props}
           onChange={(e) => {
             setText ? setText(e.target.value) : setValue(e.target.value);

@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { useQuery } from "@apollo/client";
 import { client } from "index";
 
 import { IUserResponse } from "interface";
@@ -6,7 +7,10 @@ import { getMe } from "mutation";
 import { RootState } from "store";
 
 export const loadUser = createAsyncThunk("@@user/load-user", async () => {
-  return await client.query({ query: getMe }).then((res) => res.data.getMe);
+  const user = await client
+    .query({ query: getMe })
+    .then((res) => res.data.getMe);
+  return user;
 });
 
 interface IUserState {
