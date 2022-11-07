@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect, useState } from "react";
 import cn from "classnames";
 import { useForm } from "react-hook-form";
+import { useMutation, useQuery } from "@apollo/client";
 
 import { EditsProps } from "./Edits.props";
 
@@ -10,10 +12,8 @@ import { Input } from "components";
 import { colorCard } from "helpers";
 import { IUser } from "interface";
 import { toast } from "react-toastify";
-import { client } from "index";
 import { getMe, updateUser } from "mutation";
 import { useAppDispatch } from "hooks";
-import { loadUser } from "store";
 
 interface IFormInput {
   name: string;
@@ -37,7 +37,10 @@ export const Edits = ({
     formState: { errors },
     handleSubmit,
   } = useForm<IFormInput>();
+  ///
   const dispatch = useAppDispatch();
+  const [mutateFunction, { data }] = useMutation(updateUser);
+  const { data: userdata, error, loading } = useQuery(getMe);
 
   const person: IUser | undefined = user?.data;
   const [swiper, setSwiper] = useState<boolean>(false);
@@ -142,22 +145,13 @@ export const Edits = ({
       setErrorPasswordReapeat("Please enter your repeat password");
     }
 
-    const data = await client
-      .mutate({ mutation: updateUser, variables: { input: obj } })
-      .catch((err) => console.log(err));
+    await mutateFunction({ variables: { input: obj } });
 
-    if (data?.data.updateUser.status === "Invalid") {
+    if (data?.updateUser.status === "Invalid") {
       toast.error(data?.data.updateUser.message);
     }
-    if (data?.data.updateUser.status === "Success") {
-      await client.refetchQueries({
-        include: ["UserData"],
-        updateCache(cache) {
-          cache.evict({ fieldName: "UserData" });
-        },
-      });
-      await dispatch(loadUser());
-
+    if (data?.updateUser.status === "Success") {
+      //dispatch(loadUser());
       setPassword("");
       setPasswordNew("");
       setPasswordReapeat("");
@@ -199,6 +193,7 @@ export const Edits = ({
       })}
       {...props}
     >
+      {userdata.getMe.data.surname}
       <div className={styles.editHead}>
         <div>
           <BackIcon className={styles.back} onClick={() => setEdit(false)} />

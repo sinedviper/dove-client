@@ -55,14 +55,27 @@
   background-color: var(--blue-dark);
 }
 
+.loading {
+  position: absolute;
+  stroke: white;
+  top: -24px;
+  right: -24px;
+}
+
+.loading svg circle {
+  stroke: white;
+}
+
 .errorInput {
   border-color: var(--error);
 }
+
 .error {
   font-size: 13px;
   margin-top: -20px;
   color: var(--error);
 }
+
 .link {
   font-size: 14px;
   margin-top: -15px;
@@ -70,6 +83,7 @@
   cursor: default;
   pointer-events: none;
 }
+
 .reg {
   color: var(--blue);
   cursor: pointer;

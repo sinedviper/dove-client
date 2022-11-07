@@ -1,15 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import cn from "classnames";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useMutation, useLazyQuery } from "@apollo/client";
 
 import { FormLoginProps } from "./FormLogin.props";
-import { TelegramIcon } from "assets";
+import { LoadingIcon, TelegramIcon } from "assets";
 import { Input } from "components";
-import { client } from "index";
-import { loginUser } from "mutation";
-import { loadUser } from "store";
+import { getMe, loginUser } from "mutation";
+import { actionUserAdd } from "store";
 import { useAppDispatch } from "hooks";
 
 import styles from "./FormLogin.module.css";
@@ -31,20 +32,38 @@ export const FormLogin = ({
     handleSubmit,
   } = useForm<IFormInput>();
 
-  const onSubmit = async (input: IFormInput): Promise<void> => {
-    const data = await client
-      .mutate({ mutation: loginUser, variables: { input } })
-      .catch((err) => console.log(err));
+  const [queryFunction, { loading: loadingQuery }] = useLazyQuery(getMe);
+  const [mutateFunction, { loading: loadingMutation }] = useMutation(loginUser);
 
-    if (data?.data.loginUser.status === "Invalid") {
-      toast.error(data?.data.loginUser.message);
-    }
-    if (data?.data.loginUser.status === "Success") {
-      toast.success("Data confirmed");
-      localStorage.setItem("token", data?.data.loginUser.access_token);
-      dispatch(loadUser());
-      navigate("/");
-    }
+  const onSubmit = async (input: IFormInput): Promise<void> => {
+    await mutateFunction({ variables: { input } })
+      .then(async (res) => {
+        const data = res?.data.loginUser;
+        if (data.status === "Invalid") {
+          toast.error(data.message);
+        }
+        if (data.status === "Success") {
+          localStorage.setItem("token", data.access_token);
+          await queryFunction()
+            .then((req) => {
+              const user = req.data.getMe;
+              if (user.status === "Invalid") {
+                toast.error(user.message);
+              }
+              if (user.status === "Success") {
+                toast.success("Data confirmed");
+                dispatch(actionUserAdd(req.data.getMe));
+                navigate("/");
+              }
+            })
+            .catch((err) => {
+              toast.error(err?.message);
+            });
+        }
+      })
+      .catch((err) => {
+        toast.error(err?.message);
+      });
   };
 
   return (
@@ -89,7 +108,12 @@ export const FormLogin = ({
               Password must be between 8 and 40 characters
             </span>
           )}
-          <input type='submit' value={"NEXT"} className={styles.button} />
+          <button type='submit' className={styles.button}>
+            <p>NEXT</p>
+            <span className={styles.loading}>
+              {loadingMutation || loadingQuery ? <LoadingIcon /> : ""}
+            </span>
+          </button>
           <p className={styles.link}>
             <span className={styles.reg} onClick={() => navigate("/sigup")}>
               SIGN UP

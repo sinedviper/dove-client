@@ -2,15 +2,15 @@ import React from "react";
 import cn from "classnames";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import { toast } from "react-toastify";
 
 import { FormSignUpProps } from "./FormSignUp.props";
-import { TelegramIcon } from "assets";
+import { LoadingIcon, TelegramIcon } from "assets";
 import { Input } from "components";
-import { client } from "index";
 import { signUp } from "mutation";
 
 import styles from "./FormSignUp.module.css";
-import { toast } from "react-toastify";
 
 interface IFormInput {
   name: string;
@@ -30,19 +30,19 @@ export const FormSignUp = ({
     formState: { errors },
     handleSubmit,
   } = useForm<IFormInput>();
+  const [mutateFunction, { loading: loadingMutation }] = useMutation(signUp);
 
   const onSubmit = async (input: IFormInput): Promise<void> => {
-    const data = await client
-      .mutate({ mutation: signUp, variables: { input } })
-      .catch((err) => console.log(err));
-
-    if (data?.data.signupUser.status === "Invalid") {
-      toast.error(data?.data.signupUser.message);
-    }
-    if (data?.data.signupUser.status === "Success") {
-      toast.success("Account created");
-      navigate("/login");
-    }
+    await mutateFunction({ variables: { input } }).then((res) => {
+      const data = res?.data.signupUser;
+      if (data.status === "Invalid") {
+        toast.error(data?.message);
+      }
+      if (data.status === "Success") {
+        toast.success("Account created");
+        navigate("/login");
+      }
+    });
   };
 
   return (
@@ -122,7 +122,12 @@ export const FormSignUp = ({
             Password must be between 8 and 40 characters
           </span>
         )}
-        <input type='submit' value={"Sign Up"} className={styles.button} />
+        <button type='submit' className={styles.button}>
+          <p>SIGN UP</p>
+          <span className={styles.loading}>
+            {loadingMutation ? <LoadingIcon /> : ""}
+          </span>
+        </button>
         <p className={styles.link}>
           <span className={styles.reg} onClick={() => navigate("/login")}>
             LOGIN

@@ -39,6 +39,7 @@
 }
 
 .button {
+  position: relative;
   width: 100%;
   padding: 18px 0;
   font-size: 17px;
@@ -49,6 +50,17 @@
   border: none;
   cursor: pointer;
   transition: all 0.3s;
+}
+
+.loading {
+  position: absolute;
+  stroke: white;
+  top: -24px;
+  right: -24px;
+}
+
+.loading svg circle {
+  stroke: white;
 }
 
 .button:hover {
