@@ -1,10 +1,10 @@
 import { DetailedHTMLProps, HTMLAttributes } from "react";
 
-import { IUserResponse } from "interface";
+import { IUser } from "interface";
 
 export interface EditsProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLLIElement>, HTMLLIElement> {
   edit: boolean;
   setEdit: Function;
-  user: IUserResponse | null;
+  user: IUser | null;
 }

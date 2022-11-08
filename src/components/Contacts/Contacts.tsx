@@ -42,8 +42,8 @@ export const Contacts = ({
         onMouseOut={() => setSwiper(true)}
       >
         <ul>
-          {contacts?.data &&
-            contacts?.data
+          {contacts &&
+            contacts
               .map((contact: IUser) => (
                 <CardContact contact={contact} key={contact.id} />
               ))

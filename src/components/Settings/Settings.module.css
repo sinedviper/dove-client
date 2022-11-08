@@ -1,26 +1,43 @@
 .settingsWrapper {
   position: absolute;
   top: 0;
-  left: 425px;
+  right: -425px;
   width: 420px;
   height: 100vh;
   background-color: var(--light);
   display: flex;
   transition: all 0.3s;
-  z-index: -1;
+  z-index: 1;
   display: flex;
   flex-direction: column;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.onProfile {
+  transition: all 0.3s;
+  position: relative;
 }
 
 .settingsWrapperOpen {
-  left: 0px;
-  z-index: 11;
+  right: 0px;
   transition: all 0.3s;
 }
 
+.profile {
+  transition: all 0.3s;
+  width: 320px;
+  border-left: 1px solid var(--gray-light);
+}
+
 .settingsHead {
+  position: relative;
   display: flex;
-  padding: 10px 15px;
+  padding: 8px 15px;
   background-color: white;
   justify-content: space-between;
   align-items: center;
@@ -51,6 +68,10 @@
   background-color: var(--light);
 }
 
+.remove {
+  padding: 5px;
+}
+
 .back path {
   fill: var(--gray);
 }
@@ -71,6 +92,101 @@
 
 .edit path {
   fill: var(--gray);
+}
+
+.delete {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background-color: initial;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.delete:hover {
+  transition: all 0.3s;
+  background-color: var(--light);
+}
+
+.dot {
+  pointer-events: none;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--gray);
+}
+
+.dot::before {
+  pointer-events: none;
+  content: "";
+  display: block;
+  margin-top: 8px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--gray);
+}
+
+.dot::after {
+  pointer-events: none;
+  content: "";
+  display: block;
+  margin-top: -21px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--gray);
+}
+
+.deleteWrapper {
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  bottom: -40px;
+  right: 15px;
+  padding: 5px;
+  border-radius: 10px;
+  background-color: var(--light);
+  transition: all 0.3s;
+}
+
+.openDelWrap {
+  opacity: 1;
+  pointer-events: all;
+  transition: all 0.3s;
+}
+
+.removeIcon {
+  width: 20px;
+  height: 20px;
+  stroke: var(--dark);
+}
+
+.deleteButton {
+  padding: 5px 20px;
+  border-radius: 5px;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  background-color: initial;
+  transition: all 0.3s;
+}
+
+.deleteButton:hover {
+  background-color: var(--gray-light);
+  transition: all 0.3s;
+}
+.deleteButton span {
+  color: var(--dark);
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .userPhoto {

@@ -13,6 +13,7 @@ export const getChats = gql`
           email
           name
           surname
+          createdAt
         }
         lastMessage {
           id

@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import cn from "classnames";
+import { useNavigate } from "react-router-dom";
 
 import { ChatsProps } from "./Chats.props";
-
-import styles from "./Chats.module.css";
 import { ContactsIcon, LogoutIcon, SettingsIcon } from "assets";
 import { CardChat, Search } from "components";
-import { useNavigate } from "react-router-dom";
 import { IChat } from "interface";
+import { actionClearChats, actionClearContact, actionClearUser } from "store";
+import { useAppDispatch } from "hooks";
+
+import styles from "./Chats.module.css";
 
 export const Chats = ({
   chats,
@@ -19,6 +21,7 @@ export const Chats = ({
   setValueAll,
   ...props
 }: ChatsProps): JSX.Element => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [menu, setMenu] = useState<boolean>(false);
   const [swiper, setSwiper] = useState<boolean>(false);
@@ -43,6 +46,9 @@ export const Chats = ({
 
   const handleLogOut = () => {
     localStorage.removeItem("token");
+    dispatch(actionClearUser());
+    dispatch(actionClearChats());
+    dispatch(actionClearContact());
     navigate("/login");
   };
 
@@ -91,8 +97,8 @@ export const Chats = ({
         })}
       >
         <ul>
-          {chats?.data &&
-            chats?.data.map((contact: IChat) => (
+          {chats &&
+            chats.map((contact: IChat) => (
               <CardChat contact={contact} key={contact.id} />
             ))}
         </ul>

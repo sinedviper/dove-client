@@ -2,18 +2,18 @@
 import React, { useEffect, useState } from "react";
 import cn from "classnames";
 import { useForm } from "react-hook-form";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation, useLazyQuery } from "@apollo/client";
+import { toast } from "react-toastify";
 
 import { EditsProps } from "./Edits.props";
-
-import styles from "./Edits.module.css";
 import { BackIcon, SupheedIcon } from "assets";
 import { Input } from "components";
 import { colorCard } from "helpers";
-import { IUser } from "interface";
-import { toast } from "react-toastify";
 import { getMe, updateUser } from "mutation";
 import { useAppDispatch } from "hooks";
+import { actionUserAdd } from "store";
+
+import styles from "./Edits.module.css";
 
 interface IFormInput {
   name: string;
@@ -37,25 +37,24 @@ export const Edits = ({
     formState: { errors },
     handleSubmit,
   } = useForm<IFormInput>();
-  ///
   const dispatch = useAppDispatch();
-  const [mutateFunction, { data }] = useMutation(updateUser);
-  const { data: userdata, error, loading } = useQuery(getMe);
+  //res in db
+  const [mutateFunction] = useMutation(updateUser);
+  const [queryFunction] = useLazyQuery(getMe, {
+    fetchPolicy: "no-cache",
+  });
 
-  const person: IUser | undefined = user?.data;
   const [swiper, setSwiper] = useState<boolean>(false);
   const [submit, setSubmit] = useState<boolean>(false);
 
   const [username, setUsername] = useState<string>(
-    person?.username ? person.username : ""
+    user?.username ? user.username : ""
   );
-  const [name, setName] = useState<string>(person?.name ? person?.name : "");
+  const [name, setName] = useState<string>(user?.name ? user?.name : "");
   const [surname, setSurname] = useState<string>(
-    person?.surname ? person?.surname : ""
+    user?.surname ? user?.surname : ""
   );
-  const [email, setEmail] = useState<string>(
-    person?.email ? person?.email : ""
-  );
+  const [email, setEmail] = useState<string>(user?.email ? user?.email : "");
   const [password, setPassword] = useState<string>("");
   const [passwordNew, setPasswordNew] = useState<string>("");
   const [passwordReapeat, setPasswordReapeat] = useState<string>("");
@@ -64,22 +63,24 @@ export const Edits = ({
   const [errorPasswordNew, setErrorPasswordNew] = useState<string>("");
   const [errorPasswordReapeat, setErrorPasswordReapeat] = useState<string>("");
 
-  const color = colorCard(String(user?.data.name.toUpperCase().slice()[0]));
+  const color = colorCard(String(user?.name.toUpperCase().slice()[0]));
 
   const onSubmit = async (input: IFormInput): Promise<void> => {
     let obj = {};
-    if (person?.username !== username) {
+    //Check main input on value
+    if (user?.username !== username) {
       obj = { username: input.username };
     }
-    if (person?.name !== name) {
+    if (user?.name !== name) {
       obj = { ...obj, name: input.name };
     }
-    if (person?.surname !== surname) {
+    if (user?.surname !== surname) {
       obj = { ...obj, surname: input.surname };
     }
-    if (person?.email !== email) {
+    if (user?.email !== email) {
       obj = { ...obj, email: input.email };
     }
+    //Check password on value
     if (input.mainPassword && input.newPassword && input.repeatPassword) {
       if (input.newPassword === input.repeatPassword) {
         setErrorPassword("");
@@ -90,93 +91,86 @@ export const Edits = ({
           password: input.mainPassword,
           passwordNew: input.newPassword,
         };
-      } else if (input.newPassword !== input.repeatPassword) {
+      }
+
+      if (input.newPassword !== input.repeatPassword) {
         setErrorPassword("");
         setErrorPasswordNew("");
         setErrorPasswordReapeat("Please correct repeat password");
       }
-    } else if (
-      !input.mainPassword &&
-      input.newPassword &&
-      input.repeatPassword
-    ) {
+    }
+    if (!input.mainPassword && input.newPassword && input.repeatPassword) {
       setErrorPassword("Please enter your main password");
       setErrorPasswordNew("");
       setErrorPasswordReapeat("");
-    } else if (
-      input.mainPassword &&
-      !input.newPassword &&
-      input.repeatPassword
-    ) {
+    }
+    if (input.mainPassword && !input.newPassword && input.repeatPassword) {
       setErrorPassword("");
       setErrorPasswordNew("Please enter your new password");
       setErrorPasswordReapeat("");
-    } else if (
-      input.mainPassword &&
-      input.newPassword &&
-      !input.repeatPassword
-    ) {
+    }
+    if (input.mainPassword && input.newPassword && !input.repeatPassword) {
       setErrorPassword("");
       setErrorPasswordNew("");
       setErrorPasswordReapeat("Please enter your repeat password");
-    } else if (
-      input.mainPassword &&
-      !input.newPassword &&
-      !input.repeatPassword
-    ) {
+    }
+    if (input.mainPassword && !input.newPassword && !input.repeatPassword) {
       setErrorPassword("");
       setErrorPasswordNew("Please enter your new password");
       setErrorPasswordReapeat("Please enter your repeat password");
-    } else if (
-      !input.mainPassword &&
-      !input.newPassword &&
-      input.repeatPassword
-    ) {
+    }
+    if (!input.mainPassword && !input.newPassword && input.repeatPassword) {
       setErrorPassword("Please enter your main password");
       setErrorPasswordNew("Please enter your new password");
       setErrorPasswordReapeat("");
-    } else if (
-      !input.mainPassword &&
-      input.newPassword &&
-      !input.repeatPassword
-    ) {
+    }
+    if (!input.mainPassword && input.newPassword && !input.repeatPassword) {
       setErrorPassword("Please enter your main password");
       setErrorPasswordNew("Please enter your new password");
       setErrorPasswordReapeat("Please enter your repeat password");
     }
-
-    await mutateFunction({ variables: { input: obj } });
-
-    if (data?.updateUser.status === "Invalid") {
-      toast.error(data?.data.updateUser.message);
-    }
-    if (data?.updateUser.status === "Success") {
-      //dispatch(loadUser());
-      setPassword("");
-      setPasswordNew("");
-      setPasswordReapeat("");
-      setSubmit(false);
-      setEdit(false);
-      toast.success("User update");
-    }
+    //Update user
+    await mutateFunction({ variables: { input: obj } }).then(async (res) => {
+      const data = res.data.updateUser;
+      if (data.status === "Invalid") {
+        toast.error(data.message);
+      }
+      if (data.status === "Success") {
+        await queryFunction().then((res) => {
+          const user = res.data.getMe;
+          if (user.status === "Invalid") {
+            toast.error(user.message);
+          }
+          if (user.status === "Success") {
+            dispatch(actionUserAdd(user.data));
+          }
+        });
+        setPassword("");
+        setPasswordNew("");
+        setPasswordReapeat("");
+        setSubmit(false);
+        setEdit(false);
+        toast.success("Account update");
+      }
+    });
   };
-
+  //Check values in input, changed or not, when changed button has see
   useEffect(() => {
     if (
-      person?.username !== username ||
-      person?.name !== name ||
-      person?.surname !== surname ||
-      person?.email !== email ||
+      user?.username !== username ||
+      user?.name !== name ||
+      user?.surname !== surname ||
+      user?.email !== email ||
       passwordReapeat !== "" ||
       password !== "" ||
       passwordNew !== ""
     ) {
       setSubmit(true);
     } else if (
-      person?.username === username ||
-      person?.name === name ||
-      person?.surname === surname ||
-      person?.email === email ||
+      user?.username === username ||
+      user?.name === name ||
+      user?.surname === surname ||
+      user?.email === email ||
       passwordReapeat === "" ||
       password === "" ||
       passwordNew === ""
@@ -193,7 +187,6 @@ export const Edits = ({
       })}
       {...props}
     >
-      {userdata.getMe.data.surname}
       <div className={styles.editHead}>
         <div>
           <BackIcon className={styles.back} onClick={() => setEdit(false)} />
@@ -214,8 +207,8 @@ export const Edits = ({
               background: `linear-gradient(${color?.color1}, ${color?.color2})`,
             }}
           >
-            {user?.data.surname.toUpperCase().slice()[0]}
-            {user?.data.name.toUpperCase().slice()[0]}
+            {user?.surname.toUpperCase().slice()[0]}
+            {user?.name.toUpperCase().slice()[0]}
           </div>
           <Input
             error={Boolean(errors.name)}

@@ -2,6 +2,12 @@
   padding: 8px 15px;
   border-bottom: 1px solid var(--gray-light);
   display: flex;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .menu {

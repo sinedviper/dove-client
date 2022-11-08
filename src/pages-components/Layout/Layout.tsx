@@ -1,19 +1,24 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import cn from "classnames";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
 import { LayoutProps } from "./Layout.props";
 import { useAppDispatch, useAppSelector } from "hooks";
-import { getChat, getContacts, getUser, loadChats, loadContacts } from "store";
-import { IChatResponse, IContactResponse, IUserResponse } from "interface";
+import {
+  actionClearChats,
+  actionClearContact,
+  actionClearUser,
+  getChat,
+  getContacts,
+  getUser,
+} from "store";
+import { IChat, IUser } from "interface";
 import { Chats, Contacts, Settings, Edits } from "components";
 
 import styles from "./Layout.module.css";
 
 export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const [valueAll, setValueAll] = useState<string>("");
   const [contact, setContact] = useState<boolean>(false);
@@ -22,24 +27,16 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
 
   let searchContact = useRef<HTMLInputElement>(null);
 
-  const user: IUserResponse | null = useAppSelector(getUser);
-  const chats: IChatResponse | null = useAppSelector(getChat);
-  const contacts: IContactResponse | null = useAppSelector(getContacts);
+  const user: IUser | null = useAppSelector(getUser);
+  const chats: IChat[] | null = useAppSelector(getChat);
+  const contacts: IUser[] | null = useAppSelector(getContacts);
   const token: string | null = localStorage.getItem("token");
-
-  useEffect(() => {
-    if (user != null) {
-      navigate(`${user.data.username}`);
-    }
-  }, [user]);
-
-  useEffect(() => {
-    dispatch(loadContacts());
-    dispatch(loadChats());
-  }, []);
 
   if (!token) {
     localStorage.removeItem("token");
+    dispatch(actionClearUser());
+    dispatch(actionClearChats());
+    dispatch(actionClearContact());
     return <Navigate to='/login' />;
   }
 

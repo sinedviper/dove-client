@@ -1,25 +1,15 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { client } from "index";
+/* eslint-disable array-callback-return */
+import { createSlice } from "@reduxjs/toolkit";
 
-import { IChatResponse } from "interface";
-import { getChats } from "mutation";
+import { IChat } from "interface";
 import { RootState } from "store";
 
-export const loadChats = createAsyncThunk("@@chats/load-chats", async () => {
-  const data = await client
-    .query({ query: getChats })
-    .then((res) => res.data.getChats);
-  return data;
-});
-
 interface IChatsState {
-  chats: IChatResponse | null;
-  status: string;
+  chats: IChat[] | null;
 }
 
 const initialState: IChatsState = {
   chats: null,
-  status: "idle",
 };
 
 export const chatsSlice = createSlice({
@@ -27,24 +17,14 @@ export const chatsSlice = createSlice({
   name: "chatsSlice",
   reducers: {
     actionClearChats: () => initialState,
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(loadChats.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(loadChats.rejected, (state) => {
-        state.status = "rejected";
-      })
-      .addCase(loadChats.fulfilled, (state, action) => {
-        state.status = "received";
-        state.chats = action.payload as unknown as IChatResponse;
-      });
+    actionAddChats: (state, action) => {
+      state.chats = action.payload;
+    },
   },
 });
 
 export const chatsReducer = chatsSlice.reducer;
 
-export const { actionClearChats } = chatsSlice.actions;
+export const { actionClearChats, actionAddChats } = chatsSlice.actions;
 
 export const getChat = (state: RootState) => state.chats.chats;

@@ -9,8 +9,8 @@ import { useMutation, useLazyQuery } from "@apollo/client";
 import { FormLoginProps } from "./FormLogin.props";
 import { LoadingIcon, TelegramIcon } from "assets";
 import { Input } from "components";
-import { getMe, loginUser } from "mutation";
-import { actionUserAdd } from "store";
+import { getChats, getContact, getMe, loginUser } from "mutation";
+import { actionAddChats, actionAddContact, actionUserAdd } from "store";
 import { useAppDispatch } from "hooks";
 
 import styles from "./FormLogin.module.css";
@@ -32,7 +32,18 @@ export const FormLogin = ({
     handleSubmit,
   } = useForm<IFormInput>();
 
-  const [queryFunction, { loading: loadingQuery }] = useLazyQuery(getMe);
+  const [queryFunctionUser, { loading: loadingQueryUser }] = useLazyQuery(
+    getMe,
+    { fetchPolicy: "no-cache" }
+  );
+  const [queryFunctionChats, { loading: loadingQueryChats }] = useLazyQuery(
+    getChats,
+    { fetchPolicy: "no-cache" }
+  );
+  const [queryFunctionContact, { loading: loadingQueryContact }] = useLazyQuery(
+    getContact,
+    { fetchPolicy: "no-cache" }
+  );
   const [mutateFunction, { loading: loadingMutation }] = useMutation(loginUser);
 
   const onSubmit = async (input: IFormInput): Promise<void> => {
@@ -44,15 +55,33 @@ export const FormLogin = ({
         }
         if (data.status === "Success") {
           localStorage.setItem("token", data.access_token);
-          await queryFunction()
-            .then((req) => {
-              const user = req.data.getMe;
+          await queryFunctionUser()
+            .then(async (res) => {
+              const user = res.data.getMe;
               if (user.status === "Invalid") {
                 toast.error(user.message);
               }
               if (user.status === "Success") {
                 toast.success("Data confirmed");
-                dispatch(actionUserAdd(req.data.getMe));
+                dispatch(actionUserAdd(user.data));
+                await queryFunctionChats().then((res) => {
+                  const chats = res.data.getChats;
+                  if (chats.status === "Invalid") {
+                    toast.error(chats.message);
+                  }
+                  if (chats.status === "Success") {
+                    dispatch(actionAddChats(chats.data));
+                  }
+                });
+                await queryFunctionContact().then((res) => {
+                  const contact = res.data.getContacts;
+                  if (contact.status === "Invalid") {
+                    toast.error(contact.message);
+                  }
+                  if (contact.status === "Success") {
+                    dispatch(actionAddContact(contact.data));
+                  }
+                });
                 navigate("/");
               }
             })
@@ -111,7 +140,14 @@ export const FormLogin = ({
           <button type='submit' className={styles.button}>
             <p>NEXT</p>
             <span className={styles.loading}>
-              {loadingMutation || loadingQuery ? <LoadingIcon /> : ""}
+              {loadingMutation ||
+              loadingQueryUser ||
+              loadingQueryChats ||
+              loadingQueryContact ? (
+                <LoadingIcon />
+              ) : (
+                ""
+              )}
             </span>
           </button>
           <p className={styles.link}>

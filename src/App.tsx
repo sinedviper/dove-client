@@ -11,7 +11,7 @@ function App(): JSX.Element {
   return (
     <>
       <ToastContainer
-        autoClose={1200}
+        autoClose={1300}
         pauseOnFocusLoss
         newestOnTop
         draggable
@@ -21,7 +21,7 @@ function App(): JSX.Element {
       <Router>
         <Routes>
           <Route path='/' element={<Layout />}>
-            <Route index path=':username' element={<Home />} />
+            <Route path=':username' element={<Home />} />
           </Route>
           <Route path='/login' element={<LoginPage />} />
           <Route path='/sigup' element={<SignUpPage />} />

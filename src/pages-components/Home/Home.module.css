@@ -1,13 +1,117 @@
-.main {
+.wrapper {
+  position: relative;
+  display: flex;
+  overflow: hidden;
   width: 100%;
-  height: 100%;
+  height: 100vh;
+  transition: all 0.3s;
 }
 
-.panel {
-  position: fixed;
-  top: 0;
-  z-index: -1;
+.profile {
+  transition: all 0.3s;
+}
+
+.chatWrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
   width: 100%;
-  height: 225px;
-  background: var(--blue-li);
+  height: 100%;
+  overflow: hidden;
+  background-color: #269b6a;
+}
+
+.headerReceiptWrapper {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  padding: 8px 20px;
+  justify-content: left;
+  align-items: center;
+  background-color: white;
+  border-bottom: 1px solid var(--gray-light);
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.headerReceiptPhoto {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  pointer-events: none;
+  background-color: #269b6a;
+}
+.receiptNamePhoto {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  color: white;
+  font-weight: 600;
+}
+
+.headerReceiptInfo {
+  display: flex;
+  pointer-events: none;
+  flex-direction: column;
+  width: 100%;
+  max-width: 600px;
+}
+
+.infoName {
+  font-weight: 600;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.infoDate {
+  color: var(--gray);
+  font-size: 13px;
+}
+
+.chatsWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  padding: 10px;
+  justify-content: flex-end;
+}
+
+.messageWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  overflow-y: scroll;
+}
+
+.inputWrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 5px 0px 10px;
+}
+
+.input {
+  padding: 16px 40px;
+  border: none;
+  outline: none;
+  border-radius: 15px;
+  width: 500px;
+  font-size: 16px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 }
