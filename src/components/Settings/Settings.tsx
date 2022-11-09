@@ -62,9 +62,9 @@ export const Settings = ({
   return (
     <section
       className={cn(className, styles.settingsWrapper, {
-        [styles.settingsWrapperOpen]: settings === true,
-        [styles.profile]: profile === true,
+        [styles.settingsWrapperOpen]: !profile && settings === true,
         [styles.onProfile]: settings === true && profile === true,
+        [styles.profile]: profile === true,
       })}
       {...props}
     >
@@ -78,7 +78,10 @@ export const Settings = ({
           ) : (
             <BackIcon
               className={styles.back}
-              onClick={() => setSettings(false)}
+              onClick={() => {
+                setSettings(false);
+                setDeleteUser(false);
+              }}
             />
           )}
           <h2>{setEdit ? "Settings" : "Profile"}</h2>

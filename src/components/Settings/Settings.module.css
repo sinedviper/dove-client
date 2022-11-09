@@ -8,7 +8,6 @@
   display: flex;
   transition: all 0.3s;
   z-index: 1;
-  display: flex;
   flex-direction: column;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -17,20 +16,22 @@
   -ms-user-select: none;
   user-select: none;
 }
-
-.onProfile {
-  transition: all 0.3s;
+.profile {
   position: relative;
+  overflow-x: hidden;
+  width: 0px;
+  right: 0px;
+  transition: all 0.2s;
 }
 
 .settingsWrapperOpen {
   right: 0px;
   transition: all 0.3s;
 }
-
-.profile {
-  transition: all 0.3s;
+.onProfile {
+  position: relative;
   width: 320px;
+  transition: all 0.2s;
   border-left: 1px solid var(--gray-light);
 }
 

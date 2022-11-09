@@ -60,3 +60,10 @@ export const formateDate = (data: Date): string => {
     return String(data.getFullYear());
   }
 };
+
+export const formatHours = (data: Date): string => {
+  return new Intl.DateTimeFormat("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(data);
+};
