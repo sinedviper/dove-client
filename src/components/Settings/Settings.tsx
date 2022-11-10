@@ -63,7 +63,6 @@ export const Settings = ({
     <section
       className={cn(className, styles.settingsWrapper, {
         [styles.settingsWrapperOpen]: !profile && settings === true,
-        [styles.onProfile]: settings === true && profile === true,
         [styles.profile]: profile === true,
       })}
       {...props}
@@ -131,8 +130,9 @@ export const Settings = ({
           {user?.name.toUpperCase().slice()[0]}
           {user?.surname.toUpperCase().slice()[0]}
           <div className={styles.photoFIO}>
-            <p>{user?.name}</p>
-            <p>{user?.surname}</p>
+            <p>
+              {user?.name} {user?.surname}
+            </p>
           </div>
         </div>
         <div className={styles.infoLast}>

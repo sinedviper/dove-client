@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "hooks";
 import {
   actionClearChats,
   actionClearContact,
+  actionClearMessages,
   actionClearUser,
   getChat,
   getContacts,
@@ -37,6 +38,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
     dispatch(actionClearUser());
     dispatch(actionClearChats());
     dispatch(actionClearContact());
+    dispatch(actionClearMessages());
     return <Navigate to='/login' />;
   }
 

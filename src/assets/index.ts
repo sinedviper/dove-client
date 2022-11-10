@@ -13,6 +13,10 @@ import { ReactComponent as Eye } from "./eye.svg";
 import { ReactComponent as Supheed } from "./supheed.svg";
 import { ReactComponent as Loading } from "./loading.svg";
 import { ReactComponent as RemoveUser } from "./removeUser.svg";
+import { ReactComponent as Smile } from "./smile.svg";
+import { ReactComponent as Reply } from "./reply.svg";
+import { ReactComponent as Copy } from "./copy.svg";
+import { ReactComponent as Delete } from "./delete.svg";
 
 export const TelegramIcon = Telegram;
 export const SearchIcon = Search;
@@ -29,3 +33,7 @@ export const EyeIcon = Eye;
 export const SupheedIcon = Supheed;
 export const LoadingIcon = Loading;
 export const RemoveUserIcon = RemoveUser;
+export const SmileIcon = Smile;
+export const ReplyIcon = Reply;
+export const CopyIcon = Copy;
+export const DeleteIcon = Delete;

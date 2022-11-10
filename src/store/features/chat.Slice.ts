@@ -20,11 +20,20 @@ export const chatsSlice = createSlice({
     actionAddChats: (state, action) => {
       state.chats = action.payload;
     },
+    actionUpdateChatsMessage: (state, action) => {
+      state.chats?.map((obj) => {
+        if (obj.id === action.payload.id) {
+          obj.lastMessage = action.payload.text;
+        }
+        return obj;
+      });
+    },
   },
 });
 
 export const chatsReducer = chatsSlice.reducer;
 
-export const { actionClearChats, actionAddChats } = chatsSlice.actions;
+export const { actionClearChats, actionAddChats, actionUpdateChatsMessage } =
+  chatsSlice.actions;
 
 export const getChat = (state: RootState) => state.chats.chats;

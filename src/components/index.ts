@@ -8,3 +8,4 @@ export * from "./Chats/Chats";
 export * from "./Contacts/Contacts";
 export * from "./Settings/Settings";
 export * from "./Edits/Edits";
+export * from "./MessageEdit/MessageEdit";
