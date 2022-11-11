@@ -17,6 +17,8 @@ import { ReactComponent as Smile } from "./smile.svg";
 import { ReactComponent as Reply } from "./reply.svg";
 import { ReactComponent as Copy } from "./copy.svg";
 import { ReactComponent as Delete } from "./delete.svg";
+import { ReactComponent as Dove } from "./dove.svg";
+import { ReactComponent as Send } from "./send.svg";
 
 export const TelegramIcon = Telegram;
 export const SearchIcon = Search;
@@ -37,3 +39,5 @@ export const SmileIcon = Smile;
 export const ReplyIcon = Reply;
 export const CopyIcon = Copy;
 export const DeleteIcon = Delete;
+export const DoveIcon = Dove;
+export const SendIcon = Send;

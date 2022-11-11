@@ -48,7 +48,7 @@
   padding: 18px 0;
   font-size: 17px;
   font-weight: 600;
-  color: #fff;
+  color: var(--white);
   background-color: var(--blue);
   border-radius: 10px;
   border: none;
@@ -63,13 +63,13 @@
 
 .loading {
   position: absolute;
-  stroke: white;
+  stroke: var(--white);
   top: -24px;
   right: -24px;
 }
 
 .loading svg circle {
-  stroke: white;
+  stroke: var(--white);
 }
 
 .errorInput {

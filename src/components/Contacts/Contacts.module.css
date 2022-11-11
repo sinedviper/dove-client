@@ -4,7 +4,7 @@
   left: 420px;
   width: 420px;
   height: 100vh;
-  background-color: white;
+  background-color: var(--white);
   display: flex;
   transition: all 0.3s;
   z-index: -1;

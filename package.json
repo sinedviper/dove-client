@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.7.0",
+    "@emoji-mart/data": "^1.0.7",
+    "@emoji-mart/react": "^1.0.1",
     "@mui/material": "^5.10.11",
     "@mui/styled-engine-sc": "^5.10.6",
     "@reduxjs/toolkit": "^1.8.6",
@@ -16,6 +18,7 @@
     "@types/react-dom": "^18.0.7",
     "classnames": "^2.3.2",
     "dotenv": "^16.0.3",
+    "emoji-mart": "^5.3.1",
     "emoji-picker-react": "^4.4.4",
     "generate-random-color": "^1.0.6",
     "graphql": "^16.6.0",
@@ -34,8 +37,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build"
+    "dev": "react-scripts start",
+    "build": "react-scripts build",
+    "start": "serve -s build"
   },
   "eslintConfig": {
     "extends": [

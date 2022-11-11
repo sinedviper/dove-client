@@ -1,0 +1,112 @@
+.message {
+  display: flex;
+  position: relative;
+  background-color: var(--blue-light);
+  padding: 6px 10px;
+  border-radius: 10px;
+  align-self: end;
+  margin-top: 2px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s;
+}
+
+.messageUser {
+  align-self: start;
+  background-color: var(--white);
+}
+
+.messageDown {
+  margin-bottom: 10px;
+}
+
+.messageText {
+  font-size: 16px;
+  z-index: 1;
+  pointer-events: none;
+  cursor: text;
+}
+
+.messageEdit {
+  margin-left: 5px;
+  margin-top: 7px;
+  height: 0px;
+  font-style: italic;
+  font-size: 12px;
+  color: var(--blue);
+  z-index: 1;
+  pointer-events: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.messageDate {
+  pointer-events: none;
+  margin-left: 5px;
+  margin-top: 7px;
+  font-size: 12px;
+  color: var(--blue);
+  z-index: 1;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.messageStyleLeft,
+.messageStyleRight {
+  pointer-events: none;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  right: -10px;
+  bottom: 0;
+  z-index: 0;
+  background-color: var(--blue-light);
+}
+
+.messageStyleLeft::before,
+.messageStyleRight::before {
+  pointer-events: none;
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: var(--blue-middle);
+  border-radius: 50%;
+  right: -10px;
+  bottom: -1px;
+}
+
+.messageStyleLeft::after,
+.messageStyleRight::after {
+  pointer-events: none;
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: var(--blue-middle);
+  bottom: 10px;
+  right: -10px;
+}
+
+.messageStyleRight {
+  right: auto;
+  left: -10px;
+  background-color: var(--white);
+}
+
+.messageStyleRight::after {
+  right: auto;
+  left: -10px;
+}
+
+.messageStyleRight::before {
+  right: auto;
+  left: -10px;
+}

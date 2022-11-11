@@ -5,16 +5,62 @@ import { CardContactProps } from "./CardContact.props";
 
 import styles from "./CardContact.module.css";
 import { formateDate, colorCard } from "helpers";
+import { useMutation } from "@apollo/client";
+import { addChat, removeContact } from "mutation";
+import { actionAddChats, actionAddContact, getUser } from "store";
+import { useAppDispatch, useAppSelector } from "hooks";
+import { IUser } from "interface";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { DeleteIcon } from "assets";
 
 export const CardContact = ({
   className,
   contact,
+  setContact,
   ...props
 }: CardContactProps): JSX.Element => {
+  const [top, setTop] = useState<number>(0);
+  const [left, setLeft] = useState<number>(0);
+  const [menu, setMenu] = useState<boolean>(false);
   const [click, setClick] = useState<boolean>(false);
+  const [mutationFunction] = useMutation(addChat);
+  const [mutationFunctionDelete] = useMutation(removeContact);
 
-  const handleFocus = () => {
-    setClick(!click);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const user: IUser | null = useAppSelector(getUser);
+
+  const handleFocus = async () => {
+    setContact(false);
+    await mutationFunction({
+      variables: {
+        chat: { sender: Number(user?.id), recipient: Number(contact.id) },
+      },
+    }).then((res) => {
+      const data = res.data.addChat;
+      if (data.status === "Success") {
+        dispatch(actionAddChats(data.data));
+        navigate(`${contact.username}`);
+      }
+    });
+  };
+
+  const handleDeleteContact = async () => {
+    await mutationFunctionDelete({
+      variables: {
+        contact: { userId: Number(user?.id), contactId: Number(contact.id) },
+      },
+    }).then((res) => {
+      const data = res.data.deleteContact;
+      if (data.status === "Invalid") {
+        toast.error(data.message);
+      }
+      if (data.status === "Success") {
+        dispatch(actionAddContact(data.data));
+      }
+    });
   };
 
   const color = colorCard(contact?.name.toUpperCase().split("")[0]);
@@ -26,6 +72,23 @@ export const CardContact = ({
         [styles.contactActive]: click === true,
       })}
       onClick={handleFocus}
+      onMouseDown={(e) => {
+        if (e.buttons === 2) {
+          setMenu(true);
+        } else setClick(true);
+      }}
+      onMouseUp={() => setClick(false)}
+      onMouseMoveCapture={(e: any) => {
+        if (!menu) {
+          setTop(e.nativeEvent.layerY);
+          setLeft(e.nativeEvent.layerX);
+        }
+      }}
+      onMouseLeave={() => setMenu(false)}
+      onContextMenu={(e) => {
+        e.preventDefault();
+        return false;
+      }}
     >
       <div
         className={styles.contactsPhoto}
@@ -44,6 +107,15 @@ export const CardContact = ({
         </span>
         <span className={styles.contactMessage}>
           last seen {formateDate(new Date(contact?.createdAt))}
+        </span>
+      </div>
+      <div
+        className={cn(styles.menuChat, { [styles.menuChatOn]: menu === true })}
+        style={{ top: top, left: left }}
+      >
+        <span className={styles.menuCard} onClick={handleDeleteContact}>
+          <DeleteIcon className={styles.iconDeleteMenu} />
+          <p>Delete</p>
         </span>
       </div>
     </li>

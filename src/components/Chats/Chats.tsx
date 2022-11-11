@@ -1,15 +1,27 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-func-assign */
 import React, { useState } from "react";
 import cn from "classnames";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { ChatsProps } from "./Chats.props";
 import { ContactsIcon, LogoutIcon, SettingsIcon } from "assets";
 import { CardChat, Search } from "components";
-import { IChat } from "interface";
-import { actionClearChats, actionClearContact, actionClearUser } from "store";
-import { useAppDispatch } from "hooks";
+import { IChat, IUser } from "interface";
+import {
+  actionAddChats,
+  actionClearChats,
+  actionClearContact,
+  actionClearUser,
+  getContacts,
+  getUser,
+} from "store";
+import { useAppDispatch, useAppSelector } from "hooks";
 
 import styles from "./Chats.module.css";
+import { colorCard } from "helpers";
+import { useMutation } from "@apollo/client";
+import { addChat } from "mutation";
 
 export const Chats = ({
   chats,
@@ -23,8 +35,16 @@ export const Chats = ({
 }: ChatsProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { username } = useParams();
+  const [mutationFunction] = useMutation(addChat);
+
+  const [click, setClick] = useState<boolean>(false);
   const [menu, setMenu] = useState<boolean>(false);
   const [swiper, setSwiper] = useState<boolean>(false);
+  const [searchUser, setSearchUser] = useState<boolean>(false);
+
+  const user: IUser | null = useAppSelector(getUser);
+  const contacts: IUser[] | null = useAppSelector(getContacts);
 
   const handleContact = () => {
     setContact(true);
@@ -52,16 +72,45 @@ export const Chats = ({
     navigate("/login");
   };
 
+  const handleFocus = async (contact: IUser) => {
+    setSearchUser(false);
+    await mutationFunction({
+      variables: {
+        chat: { sender: Number(user?.id), recipient: Number(contact.id) },
+      },
+    }).then((res) => {
+      const data = res.data.addChat;
+      if (data.status === "Success") {
+        dispatch(actionAddChats(data.data));
+        navigate(`${contact.username}`);
+      }
+    });
+  };
+
   return (
     <section
       className={className}
-      onMouseLeave={handleLeavMouseInBlockChats}
       onMouseOut={() => setSwiper(true)}
       {...props}
     >
-      <nav className={styles.menuWrapper}>
-        <button className={styles.menu} onClick={() => setMenu(!menu)}>
-          <span className={styles.line}></span>
+      <nav
+        className={styles.menuWrapper}
+        onMouseLeave={handleLeavMouseInBlockChats}
+      >
+        <button
+          className={styles.menu}
+          onClick={() => {
+            if (searchUser) {
+              setSearchUser(false);
+            }
+            if (!searchUser) setMenu(!menu);
+          }}
+        >
+          <span
+            className={cn(styles.line, {
+              [styles.lineBack]: searchUser === true,
+            })}
+          ></span>
         </button>
         <div
           className={cn(styles.menuClose, {
@@ -89,8 +138,52 @@ export const Chats = ({
             github repyev denis
           </a>
         </div>
-        <Search value={valueAll} setValue={setValueAll} />
+        <Search
+          value={valueAll}
+          setValue={setValueAll}
+          onFocus={() => {
+            setSearchUser(true);
+            setMenu(false);
+          }}
+        />
       </nav>
+      <section
+        className={cn(styles.searchWrapperUsers, {
+          [styles.searchWrapperUsersOn]: searchUser === true,
+        })}
+      >
+        <div className={styles.contactListWrapper}>
+          {contacts &&
+            valueAll === "" &&
+            contacts.map((contact) => {
+              const { color1, color2 } = colorCard(
+                contact.name.toUpperCase()[0]
+              );
+              return (
+                <div
+                  key={contact.id}
+                  className={cn(styles.contactWrapper, {
+                    [styles.contactWrapperOn]: username === contact.username,
+                    [styles.contactWrapperClick]: click === true,
+                  })}
+                  onClick={() => handleFocus(contact)}
+                  onMouseDown={() => setClick(true)}
+                  onMouseUp={() => setClick(false)}
+                >
+                  <div
+                    className={styles.contactPhoto}
+                    style={{
+                      background: `linear-gradient(${color1}, ${color2})`,
+                    }}
+                  >
+                    <span>{contact.name.toUpperCase()[0]}</span>
+                  </div>
+                  <p>{contact.name}</p>
+                </div>
+              );
+            })}
+        </div>
+      </section>
       <section
         className={cn(styles.contactsList, {
           [styles.swiper]: swiper === true,

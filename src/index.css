@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
 :root {
+  --white: white;
   --light: #f5f5f5;
   --dark: #17212b;
 
@@ -9,8 +10,11 @@
   --gray-dark: #c5c5c5;
   --gray-light: #e1e3e6;
 
-  --blue: #007242;
-  --blue-dark: #005a35;
+  --blue: #3390ec;
+  --blue-opacity: rgba(51, 144, 236, 0.3);
+  --blue-dark: #225991;
+  --blue-light: #e2f1ff;
+  --blue-middle: #9ccdfd;
 
   --error: #d94848;
 }
@@ -33,4 +37,16 @@ body {
 body {
   background: white;
   color: var(--dark);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  z-index: 10;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gray-light);
+  border-radius: 10px;
+}
+::-webkit-scrollbar {
+  height: 6px;
 }

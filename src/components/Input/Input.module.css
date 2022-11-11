@@ -10,7 +10,7 @@
   top: -8px;
   left: 15px;
   height: 9px;
-  background-color: white;
+  background-color: var(--white);
   padding: 0 3px;
   transition: all 0.1s;
   pointer-events: none;

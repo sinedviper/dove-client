@@ -1,6 +1,7 @@
 .contacts {
+  position: relative;
   width: 100%;
-  height: 75px;
+  padding: 15px 0px;
   border-radius: 15px;
   transition: all 0.3s;
   display: flex;
@@ -22,15 +23,15 @@
 
 .contactActive {
   transition: all 0.3s;
-  color: white;
+  color: var(--white);
   background-color: var(--blue);
 }
 .contactActive span {
-  color: white;
+  color: var(--white);
 }
 .contactActive:hover {
   transition: all 0.3s;
-  color: white;
+  color: var(--white);
   background-color: var(--blue);
 }
 
@@ -56,6 +57,7 @@
   flex-direction: column;
   margin-left: 5px;
   width: 300px;
+  pointer-events: none;
 }
 
 .contactName {
@@ -80,4 +82,57 @@
   right: -30px;
   font-size: 12px;
   color: var(--gray);
+}
+
+.menuChat {
+  position: absolute;
+  background-color: var(--white);
+  padding: 5px;
+  border-radius: 10px;
+  z-index: 1;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  width: 200px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  opacity: 0;
+  pointer-events: none;
+  transform-origin: left top;
+  transition: all 0.3s;
+}
+.menuChatOn {
+  transition: all 0.3s;
+  opacity: 1;
+  pointer-events: all;
+  z-index: 5;
+}
+
+.menuCard {
+  display: flex;
+  transition: all 0.2s;
+  border-radius: 5px;
+  align-items: center;
+  padding: 5px 15px;
+  gap: 20px;
+  cursor: pointer;
+}
+
+.menuCard:hover {
+  transition: all 0.2s;
+  background-color: var(--light);
+}
+
+.menuCard p {
+  color: var(--dark);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.iconDeleteMenu {
+  width: 20px;
+  height: 20px;
+  fill: var(--dark);
 }

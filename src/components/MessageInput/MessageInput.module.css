@@ -1,0 +1,124 @@
+.inputWrapper {
+  position: relative;
+  max-width: 500px;
+  width: 100%;
+  padding: 5px 0px 10px;
+}
+
+.input {
+  padding: 16px 55px;
+  border: none;
+  outline: none;
+  border-radius: 15px;
+  max-width: 500px;
+  width: 100%;
+  font-size: 16px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.smileIcon {
+  z-index: 1;
+  position: absolute;
+  width: 27px;
+  height: 27px;
+  bottom: 22px;
+  left: 15px;
+  cursor: pointer;
+}
+
+.send {
+  z-index: 1;
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  bottom: 16px;
+  right: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: var(--blue);
+  border-radius: 50%;
+}
+
+.sendIcon {
+  width: 20px;
+  height: 20px;
+  fill: var(--white);
+  pointer-events: none;
+}
+
+.smileIcon path {
+  fill: var(--gray);
+}
+
+.emojiIconOn path {
+  fill: var(--blue);
+}
+
+.emojiWrapper {
+  pointer-events: none;
+  position: absolute;
+  border-radius: 15px;
+  overflow: hidden;
+  z-index: 1;
+  bottom: -80px;
+  left: -120px;
+  transform: scale(0.3);
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s;
+  opacity: 0;
+  animation: transform 0.2s linear;
+}
+@keyframes transform {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.emojiWrapperOn {
+  opacity: 1;
+  pointer-events: all;
+  transition: all 0.2s;
+  bottom: 70px;
+  left: 0px;
+  transform: scale(1);
+}
+
+/* .inputStyles {
+  pointer-events: none;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  right: -15px;
+  bottom: 10px;
+  z-index: 0;
+  background-color: white;
+}
+
+.inputStyles::before {
+  pointer-events: none;
+  content: "";
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: var(--blue-middle);
+  border-radius: 50%;
+  right: -15px;
+  bottom: -1px;
+}
+
+.inputStyles::after {
+  pointer-events: none;
+  content: "";
+  position: absolute;
+  width: 30px;
+  height: 20px;
+  background: var(--blue-middle);
+  bottom: 15px;
+  right: -15px;
+} */

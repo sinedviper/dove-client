@@ -9,3 +9,6 @@ export * from "./Contacts/Contacts";
 export * from "./Settings/Settings";
 export * from "./Edits/Edits";
 export * from "./MessageEdit/MessageEdit";
+export * from "./MessageHeader/MessageHeader";
+export * from "./MessageInput/MessageInput";
+export * from "./MessageCard/MessageCard";

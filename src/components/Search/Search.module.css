@@ -60,7 +60,7 @@
 }
 
 .buttonRemove:hover {
-  background-color: rgba(51, 144, 236, 0.3);
+  background-color: var(--blue-opacity);
 }
 
 .focusRemove {

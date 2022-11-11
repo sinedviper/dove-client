@@ -1,15 +1,12 @@
 import { DetailedHTMLProps, HTMLAttributes } from "react";
 
 export interface MessageEditProps
-  extends DetailedHTMLProps<
-    HTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  > {
+  extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   setEditMessage: Function;
   editMessage: boolean;
+  clientX: number;
+  clientY: number;
   client: {
-    clientX: number;
-    clientY: number;
     id: number;
     chatId: number;
     senderMessage: number;

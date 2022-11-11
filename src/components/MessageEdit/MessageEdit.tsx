@@ -5,16 +5,18 @@ import { useMutation } from "@apollo/client";
 
 import { MessageEditProps } from "./MessageEdit.props";
 import { CopyIcon, DeleteIcon, ReplyIcon } from "assets";
-
-import styles from "./MessageEdit.module.css";
 import { deleteMessages } from "mutation";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { actionAddMessages, getUser } from "store";
+
+import styles from "./MessageEdit.module.css";
 
 export const MessageEdit = ({
   setEditMessage,
   editMessage,
   client,
+  clientX,
+  clientY,
   className,
   ...props
 }: MessageEditProps): JSX.Element => {
@@ -52,7 +54,7 @@ export const MessageEdit = ({
       className={cn(className, styles.messageWrapperEdit, {
         [styles.messageWrapperEditOn]: editMessage === true,
       })}
-      style={{ top: client.clientY, left: client.clientX - 420 }}
+      style={{ top: clientY, left: clientX }}
       {...props}
     >
       <span

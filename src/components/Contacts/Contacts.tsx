@@ -45,7 +45,11 @@ export const Contacts = ({
           {contacts &&
             contacts
               .map((contact: IUser) => (
-                <CardContact contact={contact} key={contact.id} />
+                <CardContact
+                  contact={contact}
+                  key={contact.id}
+                  setContact={setContact}
+                />
               ))
               // eslint-disable-next-line array-callback-return
               .filter((val) => {
