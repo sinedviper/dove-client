@@ -12,13 +12,13 @@
   height: 9px;
   background-color: var(--white);
   padding: 0 3px;
-  transition: all 0.1s;
+  transition: var(--transition-input);
   pointer-events: none;
 }
 
 .labelOn {
   color: var(--blue);
-  transition: all 0.1s;
+  transition: var(--transition-input);
   font-weight: 600;
 }
 
@@ -29,40 +29,40 @@
   padding: 15px;
   font-size: 17px;
   background: inherit;
-  transition: all 0.1s;
+  transition: var(--transition-input);
   border: 1px solid var(--gray-middle);
 }
 
 .input:hover {
   border: 1px solid var(--blue);
-  transition: all 0.1s;
+  transition: var(--transition-input);
 }
 
 .input:focus {
-  transition: all 0.1s;
+  transition: var(--transition-input);
   border: 1px solid var(--blue);
   outline: var(--blue) solid 1px;
 }
 
 .error {
-  transition: all 0.1s;
+  transition: var(--transition-input);
   border: 1px solid var(--error);
 }
 
 .error:hover {
-  transition: all 0.1s;
+  transition: var(--transition-input);
   border: 1px solid var(--error);
 }
 
 .error:focus {
-  transition: all 0.1s;
+  transition: var(--transition-input);
   border: 1px solid var(--error);
   outline: var(--error) solid 1px;
 }
 
 .errorLabel {
   color: var(--error);
-  transition: all 0.1s;
+  transition: var(--transition-input);
 }
 
 .password {

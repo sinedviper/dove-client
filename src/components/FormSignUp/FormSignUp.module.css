@@ -53,11 +53,11 @@
   border-radius: 10px;
   border: none;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: var(--transition);
 }
 
 .button:hover {
-  transition: all 0.3s;
+  transition: var(--transition);
   background-color: var(--blue-dark);
 }
 

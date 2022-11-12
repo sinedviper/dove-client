@@ -17,6 +17,9 @@
   --blue-middle: #9ccdfd;
 
   --error: #d94848;
+
+  --transition: all 0.23s;
+  --transition-input: all 0.1s;
 }
 
 * {
@@ -41,12 +44,11 @@ body {
 
 ::-webkit-scrollbar {
   width: 6px;
-  z-index: 10;
+  height: 6px;
 }
 ::-webkit-scrollbar-thumb {
   background: var(--gray-light);
   border-radius: 10px;
-}
-::-webkit-scrollbar {
-  height: 6px;
+  cursor: pointer;
+  scroll-behavior: smooth;
 }

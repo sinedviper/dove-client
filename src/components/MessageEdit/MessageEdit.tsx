@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { useMutation } from "@apollo/client";
 
 import { MessageEditProps } from "./MessageEdit.props";
-import { CopyIcon, DeleteIcon, ReplyIcon } from "assets";
+import { CopyIcon, DeleteIcon, EditIcon, ReplyIcon } from "assets";
 import { deleteMessages } from "mutation";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { actionAddMessages, getUser } from "store";
@@ -66,6 +66,19 @@ export const MessageEdit = ({
         <ReplyIcon className={styles.editIconMessage} />
         <p>Reply</p>
       </span>
+      {user?.id === client.senderMessage ? (
+        <span
+          className={styles.editMessagePerson}
+          onClick={() => {
+            setEditMessage(false);
+          }}
+        >
+          <EditIcon
+            className={cn(styles.editIconMessage, styles.editIconMessageE)}
+          />
+          <p>Edit</p>
+        </span>
+      ) : null}
       <span
         className={styles.editMessagePerson}
         onClick={() => {

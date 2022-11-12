@@ -5,16 +5,16 @@
   width: 330px;
   font-size: 16px;
   color: var(--dark);
-  transition: all 0.3s;
+  transition: var(--transition);
 }
 
 .search:hover {
-  transition: all 0.3s;
+  transition: var(--transition);
   border: 1px solid var(--gray-dark);
 }
 
 .search:focus {
-  transition: all 0.3s;
+  transition: var(--transition);
   border: 1px solid var(--blue);
   outline: 1px solid var(--blue);
 }
@@ -30,11 +30,11 @@
   width: 21px;
   height: 21px;
   fill: var(--gray-dark);
-  transition: all 0.3s;
+  transition: var(--transition);
 }
 
 .focusSearch {
-  transition: all 0.3s;
+  transition: var(--transition);
   fill: var(--blue);
 }
 

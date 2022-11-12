@@ -1,13 +1,26 @@
 .message {
   display: flex;
   position: relative;
+  flex-direction: column;
   background-color: var(--blue-light);
+  max-width: 480px;
+  justify-content: flex-end;
   padding: 6px 10px;
   border-radius: 10px;
   align-self: end;
   margin-top: 2px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s;
+  transition: var(--transition);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.messageTextWrap {
+  flex-direction: row;
 }
 
 .messageUser {
@@ -24,38 +37,33 @@
   z-index: 1;
   pointer-events: none;
   cursor: text;
+  word-break: break-all;
+  pointer-events: none;
+}
+
+.messageTextLen {
+  margin-top: 8px;
+  height: 0px;
+}
+
+.bottoMessage {
+  display: flex;
+  gap: 5px;
+  justify-content: flex-end;
+  pointer-events: none;
 }
 
 .messageEdit {
-  margin-left: 5px;
-  margin-top: 7px;
-  height: 0px;
   font-style: italic;
   font-size: 12px;
   color: var(--blue);
   z-index: 1;
-  pointer-events: none;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 
 .messageDate {
-  pointer-events: none;
-  margin-left: 5px;
-  margin-top: 7px;
   font-size: 12px;
   color: var(--blue);
   z-index: 1;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 
 .messageStyleLeft,

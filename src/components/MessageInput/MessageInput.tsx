@@ -32,7 +32,7 @@ export const MessageInput = forwardRef(
 
     const handleSend = async (e) => {
       if (chat)
-        if (send.replaceAll(" ", "") === "") {
+        if (send.replaceAll(" ", "") !== "") {
           if (e.code === "Enter") {
             setSend("");
             await metationFunction({
@@ -58,7 +58,7 @@ export const MessageInput = forwardRef(
 
     const handleSendClick = async () => {
       if (chat) {
-        if (send.replaceAll(" ", "") === "") {
+        if (send.replaceAll(" ", "") !== "") {
           setSend("");
           await metationFunction({
             variables: {

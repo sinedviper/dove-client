@@ -6,7 +6,7 @@
   height: 100vh;
   background-color: var(--white);
   display: flex;
-  transition: all 0.3s;
+  transition: var(--transition);
   z-index: -1;
   display: flex;
   flex-direction: column;
@@ -21,7 +21,7 @@
 .contactWrapperOpen {
   left: 0px;
   z-index: 1;
-  transition: all 0.3s;
+  transition: var(--transition);
 }
 
 .contactSearch {
@@ -36,11 +36,11 @@
   border-radius: 50%;
   margin-right: 10px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: var(--transition);
 }
 
 .back:hover {
-  transition: all 0.3s;
+  transition: var(--transition);
   background-color: var(--light);
 }
 

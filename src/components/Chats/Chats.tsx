@@ -152,9 +152,12 @@ export const Chats = ({
           [styles.searchWrapperUsersOn]: searchUser === true,
         })}
       >
-        <div className={styles.contactListWrapper}>
+        <div
+          className={cn(styles.contactListWrapper, {
+            [styles.contactListWrapperOn]: valueAll.replaceAll(" ", "") !== "",
+          })}
+        >
           {contacts &&
-            valueAll === "" &&
             contacts.map((contact) => {
               const { color1, color2 } = colorCard(
                 contact.name.toUpperCase()[0]

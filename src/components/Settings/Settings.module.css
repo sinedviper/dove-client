@@ -6,7 +6,7 @@
   height: 100vh;
   background-color: var(--light);
   display: flex;
-  transition: all 0.3s;
+  transition: var(--transition);
   z-index: 1;
   flex-direction: column;
 
@@ -27,7 +27,7 @@
 
 .settingsWrapperOpen {
   right: 0px;
-  transition: all 0.3s;
+  transition: var(--transition);
 }
 
 .settingsHead {
@@ -56,11 +56,11 @@
   border-radius: 50%;
   margin-right: 10px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: var(--transition);
 }
 
 .back:hover {
-  transition: all 0.3s;
+  transition: var(--transition);
   background-color: var(--light);
 }
 
@@ -78,11 +78,11 @@
   padding: 7.5px 3.5px;
   border-radius: 50%;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: var(--transition);
 }
 
 .edit:hover {
-  transition: all 0.3s;
+  transition: var(--transition);
   background-color: var(--light);
 }
 
@@ -100,11 +100,11 @@
   border: none;
   background-color: initial;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: var(--transition);
 }
 
 .delete:hover {
-  transition: all 0.3s;
+  transition: var(--transition);
   background-color: var(--light);
 }
 
@@ -148,13 +148,13 @@
   padding: 5px;
   border-radius: 10px;
   background-color: var(--light);
-  transition: all 0.3s;
+  transition: var(--transition);
 }
 
 .openDelWrap {
   opacity: 1;
   pointer-events: all;
-  transition: all 0.3s;
+  transition: var(--transition);
 }
 
 .removeIcon {
@@ -172,12 +172,12 @@
   gap: 20px;
   cursor: pointer;
   background-color: initial;
-  transition: all 0.3s;
+  transition: var(--transition);
 }
 
 .deleteButton:hover {
   background-color: var(--gray-light);
-  transition: all 0.3s;
+  transition: var(--transition);
 }
 .deleteButton span {
   color: var(--dark);
@@ -228,12 +228,12 @@
   padding: 10px 15px;
   gap: 20px;
   border-radius: 10px;
-  transition: all 0.3s;
+  transition: var(--transition);
   cursor: pointer;
 }
 
 .info:hover {
-  transition: all 0.3s;
+  transition: var(--transition);
   background-color: var(--light);
 }
 

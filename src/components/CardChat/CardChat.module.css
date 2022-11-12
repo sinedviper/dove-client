@@ -3,7 +3,7 @@
   width: 100%;
   padding: 15px 0px;
   border-radius: 15px;
-  transition: all 0.3s;
+  transition: var(--transition);
   display: flex;
   cursor: pointer;
   justify-content: left;
@@ -17,12 +17,12 @@
 }
 
 .contacts:hover {
-  transition: all 0.3s;
+  transition: var(--transition);
   background-color: var(--light);
 }
 
 .contactActive {
-  transition: all 0.3s;
+  transition: var(--transition);
   color: var(--white);
   background-color: var(--blue);
 }
@@ -30,7 +30,7 @@
   color: var(--white);
 }
 .contactActive:hover {
-  transition: all 0.3s;
+  transition: var(--transition);
   color: var(--white);
   background-color: var(--blue);
 }
@@ -101,10 +101,10 @@
   opacity: 0;
   pointer-events: none;
   transform-origin: left top;
-  transition: all 0.3s;
+  transition: var(--transition);
 }
 .menuChatOn {
-  transition: all 0.3s;
+  transition: var(--transition);
   opacity: 1;
   pointer-events: all;
   z-index: 5;
@@ -112,7 +112,7 @@
 
 .menuCard {
   display: flex;
-  transition: all 0.2s;
+  transition: var(--transition);
   border-radius: 5px;
   align-items: center;
   padding: 5px 15px;
@@ -121,7 +121,7 @@
 }
 
 .menuCard:hover {
-  transition: all 0.2s;
+  transition: var(--transition);
   background-color: var(--light);
 }
 

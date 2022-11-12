@@ -9,9 +9,9 @@
   width: 200px;
   opacity: 0;
   pointer-events: none;
-  transition: all 0.3s;
+  transition: var(--transition);
+  transform-origin: left top;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
-
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -23,7 +23,7 @@
 .messageWrapperEditOn {
   opacity: 1;
   transform-origin: left top;
-  transition: all 0.3s;
+  transition: var(--transition);
   pointer-events: all;
 }
 
@@ -49,6 +49,11 @@
   fill: var(--dark);
   width: 20px;
   height: 20px;
+}
+
+.editIconMessageE {
+  width: 21px;
+  height: 21px;
 }
 
 .deleteMessage p {

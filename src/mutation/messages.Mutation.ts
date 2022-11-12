@@ -1,20 +1,25 @@
 import { gql } from "@apollo/client";
 
 export const getMessage = gql`
-  query GetMessages($message: MessageFindInput!) {
+  query GetMessages($message: MessageInput!) {
     getMessages(message: $message) {
       data {
-        id
+        text
         senderMessage {
-          createdAt
-          email
           id
           name
           surname
           username
         }
-        text
-        updatedAt
+        reply {
+          text
+          id
+          createdAt
+        }
+        id
+        chatId {
+          id
+        }
         createdAt
       }
       message
@@ -26,54 +31,81 @@ export const getMessage = gql`
 export const addMessages = gql`
   mutation Mutation($message: MessageInput!) {
     addMessage(message: $message) {
-      status
-      message
       data {
-        id
-        createdAt
         text
-        updatedAt
         senderMessage {
-          createdAt
-          email
           id
           name
           surname
-          updatedAt
           username
         }
+        reply {
+          text
+          id
+          createdAt
+        }
+        id
+        chatId {
+          id
+        }
+        createdAt
       }
+      message
+      status
     }
   }
 `;
 
 export const deleteMessages = gql`
-  mutation Mutation($message: MessageDeleteInput!) {
+  mutation Mutation($message: MessageInput!) {
     deleteMessage(message: $message) {
-      message
-      status
       data {
-        id
-        createdAt
         text
-        updatedAt
         senderMessage {
-          createdAt
-          email
           id
           name
           surname
-          updatedAt
           username
         }
+        reply {
+          text
+          id
+          createdAt
+        }
+        id
+        chatId {
+          id
+        }
+        createdAt
       }
+      message
+      status
     }
   }
 `;
 
 export const updateMessages = gql`
-  mutation Mutation($message: MessageUpdateInput!) {
+  mutation Mutation($message: MessageInput!) {
     updateMessage(message: $message) {
+      data {
+        text
+        senderMessage {
+          id
+          name
+          surname
+          username
+        }
+        reply {
+          text
+          id
+          createdAt
+        }
+        id
+        chatId {
+          id
+        }
+        createdAt
+      }
       message
       status
     }

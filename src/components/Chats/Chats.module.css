@@ -16,14 +16,14 @@
   border-radius: 50%;
   border: none;
   background-color: inherit;
-  transition: all 0.3s;
+  transition: var(--transition);
   position: relative;
   margin-right: 7px;
   cursor: pointer;
 }
 
 .menu:hover {
-  transition: all 0.3s;
+  transition: var(--transition);
   background-color: var(--light);
 }
 
@@ -37,7 +37,7 @@
   position: absolute;
   top: 18px;
   left: 11px;
-  transition: all 0.2s;
+  transition: var(--transition);
 }
 
 .line::after {
@@ -50,7 +50,7 @@
   border-radius: 30px;
   background-color: var(--gray);
   display: block;
-  transition: all 0.2s;
+  transition: var(--transition);
 }
 
 .line::before {
@@ -63,30 +63,30 @@
   border-radius: 30px;
   background-color: var(--gray);
   display: block;
-  transition: all 0.2s;
+  transition: var(--transition);
 }
 
 .lineBack {
   top: 18px;
-  width: 21px;
-  transition: all 0.2s;
+  width: 18px;
+  transition: var(--transition);
   transform: rotate(180deg);
 }
 
 .lineBack::after {
-  top: 5px;
-  left: 10px;
+  top: 4px;
+  left: 7px;
   width: 12px;
-  transform: rotate(-40deg);
-  transition: all 0.2s;
+  transform: rotate(-45deg);
+  transition: var(--transition);
 }
 
 .lineBack::before {
-  top: -5px;
+  top: -4px;
   width: 12px;
-  left: 10px;
-  transform: rotate(40deg);
-  transition: all 0.2s;
+  left: 7px;
+  transform: rotate(45deg);
+  transition: var(--transition);
 }
 
 .menuClose {
@@ -103,11 +103,11 @@
   left: 15px;
   text-align: center;
   opacity: 0;
-  transition: all 0.2s;
+  transition: var(--transition);
 }
 
 .menuOpen {
-  transition: all 0.2s;
+  transition: var(--transition);
   z-index: 10;
   opacity: 1;
 }
@@ -120,7 +120,7 @@
   width: 100%;
   color: var(--dark);
   text-align: left;
-  transition: all 0.3s;
+  transition: var(--transition);
   border-radius: 7px;
   font-weight: 600;
   display: flex;
@@ -128,7 +128,7 @@
 }
 
 .menuCard:hover {
-  transition: all 0.3s;
+  transition: var(--transition);
   background-color: var(--light);
 }
 
@@ -159,14 +159,14 @@
 }
 
 .contactsList {
-  padding: 6px 6px 0 6px;
-  height: 95vh;
+  padding: 6px;
+  height: calc(100vh - 60px);
   overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 .swiper {
-  padding-right: 0px;
-  overflow-y: scroll;
+  overflow-y: overlay;
 }
 
 .searchWrapperUsers {
@@ -175,12 +175,12 @@
   width: 100%;
   background-color: var(--white);
   height: 92vh;
-  overflow-y: scroll;
+  overflow-y: overlay;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
   opacity: 0;
-  transition: all 0.2s;
+  transition: var(--transition);
   transform: scale(1.05);
   pointer-events: none;
 }
@@ -188,17 +188,26 @@
 .searchWrapperUsersOn {
   opacity: 1;
   z-index: 1;
-  transition: all 0.2s;
+  transition: var(--transition);
   pointer-events: all;
   transform: scale(1);
 }
 
 .contactListWrapper {
   display: flex;
-  overflow-x: scroll;
+  overflow-x: overlay;
   overflow-y: hidden;
-  padding: 5px;
+  padding: 6px;
   gap: 5px;
+  border-bottom: 1px solid var(--gray-light);
+  opacity: 1;
+  transition: var(--transition);
+}
+
+.contactListWrapperOn {
+  transition: var(--transition);
+  pointer-events: none;
+  opacity: 0;
 }
 
 .contactWrapper {
@@ -210,7 +219,7 @@
   width: 75px;
   background-color: var(--white);
   border-radius: 10px;
-  transition: all 0.2s;
+  transition: var(--transition);
   text-align: center;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -221,7 +230,7 @@
 }
 
 .contactWrapper:hover {
-  transition: all 0.2s;
+  transition: var(--transition);
   background-color: var(--light);
 }
 

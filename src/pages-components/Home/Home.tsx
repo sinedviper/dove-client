@@ -12,14 +12,11 @@ import styles from "./Home.module.css";
 
 export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
   const MessageHeaderMemo = React.memo(MessageHeader);
-  const MessageCardMemo = React.memo(MessageCard);
-
-  const [scroll, setScroll] = useState<boolean>(false);
   const [settings, setSettings] = useState<boolean>(false);
   const { username } = useParams();
 
   let chat: IChat | null = null;
-  let receipt: IUser | undefined = useAppSelector(getChat)
+  const receipt: IUser | undefined = useAppSelector(getChat)
     ?.filter((obj) => obj.user.username === username)
     .map((obj) => {
       chat = obj;
@@ -43,14 +40,10 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
       <section className={styles.chatWrapper}>
         <MessageHeaderMemo receipt={receipt} setSettings={setSettings} />
         <section className={styles.chatsWrapper}>
-          <ul
-            className={cn(styles.messageWrapper, {
-              [styles.scrollOn]: scroll === true,
-            })}
-          >
+          <ul className={cn(styles.messageWrapper)}>
             {messages &&
               messages?.map((message, index) => (
-                <MessageCardMemo
+                <MessageCard
                   chat={chat}
                   message={message}
                   index={index}
@@ -63,11 +56,7 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
             <li ref={messagesEndRef}></li>
           </ul>
           <div className={styles.inputWrap}>
-            <MessageInput
-              className={styles.inputWrapper}
-              chat={chat}
-              user={user}
-            />
+            <MessageInput chat={chat} user={user} />
           </div>
         </section>
       </section>

@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import cn from "classnames";
 
 import { MessageCardProps } from "./MessageCard.props";
-
-import styles from "./MessageCard.module.css";
 import { formatHours } from "helpers";
 import { MessageEdit } from "components";
 import { IMessage } from "interface";
+
+import styles from "./MessageCard.module.css";
 
 export const MessageCard = ({
   chat,
@@ -58,6 +58,7 @@ export const MessageCard = ({
           messages[Number(index + 1)]?.senderMessage.username !==
             message.senderMessage.username &&
           messages[Number(index + 1)]?.senderMessage.username !== undefined,
+        [styles.messageTextWrap]: message.text.length < 50,
       })}
       onMouseMove={(e: any) => {
         if (!editMessage) {
@@ -73,13 +74,19 @@ export const MessageCard = ({
       }}
       {...props}
     >
-      <span className={styles.messageText}>{message.text}</span>
-      <span className={styles.messageEdit}>
-        {message.createdAt === message.updatedAt ? null : "edited"}
-      </span>
-      <span className={styles.messageDate}>
-        {formatHours(new Date(message.createdAt))}
-      </span>
+      <span className={cn(styles.messageText)}>{message.text}</span>
+      <div
+        className={cn(styles.bottoMessage, {
+          [styles.messageTextLen]: message.text.length < 50,
+        })}
+      >
+        <span className={styles.messageEdit}>
+          {message.createdAt === message.updatedAt ? "edited" : null}
+        </span>
+        <span className={styles.messageDate}>
+          {formatHours(new Date(message.createdAt))}
+        </span>
+      </div>
       <span
         className={cn(
           messages[Number(index + 1)]?.senderMessage.username !==

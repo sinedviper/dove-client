@@ -2,14 +2,14 @@
 import React, { useEffect, useState } from "react";
 import cn from "classnames";
 import { useForm } from "react-hook-form";
-import { useMutation, useLazyQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
 
 import { EditsProps } from "./Edits.props";
 import { BackIcon, SupheedIcon } from "assets";
 import { Input } from "components";
 import { colorCard } from "helpers";
-import { getMe, updateUser } from "mutation";
+import { updateUser } from "mutation";
 import { useAppDispatch } from "hooks";
 import { actionUserAdd } from "store";
 
@@ -40,9 +40,6 @@ export const Edits = ({
   const dispatch = useAppDispatch();
   //res in db
   const [mutateFunction] = useMutation(updateUser);
-  const [queryFunction] = useLazyQuery(getMe, {
-    fetchPolicy: "no-cache",
-  });
 
   const [swiper, setSwiper] = useState<boolean>(false);
   const [submit, setSubmit] = useState<boolean>(false);
@@ -136,15 +133,7 @@ export const Edits = ({
         toast.error(data.message);
       }
       if (data.status === "Success") {
-        await queryFunction().then((res) => {
-          const user = res.data.getMe;
-          if (user.status === "Invalid") {
-            toast.error(user.message);
-          }
-          if (user.status === "Success") {
-            dispatch(actionUserAdd(user.data));
-          }
-        });
+        dispatch(actionUserAdd(data.data));
         setPassword("");
         setPasswordNew("");
         setPasswordReapeat("");
