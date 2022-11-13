@@ -1,29 +1,35 @@
 import { gql } from "@apollo/client";
 
 export const getMessage = gql`
-  query GetMessages($message: MessageInput!) {
+  query Query($message: MessageInput!) {
     getMessages(message: $message) {
+      status
+      code
       data {
-        text
+        id
         senderMessage {
           id
+          username
+          email
           name
           surname
-          username
         }
+        text
         reply {
+          id
+          senderMessage {
+            id
+            username
+            email
+            name
+            surname
+          }
           text
-          id
           createdAt
-        }
-        id
-        chatId {
-          id
         }
         createdAt
       }
       message
-      status
     }
   }
 `;
@@ -31,83 +37,101 @@ export const getMessage = gql`
 export const addMessages = gql`
   mutation Mutation($message: MessageInput!) {
     addMessage(message: $message) {
+      status
+      code
       data {
-        text
+        id
         senderMessage {
           id
+          username
+          email
           name
           surname
-          username
         }
+        text
         reply {
+          id
+          senderMessage {
+            id
+            username
+            email
+            name
+            surname
+          }
           text
-          id
           createdAt
-        }
-        id
-        chatId {
-          id
         }
         createdAt
       }
       message
-      status
     }
   }
 `;
 
 export const deleteMessages = gql`
   mutation Mutation($message: MessageInput!) {
-    deleteMessage(message: $message) {
+    addMessage(message: $message) {
+      status
+      code
       data {
-        text
+        id
         senderMessage {
           id
+          username
+          email
           name
           surname
-          username
         }
+        text
         reply {
+          id
+          senderMessage {
+            id
+            username
+            email
+            name
+            surname
+          }
           text
-          id
           createdAt
-        }
-        id
-        chatId {
-          id
         }
         createdAt
       }
       message
-      status
     }
   }
 `;
 
 export const updateMessages = gql`
   mutation Mutation($message: MessageInput!) {
-    updateMessage(message: $message) {
+    addMessage(message: $message) {
+      status
+      code
       data {
-        text
+        id
         senderMessage {
           id
+          username
+          email
           name
           surname
-          username
         }
+        text
         reply {
+          id
+          senderMessage {
+            id
+            username
+            email
+            name
+            surname
+          }
           text
-          id
           createdAt
-        }
-        id
-        chatId {
-          id
         }
         createdAt
       }
       message
-      status
     }
   }
 `;

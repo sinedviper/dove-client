@@ -24,7 +24,7 @@
 .contactActive {
   transition: var(--transition);
   color: var(--white);
-  background-color: var(--blue);
+  background-color: var(--primary);
 }
 .contactActive span {
   color: var(--white);
@@ -32,7 +32,7 @@
 .contactActive:hover {
   transition: var(--transition);
   color: var(--white);
-  background-color: var(--blue);
+  background-color: var(--primary);
 }
 
 .contactsPhoto {

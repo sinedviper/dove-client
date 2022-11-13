@@ -7,7 +7,7 @@
   background-color: var(--light);
   display: flex;
   transition: var(--transition);
-  z-index: 1;
+  z-index: 2;
   flex-direction: column;
 
   -webkit-touch-callout: none;
@@ -34,7 +34,7 @@
   position: relative;
   display: flex;
   padding: 8px 15px;
-  background-color: white;
+  background-color: var(--white);
   justify-content: space-between;
   align-items: center;
 }
@@ -193,7 +193,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: white;
+  color: var(--white);
   font-size: 40px;
 }
 
@@ -215,7 +215,7 @@
 }
 
 .infoLast {
-  background-color: white;
+  background-color: var(--white);
   padding: 10px;
   display: flex;
   flex-direction: column;

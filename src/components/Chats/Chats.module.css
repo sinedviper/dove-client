@@ -236,13 +236,13 @@
 
 .contactWrapperOn,
 .contactWrapperOn:hover {
-  background-color: var(--blue);
+  background-color: var(--primary);
   color: var(--white);
 }
 
 .contactWrapperClick,
 .contactWrapperClick:hover {
-  background-color: var(--blue);
+  background-color: var(--primary);
   color: var(--white);
 }
 

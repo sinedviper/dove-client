@@ -13,6 +13,7 @@
   max-width: 500px;
   width: 100%;
   font-size: 16px;
+  background-color: var(--light);
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
@@ -37,7 +38,7 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  background-color: var(--blue);
+  background-color: var(--primary);
   border-radius: 50%;
 }
 
@@ -53,7 +54,7 @@
 }
 
 .emojiIconOn path {
-  fill: var(--blue);
+  fill: var(--primary);
 }
 
 .emojiWrapper {

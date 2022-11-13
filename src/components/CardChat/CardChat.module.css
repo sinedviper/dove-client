@@ -24,7 +24,7 @@
 .contactActive {
   transition: var(--transition);
   color: var(--white);
-  background-color: var(--blue);
+  background-color: var(--primary);
 }
 .contactActive span {
   color: var(--white);
@@ -32,7 +32,7 @@
 .contactActive:hover {
   transition: var(--transition);
   color: var(--white);
-  background-color: var(--blue);
+  background-color: var(--primary);
 }
 
 .contactsPhoto {
@@ -107,7 +107,7 @@
   transition: var(--transition);
   opacity: 1;
   pointer-events: all;
-  z-index: 5;
+  z-index: 2;
 }
 
 .menuCard {

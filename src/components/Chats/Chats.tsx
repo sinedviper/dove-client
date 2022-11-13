@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-func-assign */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import cn from "classnames";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -22,6 +22,7 @@ import styles from "./Chats.module.css";
 import { colorCard } from "helpers";
 import { useMutation } from "@apollo/client";
 import { addChat } from "mutation";
+import { useTheme } from "context/ThemeProvider";
 
 export const Chats = ({
   chats,
@@ -35,6 +36,7 @@ export const Chats = ({
 }: ChatsProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const stheme = useTheme();
   const { username } = useParams();
   const [mutationFunction] = useMutation(addChat);
 
@@ -42,6 +44,7 @@ export const Chats = ({
   const [menu, setMenu] = useState<boolean>(false);
   const [swiper, setSwiper] = useState<boolean>(false);
   const [searchUser, setSearchUser] = useState<boolean>(false);
+  const [theme, setTheme] = useState<boolean>(false);
 
   const user: IUser | null = useAppSelector(getUser);
   const contacts: IUser[] | null = useAppSelector(getContacts);
@@ -86,6 +89,9 @@ export const Chats = ({
       }
     });
   };
+  useEffect(() => {
+    stheme?.change("light");
+  }, [theme, stheme]);
 
   return (
     <section
@@ -124,6 +130,10 @@ export const Chats = ({
           <button className={styles.menuCard} onClick={handleSettings}>
             <SettingsIcon className={styles.cardIcon} />
             <span>Settings</span>
+          </button>
+          <button className={styles.menuCard} onClick={() => setTheme(!theme)}>
+            <ContactsIcon className={cn(styles.cardIcon, styles.contact)} />
+            <span>Dark mode</span>
           </button>
           <button className={styles.menuCard} onClick={handleLogOut}>
             <LogoutIcon className={cn(styles.cardIcon, styles.logout)} />

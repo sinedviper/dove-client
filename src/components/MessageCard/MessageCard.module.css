@@ -2,7 +2,7 @@
   display: flex;
   position: relative;
   flex-direction: column;
-  background-color: var(--blue-light);
+  background-color: var(--primary-light);
   max-width: 480px;
   justify-content: flex-end;
   padding: 6px 10px;
@@ -56,13 +56,13 @@
 .messageEdit {
   font-style: italic;
   font-size: 12px;
-  color: var(--blue);
+  color: var(--primary);
   z-index: 1;
 }
 
 .messageDate {
   font-size: 12px;
-  color: var(--blue);
+  color: var(--primary);
   z-index: 1;
 }
 
@@ -75,7 +75,7 @@
   right: -10px;
   bottom: 0;
   z-index: 0;
-  background-color: var(--blue-light);
+  background-color: var(--primary-light);
 }
 
 .messageStyleLeft::before,
@@ -85,7 +85,7 @@
   position: absolute;
   width: 20px;
   height: 20px;
-  background: var(--blue-middle);
+  background: var(--primary-middle);
   border-radius: 50%;
   right: -10px;
   bottom: -1px;
@@ -98,7 +98,7 @@
   position: absolute;
   width: 20px;
   height: 20px;
-  background: var(--blue-middle);
+  background: var(--primary-middle);
   bottom: 10px;
   right: -10px;
 }

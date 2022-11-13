@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useRef, useEffect } from "react";
 import cn from "classnames";
 import { Navigate, Outlet } from "react-router-dom";
 
@@ -17,9 +18,11 @@ import { IChat, IUser } from "interface";
 import { Chats, Contacts, Settings, Edits } from "components";
 
 import styles from "./Layout.module.css";
+import { useTheme } from "context/ThemeProvider";
 
 export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   const dispatch = useAppDispatch();
+  const theme = useTheme();
 
   const [valueAll, setValueAll] = useState<string>("");
   const [contact, setContact] = useState<boolean>(false);
@@ -32,6 +35,11 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   const chats: IChat[] | null = useAppSelector(getChat);
   const contacts: IUser[] | null = useAppSelector(getContacts);
   const token: string | null = localStorage.getItem("token");
+
+  useEffect(() => {
+    console.log("!");
+    theme?.change("light");
+  }, []);
 
   if (!token) {
     localStorage.removeItem("token");

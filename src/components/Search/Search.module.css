@@ -6,6 +6,7 @@
   font-size: 16px;
   color: var(--dark);
   transition: var(--transition);
+  background-color: var(--light);
 }
 
 .search:hover {
@@ -15,8 +16,8 @@
 
 .search:focus {
   transition: var(--transition);
-  border: 1px solid var(--blue);
-  outline: 1px solid var(--blue);
+  border: 1px solid var(--primary);
+  outline: 1px solid var(--primary);
 }
 
 .searchWrapper {
@@ -35,13 +36,13 @@
 
 .focusSearch {
   transition: var(--transition);
-  fill: var(--blue);
+  fill: var(--primary);
 }
 
 .iconRemove {
   width: 30px;
   height: 30px;
-  fill: var(--blue);
+  fill: var(--primary);
   pointer-events: none;
 }
 
@@ -60,7 +61,7 @@
 }
 
 .buttonRemove:hover {
-  background-color: var(--blue-opacity);
+  background-color: var(--primary-opacity);
 }
 
 .focusRemove {

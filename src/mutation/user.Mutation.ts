@@ -4,6 +4,7 @@ export const getMe = gql`
   query Query {
     getMe {
       status
+      code
       message
       data {
         id
@@ -11,24 +12,32 @@ export const getMe = gql`
         email
         name
         surname
+        online
+        bio
+        theme
+        animation
+        createdAt
+        updatedAt
       }
     }
   }
 `;
 
 export const signUp = gql`
-  mutation signUp($input: SignUpInput!) {
+  mutation Mutation($input: SignUpInput!) {
     signupUser(input: $input) {
       status
+      code
       message
     }
   }
 `;
 
 export const loginUser = gql`
-  mutation loginUser($input: LoginInput!) {
+  mutation Mutation($input: LoginInput!) {
     loginUser(input: $input) {
       status
+      code
       message
       access_token
     }
@@ -36,26 +45,33 @@ export const loginUser = gql`
 `;
 
 export const deleteUser = gql`
-  mutation deleteUser {
+  mutation Mutation {
     deleteUser {
       status
+      code
       message
     }
   }
 `;
 export const updateUser = gql`
-  mutation updateUser($input: UpdateInput!) {
+  mutation Mutation($input: UpdateInput!) {
     updateUser(input: $input) {
       status
-      message
+      code
       data {
+        id
         username
         email
         name
         surname
+        online
+        bio
+        theme
+        animation
         createdAt
-        id
+        updatedAt
       }
+      message
     }
   }
 `;

@@ -73,7 +73,7 @@
 
 .usernameEdit {
   font-size: 15px;
-  color: var(--blue);
+  color: var(--primary);
 }
 
 .back {
@@ -105,7 +105,7 @@
   bottom: 20px;
   right: 20px;
   border-radius: 50%;
-  background-color: var(--blue);
+  background-color: var(--primary);
   justify-content: center;
   align-items: center;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);

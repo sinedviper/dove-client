@@ -4,7 +4,7 @@ export const getChats = gql`
   query Query {
     getChats {
       status
-      message
+      code
       data {
         id
         user {
@@ -13,19 +13,19 @@ export const getChats = gql`
           email
           name
           surname
-          createdAt
+          online
         }
         lastMessage {
           id
-          senderMessage {
-            id
-            name
-            surname
-            username
-            email
-          }
           text
           createdAt
+          senderMessage {
+            id
+            username
+            email
+            name
+            surname
+          }
         }
       }
     }
@@ -36,7 +36,7 @@ export const addChat = gql`
   mutation Mutation($chat: ChatInput!) {
     addChat(chat: $chat) {
       status
-      message
+      code
       data {
         id
         user {
@@ -45,19 +45,19 @@ export const addChat = gql`
           email
           name
           surname
-          createdAt
+          online
         }
         lastMessage {
           id
-          senderMessage {
-            id
-            name
-            surname
-            username
-            email
-          }
           text
           createdAt
+          senderMessage {
+            id
+            username
+            email
+            name
+            surname
+          }
         }
       }
     }
@@ -68,7 +68,7 @@ export const removeChat = gql`
   mutation Mutation($idChat: Float!) {
     deleteChat(idChat: $idChat) {
       status
-      message
+      code
       data {
         id
         user {
@@ -77,19 +77,19 @@ export const removeChat = gql`
           email
           name
           surname
-          createdAt
+          online
         }
         lastMessage {
           id
-          senderMessage {
-            id
-            name
-            surname
-            username
-            email
-          }
           text
           createdAt
+          senderMessage {
+            id
+            username
+            email
+            name
+            surname
+          }
         }
       }
     }

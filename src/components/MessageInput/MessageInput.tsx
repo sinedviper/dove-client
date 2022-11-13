@@ -85,6 +85,7 @@ export const MessageInput = forwardRef(
       <div className={styles.inputWrapper}>
         <input
           value={String(send)}
+          placeholder='Message'
           className={cn(className, styles.input)}
           onChange={(e) => {
             setSend(e.target.value);

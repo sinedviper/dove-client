@@ -17,7 +17,7 @@
 }
 
 .labelOn {
-  color: var(--blue);
+  color: var(--primary);
   transition: var(--transition-input);
   font-weight: 600;
 }
@@ -34,14 +34,14 @@
 }
 
 .input:hover {
-  border: 1px solid var(--blue);
+  border: 1px solid var(--primary);
   transition: var(--transition-input);
 }
 
 .input:focus {
   transition: var(--transition-input);
-  border: 1px solid var(--blue);
-  outline: var(--blue) solid 1px;
+  border: 1px solid var(--primary);
+  outline: var(--primary) solid 1px;
 }
 
 .error {
@@ -83,7 +83,7 @@
 }
 
 .eyeOn {
-  stroke: var(--blue);
+  stroke: var(--primary);
 }
 
 .errorOn {
