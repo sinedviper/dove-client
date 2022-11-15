@@ -1,75 +1,69 @@
 import React, { useState, useEffect } from "react";
 import cn from "classnames";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useLazyQuery, useMutation } from "@apollo/client";
 
 import { CardChatProps } from "./CardChat.props";
 import { colorCard, formateDate } from "helpers";
-
-import styles from "./CardChat.module.css";
-import { useLazyQuery, useMutation } from "@apollo/client";
-
 import { getMessage, removeChat } from "mutation";
 import { useAppDispatch, useAppSelector } from "hooks";
-import { actionAddChats, actionAddMessages, getUser } from "store";
-import { toast } from "react-toastify";
+import { actionAddMessages, getUser } from "store";
 import { DeleteIcon } from "assets";
+import { IUser } from "interface";
+
+import styles from "./CardChat.module.css";
 
 export const CardChat = ({
   className,
   contact,
   ...props
 }: CardChatProps): JSX.Element => {
-  const [top, setTop] = useState<number>(0);
-  const [left, setLeft] = useState<number>(0);
-  const [menu, setMenu] = useState<boolean>(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const params = useParams();
-  const [queryFunction] = useLazyQuery(getMessage);
-  const [mutationFunction] = useMutation(removeChat);
 
-  const [click, setClick] = useState<boolean>(false);
-
-  const user = useAppSelector(getUser);
-  const color = colorCard(contact?.user.name.toUpperCase().split("")[0]);
-
-  const handleFocus = async () => {
-    await queryFunction({
-      variables: {
-        message: { chatId: contact.id, senderMessage: Number(user?.id) },
-      },
-    }).then((res) => {
-      const messages = res.data.getMessages;
+  const [queryFunction] = useLazyQuery(getMessage, {
+    onCompleted(data) {
+      const messages = data.getMessages;
       if (messages.status === "Invalid") {
         toast.error(messages.message);
       }
       if (messages.status === "Success") {
         dispatch(actionAddMessages(messages.data));
-        navigate(`${contact.user.username}`);
+        navigate(`${contact?.user.username}`);
       }
-    });
-  };
+    },
+  });
+  const [mutationFunction] = useMutation(removeChat, {
+    onCompleted() {
+      navigate("");
+    },
+  });
 
-  const handleDeleteChat = async () => {
-    await mutationFunction({ variables: { idChat: Number(contact.id) } }).then(
-      (res) => {
-        const data = res.data.deleteChat;
-        if (data.status === "Invalid") {
-          toast.error(data.message);
-        }
-        if (data.status === "Success") {
-          dispatch(actionAddChats(data.data));
-          navigate("");
-        }
-      }
-    );
-  };
+  const [top, setTop] = useState<number>(0);
+  const [left, setLeft] = useState<number>(0);
+  const [menu, setMenu] = useState<boolean>(false);
+  const [click, setClick] = useState<boolean>(false);
+
+  const user: IUser | null = useAppSelector(getUser);
+  const color = colorCard(contact?.user.name.toUpperCase().split("")[0]);
+
+  const handleFocus = async () =>
+    await queryFunction({
+      variables: {
+        message: { chatId: contact?.id, senderMessage: Number(user?.id) },
+      },
+    });
+
+  const handleDeleteChat = async () =>
+    await mutationFunction({ variables: { idChat: Number(contact?.id) } });
 
   useEffect(() => {
-    if (params.username === contact.user.username) {
+    if (params.username === contact?.user.username) {
       setClick(true);
     }
-    if (params.username !== contact.user.username) {
+    if (params.username !== contact?.user.username) {
       setClick(false);
     }
   }, [params, contact]);

@@ -4,7 +4,7 @@
   left: 420px;
   width: 420px;
   height: 100vh;
-  background-color: var(--white);
+  background-color: var(--background-first);
   display: flex;
   transition: var(--transition);
   z-index: -1;
@@ -41,11 +41,11 @@
 
 .back:hover {
   transition: var(--transition);
-  background-color: var(--light);
+  background-color: var(--opacity-box);
 }
 
 .back path {
-  fill: var(--gray);
+  fill: var(--icon-first);
 }
 
 .contactsList {
@@ -57,7 +57,7 @@
   width: 6px;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--gray-light);
+  background: var(--icon-first);
   border-radius: 10px;
 }
 

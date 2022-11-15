@@ -1,24 +1,22 @@
 import React, { useState } from "react";
 import cn from "classnames";
 import { toast } from "react-toastify";
+import { useMutation } from "@apollo/client";
 
 import { SettingsProps } from "./Settings.props";
 import {
   BackIcon,
   EditIcon,
+  InfoIcon,
   MailIcon,
   RemoveIcon,
   RemoveUserIcon,
   UsernameIcon,
 } from "assets";
+import { colorCard } from "helpers";
+import { deleteUser } from "mutation";
 
 import styles from "./Settings.module.css";
-import { colorCard } from "helpers";
-import { useMutation } from "@apollo/client";
-import { deleteUser } from "mutation";
-import { useAppDispatch } from "hooks";
-import { actionClearChats, actionClearContact, actionClearUser } from "store";
-import { useNavigate } from "react-router-dom";
 
 export const Settings = ({
   className,
@@ -29,9 +27,6 @@ export const Settings = ({
   profile = false,
   ...props
 }: SettingsProps): JSX.Element => {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-
   const [deleteUsera, setDeleteUser] = useState<boolean>(false);
   const [mutationFunction] = useMutation(deleteUser);
 
@@ -43,20 +38,7 @@ export const Settings = ({
   };
 
   const handleRemoveUser = async () => {
-    await mutationFunction().then((res) => {
-      const data = res.data.deleteUser;
-      if (data.status === "Invalid") {
-        toast.error(data.message);
-      }
-      if (data.status === "Success") {
-        toast.success("Account delete");
-        localStorage.removeItem("token");
-        dispatch(actionClearChats());
-        dispatch(actionClearContact());
-        dispatch(actionClearUser());
-        navigate("/login");
-      }
-    });
+    await mutationFunction();
   };
 
   return (
@@ -156,6 +138,18 @@ export const Settings = ({
               <p className={styles.secondInfo}>Username</p>
             </span>
           </div>
+          {user?.bio && (
+            <div
+              className={styles.info}
+              onClick={() => handleCopy(String(user?.username))}
+            >
+              <InfoIcon className={styles.iconInfo} />
+              <span>
+                <p className={styles.firstInfo}>{user?.bio}</p>
+                <p className={styles.secondInfo}>bio</p>
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </section>

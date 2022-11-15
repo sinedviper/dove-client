@@ -33,6 +33,7 @@
       "mutation":["mutation"],
       "pages-components":["pages-components"],
       "helpers":["helpers"],
+      "context":["context"],
     },
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
   },

@@ -2,7 +2,8 @@
   position: absolute;
   padding: 5px;
   border-radius: 10px;
-  background-color: var(--white);
+  background-color: var(--opacity-box-second);
+  backdrop-filter: blur(30px);
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -37,16 +38,16 @@
 .editMessagePerson p {
   font-size: 14px;
   font-weight: 600;
-  color: var(--dark);
+  color: var(--icon-second);
 }
 
 .editMessagePerson:hover {
-  background-color: var(--light);
+  background-color: var(--opacity-box);
   border-radius: 5px;
 }
 
 .editIconMessage {
-  fill: var(--dark);
+  fill: var(--icon-second);
   width: 20px;
   height: 20px;
 }
@@ -54,6 +55,12 @@
 .editIconMessageE {
   width: 21px;
   height: 21px;
+}
+
+.editIconMessageE path {
+  width: 21px;
+  height: 21px;
+  fill: var(--icon-second);
 }
 
 .deleteMessage p {

@@ -5,8 +5,8 @@
   padding: 8px 20px;
   justify-content: left;
   align-items: center;
-  background-color: var(--white);
-  border-bottom: 1px solid var(--gray-light);
+  background-color: var(--background-first);
+  border-bottom: 1px solid var(--border-second);
   cursor: pointer;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -50,9 +50,10 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  color: var(--text-first);
 }
 
 .infoDate {
-  color: var(--gray);
+  color: var(--text-second);
   font-size: 13px;
 }

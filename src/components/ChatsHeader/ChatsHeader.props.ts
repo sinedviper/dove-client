@@ -1,10 +1,14 @@
-import { IChat } from "interface";
 import { DetailedHTMLProps, HTMLAttributes, RefObject } from "react";
 
-export interface ChatsProps
+export interface ChatsHeaderProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-  chats: IChat[] | null;
+  setSwiper: Function;
+  setSearchUser: Function;
+  searchUser: boolean;
   searchContact: RefObject<HTMLInputElement>;
   setContact: Function;
   setSettings: Function;
+  valueAll: string;
+  setValueAll: Function;
+  handleSearch: VoidFunction;
 }

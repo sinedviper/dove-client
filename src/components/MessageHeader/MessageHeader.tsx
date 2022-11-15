@@ -4,7 +4,7 @@ import cn from "classnames";
 import { MessageHeaderProps } from "./MessageHeader.props";
 
 import styles from "./MessageHeader.module.css";
-import { colorCard, formateDate } from "helpers";
+import { colorCard, formateDate, formateDateOnline } from "helpers";
 
 export const MessageHeader = ({
   setSettings,
@@ -42,8 +42,8 @@ export const MessageHeader = ({
         </p>
         <p className={styles.infoDate}>
           last seen{" "}
-          {receipt?.createdAt &&
-            formateDate(new Date(receipt?.createdAt)).toLowerCase()}
+          {receipt?.online &&
+            formateDateOnline(new Date(receipt?.online)).toLowerCase()}
         </p>
       </div>
     </section>

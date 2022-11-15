@@ -1,5 +1,31 @@
 import { gql } from "@apollo/client";
 
+export const subscribeChats = gql`
+  subscription Subscription {
+    chatSubscription {
+      status
+      code
+      data {
+        id
+        user {
+          id
+          username
+          email
+          name
+          surname
+          online
+        }
+        lastMessage {
+          id
+          text
+          createdAt
+        }
+      }
+      message
+    }
+  }
+`;
+
 export const getChats = gql`
   query Query {
     getChats {
@@ -19,79 +45,21 @@ export const getChats = gql`
           id
           text
           createdAt
-          senderMessage {
-            id
-            username
-            email
-            name
-            surname
-          }
         }
       }
+      message
     }
   }
 `;
 
 export const addChat = gql`
   mutation Mutation($chat: ChatInput!) {
-    addChat(chat: $chat) {
-      status
-      code
-      data {
-        id
-        user {
-          id
-          username
-          email
-          name
-          surname
-          online
-        }
-        lastMessage {
-          id
-          text
-          createdAt
-          senderMessage {
-            id
-            username
-            email
-            name
-            surname
-          }
-        }
-      }
-    }
+    addChat(chat: $chat)
   }
 `;
 
 export const removeChat = gql`
   mutation Mutation($idChat: Float!) {
-    deleteChat(idChat: $idChat) {
-      status
-      code
-      data {
-        id
-        user {
-          id
-          username
-          email
-          name
-          surname
-          online
-        }
-        lastMessage {
-          id
-          text
-          createdAt
-          senderMessage {
-            id
-            username
-            email
-            name
-            surname
-          }
-        }
-      }
-    }
+    deleteChat(idChat: $idChat)
   }
 `;

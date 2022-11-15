@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import cn from "classnames";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@apollo/client";
 
 import { CardContactProps } from "./CardContact.props";
+import { formateDate, colorCard } from "helpers";
+import { addChat, deleteContact } from "mutation";
+import { getUser } from "store";
+import { useAppSelector } from "hooks";
+import { IUser } from "interface";
+import { DeleteIcon } from "assets";
 
 import styles from "./CardContact.module.css";
-import { formateDate, colorCard } from "helpers";
-import { useMutation } from "@apollo/client";
-import { addChat, removeContact } from "mutation";
-import { actionAddChats, actionAddContact, getUser } from "store";
-import { useAppDispatch, useAppSelector } from "hooks";
-import { IUser } from "interface";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { DeleteIcon } from "assets";
 
 export const CardContact = ({
   className,
@@ -20,15 +19,19 @@ export const CardContact = ({
   setContact,
   ...props
 }: CardContactProps): JSX.Element => {
+  const navigate = useNavigate();
+
+  const [mutationFunction] = useMutation(addChat, {
+    onCompleted() {
+      navigate(`${contact.username}`);
+    },
+  });
+  const [mutationFunctionDelete] = useMutation(deleteContact);
+
   const [top, setTop] = useState<number>(0);
   const [left, setLeft] = useState<number>(0);
   const [menu, setMenu] = useState<boolean>(false);
   const [click, setClick] = useState<boolean>(false);
-  const [mutationFunction] = useMutation(addChat);
-  const [mutationFunctionDelete] = useMutation(removeContact);
-
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const user: IUser | null = useAppSelector(getUser);
 
@@ -38,12 +41,6 @@ export const CardContact = ({
       variables: {
         chat: { sender: Number(user?.id), recipient: Number(contact.id) },
       },
-    }).then((res) => {
-      const data = res.data.addChat;
-      if (data.status === "Success") {
-        dispatch(actionAddChats(data.data));
-        navigate(`${contact.username}`);
-      }
     });
   };
 
@@ -52,14 +49,6 @@ export const CardContact = ({
       variables: {
         contact: { userId: Number(user?.id), contactId: Number(contact.id) },
       },
-    }).then((res) => {
-      const data = res.data.deleteContact;
-      if (data.status === "Invalid") {
-        toast.error(data.message);
-      }
-      if (data.status === "Success") {
-        dispatch(actionAddContact(data.data));
-      }
     });
   };
 
@@ -106,7 +95,7 @@ export const CardContact = ({
           {contact?.name} {contact.surname}
         </span>
         <span className={styles.contactMessage}>
-          last seen {formateDate(new Date(contact?.createdAt))}
+          last seen {formateDate(new Date(contact?.online)).toLocaleLowerCase()}
         </span>
       </div>
       <div

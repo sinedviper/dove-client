@@ -4,7 +4,7 @@
   right: -425px;
   width: 420px;
   height: 100vh;
-  background-color: var(--light);
+  background-color: var(--background-second);
   display: flex;
   transition: var(--transition);
   z-index: 2;
@@ -22,7 +22,7 @@
   width: 320px;
   position: relative;
   right: 0px;
-  border-left: 1px solid var(--gray-light);
+  border-left: 1px solid var(--border-second);
 }
 
 .settingsWrapperOpen {
@@ -33,11 +33,12 @@
 .settingsHead {
   position: relative;
   display: flex;
-  padding: 8px 15px;
-  background-color: var(--white);
+  padding: 8.5px 15px;
+  background-color: var(--background-first);
   justify-content: space-between;
   align-items: center;
 }
+
 .settingsHead div {
   display: flex;
   align-items: center;
@@ -47,6 +48,7 @@
   margin-left: 15px;
   font-size: 19px;
   pointer-events: none;
+  color: var(--text-first);
 }
 
 .back {
@@ -61,7 +63,7 @@
 
 .back:hover {
   transition: var(--transition);
-  background-color: var(--light);
+  background-color: var(--opacity-box);
 }
 
 .remove {
@@ -69,7 +71,7 @@
 }
 
 .back path {
-  fill: var(--gray);
+  fill: var(--icon-first);
 }
 
 .edit {
@@ -83,11 +85,11 @@
 
 .edit:hover {
   transition: var(--transition);
-  background-color: var(--light);
+  background-color: var(--opacity-box);
 }
 
 .edit path {
-  fill: var(--gray);
+  fill: var(--icon-first);
 }
 
 .delete {
@@ -105,7 +107,7 @@
 
 .delete:hover {
   transition: var(--transition);
-  background-color: var(--light);
+  background-color: var(--opacity-box);
 }
 
 .dot {
@@ -113,7 +115,7 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background-color: var(--gray);
+  background-color: var(--icon-first);
 }
 
 .dot::before {
@@ -124,7 +126,7 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background-color: var(--gray);
+  background-color: var(--icon-first);
 }
 
 .dot::after {
@@ -135,7 +137,7 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background-color: var(--gray);
+  background-color: var(--icon-first);
 }
 
 .deleteWrapper {
@@ -147,7 +149,8 @@
   right: 15px;
   padding: 5px;
   border-radius: 10px;
-  background-color: var(--light);
+  background-color: var(--opacity-box-second);
+  backdrop-filter: blur(30px);
   transition: var(--transition);
 }
 
@@ -160,7 +163,7 @@
 .removeIcon {
   width: 20px;
   height: 20px;
-  stroke: var(--dark);
+  stroke: var(--icon-second);
 }
 
 .deleteButton {
@@ -176,11 +179,11 @@
 }
 
 .deleteButton:hover {
-  background-color: var(--gray-light);
+  background-color: var(--opacity-box-dark);
   transition: var(--transition);
 }
 .deleteButton span {
-  color: var(--dark);
+  color: var(--icon-second);
   font-size: 14px;
   font-weight: 600;
 }
@@ -215,11 +218,11 @@
 }
 
 .infoLast {
-  background-color: var(--white);
+  background-color: var(--background-first);
   padding: 10px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 5px var(--opacity-box-dark);
 }
 
 .info {
@@ -234,13 +237,13 @@
 
 .info:hover {
   transition: var(--transition);
-  background-color: var(--light);
+  background-color: var(--opacity-box);
 }
 
 .iconInfo {
   width: 26px;
   height: 26px;
-  stroke: var(--gray);
+  stroke: var(--icon-first);
 }
 
 .info > span {
@@ -252,7 +255,7 @@
 }
 
 .firstInfo {
-  color: var(--dark);
+  color: var(--text-first);
   font-size: 17px;
   overflow: hidden;
   white-space: nowrap;
@@ -261,5 +264,5 @@
 
 .secondInfo {
   font-size: 14px;
-  color: var(--gray);
+  color: var(--text-sixth);
 }

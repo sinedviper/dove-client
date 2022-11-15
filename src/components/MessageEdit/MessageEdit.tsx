@@ -1,13 +1,12 @@
 import React from "react";
 import cn from "classnames";
-import { toast } from "react-toastify";
 import { useMutation } from "@apollo/client";
 
 import { MessageEditProps } from "./MessageEdit.props";
 import { CopyIcon, DeleteIcon, EditIcon, ReplyIcon } from "assets";
 import { deleteMessages } from "mutation";
-import { useAppDispatch, useAppSelector } from "hooks";
-import { actionAddMessages, getUser } from "store";
+import { useAppSelector } from "hooks";
+import { getUser } from "store";
 
 import styles from "./MessageEdit.module.css";
 
@@ -21,7 +20,6 @@ export const MessageEdit = ({
   ...props
 }: MessageEditProps): JSX.Element => {
   const [mutationFunction] = useMutation(deleteMessages);
-  const dispatch = useAppDispatch();
   const user = useAppSelector(getUser);
 
   const handleCopy = (value: string) => {
@@ -33,19 +31,11 @@ export const MessageEdit = ({
     await mutationFunction({
       variables: {
         message: {
-          id: client.id,
+          id: Number(client.id),
           chatId: client.chatId,
           senderMessage: Number(client.user),
         },
       },
-    }).then((res) => {
-      const data = res.data.deleteMessage;
-      if (data.status === "Invalid") {
-        toast.error(data.message);
-      }
-      if (data.status === "Success") {
-        dispatch(actionAddMessages(data.data));
-      }
     });
   };
 

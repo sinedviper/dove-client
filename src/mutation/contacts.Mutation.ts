@@ -1,5 +1,26 @@
 import { gql } from "@apollo/client";
 
+export const subscribeContacts = gql`
+  subscription Subscription {
+    contactSubscription {
+      status
+      code
+      message
+      data {
+        id
+        username
+        email
+        name
+        surname
+        online
+        bio
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
 export const getContact = gql`
   query Query {
     getContacts {
@@ -11,7 +32,10 @@ export const getContact = gql`
         email
         name
         surname
+        online
+        bio
         createdAt
+        updatedAt
       }
       message
     }
@@ -20,36 +44,12 @@ export const getContact = gql`
 
 export const addContact = gql`
   mutation Mutation($contact: ContactInput!) {
-    addContact(contact: $contact) {
-      status
-      code
-      data {
-        id
-        username
-        email
-        name
-        surname
-        createdAt
-      }
-      message
-    }
+    addContact(contact: $contact)
   }
 `;
 
-export const removeContact = gql`
+export const deleteContact = gql`
   mutation Mutation($contact: ContactInput!) {
-    deleteContact(contact: $contact) {
-      status
-      code
-      data {
-        id
-        username
-        email
-        name
-        surname
-        createdAt
-      }
-      message
-    }
+    deleteContact(contact: $contact)
   }
 `;

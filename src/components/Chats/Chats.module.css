@@ -1,168 +1,9 @@
-.menuWrapper {
-  padding: 8px 15px;
-  border-bottom: 1px solid var(--gray-light);
-  display: flex;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-.menu {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: none;
-  background-color: inherit;
-  transition: var(--transition);
-  position: relative;
-  margin-right: 7px;
-  cursor: pointer;
-}
-
-.menu:hover {
-  transition: var(--transition);
-  background-color: var(--light);
-}
-
-.line {
-  pointer-events: none;
-  width: 18px;
-  height: 2px;
-  border-radius: 30px;
-  background-color: var(--gray);
-  display: block;
-  position: absolute;
-  top: 18px;
-  left: 11px;
-  transition: var(--transition);
-}
-
-.line::after {
-  pointer-events: none;
-  position: absolute;
-  top: 5px;
-  content: "";
-  width: 18px;
-  height: 2px;
-  border-radius: 30px;
-  background-color: var(--gray);
-  display: block;
-  transition: var(--transition);
-}
-
-.line::before {
-  pointer-events: none;
-  position: absolute;
-  top: -5px;
-  content: "";
-  width: 18px;
-  height: 2px;
-  border-radius: 30px;
-  background-color: var(--gray);
-  display: block;
-  transition: var(--transition);
-}
-
-.lineBack {
-  top: 18px;
-  width: 18px;
-  transition: var(--transition);
-  transform: rotate(180deg);
-}
-
-.lineBack::after {
-  top: 4px;
-  left: 7px;
-  width: 12px;
-  transform: rotate(-45deg);
-  transition: var(--transition);
-}
-
-.lineBack::before {
-  top: -4px;
-  width: 12px;
-  left: 7px;
-  transform: rotate(45deg);
-  transition: var(--transition);
-}
-
-.menuClose {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  z-index: -1;
-  width: 300px;
-  background-color: var(--white);
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
-  padding: 5px;
-  border-radius: 10px;
-  top: 55px;
-  left: 15px;
-  text-align: center;
-  opacity: 0;
-  transition: var(--transition);
-}
-
-.menuOpen {
-  transition: var(--transition);
-  z-index: 10;
-  opacity: 1;
-}
-
-.menuCard {
-  background-color: var(--white);
-  border: none;
-  padding: 5px 0;
-  cursor: pointer;
-  width: 100%;
-  color: var(--dark);
-  text-align: left;
-  transition: var(--transition);
-  border-radius: 7px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-}
-
-.menuCard:hover {
-  transition: var(--transition);
-  background-color: var(--light);
-}
-
-.cardIcon {
-  width: 23px;
-  height: 23px;
-  margin: 0 15px 0 13px;
-}
-
-.contact {
-  width: 22px;
-  height: 22px;
-}
-
-.logout {
-  width: 23px;
-  height: 21px;
-}
-
-.cardIcon path {
-  fill: var(--dark);
-}
-
-.creator {
-  margin: 10px 0 5px;
-  font-size: 15px;
-  color: var(--gray);
-}
-
 .contactsList {
   padding: 6px;
   height: calc(100vh - 60px);
   overflow-y: hidden;
   overflow-x: hidden;
+  background-color: var(--background-first);
 }
 
 .swiper {
@@ -173,7 +14,7 @@
   position: absolute;
   z-index: 0;
   width: 100%;
-  background-color: var(--white);
+  background-color: var(--background-first);
   height: 92vh;
   overflow-y: overlay;
   overflow-x: hidden;
@@ -199,7 +40,7 @@
   overflow-y: hidden;
   padding: 6px;
   gap: 5px;
-  border-bottom: 1px solid var(--gray-light);
+  border-bottom: 1px solid var(--border-second);
   opacity: 1;
   transition: var(--transition);
 }
@@ -217,7 +58,6 @@
   padding: 10px;
   gap: 5px;
   width: 75px;
-  background-color: var(--white);
   border-radius: 10px;
   transition: var(--transition);
   text-align: center;
@@ -231,7 +71,7 @@
 
 .contactWrapper:hover {
   transition: var(--transition);
-  background-color: var(--light);
+  background-color: var(--opacity-box);
 }
 
 .contactWrapperOn,

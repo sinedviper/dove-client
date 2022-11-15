@@ -4,13 +4,13 @@
 
 .placeholder {
   position: absolute;
-  color: var(--gray);
-  font-size: 13px;
+  color: var(--text-third);
+  font-size: 12px;
   cursor: text;
-  top: -8px;
+  top: -7px;
   left: 15px;
   height: 9px;
-  background-color: var(--white);
+  background-color: var(--background-first);
   padding: 0 3px;
   transition: var(--transition-input);
   pointer-events: none;
@@ -30,7 +30,8 @@
   font-size: 17px;
   background: inherit;
   transition: var(--transition-input);
-  border: 1px solid var(--gray-middle);
+  border: 1px solid var(--border-first);
+  color: var(--text-first);
 }
 
 .input:hover {
@@ -78,7 +79,7 @@
 .eye {
   width: 30px;
   height: 30px;
-  stroke: var(--gray);
+  stroke: var(--icon-first);
   cursor: pointer;
 }
 

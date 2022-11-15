@@ -1,23 +1,33 @@
 import React, { useContext } from "react";
 
-import { changeTheme } from "helpers";
+import { changeCssColor, changeCssTransition } from "helpers";
 
 export enum theme {
   THEME_DARK = "dark",
   THEME_LIGHT = "light",
 }
 
+export enum animation {
+  ANIMATION_ON = "on",
+  ANIMATION_OFF = "off",
+}
+
 const ThemeContext = React.createContext<{
-  change: Function;
+  changeTheme: Function;
+  changeAnimation: Function;
 } | null>(null);
 
 export const ThemeProvider = ({ children, ...props }) => {
-  const change = (name) => {
-    changeTheme(name);
+  const changeTheme = (name) => {
+    changeCssColor(name);
+  };
+
+  const changeAnimation = (name) => {
+    changeCssTransition(name);
   };
 
   return (
-    <ThemeContext.Provider value={{ change }} {...props}>
+    <ThemeContext.Provider value={{ changeTheme, changeAnimation }} {...props}>
       {children}
     </ThemeContext.Provider>
   );

@@ -1,3 +1,5 @@
 export * from "./formatDate";
 export * from "./colorCard";
-export * from "./changeTheme";
+export * from "./changeCssColor";
+export * from "./outLogin";
+export * from "./checkAuthorization";

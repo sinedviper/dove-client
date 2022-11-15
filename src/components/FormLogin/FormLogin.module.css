@@ -33,7 +33,7 @@
 .text {
   font-size: 15px;
   line-height: 1.5;
-  color: var(--gray);
+  color: var(--text-second);
   cursor: default;
 }
 
@@ -85,7 +85,7 @@
 .link {
   font-size: 14px;
   margin-top: -15px;
-  color: var(--gray);
+  color: var(--text-second);
   cursor: default;
   pointer-events: none;
 }

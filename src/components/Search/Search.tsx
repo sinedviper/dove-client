@@ -14,7 +14,7 @@ export const Search = forwardRef(
     const [focus, setFocus] = useState<boolean>(false);
 
     return (
-      <div className={styles.searchWrapper}>
+      <div className={cn(styles.searchWrapper)}>
         <input
           ref={ref}
           type='text'

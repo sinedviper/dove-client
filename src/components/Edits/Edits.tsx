@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect, useState } from "react";
 import cn from "classnames";
 import { useForm } from "react-hook-form";
@@ -10,8 +9,6 @@ import { BackIcon, SupheedIcon } from "assets";
 import { Input } from "components";
 import { colorCard } from "helpers";
 import { updateUser } from "mutation";
-import { useAppDispatch } from "hooks";
-import { actionUserAdd } from "store";
 
 import styles from "./Edits.module.css";
 
@@ -20,6 +17,7 @@ interface IFormInput {
   surname: string;
   username: string;
   email: string;
+  bio: string;
   mainPassword: string;
   newPassword: string;
   repeatPassword: string;
@@ -37,9 +35,18 @@ export const Edits = ({
     formState: { errors },
     handleSubmit,
   } = useForm<IFormInput>();
-  const dispatch = useAppDispatch();
+
   //res in db
-  const [mutateFunction] = useMutation(updateUser);
+  const [mutateFunction] = useMutation(updateUser, {
+    onCompleted() {
+      setPassword("");
+      setPasswordNew("");
+      setPasswordReapeat("");
+      setSubmit(false);
+      setEdit(false);
+      toast.success("Account update");
+    },
+  });
 
   const [swiper, setSwiper] = useState<boolean>(false);
   const [submit, setSubmit] = useState<boolean>(false);
@@ -52,10 +59,11 @@ export const Edits = ({
     user?.surname ? user?.surname : ""
   );
   const [email, setEmail] = useState<string>(user?.email ? user?.email : "");
+  const [bio, setBio] = useState<string>(user?.bio ? user?.bio : "");
+
   const [password, setPassword] = useState<string>("");
   const [passwordNew, setPasswordNew] = useState<string>("");
   const [passwordReapeat, setPasswordReapeat] = useState<string>("");
-
   const [errorPassword, setErrorPassword] = useState<string>("");
   const [errorPasswordNew, setErrorPasswordNew] = useState<string>("");
   const [errorPasswordReapeat, setErrorPasswordReapeat] = useState<string>("");
@@ -76,6 +84,9 @@ export const Edits = ({
     }
     if (user?.email !== email) {
       obj = { ...obj, email: input.email };
+    }
+    if (user?.bio !== bio) {
+      obj = { ...obj, bio: input.bio };
     }
     //Check password on value
     if (input.mainPassword && input.newPassword && input.repeatPassword) {
@@ -127,21 +138,7 @@ export const Edits = ({
       setErrorPasswordReapeat("Please enter your repeat password");
     }
     //Update user
-    await mutateFunction({ variables: { input: obj } }).then(async (res) => {
-      const data = res.data.updateUser;
-      if (data.status === "Invalid") {
-        toast.error(data.message);
-      }
-      if (data.status === "Success") {
-        dispatch(actionUserAdd(data.data));
-        setPassword("");
-        setPasswordNew("");
-        setPasswordReapeat("");
-        setSubmit(false);
-        setEdit(false);
-        toast.success("Account update");
-      }
-    });
+    await mutateFunction({ variables: { input: obj } });
   };
   //Check values in input, changed or not, when changed button has see
   useEffect(() => {
@@ -150,6 +147,7 @@ export const Edits = ({
       user?.name !== name ||
       user?.surname !== surname ||
       user?.email !== email ||
+      user?.bio !== bio ||
       passwordReapeat !== "" ||
       password !== "" ||
       passwordNew !== ""
@@ -160,14 +158,24 @@ export const Edits = ({
       user?.name === name ||
       user?.surname === surname ||
       user?.email === email ||
+      user?.bio === bio ||
       passwordReapeat === "" ||
       password === "" ||
       passwordNew === ""
     ) {
       setSubmit(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [password, passwordReapeat, passwordNew, username, name, surname, email]);
+  }, [
+    user,
+    password,
+    passwordReapeat,
+    passwordNew,
+    username,
+    name,
+    surname,
+    email,
+    bio,
+  ]);
 
   return (
     <section
@@ -229,11 +237,20 @@ export const Edits = ({
               Surname must be between 1 and 40 characters
             </span>
           )}
-          <Input placeholderName='Bio(optional)' />
+          <Input
+            placeholderName='Bio(optional)'
+            error={Boolean(errors.bio)}
+            {...register("bio", {
+              minLength: 0,
+              maxLength: 40,
+            })}
+            text={bio}
+            setText={setBio}
+          />
         </div>
         <div className={styles.editInfo}>
           <p>Any details such as age, occupation or city.</p>
-          <p>Example: 23 y.o. designer from San Francisco</p>
+          <p>Example: 24 y.o. frontend from San Francisco</p>
         </div>
         <div className={styles.editUser}>
           <h2 className={styles.usernameEdit}>Email</h2>

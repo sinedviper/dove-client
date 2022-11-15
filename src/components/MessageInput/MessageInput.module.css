@@ -13,7 +13,8 @@
   max-width: 500px;
   width: 100%;
   font-size: 16px;
-  background-color: var(--light);
+  color: var(--text-first);
+  background-color: var(--background-third);
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
@@ -50,7 +51,7 @@
 }
 
 .smileIcon path {
-  fill: var(--gray);
+  fill: var(--icon-first);
 }
 
 .emojiIconOn path {

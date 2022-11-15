@@ -18,7 +18,7 @@
 
 .contacts:hover {
   transition: var(--transition);
-  background-color: var(--light);
+  background-color: var(--opacity-box);
 }
 
 .contactActive {
@@ -47,7 +47,7 @@
 
 .contactsPhoto span {
   display: block;
-  color: var(--light);
+  color: var(--white);
   font-weight: 600;
 }
 
@@ -70,7 +70,7 @@
 
 .contactMessage {
   margin-top: 5px;
-  color: var(--gray);
+  color: var(--text-sixth);
   padding: 0 5px 0 0;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -81,12 +81,13 @@
   position: absolute;
   right: -30px;
   font-size: 12px;
-  color: var(--gray);
+  color: var(--text-second);
 }
 
 .menuChat {
   position: absolute;
-  background-color: var(--white);
+  background-color: var(--opacity-box-second);
+  backdrop-filter: blur(30px);
   padding: 5px;
   border-radius: 10px;
   z-index: 1;
@@ -122,11 +123,11 @@
 
 .menuCard:hover {
   transition: var(--transition);
-  background-color: var(--light);
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .menuCard p {
-  color: var(--dark);
+  color: var(--text-first);
   font-size: 14px;
   font-weight: 600;
 }
@@ -134,5 +135,5 @@
 .iconDeleteMenu {
   width: 20px;
   height: 20px;
-  fill: var(--dark);
+  fill: var(--icon-second);
 }

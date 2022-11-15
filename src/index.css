@@ -2,56 +2,103 @@
 
 :root {
   --white: white;
-  --light: #f5f5f5;
-  --dark: #17212b;
-
-  --gray: #707579;
-  --gray-middle: #b9b9b9;
-  --gray-dark: #c5c5c5;
-  --gray-light: #e1e3e6;
 
   --primary: #3390ec;
   --primary-dark: #225991;
   --primary-light: #e2f1ff;
   --primary-middle: #9ccdfd;
+
+  --text-first: #000;
+  --text-second: #74797d;
+  --text-sixth: #707579;
+  --text-third: #a4a4a4;
+  --text-fourth: #c4c9cc;
+  --text-fiveth: #fff;
+  --text-seventh: #5a99b5;
+
+  --background-first: #fff;
+  --background-second: #f4f4f5;
+  --background-third: #fff;
+
+  --icon-first: #707579;
+  --icon-second: #000;
+
+  --border-first: #c4c9cc;
+  --border-second: #dfe1e5;
+
+  --opacity-box: rgba(0, 0, 0, 0.05);
+  --opacity-box-dark: rgba(0, 0, 0, 0.1);
+  --opacity-box-second: rgba(255, 255, 255, 0.7);
   --primary-opacity: rgba(51, 144, 236, 0.3);
-
-  /* ------------------------ LIGHT THEME ------------------------*/
-  --theme-light-white: white;
-  --theme-light-light: #f5f5f5;
-  --theme-light-dark: #17212b;
-
-  --theme-light-gray: #707579;
-  --theme-light-gray-middle: #b9b9b9;
-  --theme-light-gray-dark: #c5c5c5;
-  --theme-light-gray-light: #e1e3e6;
-
-  --theme-light-primary: #3390ec;
-  --theme-light-primary-dark: #225991;
-  --theme-light-primary-light: #e2f1ff;
-  --theme-light-primary-middle: #9ccdfd;
-  --theme-light-primary-opacity: rgba(51, 144, 236, 0.3);
-
-  /* ------------------------ DARK THEME ------------------------*/
-  --theme-dark-white: #212121;
-  --theme-dark-light: #181818;
-  --theme-dark-dark: #f5f5f5;
-
-  --theme-dark-gray: #707579;
-  --theme-dark-gray-middle: #b9b9b9;
-  --theme-dark-gray-dark: #c5c5c5;
-  --theme-dark-gray-light: #0f0f0f;
-
-  --theme-dark-primary: #8774e1;
-  --theme-dark-primary-dark: #6a52da;
-  --theme-dark-primary-light: #a698e2;
-  --theme-dark-primary-middle: #ccc1fd;
-  --theme-dark-primary-opacity: rgba(134, 116, 225, 0.3);
 
   --error: #d94848;
 
   --transition: all 0.23s;
   --transition-input: all 0.1s;
+
+  /* ------------------------ LIGHT THEME ------------------------*/
+  --theme-light-primary: #3390ec;
+  --theme-light-primary-dark: #225991;
+  --theme-light-primary-light: #e2f1ff;
+  --theme-light-primary-middle: #9ccdfd;
+
+  --theme-light-text-first: #000;
+  --theme-light-text-second: #74797d;
+  --theme-light-text-sixth: #707579;
+  --theme-light-text-third: #a4a4a4;
+  --theme-light-text-fourth: #c4c9cc;
+  --theme-light-text-fiveth: #fff;
+  --theme-light-text-seventh: #5a99b5;
+
+  --theme-light-background-first: #fff;
+  --theme-light-background-second: #f4f4f5;
+  --theme-light-background-third: #fff;
+
+  --theme-light-icon-first: #707579;
+  --theme-light-icon-second: #000;
+
+  --theme-light-border-first: #c4c9cc;
+  --theme-light-border-second: #dfe1e5;
+
+  --theme-light-opacity-box: rgba(0, 0, 0, 0.05);
+  --theme-light-opacity-box-dark: rgba(0, 0, 0, 0.1);
+  --theme-light-opacity-box-second: rgba(255, 255, 255, 0.7);
+  --theme-light-primary-opacity: rgba(51, 144, 236, 0.3);
+
+  /* ------------------------ DARK THEME ------------------------*/
+
+  --theme-dark-primary: #8774e1;
+  --theme-dark-primary-dark: #6a52da;
+  --theme-dark-primary-light: #a698e2;
+  --theme-dark-primary-middle: #8675d1;
+
+  --theme-dark-text-first: #fff;
+  --theme-dark-text-second: #a6a6a6;
+  --theme-dark-text-sixth: #aaa;
+  --theme-dark-text-third: #9e9e9e;
+  --theme-dark-text-fourth: #707579;
+  --theme-dark-text-fiveth: #000;
+  --theme-dark-text-seventh: #cbc3f2;
+
+  --theme-dark-background-first: #212121;
+  --theme-dark-background-second: #181818;
+  --theme-dark-background-third: #181818;
+
+  --theme-dark-icon-first: #707579;
+  --theme-dark-icon-second: #fff;
+
+  --theme-dark-border-first: #707579;
+  --theme-dark-border-second: #0f0f0f;
+
+  --theme-dark-opacity-box: rgba(255, 255, 255, 0.05);
+  --theme-dark-opacity-box-dark: rgba(255, 255, 255, 0.1);
+  --theme-dark-opacity-box-second: rgba(0, 0, 0, 0.7);
+  --theme-dark-primary-opacity: rgba(134, 116, 225, 0.3);
+
+  /* ------------------------ ANIMATION OFF ------------------------*/
+  --transition-off: all 0s;
+  /* ------------------------ ANIMATION ON ------------------------*/
+  --transition-on: all 0.23s;
 }
 
 * {
@@ -70,8 +117,8 @@ body {
 }
 
 body {
-  background: var(--white);
-  color: var(--dark);
+  background: var(--background-first);
+  color: var(--text-first);
 }
 
 ::-webkit-scrollbar {
@@ -79,7 +126,7 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--gray-light);
+  background: var(--border-first);
   border-radius: 10px;
   cursor: pointer;
   scroll-behavior: smooth;

@@ -16,9 +16,9 @@ import { getMainDefinition } from "@apollo/client/utilities";
 
 import App from "./App";
 import { persistor, store } from "./store";
+import { ThemeProvider } from "context";
 
 import "./index.css";
-import ThemeProvider from "context/ThemeProvider";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -30,7 +30,7 @@ const httpLink = createHttpLink({
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: `ws://localhost:$3001/subscriptions`,
+    url: `ws://localhost:3001/graphql`,
   })
 );
 

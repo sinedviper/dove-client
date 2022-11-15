@@ -19,6 +19,9 @@ import { ReactComponent as Copy } from "./copy.svg";
 import { ReactComponent as Delete } from "./delete.svg";
 import { ReactComponent as Dove } from "./dove.svg";
 import { ReactComponent as Send } from "./send.svg";
+import { ReactComponent as Moon } from "./moon.svg";
+import { ReactComponent as Meteor } from "./meteor.svg";
+import { ReactComponent as Info } from "./information.svg";
 
 export const TelegramIcon = Telegram;
 export const SearchIcon = Search;
@@ -41,3 +44,6 @@ export const CopyIcon = Copy;
 export const DeleteIcon = Delete;
 export const DoveIcon = Dove;
 export const SendIcon = Send;
+export const MoonIcon = Moon;
+export const MeteorIcon = Meteor;
+export const InfoIcon = Info;

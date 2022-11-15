@@ -4,7 +4,7 @@
   right: -425px;
   width: 420px;
   height: 100vh;
-  background-color: var(--light);
+  background-color: var(--background-second);
   display: flex;
   transition: var(--transition);
   z-index: 2;
@@ -25,11 +25,12 @@
 .editHead {
   display: flex;
   padding: 9px 15px;
-  background-color: var(--white);
+  background-color: var(--background-first);
   justify-content: space-between;
   align-items: center;
   z-index: 1;
 }
+
 .editHead div {
   display: flex;
   align-items: center;
@@ -39,6 +40,7 @@
   margin-left: 15px;
   font-size: 19px;
   pointer-events: none;
+  color: var(--text-first);
 }
 
 .editPhoto {
@@ -59,13 +61,13 @@
   flex-direction: column;
   gap: 25px;
   padding: 20px;
-  background-color: var(--white);
+  background-color: var(--background-first);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .editInfo {
   text-align: left;
-  color: var(--gray);
+  color: var(--text-sixth);
   font-size: 13px;
   padding: 10px 20px;
   margin-bottom: 10px;
@@ -88,11 +90,11 @@
 
 .back:hover {
   transition: var(--transition);
-  background-color: var(--light);
+  background-color: var(--opacity-box);
 }
 
 .back path {
-  fill: var(--gray);
+  fill: var(--icon-first);
 }
 
 .supheed {
@@ -108,7 +110,7 @@
   background-color: var(--primary);
   justify-content: center;
   align-items: center;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);
+  box-shadow: 1px 1px 5px var(--opacity-box-dark);
   opacity: 0;
   fill: var(--white);
   transition: var(--transition);
@@ -134,14 +136,6 @@
 
 .contactsList {
   overflow-y: hidden;
-}
-
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--gray-light);
-  border-radius: 10px;
 }
 
 .swiper {
