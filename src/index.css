@@ -15,6 +15,7 @@
   --text-fourth: #c4c9cc;
   --text-fiveth: #fff;
   --text-seventh: #5a99b5;
+  --text-eighth: #cecece;
 
   --background-first: #fff;
   --background-second: #f4f4f5;
@@ -49,6 +50,7 @@
   --theme-light-text-fourth: #c4c9cc;
   --theme-light-text-fiveth: #fff;
   --theme-light-text-seventh: #5a99b5;
+  --theme-light-text-eighth: #cecece;
 
   --theme-light-background-first: #fff;
   --theme-light-background-second: #f4f4f5;
@@ -79,6 +81,7 @@
   --theme-dark-text-fourth: #707579;
   --theme-dark-text-fiveth: #000;
   --theme-dark-text-seventh: #cbc3f2;
+  --theme-dark-text-eighth: #cecece;
 
   --theme-dark-background-first: #212121;
   --theme-dark-background-second: #181818;

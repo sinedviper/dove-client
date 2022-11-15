@@ -13,7 +13,7 @@ import {
   RemoveUserIcon,
   UsernameIcon,
 } from "assets";
-import { colorCard } from "helpers";
+import { colorCard, formateDateOnline } from "helpers";
 import { deleteUser } from "mutation";
 
 import styles from "./Settings.module.css";
@@ -114,6 +114,9 @@ export const Settings = ({
           <div className={styles.photoFIO}>
             <p>
               {user?.name} {user?.surname}
+            </p>
+            <p className={styles.userOnline}>
+              {user?.online && formateDateOnline(new Date(user?.online))}
             </p>
           </div>
         </div>

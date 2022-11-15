@@ -24,6 +24,7 @@ export const changeCssColor = (theme) => {
     "opacity-box-dark",
     "opacity-box-second",
     "primary-opacity",
+    "--text-eighth",
   ];
 
   cssVariable.forEach((element) => {

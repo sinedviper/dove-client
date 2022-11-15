@@ -4,7 +4,7 @@ import cn from "classnames";
 import { MessageHeaderProps } from "./MessageHeader.props";
 
 import styles from "./MessageHeader.module.css";
-import { colorCard, formateDate, formateDateOnline } from "helpers";
+import { colorCard, formateDateOnline } from "helpers";
 
 export const MessageHeader = ({
   setSettings,

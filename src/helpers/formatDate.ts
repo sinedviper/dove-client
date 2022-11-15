@@ -68,15 +68,25 @@ export const formatHours = (data: Date): string => {
   }).format(data);
 };
 
+/*
+20.01
+19.50
+
+
+*/
+
 export const formateDateOnline = (data: Date): string => {
   const todayDate = new Date();
-
   if (todayDate.getFullYear() === data.getFullYear()) {
     if (todayDate.getMonth() === data.getMonth()) {
       if (todayDate.getDate() === data.getDate()) {
         if (todayDate.getHours() === data.getHours()) {
-          if (todayDate.getMinutes() === data.getMinutes()) {
-            return "";
+          if (minutesFormat(todayDate, data) < 30) {
+            if (minutesFormat(todayDate, data) < 5) {
+              return "online";
+            } else {
+              return `last seen ${minutesFormat(todayDate, data)} minutes`;
+            }
           } else {
             return new Intl.DateTimeFormat("en-US", {
               hour: "2-digit",
@@ -84,10 +94,14 @@ export const formateDateOnline = (data: Date): string => {
             }).format(data);
           }
         } else {
-          return new Intl.DateTimeFormat("en-US", {
-            hour: "2-digit",
-            minute: "2-digit",
-          }).format(data);
+          if (minutesFormat(todayDate, data) < 30) {
+            return `last seen ${minutesFormat(todayDate, data)} minutes`;
+          } else {
+            return new Intl.DateTimeFormat("en-US", {
+              hour: "2-digit",
+              minute: "2-digit",
+            }).format(data);
+          }
         }
       } else {
         if (todayDate.getDate() - 7 <= 0) {
@@ -140,4 +154,8 @@ export const formateDateOnline = (data: Date): string => {
   } else {
     return String(data.getFullYear());
   }
+};
+
+export const minutesFormat = (d: any, d2: any) => {
+  return Math.floor((d - d2) / (60 * 1000));
 };

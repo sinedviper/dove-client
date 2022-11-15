@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState, useRef, useEffect } from "react";
 import cn from "classnames";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useSubscription } from "@apollo/client";
 
 import { LayoutProps } from "./Layout.props";
-import { useAppDispatch, useAppSelector } from "hooks";
+import { useAppDispatch, useAppSelector, useDebounce } from "hooks";
 import {
   actionAddChats,
   actionAddContact,
@@ -26,7 +27,7 @@ import {
   subscribeUser,
   updateUserOnline,
 } from "mutation";
-import { checkAuthorization, outLogin } from "helpers";
+import { checkAuthorization, minutesFormat, outLogin } from "helpers";
 
 import styles from "./Layout.module.css";
 import { toast } from "react-toastify";
@@ -37,6 +38,18 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   const themeChange = useTheme();
 
   const [mutationUserOnlineFunction] = useMutation(updateUserOnline);
+
+  const debouncedMutation = useDebounce(() => {
+    mutationUserOnlineFunction({
+      variables: { input: { online: "ping" } },
+    });
+  }, 300000);
+
+  const debouncedCheck = useDebounce(() => {
+    mutationUserOnlineFunction({
+      variables: { input: { online: "ping" } },
+    });
+  }, 1000);
 
   const { loading: loadQueryContact } = useQuery(getContact, {
     onCompleted(data) {
@@ -164,7 +177,8 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
     themeChange?.changeAnimation(
       user?.animation ? animation.ANIMATION_ON : animation.ANIMATION_OFF
     );
-  }, [themeChange, user?.animation, user?.theme]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.animation, user?.theme]);
 
   if (!token) {
     outLogin(dispatch, themeChange);
@@ -174,14 +188,10 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   return (
     <main
       className={cn(className, styles.main)}
-      onMouseMove={() =>
-        setInterval(
-          async () =>
-            await mutationUserOnlineFunction({
-              variables: { input: { online: "ping" } },
-            }),
-          300000
-        )
+      onMouseMove={
+        user?.online && minutesFormat(new Date(), new Date(user?.online)) > 4
+          ? debouncedCheck
+          : debouncedMutation
       }
       {...props}
     >

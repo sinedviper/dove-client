@@ -46,6 +46,27 @@ export const getMe = gql`
   }
 `;
 
+export const getUsersSearch = gql`
+  query SearchUsers($searchUsersInput2: UserSearchInput!) {
+    searchUsers(input: $searchUsersInput2) {
+      status
+      code
+      data {
+        id
+        username
+        email
+        name
+        surname
+        online
+        bio
+        theme
+        animation
+      }
+      message
+    }
+  }
+`;
+
 export const signUp = gql`
   mutation Mutation($input: SignUpInput!) {
     signupUser(input: $input) {

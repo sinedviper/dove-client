@@ -27,7 +27,6 @@ export const ChatsHeader = ({
   setSearchUser,
   setSettings,
   searchUser,
-  handleSearch,
   valueAll,
   setValueAll,
   className,
@@ -202,7 +201,6 @@ export const ChatsHeader = ({
       <Search
         value={valueAll}
         setValue={setValueAll}
-        onChange={handleSearch}
         onFocus={() => {
           setSearchUser(true);
           setMenu(false);

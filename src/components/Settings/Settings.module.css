@@ -202,11 +202,13 @@
 
 .photoFIO {
   position: absolute;
+  display: flex;
+  flex-direction: column;
   font-size: 19px;
   display: flex;
   gap: 5px;
   font-weight: 600;
-  bottom: 30px;
+  bottom: 15px;
   left: 25px;
   width: 85%;
 }
@@ -215,6 +217,10 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+.userOnline {
+  font-size: 14px;
+  color: var(--text-eighth);
 }
 
 .infoLast {

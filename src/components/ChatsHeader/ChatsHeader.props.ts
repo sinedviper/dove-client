@@ -10,5 +10,4 @@ export interface ChatsHeaderProps
   setSettings: Function;
   valueAll: string;
   setValueAll: Function;
-  handleSearch: VoidFunction;
 }

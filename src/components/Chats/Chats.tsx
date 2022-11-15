@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import cn from "classnames";
-import { useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { ChatsProps } from "./Chats.props";
 import { CardChat, ChatsHeader } from "components";
 import { IChat, IUser } from "interface";
-import { addChat } from "mutation";
+import { addChat, getUsersSearch } from "mutation";
 import { colorCard } from "helpers";
 import { getContacts, getUser } from "store";
 import { useAppSelector } from "hooks";
@@ -34,6 +34,8 @@ export const Chats = ({
   const [searchUser, setSearchUser] = useState<boolean>(false);
   const [valueAll, setValueAll] = useState<string>("");
 
+  const [querySearch, { data: dataSearch }] = useLazyQuery(getUsersSearch);
+
   const handleFocus = async (contact: IUser) => {
     setSearchUser(false);
     await mutationFunction({
@@ -44,7 +46,11 @@ export const Chats = ({
     navigate(`${contact.username}`);
   };
 
-  const handleSearch = (): void => {};
+  if (valueAll.replaceAll(" ", "") !== "") {
+    querySearch({
+      variables: { userId: Number(user?.id), username: String(valueAll) },
+    });
+  }
 
   return (
     <section
@@ -61,7 +67,6 @@ export const Chats = ({
         searchUser={searchUser}
         valueAll={valueAll}
         setValueAll={setValueAll}
-        handleSearch={handleSearch}
       />
       <section
         className={cn(styles.searchWrapperUsers, {
@@ -101,6 +106,10 @@ export const Chats = ({
                 </div>
               );
             })}
+        </div>
+        <div>
+          {dataSearch &&
+            dataSearch.searchUsers.map((obj) => <div>{obj.id}</div>)}
         </div>
       </section>
       <section
