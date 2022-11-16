@@ -1,15 +1,21 @@
 import React, { useState } from "react";
 import cn from "classnames";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 
 import { CardContactProps } from "./CardContact.props";
-import { formateDate, colorCard } from "helpers";
-import { addChat, deleteContact } from "mutation";
-import { getUser } from "store";
-import { useAppSelector } from "hooks";
-import { IUser } from "interface";
+import { checkAuthorization, colorCard, formateDateOnline } from "helpers";
+import { addChat, deleteContact, getMessage } from "mutation";
+import {
+  actionAddMessages,
+  actionClearMessages,
+  getChat,
+  getUser,
+} from "store";
+import { useAppDispatch, useAppSelector } from "hooks";
+import { IChat, IUser } from "interface";
 import { DeleteIcon } from "assets";
+import { useTheme } from "context";
 
 import styles from "./CardContact.module.css";
 
@@ -17,14 +23,27 @@ export const CardContact = ({
   className,
   contact,
   setContact,
+  setValue,
   ...props
 }: CardContactProps): JSX.Element => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const themeChange = useTheme();
+
+  const [queryFunction] = useLazyQuery(getMessage, {
+    onCompleted(data) {
+      checkAuthorization({
+        dispatch,
+        navigate,
+        data: data.getMessages,
+        actionAdd: actionAddMessages,
+        themeChange,
+      });
+    },
+  });
 
   const [mutationFunction] = useMutation(addChat, {
-    onCompleted() {
-      navigate(`${contact.username}`);
-    },
+    onCompleted() {},
   });
   const [mutationFunctionDelete] = useMutation(deleteContact);
 
@@ -34,14 +53,32 @@ export const CardContact = ({
   const [click, setClick] = useState<boolean>(false);
 
   const user: IUser | null = useAppSelector(getUser);
+  const chat: IChat[] | null = useAppSelector(getChat);
 
   const handleFocus = async () => {
+    setValue("");
     setContact(false);
+    dispatch(actionClearMessages());
     await mutationFunction({
       variables: {
         chat: { sender: Number(user?.id), recipient: Number(contact.id) },
       },
     });
+    // eslint-disable-next-line array-callback-return
+    const chatId = chat?.filter((obj) => {
+      if (obj.user.id === contact.id) {
+        return obj;
+      }
+    })[0];
+    await queryFunction({
+      variables: {
+        message: {
+          chatId: Number(chatId?.id),
+          senderMessage: Number(user?.id),
+        },
+      },
+    });
+    navigate(`${contact?.username}`);
   };
 
   const handleDeleteContact = async () => {
@@ -86,16 +123,18 @@ export const CardContact = ({
         }}
       >
         <span>
-          {contact?.name.toUpperCase().split("")[0] +
-            contact?.surname.toUpperCase().split("")[0]}
+          {contact?.name && contact?.name.toUpperCase().split("")[0]}
+          {contact?.surname && contact?.surname.toUpperCase().split("")[0]}
         </span>
       </div>
       <div className={styles.contactInfo}>
         <span className={styles.contactName}>
-          {contact?.name} {contact.surname}
+          {contact?.name && contact?.name}{" "}
+          {contact?.surname && contact?.surname}
         </span>
         <span className={styles.contactMessage}>
-          last seen {formateDate(new Date(contact?.online)).toLocaleLowerCase()}
+          {contact?.online &&
+            formateDateOnline(new Date(contact?.online)).toLocaleLowerCase()}
         </span>
       </div>
       <div

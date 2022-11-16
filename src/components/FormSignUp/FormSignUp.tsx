@@ -6,7 +6,7 @@ import { useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
 
 import { FormSignUpProps } from "./FormSignUp.props";
-import { LoadingIcon, TelegramIcon } from "assets";
+import { DoveIcon, LoadingIcon } from "assets";
 import { Input } from "components";
 import { signUp } from "mutation";
 
@@ -47,9 +47,11 @@ export const FormSignUp = ({
 
   return (
     <section className={cn(className, styles.form)} {...props}>
-      <TelegramIcon className={styles.svg} />
-      <h2 className={styles.head}>Sign Up in Telegram</h2>
-      <p className={styles.text}>Please fill in all fields.</p>
+      <DoveIcon className={styles.svg} />
+      <h2 className={styles.head}>Sign Up in Dove</h2>
+      <p className={styles.text}>
+        Please fill in all fields, if you don't want to then go fuck yourself
+      </p>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.login}>
         <Input
           placeholderName={"Name"}

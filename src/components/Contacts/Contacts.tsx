@@ -49,6 +49,7 @@ export const Contacts = ({
                   contact={contact}
                   key={contact.id}
                   setContact={setContact}
+                  setValue={setValueContact}
                 />
               ))
               // eslint-disable-next-line array-callback-return

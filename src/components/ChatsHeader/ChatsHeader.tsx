@@ -95,6 +95,7 @@ export const ChatsHeader = ({
         onClick={() => {
           if (searchUser) {
             setSearchUser(false);
+            setValueAll("");
           }
           if (!searchUser) setMenu(!menu);
         }}

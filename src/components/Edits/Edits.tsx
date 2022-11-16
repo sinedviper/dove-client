@@ -271,7 +271,7 @@ export const Edits = ({
           )}
         </div>
         <div className={styles.editInfo}>
-          <p>You can change the your email on Telegram.</p>
+          <p>You can change the your email on Dove.</p>
         </div>
         <div className={styles.editUser}>
           <h2 className={styles.usernameEdit}>Username</h2>
@@ -293,8 +293,8 @@ export const Edits = ({
         </div>
         <div className={styles.editInfo}>
           <p>
-            You can choose a username on Telegram. If you do people will be able
-            to find you by this username.
+            You can choose a username on Dove. If you do people will be able to
+            find you by this username.
           </p>
         </div>
         <div className={styles.editUser}>
@@ -364,7 +364,7 @@ export const Edits = ({
           )}
         </div>
         <div className={cn(styles.editInfo, styles.info)}>
-          <p>You can change the your password on Telegram.</p>
+          <p>You can change the your password on Dove.</p>
         </div>
         <button
           className={cn(styles.supheed, {

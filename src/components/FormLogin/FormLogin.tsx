@@ -1,15 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import cn from "classnames";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useMutation, useLazyQuery, useQuery } from "@apollo/client";
+import { useMutation, useLazyQuery } from "@apollo/client";
 
 import { FormLoginProps } from "./FormLogin.props";
-import { LoadingIcon, TelegramIcon } from "assets";
+import { DoveIcon, LoadingIcon } from "assets";
 import { Input } from "components";
-import { getChats, getContact, getMe, loginUser } from "mutation";
+import { getMe, loginUser } from "mutation";
 import { actionAddUser } from "store";
 import { useAppDispatch } from "hooks";
 
@@ -67,14 +66,14 @@ export const FormLogin = ({
   return (
     <>
       <section className={cn(className, styles.form)} {...props}>
-        <TelegramIcon className={styles.svg} />
-        <h2 className={styles.head}>Login in Telegram</h2>
+        <DoveIcon className={styles.svg} />
+        <h2 className={styles.head}>Login in Dove</h2>
         <p className={styles.text}>
           Please enter your full email and enter your full password.
         </p>
         <p className={styles.text}>
-          Note that you need an existing account to log in to Telegram. To sign
-          up for Telegram, use the link down.
+          Note that you need an existing account to log in to Dove. To sign up
+          for Dove, use the link down.
         </p>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.login}>
           <Input

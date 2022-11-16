@@ -5,4 +5,5 @@ export interface CardContactProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLLIElement>, HTMLLIElement> {
   contact: IUser;
   setContact: Function;
+  setValue: Function;
 }

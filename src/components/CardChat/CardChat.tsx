@@ -99,13 +99,15 @@ export const CardChat = ({
         }}
       >
         <span>
-          {contact?.user.name.toUpperCase().split("")[0] +
+          {contact?.user.name && contact?.user.name.toUpperCase().split("")[0]}
+          {contact?.user.surname &&
             contact?.user.surname.toUpperCase().split("")[0]}
         </span>
       </div>
       <div className={styles.contactInfo}>
         <span className={styles.contactName}>
-          {contact?.user.name} {contact?.user.surname}
+          {contact?.user?.name && contact?.user?.name}{" "}
+          {contact?.user?.surname && contact?.user?.surname}
         </span>
         <span className={styles.contactMessage}>
           {contact?.lastMessage && contact?.lastMessage.text}

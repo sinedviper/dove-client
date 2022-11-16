@@ -41,7 +41,6 @@ export const MessageHeader = ({
           {receipt?.surname && receipt?.surname}
         </p>
         <p className={styles.infoDate}>
-          last seen{" "}
           {receipt?.online &&
             formateDateOnline(new Date(receipt?.online)).toLowerCase()}
         </p>

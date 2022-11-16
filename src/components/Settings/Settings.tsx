@@ -49,7 +49,10 @@ export const Settings = ({
       })}
       {...props}
     >
-      <div className={styles.settingsHead}>
+      <div
+        className={styles.settingsHead}
+        onMouseLeave={() => setDeleteUser(false)}
+      >
         <div>
           {profile ? (
             <RemoveIcon

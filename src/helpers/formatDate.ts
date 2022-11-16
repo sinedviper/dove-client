@@ -68,13 +68,6 @@ export const formatHours = (data: Date): string => {
   }).format(data);
 };
 
-/*
-20.01
-19.50
-
-
-*/
-
 export const formateDateOnline = (data: Date): string => {
   const todayDate = new Date();
   if (todayDate.getFullYear() === data.getFullYear()) {
@@ -105,22 +98,29 @@ export const formateDateOnline = (data: Date): string => {
         }
       } else {
         if (todayDate.getDate() - 7 <= 0) {
-          return new Intl.DateTimeFormat("en-US", {
-            weekday: "long",
-          }).format(data);
+          return (
+            "last seen " +
+            new Intl.DateTimeFormat("en-US", {
+              weekday: "long",
+            }).format(data)
+          );
         } else {
           if (todayDate.getDate() - 7 >= data.getDate()) {
             return (
-              new Intl.DateTimeFormat("en-US", { month: "short" }).format(
+              "last seen " +
+              (new Intl.DateTimeFormat("en-US", { month: "long" }).format(
                 data
               ) +
-              " " +
-              data.getDate()
+                " " +
+                data.getDate())
             );
           } else {
-            return new Intl.DateTimeFormat("en-US", {
-              weekday: "long",
-            }).format(data);
+            return (
+              "last seen " +
+              new Intl.DateTimeFormat("en-US", {
+                weekday: "long",
+              }).format(data)
+            );
           }
         }
       }
@@ -134,25 +134,30 @@ export const formateDateOnline = (data: Date): string => {
       if (day.getMonth() === data.getMonth()) {
         if (day.getDate() > data.getDate()) {
           return (
-            new Intl.DateTimeFormat("en-US", { month: "long" }).format(data) +
-            " " +
-            data.getDate()
+            "last seen " +
+            (new Intl.DateTimeFormat("en-US", { month: "long" }).format(data) +
+              " " +
+              data.getDate())
           );
         } else {
-          return new Intl.DateTimeFormat("en-US", {
-            weekday: "long",
-          }).format(data);
+          return (
+            "last seen " +
+            new Intl.DateTimeFormat("en-US", {
+              weekday: "long",
+            }).format(data)
+          );
         }
       } else {
         return (
-          new Intl.DateTimeFormat("en-US", { month: "long" }).format(data) +
-          " " +
-          data.getDate()
+          "last seen " +
+          (new Intl.DateTimeFormat("en-US", { month: "long" }).format(data) +
+            " " +
+            data.getDate())
         );
       }
     }
   } else {
-    return String(data.getFullYear());
+    return "last seen " + String(data.getFullYear());
   }
 };
 

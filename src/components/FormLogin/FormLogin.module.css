@@ -2,9 +2,6 @@
   width: 160px;
   height: 160px;
   margin: 0 auto;
-}
-
-.svg path:last-child {
   fill: var(--primary);
 }
 

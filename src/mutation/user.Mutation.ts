@@ -47,8 +47,8 @@ export const getMe = gql`
 `;
 
 export const getUsersSearch = gql`
-  query SearchUsers($searchUsersInput2: UserSearchInput!) {
-    searchUsers(input: $searchUsersInput2) {
+  query SearchUsers($input: UserSearchInput!) {
+    searchUsers(input: $input) {
       status
       code
       data {
@@ -59,8 +59,6 @@ export const getUsersSearch = gql`
         surname
         online
         bio
-        theme
-        animation
       }
       message
     }

@@ -28,3 +28,21 @@ export const checkAuthorization = ({
     dispatch(actionAdd(data.data));
   }
 };
+
+export const checkAuthorizationSearch = ({
+  dispatch,
+  navigate,
+  data,
+  themeChange,
+}: Omit<check, "actionAdd">) => {
+  if (data.status === "Invalid") {
+    if (data.code === 401) {
+      outLogin(dispatch, themeChange);
+      navigate("/login");
+    }
+    toast.error(data.message);
+  }
+  if (data.status === "Success") {
+    return data.data;
+  }
+};

@@ -107,26 +107,17 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   const contacts: IUser[] | null = useAppSelector(getContacts);
   const token: string | null = localStorage.getItem("token");
 
-  useEffect(() => {
-    if (errorUser) toast.error(errorUser.message);
-    if (errorChats) toast.error(errorChats.message);
-    if (errorMessage) toast.error(errorMessage.message);
-    if (errorContact) toast.error(errorContact.message);
-  }, [
-    loadQueryContact,
-    loadQueryChat,
-    errorUser,
-    errorChats,
-    errorMessage,
-    errorContact,
-  ]);
+  if (errorUser) toast.error(errorUser.message);
+  if (errorChats) toast.error(errorChats.message);
+  if (errorMessage) toast.error(errorMessage.message);
+  if (errorContact) toast.error(errorContact.message);
 
   useEffect(() => {
     if (!loadingChats) {
       checkAuthorization({
         dispatch,
         navigate,
-        data: dataMessage.chatSubscription,
+        data: dataChats.chatSubscription,
         actionAdd: actionAddChats,
         themeChange,
       });
