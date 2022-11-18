@@ -1,3 +1,4 @@
+import { receiptReducer } from "./features/receipt.Slice";
 import {
   Action,
   configureStore,
@@ -30,6 +31,7 @@ const reducer = combineReducers({
   chats: chatsReducer,
   messages: messagesReducer,
   message: messageEditReducer,
+  receipt: receiptReducer,
 });
 
 const persistConfig = {

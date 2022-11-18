@@ -1,29 +1,52 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import cn from "classnames";
 
 import { HomeProps } from "./Home.props";
-import { useAppSelector } from "hooks";
-import { getChat, getMessages, getUser } from "store";
-import { IChat, IUser } from "interface";
+import { useAppDispatch, useAppSelector } from "hooks";
+import {
+  actionAddMessages,
+  getChat,
+  getMessages,
+  getReceipt,
+  getUser,
+} from "store";
+import { IChat, IMessage, IUser } from "interface";
 import { MessageCard, MessageHeader, MessageInput, Settings } from "components";
 
 import styles from "./Home.module.css";
-import { formatDay } from "helpers";
+import { checkAuthorization, formatDay } from "helpers";
+import { useLazyQuery } from "@apollo/client";
+import { getMessage } from "mutation";
+import { useTheme } from "context";
 
 export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
-  const [settings, setSettings] = useState<boolean>(false);
   const { username } = useParams();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const themeChange = useTheme();
 
-  let chat: IChat | null = null;
-  const receipt: IUser | undefined = useAppSelector(getChat)
-    ?.filter((obj) => obj.user.username === username)
-    .map((obj) => {
-      chat = obj;
-      return obj.user;
-    })[0];
+  const [queryFunction] = useLazyQuery(getMessage, {
+    onCompleted(data) {
+      checkAuthorization({
+        dispatch,
+        navigate,
+        data: data.getMessages,
+        actionAdd: actionAddMessages,
+        themeChange,
+      });
+    },
+  });
+
+  const chats: IChat[] | null = useAppSelector(getChat);
+  const sender: IUser | null = useAppSelector(getReceipt);
   const user: IUser | null = useAppSelector(getUser);
-  const messages = useAppSelector(getMessages);
+  const messages: IMessage[] | null = useAppSelector(getMessages);
+
+  const [settings, setSettings] = useState<boolean>(false);
+
+  const haveChatOrNot: IChat | null =
+    chats && chats.filter((chat) => chat.user.id === sender?.id)[0];
 
   const messagesEndRef = useRef<HTMLLIElement>(null);
 
@@ -32,16 +55,27 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
   };
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    messages && scrollToBottom();
+    if (haveChatOrNot && !messages) {
+      queryFunction({
+        variables: {
+          message: {
+            chatId: Number(haveChatOrNot?.id),
+            senderMessage: Number(user?.id),
+          },
+        },
+      });
+    }
+  }, [messages, haveChatOrNot, user?.id]);
 
   return (
     <section className={cn(className, styles.wrapper)} {...props}>
       <section className={styles.chatWrapper}>
-        <MessageHeader receipt={receipt} setSettings={setSettings} />
+        <MessageHeader receipt={sender} setSettings={setSettings} />
         <section className={styles.chatsWrapper}>
           <ul className={cn(styles.messageWrapper)}>
             {messages &&
+              haveChatOrNot &&
               messages?.map((message, index) => {
                 if (messages[index + 1]?.createdAt)
                   if (
@@ -51,7 +85,7 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
                     return (
                       <div key={message.id} className={styles.wrapperWithDate}>
                         <MessageCard
-                          chat={chat}
+                          chat={haveChatOrNot}
                           message={message}
                           index={index}
                           user={user}
@@ -66,7 +100,7 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
                   }
                 return (
                   <MessageCard
-                    chat={chat}
+                    chat={haveChatOrNot}
                     message={message}
                     index={index}
                     user={user}
@@ -80,7 +114,7 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
           </ul>
         </section>
         <div className={styles.inputWrap}>
-          <MessageInput chat={chat} user={user} />
+          <MessageInput chat={haveChatOrNot} user={user} />
         </div>
       </section>
       <section
@@ -88,7 +122,7 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
           [styles.profileOn]: settings === true,
         })}
       >
-        <Settings setSettings={setSettings} user={receipt} profile={true} />
+        <Settings setSettings={setSettings} user={sender} profile={true} />
       </section>
     </section>
   );

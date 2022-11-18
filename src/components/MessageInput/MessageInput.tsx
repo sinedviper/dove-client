@@ -5,12 +5,13 @@ import Picker from "@emoji-mart/react";
 import { useMutation } from "@apollo/client";
 
 import { MessageInputProps } from "./MessageInput.props";
-import { addMessages, updateMessages } from "mutation";
+import { addChat, addMessages, updateMessages } from "mutation";
 import { EditIcon, RemoveIcon, ReplyIcon, SendIcon, SmileIcon } from "assets";
 
 import styles from "./MessageInput.module.css";
-import { actionClearMessageEdit, getMessageEdit } from "store";
+import { actionClearMessageEdit, getMessageEdit, getReceipt } from "store";
 import { useAppDispatch, useAppSelector } from "hooks";
+import { IUser } from "interface";
 
 export const MessageInput = forwardRef(
   (
@@ -18,10 +19,13 @@ export const MessageInput = forwardRef(
     ref: ForwardedRef<HTMLInputElement>
   ): JSX.Element => {
     const [metationFunction] = useMutation(addMessages);
+    const [mutationFunctionChat] = useMutation(addChat);
     const [mutationFunctionUpdate] = useMutation(updateMessages);
     const {
       message: { message, edit },
     } = useAppSelector(getMessageEdit);
+    const sender: IUser | null = useAppSelector(getReceipt);
+
     const dispatch = useAppDispatch();
 
     const [emoji, setEmoji] = useState<boolean>(false);
@@ -31,102 +35,71 @@ export const MessageInput = forwardRef(
       setSend(send + String(emoji.native));
     };
 
+    const handleAddChat = async () => {
+      await mutationFunctionChat({
+        variables: {
+          chat: { sender: Number(user?.id), recipient: Number(sender?.id) },
+        },
+      });
+    };
+
+    const handleMessageUpdate = async () => {
+      setSend("");
+      dispatch(actionClearMessageEdit());
+      await mutationFunctionUpdate({
+        variables: {
+          message: {
+            id: Number(message?.id),
+            chatId: Number(message?.chatId),
+            text: send,
+            senderMessage: Number(user?.id),
+          },
+        },
+      });
+    };
+
+    const handleMessageAdd = async () => {
+      setSend("");
+      await metationFunction({
+        variables: {
+          message: {
+            text: send,
+            senderMessage: Number(user?.id),
+            chatId: Number(chat?.id),
+          },
+        },
+      });
+    };
+
     const handleSend = async (e) => {
-      if (chat)
+      if (chat) {
         if (message) {
           if (e.code === "Enter") {
-            if (edit) {
-              setSend("");
-              dispatch(actionClearMessageEdit());
-              await mutationFunctionUpdate({
-                variables: {
-                  message: {
-                    id: Number(message.id),
-                    chatId: Number(message.chatId),
-                    text: send,
-                    senderMessage: Number(user?.id),
-                  },
-                },
-              });
-            }
-            if (!edit) {
-              setSend("");
-              dispatch(actionClearMessageEdit());
-              await metationFunction({
-                variables: {
-                  message: {
-                    chatId: Number(message.chatId),
-                    text: send,
-                    reply: Number(message.id),
-                    senderMessage: Number(user?.id),
-                  },
-                },
-              });
-            }
+            edit && (await handleMessageUpdate());
+            !edit && (await handleMessageUpdate());
           }
         } else {
-          if (send.replaceAll(" ", "") !== "") {
-            if (e.code === "Enter") {
-              setSend("");
-              await metationFunction({
-                variables: {
-                  message: {
-                    text: send,
-                    senderMessage: Number(user?.id),
-                    chatId: Number(chat?.id),
-                  },
-                },
-              });
-            }
-          }
+          send.replaceAll(" ", "") !== "" &&
+            e.code === "Enter" &&
+            (await handleMessageAdd());
         }
+      } else {
+        handleAddChat();
+      }
     };
 
     const handleSendClick = async () => {
       if (chat) {
         if (message) {
-          if (edit) {
-            setSend("");
-            dispatch(actionClearMessageEdit());
-            await mutationFunctionUpdate({
-              variables: {
-                message: {
-                  id: Number(message.id),
-                  chatId: Number(message.chatId),
-                  text: send,
-                  senderMessage: Number(user?.id),
-                },
-              },
-            });
-          }
-          if (!edit) {
-            setSend("");
-            dispatch(actionClearMessageEdit());
-            await metationFunction({
-              variables: {
-                message: {
-                  chatId: Number(message.chatId),
-                  text: send,
-                  reply: Number(message.id),
-                  senderMessage: Number(user?.id),
-                },
-              },
-            });
-          }
+          edit && (await handleMessageUpdate());
+          !edit && (await handleMessageUpdate());
         } else {
           if (send.replaceAll(" ", "") !== "") {
-            setSend("");
-            await metationFunction({
-              variables: {
-                message: {
-                  text: send,
-                  senderMessage: Number(user?.id),
-                  chatId: chat.id,
-                },
-              },
-            });
+            await handleMessageAdd();
           }
         }
+      } else {
+        handleAddChat();
       }
     };
 

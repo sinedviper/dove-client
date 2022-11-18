@@ -14,7 +14,7 @@ const initialState: IMessageState = {
 
 export const messagesSlice = createSlice({
   initialState,
-  name: "messagesSlice",
+  name: "@@messagesSlice",
   reducers: {
     actionClearMessages: () => initialState,
     actionAddMessages: (state, action) => {

@@ -1,22 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from "react";
 import cn from "classnames";
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { ChatsProps } from "./Chats.props";
 import { CardChat, CardContact, ChatsHeader } from "components";
 import { IChat, IUser } from "interface";
-import { addChat, getMessage, getUsersSearch } from "mutation";
+import { getUsersSearch } from "mutation";
+import { checkAuthorizationSearch, colorCard } from "helpers";
 import {
-  checkAuthorization,
-  checkAuthorizationSearch,
-  colorCard,
-} from "helpers";
-import {
-  actionAddMessages,
+  actionAddReceipt,
   actionClearMessages,
-  getChat,
+  actionClearReceipt,
   getContacts,
   getUser,
 } from "store";
@@ -24,7 +20,6 @@ import { useAppDispatch, useAppSelector, useDebounce } from "hooks";
 
 import styles from "./Chats.module.css";
 import { useTheme } from "context";
-import { toast } from "react-toastify";
 
 export const Chats = ({
   chats,
@@ -41,21 +36,6 @@ export const Chats = ({
 
   const user: IUser | null = useAppSelector(getUser);
   const contacts: IUser[] | null = useAppSelector(getContacts);
-  const chat: IChat[] | null = useAppSelector(getChat);
-
-  const [mutationFunction] = useMutation(addChat);
-
-  const [queryFunction] = useLazyQuery(getMessage, {
-    onCompleted(data) {
-      checkAuthorization({
-        dispatch,
-        navigate,
-        data: data.getMessages,
-        actionAdd: actionAddMessages,
-        themeChange,
-      });
-    },
-  });
 
   const [click, setClick] = useState<boolean>(false);
   const [swiper, setSwiper] = useState<boolean>(false);
@@ -77,25 +57,8 @@ export const Chats = ({
   const handleFocus = async (contact: IUser) => {
     setSearchUser(false);
     dispatch(actionClearMessages());
-    await mutationFunction({
-      variables: {
-        chat: { sender: Number(user?.id), recipient: Number(contact.id) },
-      },
-    });
-    // eslint-disable-next-line array-callback-return
-    const chatId = chat?.filter((obj) => {
-      if (obj.user.id === contact.id) {
-        return obj;
-      }
-    })[0];
-    await queryFunction({
-      variables: {
-        message: {
-          chatId: Number(chatId?.id),
-          senderMessage: Number(user?.id),
-        },
-      },
-    });
+    dispatch(actionClearReceipt());
+    dispatch(actionAddReceipt(contact));
     navigate(`${contact?.username}`);
   };
 
@@ -112,7 +75,6 @@ export const Chats = ({
       debouncedCheck();
       setLength(valueAll.replaceAll(" ", "").length);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [valueAll]);
 
   return (

@@ -13,7 +13,7 @@ const initialState: IUserState = {
 
 export const userSlice = createSlice({
   initialState,
-  name: "userSlice",
+  name: "@@userSlice",
   reducers: {
     actionClearUser: () => initialState,
     actionAddUser: (state, action) => {

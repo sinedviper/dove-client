@@ -8,5 +8,5 @@ export interface SettingsProps
   setSettings: Function;
   setEdit?: Function;
   profile?: boolean;
-  user: IUser | null | undefined;
+  user: IUser | null;
 }

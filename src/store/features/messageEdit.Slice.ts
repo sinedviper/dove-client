@@ -20,7 +20,7 @@ const initialState: IMessageState = {
 
 export const messageEditSlice = createSlice({
   initialState,
-  name: "messagesEditSlice",
+  name: "@@messagesEditSlice",
   reducers: {
     actionClearMessageEdit: () => initialState,
     actionAddMessageEdit: (state, action) => {

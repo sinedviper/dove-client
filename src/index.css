@@ -120,7 +120,7 @@ body {
 }
 
 body {
-  background: var(--background-second);
+  background: var(--background-first);
   color: var(--text-first);
 }
 

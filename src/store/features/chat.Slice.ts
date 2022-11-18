@@ -14,7 +14,7 @@ const initialState: IChatsState = {
 
 export const chatsSlice = createSlice({
   initialState,
-  name: "chatsSlice",
+  name: "@@chatsSlice",
   reducers: {
     actionClearChats: () => initialState,
     actionAddChats: (state, action) => {

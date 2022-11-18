@@ -57,12 +57,12 @@ export const MessageCard = ({
   return (
     <li
       className={cn(className, styles.message, {
-        [styles.messageUser]: username === message.senderMessage.username,
+        [styles.messageUser]: username === message?.senderMessage.username,
         [styles.messageDown]:
           messages[Number(index + 1)]?.senderMessage.username !==
-            message.senderMessage.username &&
+            message?.senderMessage.username &&
           messages[Number(index + 1)]?.senderMessage.username !== undefined,
-        [styles.wrapperReply]: message.reply !== null,
+        [styles.wrapperReply]: message?.reply !== null,
       })}
       onMouseMove={(e: any) => {
         if (!editMessage) {
@@ -71,14 +71,14 @@ export const MessageCard = ({
         }
       }}
       onMouseLeave={() => setEditMessage(false)}
-      onMouseDown={(e) => handleMouseDown(e, message)}
+      onMouseDown={(e) => message && handleMouseDown(e, message)}
       onContextMenu={(e) => {
         e.preventDefault();
         return false;
       }}
       {...props}
     >
-      {message.reply ? (
+      {message?.reply ? (
         <div className={styles.messageReply}>
           <div className={cn(styles.textWrapper)}>
             <p
@@ -102,41 +102,41 @@ export const MessageCard = ({
       ) : null}
       <div
         className={cn(styles.textMessageWrap, {
-          [styles.messageTextWrap]: message.text.length < 45,
+          [styles.messageTextWrap]: message?.text.length < 45,
         })}
       >
-        <span className={cn(styles.messageText)}>{message.text}</span>
+        <span className={cn(styles.messageText)}>{message?.text}</span>
         <div
           className={cn(styles.bottoMessage, {
-            [styles.messageTextLen]: message.text.length < 45,
+            [styles.messageTextLen]: message?.text.length < 45,
           })}
         >
           <span className={styles.messageEdit}>
-            {message.createdAt !== message.updatedAt ? "edited" : null}
+            {message?.createdAt !== message?.updatedAt ? "edited" : null}
           </span>
           <span className={styles.messageDate}>
-            {formatHours(new Date(message.createdAt))}
+            {formatHours(new Date(message?.createdAt))}
           </span>
         </div>
       </div>
       <span
         className={cn(
           messages[Number(index + 1)]?.senderMessage.username !==
-            user?.username && user?.username === message.senderMessage.username
+            user?.username && user?.username === message?.senderMessage.username
             ? styles.messageStyleLeft
             : null,
           messages[Number(index + 1)]?.senderMessage.username ===
-            user?.username && user?.username !== message.senderMessage.username
+            user?.username && user?.username !== message?.senderMessage.username
             ? styles.messageStyleRight
             : null,
           messages[Number(index + 1)]?.senderMessage.username === undefined
-            ? message.senderMessage.username === user?.username
+            ? message?.senderMessage.username === user?.username
               ? styles.messageStyleLeft
               : styles.messageStyleRight
             : null,
           new Date(message?.createdAt).getDate() !==
             new Date(messages[index + 1]?.createdAt).getDate()
-            ? message.senderMessage.username === user?.username
+            ? message?.senderMessage.username === user?.username
               ? styles.messageStyleLeft
               : styles.messageStyleRight
             : null

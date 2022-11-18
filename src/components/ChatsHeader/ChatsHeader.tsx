@@ -68,9 +68,7 @@ export const ChatsHeader = ({
   };
 
   const handleLeavMouseInBlockChats = () => {
-    if (menu) {
-      setMenu(false);
-    }
+    menu && setMenu(false);
     setSwiper(false);
   };
 

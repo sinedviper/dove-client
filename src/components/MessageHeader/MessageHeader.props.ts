@@ -7,5 +7,5 @@ export interface MessageHeaderProps
     HTMLInputElement
   > {
   setSettings: Function;
-  receipt: IUser | undefined;
+  receipt: IUser | null;
 }
