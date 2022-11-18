@@ -28,7 +28,9 @@ export const Settings = ({
   ...props
 }: SettingsProps): JSX.Element => {
   const [deleteUsera, setDeleteUser] = useState<boolean>(false);
-  const [mutationFunction] = useMutation(deleteUser);
+  const [mutationFunction] = useMutation(deleteUser, {
+    fetchPolicy: "network-only",
+  });
 
   const color = colorCard(String(user?.name.toUpperCase().slice()[0]));
 

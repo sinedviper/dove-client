@@ -27,6 +27,7 @@ export const subscribeMessages = gql`
           text
           createdAt
         }
+        updatedAt
         createdAt
       }
       message
@@ -61,6 +62,7 @@ export const getMessage = gql`
           text
           createdAt
         }
+        updatedAt
         createdAt
       }
       message

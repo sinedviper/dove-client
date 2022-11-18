@@ -13,4 +13,5 @@ export interface MessageEditProps
     text: string;
     user: number;
   };
+  position: boolean;
 }

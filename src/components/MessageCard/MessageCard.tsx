@@ -21,6 +21,7 @@ export const MessageCard = ({
   const [editMessage, setEditMessage] = useState<boolean>(false);
   const [clientX, setClientX] = useState<number>(0);
   const [clientY, setClientY] = useState<number>(0);
+  const [position, setPosition] = useState<boolean>(false);
   const [client, setClient] = useState<{
     id: number;
     chatId: number;
@@ -35,9 +36,12 @@ export const MessageCard = ({
     user: 0,
   });
 
-  const handleMouseDown = (e: any, message: IMessage) => {
+  const handleMouseDown = (e, message: IMessage) => {
     if (e.nativeEvent?.which === 3) {
       setEditMessage(true);
+      if (e.nativeEvent.screenY > 450) {
+        setPosition(true);
+      }
       setClientX(e.nativeEvent.layerX);
       setClientY(e.nativeEvent.layerY);
       setClient({
@@ -58,7 +62,7 @@ export const MessageCard = ({
           messages[Number(index + 1)]?.senderMessage.username !==
             message.senderMessage.username &&
           messages[Number(index + 1)]?.senderMessage.username !== undefined,
-        [styles.messageTextWrap]: message.text.length < 50,
+        [styles.wrapperReply]: message.reply !== null,
       })}
       onMouseMove={(e: any) => {
         if (!editMessage) {
@@ -74,18 +78,46 @@ export const MessageCard = ({
       }}
       {...props}
     >
-      <span className={cn(styles.messageText)}>{message.text}</span>
+      {message.reply ? (
+        <div className={styles.messageReply}>
+          <div className={cn(styles.textWrapper)}>
+            <p
+              className={cn(styles.messageWrapperEdit, {
+                [styles.messageWrapperUser]:
+                  user?.username === message.senderMessage.username,
+              })}
+            >
+              {message.reply.senderMessage.name}
+            </p>
+            <p
+              className={cn(styles.textMessage, {
+                [styles.messageWrapperUser]:
+                  user?.username === message.senderMessage.username,
+              })}
+            >
+              {message.reply.text}
+            </p>
+          </div>
+        </div>
+      ) : null}
       <div
-        className={cn(styles.bottoMessage, {
-          [styles.messageTextLen]: message.text.length < 50,
+        className={cn(styles.textMessageWrap, {
+          [styles.messageTextWrap]: message.text.length < 45,
         })}
       >
-        <span className={styles.messageEdit}>
-          {message.createdAt === message.updatedAt ? "edited" : null}
-        </span>
-        <span className={styles.messageDate}>
-          {formatHours(new Date(message.createdAt))}
-        </span>
+        <span className={cn(styles.messageText)}>{message.text}</span>
+        <div
+          className={cn(styles.bottoMessage, {
+            [styles.messageTextLen]: message.text.length < 45,
+          })}
+        >
+          <span className={styles.messageEdit}>
+            {message.createdAt !== message.updatedAt ? "edited" : null}
+          </span>
+          <span className={styles.messageDate}>
+            {formatHours(new Date(message.createdAt))}
+          </span>
+        </div>
       </div>
       <span
         className={cn(
@@ -101,6 +133,12 @@ export const MessageCard = ({
             ? message.senderMessage.username === user?.username
               ? styles.messageStyleLeft
               : styles.messageStyleRight
+            : null,
+          new Date(message?.createdAt).getDate() !==
+            new Date(messages[index + 1]?.createdAt).getDate()
+            ? message.senderMessage.username === user?.username
+              ? styles.messageStyleLeft
+              : styles.messageStyleRight
             : null
         )}
       ></span>
@@ -109,6 +147,7 @@ export const MessageCard = ({
         client={client}
         clientX={clientX}
         clientY={clientY}
+        position={position}
         setEditMessage={setEditMessage}
       />
     </li>

@@ -112,11 +112,11 @@ export const CardChat = ({
         <span className={styles.contactMessage}>
           {contact?.lastMessage && contact?.lastMessage.text}
         </span>
-        <span className={styles.contactDate}>
-          {contact?.lastMessage &&
-            formateDate(new Date(contact?.lastMessage.createdAt))}
-        </span>
       </div>
+      <span className={styles.contactDate}>
+        {contact?.lastMessage &&
+          formateDate(new Date(contact?.lastMessage.createdAt))}
+      </span>
       <div
         className={cn(styles.menuChat, { [styles.menuChatOn]: menu === true })}
         style={{ top: top, left: left }}

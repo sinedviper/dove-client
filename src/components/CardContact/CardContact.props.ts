@@ -6,4 +6,5 @@ export interface CardContactProps
   contact: IUser;
   setContact: Function;
   setValue: Function;
+  search?: boolean;
 }

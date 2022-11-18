@@ -19,6 +19,7 @@ import {
 import {
   chatsReducer,
   contactReducer,
+  messageEditReducer,
   messagesReducer,
   userReducer,
 } from "./features";
@@ -28,6 +29,7 @@ const reducer = combineReducers({
   contacts: contactReducer,
   chats: chatsReducer,
   messages: messagesReducer,
+  message: messageEditReducer,
 });
 
 const persistConfig = {

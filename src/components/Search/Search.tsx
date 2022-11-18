@@ -8,7 +8,14 @@ import { RemoveIcon, SearchIcon } from "assets";
 
 export const Search = forwardRef(
   (
-    { value, setValue, className, ...props }: SearchProps,
+    {
+      value,
+      setSearchUser,
+      setMenu,
+      setValue,
+      className,
+      ...props
+    }: SearchProps,
     ref?: ForwardedRef<HTMLInputElement>
   ): JSX.Element => {
     const [focus, setFocus] = useState<boolean>(false);
@@ -19,7 +26,11 @@ export const Search = forwardRef(
           ref={ref}
           type='text'
           className={cn(className, styles.search)}
-          onFocus={() => setFocus(true)}
+          onFocus={() => {
+            setFocus(true);
+            setSearchUser && setSearchUser(true);
+            setMenu && setMenu(false);
+          }}
           onBlur={() => setFocus(false)}
           placeholder='Search'
           value={value}

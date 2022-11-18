@@ -14,6 +14,7 @@ export const subscribeChats = gql`
           name
           surname
           online
+          bio
         }
         lastMessage {
           id
@@ -40,6 +41,7 @@ export const getChats = gql`
           name
           surname
           online
+          bio
         }
         lastMessage {
           id

@@ -11,12 +11,20 @@
   margin-top: 2px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   transition: var(--transition);
+
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.textMessageWrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
 }
 
 .messageTextWrap {
@@ -47,9 +55,15 @@
   height: 0px;
 }
 
+.messageTextReply {
+  flex-direction: row;
+}
+
 .bottoMessage {
   display: flex;
   gap: 5px;
+  height: 16px;
+  white-space: nowrap;
   justify-content: flex-end;
   pointer-events: none;
 }
@@ -118,4 +132,48 @@
 .messageStyleRight::before {
   right: auto;
   left: -10px;
+}
+
+.messageReply {
+  max-width: 500px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  pointer-events: none;
+}
+
+.textWrapper {
+  max-width: 390px;
+  width: 100%;
+  pointer-events: none;
+}
+
+.textMessage {
+  font-size: 13px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.textMessage,
+.messageWrapperEdit {
+  padding-left: 5px;
+  border-left: 2px solid var(--primary);
+  pointer-events: none;
+}
+
+.messageWrapperEdit {
+  font-size: 14px;
+  color: var(--primary);
+}
+
+.messageWrapperUser {
+  border-color: var(--text-first);
+  color: var(--text-first);
+}
+
+.wrapperReply {
+  display: flex;
+  flex-direction: column;
 }

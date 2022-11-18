@@ -41,7 +41,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 50px;
+  min-width: 50px;
   height: 50px;
   border-radius: 50%;
   margin-left: 10px;
@@ -116,6 +116,7 @@
   align-items: center;
   padding: 5px 15px;
   gap: 20px;
+
   cursor: pointer;
 }
 
@@ -125,7 +126,7 @@
 }
 
 .menuCard p {
-  color: var(--theme-light-text-first);
+  color: var(--text-first);
   font-size: 14px;
   font-weight: 600;
 }
@@ -133,5 +134,5 @@
 .iconDeleteMenu {
   width: 20px;
   height: 20px;
-  fill: var(--theme-light-icon-second);
+  fill: var(--icon-second);
 }

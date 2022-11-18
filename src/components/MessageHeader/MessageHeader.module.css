@@ -1,19 +1,27 @@
 .headerReceiptWrapper {
+  position: relative;
   display: flex;
-  gap: 20px;
   width: 100%;
   padding: 8px 20px;
   justify-content: left;
   align-items: center;
+  justify-content: space-between;
   background-color: var(--background-first);
   border-bottom: 1px solid var(--border-second);
   cursor: pointer;
+
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.headerWrapper {
+  display: flex;
+  gap: 20px;
+  width: 100%;
 }
 
 .headerReceiptPhoto {
@@ -56,4 +64,102 @@
 .infoDate {
   color: var(--text-second);
   font-size: 13px;
+  white-space: nowrap;
+}
+
+.delete {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 40px;
+  height: 40px;
+  margin-left: 10px;
+  border-radius: 50%;
+  border: none;
+  background-color: initial;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.delete:hover {
+  transition: var(--transition);
+  background-color: var(--opacity-box);
+}
+
+.dot {
+  pointer-events: none;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--icon-first);
+}
+
+.dot::before {
+  pointer-events: none;
+  content: "";
+  display: block;
+  margin-top: 8px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--icon-first);
+}
+
+.dot::after {
+  pointer-events: none;
+  content: "";
+  display: block;
+  margin-top: -21px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--icon-first);
+}
+
+.menuMessageWrapper {
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  bottom: -40px;
+  right: 15px;
+  padding: 5px;
+  border-radius: 10px;
+  background-color: var(--opacity-box-second);
+  backdrop-filter: blur(30px);
+  transition: var(--transition);
+}
+
+.menuMessageWrapperOn {
+  opacity: 1;
+  pointer-events: all;
+  transition: var(--transition);
+}
+
+.removeIcon {
+  width: 20px;
+  height: 20px;
+  stroke: var(--icon-second);
+}
+
+.deleteButton {
+  padding: 5px 20px;
+  border-radius: 5px;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  background-color: initial;
+  transition: var(--transition);
+}
+
+.deleteButton:hover {
+  background-color: var(--opacity-box-dark);
+  transition: var(--transition);
+}
+.deleteButton span {
+  color: var(--icon-second);
+  font-size: 14px;
+  font-weight: 600;
 }

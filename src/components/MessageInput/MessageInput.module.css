@@ -2,6 +2,8 @@
   position: relative;
   max-width: 500px;
   width: 100%;
+  display: flex;
+  flex-direction: column;
   padding: 5px 0px 10px;
 }
 
@@ -80,4 +82,69 @@
   bottom: 70px;
   left: 0px;
   transform: scale(1);
+}
+
+.messageReply {
+  max-width: 500px;
+  width: 100%;
+  display: flex;
+  background-color: var(--background-third);
+  border-radius: 15px 15px 0px 0px;
+  padding: 10px;
+  align-items: center;
+  user-select: none;
+}
+
+.textMessage {
+  font-size: 13px;
+  color: var(--text-sixth);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.textMessage,
+.messageWrapperEdit {
+  padding-left: 5px;
+  border-left: 2px solid var(--primary);
+}
+
+.messageWrapperEdit {
+  font-size: 14px;
+  color: var(--primary);
+}
+
+.inputEdit {
+  border-radius: 0px 0px 15px 15px;
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.1);
+}
+
+.iconEditMessage {
+  min-width: 25px;
+  height: 25px;
+  margin: 0px 10px;
+}
+
+.iconEditMessage path {
+  fill: var(--primary);
+}
+
+.iconRemoveEdit {
+  justify-tracks: flex-end;
+  min-width: 35px;
+  height: 35px;
+  fill: var(--primary);
+  margin: 0 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.iconRemoveEdit:hover {
+  background-color: var(--primary-opacity);
+}
+
+.textWrapper {
+  max-width: 390px;
+  width: 100%;
 }

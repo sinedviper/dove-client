@@ -37,7 +37,9 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   const navigate = useNavigate();
   const themeChange = useTheme();
 
-  const [mutationUserOnlineFunction] = useMutation(updateUserOnline);
+  const [mutationUserOnlineFunction] = useMutation(updateUserOnline, {
+    fetchPolicy: "network-only",
+  });
 
   const debouncedMutation = useDebounce(() => {
     mutationUserOnlineFunction({
@@ -52,6 +54,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   }, 1000);
 
   const { loading: loadQueryContact } = useQuery(getContact, {
+    fetchPolicy: "network-only",
     onCompleted(data) {
       checkAuthorization({
         dispatch,
@@ -63,6 +66,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
     },
   });
   const { loading: loadQueryChat } = useQuery(getChats, {
+    fetchPolicy: "network-only",
     onCompleted(data) {
       checkAuthorization({
         dispatch,
@@ -78,23 +82,23 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
     data: dataUser,
     loading: lodingUser,
     error: errorUser,
-  } = useSubscription(subscribeUser);
+  } = useSubscription(subscribeUser, { fetchPolicy: "network-only" });
   const {
     data: dataChats,
     loading: loadingChats,
     error: errorChats,
-  } = useSubscription(subscribeChats);
+  } = useSubscription(subscribeChats, { fetchPolicy: "network-only" });
   const {
     data: dataMessage,
     loading: loadingMessage,
     error: errorMessage,
-  } = useSubscription(subscribeMessages);
+  } = useSubscription(subscribeMessages, { fetchPolicy: "network-only" });
 
   const {
     data: dataContact,
     loading: loadingContact,
     error: errorContact,
-  } = useSubscription(subscribeContacts);
+  } = useSubscription(subscribeContacts, { fetchPolicy: "network-only" });
 
   const [contact, setContact] = useState<boolean>(false);
   const [settings, setSettings] = useState<boolean>(false);
@@ -117,7 +121,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
       checkAuthorization({
         dispatch,
         navigate,
-        data: dataChats.chatSubscription,
+        data: dataChats?.chatSubscription,
         actionAdd: actionAddChats,
         themeChange,
       });
@@ -126,7 +130,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
       checkAuthorization({
         dispatch,
         navigate,
-        data: dataMessage.messageSubscription,
+        data: dataMessage?.messageSubscription,
         actionAdd: actionAddMessages,
         themeChange,
       });
@@ -135,7 +139,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
       checkAuthorization({
         dispatch,
         navigate,
-        data: dataContact.contactSubscription,
+        data: dataContact?.contactSubscription,
         actionAdd: actionAddContact,
         themeChange,
       });
@@ -144,7 +148,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
       checkAuthorization({
         dispatch,
         navigate,
-        data: dataUser.userSubscription,
+        data: dataUser?.userSubscription,
         actionAdd: actionAddUser,
         themeChange,
       });

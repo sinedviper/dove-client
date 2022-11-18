@@ -173,7 +173,7 @@ export const Chats = ({
               })}
           </div>
         )}
-        {searchUsers && (
+        {searchUsers && searchUsers.length !== 0 && (
           <div className={styles.searchWrapper}>
             <p>Global users</p>
             {searchUsers.map((obj) => (
@@ -182,6 +182,7 @@ export const Chats = ({
                 contact={obj}
                 setContact={setSearchUser}
                 setValue={setValueAll}
+                search={true}
               />
             ))}
           </div>

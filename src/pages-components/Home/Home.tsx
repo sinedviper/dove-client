@@ -9,9 +9,9 @@ import { IChat, IUser } from "interface";
 import { MessageCard, MessageHeader, MessageInput, Settings } from "components";
 
 import styles from "./Home.module.css";
+import { formatDay } from "helpers";
 
 export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
-  const MessageHeaderMemo = React.memo(MessageHeader);
   const [settings, setSettings] = useState<boolean>(false);
   const { username } = useParams();
 
@@ -38,27 +38,50 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
   return (
     <section className={cn(className, styles.wrapper)} {...props}>
       <section className={styles.chatWrapper}>
-        <MessageHeaderMemo receipt={receipt} setSettings={setSettings} />
+        <MessageHeader receipt={receipt} setSettings={setSettings} />
         <section className={styles.chatsWrapper}>
           <ul className={cn(styles.messageWrapper)}>
             {messages &&
-              messages?.map((message, index) => (
-                <MessageCard
-                  chat={chat}
-                  message={message}
-                  index={index}
-                  user={user}
-                  messages={messages}
-                  key={message.id}
-                  username={String(username)}
-                />
-              ))}
+              messages?.map((message, index) => {
+                if (messages[index + 1]?.createdAt)
+                  if (
+                    new Date(message?.createdAt).getDate() !==
+                    new Date(messages[index + 1]?.createdAt).getDate()
+                  ) {
+                    return (
+                      <div key={message.id} className={styles.wrapperWithDate}>
+                        <MessageCard
+                          chat={chat}
+                          message={message}
+                          index={index}
+                          user={user}
+                          messages={messages}
+                          username={String(username)}
+                        />
+                        <p className={styles.dateMessage}>
+                          {formatDay(new Date(messages[index + 1].createdAt))}
+                        </p>
+                      </div>
+                    );
+                  }
+                return (
+                  <MessageCard
+                    chat={chat}
+                    message={message}
+                    index={index}
+                    user={user}
+                    messages={messages}
+                    key={message.id}
+                    username={String(username)}
+                  />
+                );
+              })}
             <li ref={messagesEndRef}></li>
           </ul>
-          <div className={styles.inputWrap}>
-            <MessageInput chat={chat} user={user} />
-          </div>
         </section>
+        <div className={styles.inputWrap}>
+          <MessageInput chat={chat} user={user} />
+        </div>
       </section>
       <section
         className={cn(styles.profileWrap, {

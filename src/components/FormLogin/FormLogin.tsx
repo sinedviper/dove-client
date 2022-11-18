@@ -31,10 +31,15 @@ export const FormLogin = ({
     handleSubmit,
   } = useForm<IFormInput>();
 
-  const [queryFunctionUser, { loading: loadingQueryUser }] =
-    useLazyQuery(getMe);
+  const [queryFunctionUser, { loading: loadingQueryUser }] = useLazyQuery(
+    getMe,
+    { fetchPolicy: "network-only" }
+  );
 
-  const [mutateFunction, { loading: loadingMutation }] = useMutation(loginUser);
+  const [mutateFunction, { loading: loadingMutation }] = useMutation(
+    loginUser,
+    { fetchPolicy: "network-only" }
+  );
 
   const onSubmit = async (input: IFormInput): Promise<void> => {
     await mutateFunction({ variables: { input } })

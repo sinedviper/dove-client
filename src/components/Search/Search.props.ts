@@ -7,4 +7,6 @@ export interface SearchProps
   > {
   value: string;
   setValue: Function;
+  setSearchUser?: Function;
+  setMenu?: Function;
 }

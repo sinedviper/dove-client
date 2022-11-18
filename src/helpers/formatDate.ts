@@ -164,3 +164,15 @@ export const formateDateOnline = (data: Date): string => {
 export const minutesFormat = (d: any, d2: any) => {
   return Math.floor((d - d2) / (60 * 1000));
 };
+
+export const formatDay = (data: Date): string => {
+  return String(
+    new Intl.DateTimeFormat("en-US", {
+      month: "long",
+      day: "2-digit",
+    }).format(data)
+  )
+    .split(" ")
+    .reverse()
+    .join(" ");
+};

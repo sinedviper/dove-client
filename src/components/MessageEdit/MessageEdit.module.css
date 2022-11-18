@@ -13,6 +13,7 @@
   transition: var(--transition);
   transform-origin: left top;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;

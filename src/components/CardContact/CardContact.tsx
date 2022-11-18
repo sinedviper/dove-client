@@ -24,6 +24,7 @@ export const CardContact = ({
   contact,
   setContact,
   setValue,
+  search,
   ...props
 }: CardContactProps): JSX.Element => {
   const navigate = useNavigate();
@@ -42,9 +43,7 @@ export const CardContact = ({
     },
   });
 
-  const [mutationFunction] = useMutation(addChat, {
-    onCompleted() {},
-  });
+  const [mutationFunction] = useMutation(addChat);
   const [mutationFunctionDelete] = useMutation(deleteContact);
 
   const [top, setTop] = useState<number>(0);
@@ -82,11 +81,13 @@ export const CardContact = ({
   };
 
   const handleDeleteContact = async () => {
-    await mutationFunctionDelete({
-      variables: {
-        contact: { userId: Number(user?.id), contactId: Number(contact.id) },
-      },
-    });
+    if (!search) {
+      await mutationFunctionDelete({
+        variables: {
+          contact: { userId: Number(user?.id), contactId: Number(contact.id) },
+        },
+      });
+    }
   };
 
   const color = colorCard(contact?.name.toUpperCase().split("")[0]);
@@ -133,19 +134,25 @@ export const CardContact = ({
           {contact?.surname && contact?.surname}
         </span>
         <span className={styles.contactMessage}>
-          {contact?.online &&
-            formateDateOnline(new Date(contact?.online)).toLocaleLowerCase()}
+          {search
+            ? "@" + contact?.username
+            : contact?.online &&
+              formateDateOnline(new Date(contact?.online)).toLocaleLowerCase()}
         </span>
       </div>
-      <div
-        className={cn(styles.menuChat, { [styles.menuChatOn]: menu === true })}
-        style={{ top: top, left: left }}
-      >
-        <span className={styles.menuCard} onClick={handleDeleteContact}>
-          <DeleteIcon className={styles.iconDeleteMenu} />
-          <p>Delete</p>
-        </span>
-      </div>
+      {!search && (
+        <div
+          className={cn(styles.menuChat, {
+            [styles.menuChatOn]: menu === true,
+          })}
+          style={{ top: top, left: left }}
+        >
+          <span className={styles.menuCard} onClick={handleDeleteContact}>
+            <DeleteIcon className={styles.iconDeleteMenu} />
+            <p>Delete</p>
+          </span>
+        </div>
+      )}
     </li>
   );
 };

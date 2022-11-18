@@ -108,3 +108,7 @@
   padding: 20px;
   color: var(--text-second);
 }
+
+.results {
+  font-size: 12px;
+}

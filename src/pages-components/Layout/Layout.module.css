@@ -13,3 +13,13 @@
   background-color: var(--background-first);
   border-right: 1px solid var(--border-second);
 }
+
+@media screen and (min-width: 1920px) {
+  .main {
+    margin: 0 auto;
+    width: 1350px;
+    border-right: 1px solid;
+    border-left: 1px solid;
+    border-color: var(--border-second);
+  }
+}

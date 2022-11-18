@@ -5,8 +5,8 @@ import { useMutation } from "@apollo/client";
 import { MessageEditProps } from "./MessageEdit.props";
 import { CopyIcon, DeleteIcon, EditIcon, ReplyIcon } from "assets";
 import { deleteMessages } from "mutation";
-import { useAppSelector } from "hooks";
-import { getUser } from "store";
+import { useAppDispatch, useAppSelector } from "hooks";
+import { actionAddMessageEdit, getUser } from "store";
 
 import styles from "./MessageEdit.module.css";
 
@@ -14,12 +14,15 @@ export const MessageEdit = ({
   setEditMessage,
   editMessage,
   client,
+  position,
   clientX,
   clientY,
   className,
   ...props
 }: MessageEditProps): JSX.Element => {
+  const dispatch = useAppDispatch();
   const [mutationFunction] = useMutation(deleteMessages);
+
   const user = useAppSelector(getUser);
 
   const handleCopy = (value: string) => {
@@ -39,18 +42,57 @@ export const MessageEdit = ({
     });
   };
 
+  const handleEdit = () => {
+    dispatch(
+      actionAddMessageEdit({
+        message: {
+          id: Number(client.id),
+          text: client.text,
+          chatId: Number(client.chatId),
+        },
+        edit: true,
+      })
+    );
+  };
+  const handleReply = () => {
+    dispatch(
+      actionAddMessageEdit({
+        message: {
+          id: Number(client.id),
+          text: client.text,
+          chatId: Number(client.chatId),
+        },
+        edit: false,
+      })
+    );
+  };
+
   return (
     <div
       className={cn(className, styles.messageWrapperEdit, {
         [styles.messageWrapperEditOn]: editMessage === true,
       })}
-      style={{ top: clientY, left: clientX }}
+      style={
+        position
+          ? {
+              top:
+                user?.id === client.senderMessage
+                  ? clientY - 120
+                  : clientY - 65,
+              left: clientX,
+            }
+          : {
+              top: clientY,
+              left: clientX,
+            }
+      }
       {...props}
     >
       <span
         className={styles.editMessagePerson}
         onClick={() => {
           setEditMessage(false);
+          handleReply();
         }}
       >
         <ReplyIcon className={styles.editIconMessage} />
@@ -61,6 +103,7 @@ export const MessageEdit = ({
           className={styles.editMessagePerson}
           onClick={() => {
             setEditMessage(false);
+            handleEdit();
           }}
         >
           <EditIcon
