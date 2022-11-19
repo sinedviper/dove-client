@@ -1,4 +1,3 @@
-import { receiptReducer } from "./features/receipt.Slice";
 import {
   Action,
   configureStore,
@@ -23,7 +22,9 @@ import {
   messageEditReducer,
   messagesReducer,
   userReducer,
-} from "./features";
+  recipientReducer,
+  menuReducer,
+} from "./slice";
 
 const reducer = combineReducers({
   user: userReducer,
@@ -31,7 +32,8 @@ const reducer = combineReducers({
   chats: chatsReducer,
   messages: messagesReducer,
   message: messageEditReducer,
-  receipt: receiptReducer,
+  recipient: recipientReducer,
+  menu: menuReducer,
 });
 
 const persistConfig = {

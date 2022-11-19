@@ -2,6 +2,7 @@
 
 :root {
   --white: white;
+  --transition-static: all 0.23s;
 
   --primary: #3390ec;
   --primary-dark: #225991;

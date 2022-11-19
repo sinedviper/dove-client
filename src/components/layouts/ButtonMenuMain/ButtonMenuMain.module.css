@@ -1,0 +1,90 @@
+.menuCard {
+  border: none;
+  padding: 5px 15px;
+  cursor: pointer;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  color: var(--text-first);
+  transition: var(--transition);
+  border-radius: 7px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.menuCard:hover {
+  transition: var(--transition);
+  background-color: var(--opacity-box);
+}
+
+.menuCard div {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.cardIcon {
+  width: 23px;
+  height: 23px;
+}
+
+.contact {
+  width: 22px;
+  height: 22px;
+}
+
+.logout {
+  width: 21px;
+  height: 21px;
+}
+
+.cardIcon path {
+  fill: var(--icon-second);
+}
+
+input[type="checkbox"] {
+  visibility: hidden;
+}
+
+.checkBox {
+  width: 30px;
+  height: 15px;
+  background: var(--border-first);
+
+  border-radius: 50px;
+  position: relative;
+}
+
+.checkBox label {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-first);
+  background: var(--white);
+
+  border-radius: 50px;
+  transition: var(--transition);
+  cursor: pointer;
+  position: absolute;
+  top: -3px;
+  left: -3px;
+}
+
+.checkBox input[type="checkbox"]:checked {
+  background: var(--primary);
+}
+
+.checkBox input[type="checkbox"]:checked + label {
+  left: 14px;
+  border-color: var(--primary);
+}
+
+.checkBoxClick {
+  background: var(--primary);
+  transition: var(--transition);
+}
+
+.menuClick {
+  transform: scale(0.95);
+}

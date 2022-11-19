@@ -9,6 +9,7 @@ export const LoginPage = (): JSX.Element => {
   if (token) {
     return <Navigate to={"/"} />;
   }
+
   return (
     <>
       <Login />

@@ -1,9 +1,18 @@
 import React, { useState } from "react";
-import cn from "classnames";
-import { toast } from "react-toastify";
 import { useMutation } from "@apollo/client";
+import { toast } from "react-toastify";
+import cn from "classnames";
 
-import { SettingsProps } from "./Settings.props";
+import { colorCard, formateDateOnline } from "utils/helpers";
+import { IUser } from "utils/interface";
+import { useAppDispatch, useAppSelector } from "utils/hooks";
+import { deleteUser } from "resolvers/user";
+import {
+  actionMenuEdit,
+  actionMenuSetting,
+  getMenuSetting,
+  getUser,
+} from "store";
 import {
   BackIcon,
   EditIcon,
@@ -13,24 +22,30 @@ import {
   RemoveUserIcon,
   UsernameIcon,
 } from "assets";
-import { colorCard, formateDateOnline } from "helpers";
-import { deleteUser } from "mutation";
 
+import { SettingsProps } from "./Settings.props";
 import styles from "./Settings.module.css";
 
 export const Settings = ({
   className,
-  settings,
   setSettings,
-  setEdit,
-  user,
+  sender,
   profile = false,
   ...props
 }: SettingsProps): JSX.Element => {
-  const [deleteUsera, setDeleteUser] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+
   const [mutationFunction] = useMutation(deleteUser, {
     fetchPolicy: "network-only",
   });
+
+  let user: IUser | undefined = useAppSelector(getUser);
+  if (sender) {
+    user = sender;
+  }
+  const settings: boolean = useAppSelector(getMenuSetting);
+
+  const [deleteUsera, setDeleteUser] = useState<boolean>(false);
 
   const color = colorCard(String(user?.name.toUpperCase().slice()[0]));
 
@@ -39,9 +54,7 @@ export const Settings = ({
     toast.success("Copy!");
   };
 
-  const handleRemoveUser = async () => {
-    await mutationFunction();
-  };
+  const handleRemoveUser = async () => await mutationFunction();
 
   return (
     <section
@@ -59,30 +72,38 @@ export const Settings = ({
           {profile ? (
             <RemoveIcon
               className={cn(styles.back, styles.remove)}
-              onClick={() => setSettings(false)}
+              onClick={() =>
+                setSettings
+                  ? setSettings(false)
+                  : dispatch(actionMenuSetting(false))
+              }
             />
           ) : (
             <BackIcon
               className={styles.back}
               onClick={() => {
-                setSettings(false);
+                setSettings
+                  ? setSettings(false)
+                  : dispatch(actionMenuSetting(false));
                 setDeleteUser(false);
               }}
             />
           )}
-          <h2>{setEdit ? "Settings" : "Profile"}</h2>
+          <h2>{!profile ? "Settings" : "Profile"}</h2>
         </div>
         <div>
-          {setEdit && (
+          {!profile && (
             <EditIcon
               className={styles.edit}
               onClick={() => {
-                setEdit(true);
+                setSettings
+                  ? setSettings(false)
+                  : dispatch(actionMenuEdit(true));
                 setDeleteUser(false);
               }}
             />
           )}
-          {setEdit && (
+          {!profile && (
             <>
               <button
                 className={styles.delete}

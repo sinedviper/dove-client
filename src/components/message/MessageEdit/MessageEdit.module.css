@@ -1,0 +1,77 @@
+.messageWrapperEdit {
+  position: absolute;
+  padding: 5px;
+  border-radius: 10px;
+  background-color: var(--opacity-box-second);
+  backdrop-filter: blur(30px);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  opacity: 0;
+  pointer-events: none;
+  transition: var(--transition);
+  transform-origin: left top;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.messageWrapperEditOn {
+  opacity: 1;
+  transform-origin: left top;
+  transition: var(--transition);
+  pointer-events: all;
+}
+
+.editMessagePerson {
+  display: flex;
+  padding: 5px 15px;
+  gap: 20px;
+  cursor: pointer;
+}
+
+.editMessagePerson p {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--icon-second);
+}
+
+.editMessagePerson:hover {
+  background-color: var(--opacity-box);
+  border-radius: 5px;
+}
+
+.editIconMessage {
+  fill: var(--icon-second);
+  width: 20px;
+  height: 20px;
+}
+
+.editIconMessageE {
+  width: 21px;
+  height: 21px;
+}
+
+.editIconMessageE path {
+  width: 21px;
+  height: 21px;
+  fill: var(--icon-second);
+}
+
+.deleteMessage p {
+  color: var(--error);
+}
+
+.deleteMessage .editIconMessage {
+  fill: var(--error);
+}
+
+.deleteMessage:hover {
+  background-color: rgba(217, 72, 72, 0.2);
+}

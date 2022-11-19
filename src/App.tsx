@@ -6,12 +6,12 @@ import { LoginPage, SignUpPage } from "page";
 import { Home, Layout } from "pages-components";
 
 import "react-toastify/dist/ReactToastify.css";
-import { useAppSelector } from "hooks";
+import { useAppSelector } from "utils/hooks";
 import { getUser } from "store";
-import { IUser } from "interface";
+import { IUser } from "utils/interface";
 
 function App(): JSX.Element {
-  const user: IUser | null = useAppSelector(getUser);
+  const user: IUser | undefined = useAppSelector(getUser);
 
   return (
     <>

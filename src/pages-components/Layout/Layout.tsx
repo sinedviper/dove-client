@@ -1,36 +1,31 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import React, { useState, useRef, useEffect } from "react";
-import cn from "classnames";
+import React, { useRef, useEffect } from "react";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useSubscription } from "@apollo/client";
+import { toast } from "react-toastify";
+import cn from "classnames";
 
-import { LayoutProps } from "./Layout.props";
-import { useAppDispatch, useAppSelector, useDebounce } from "hooks";
+import { checkAuthorization, minutesFormat, outLogin } from "utils/helpers";
+import { useAppDispatch, useAppSelector, useDebounce } from "utils/hooks";
+import { useTheme, theme, animation } from "utils/context";
+import { IUser } from "utils/interface";
+import { getContact, subscribeContacts } from "resolvers/contacts";
+import { updateUserOnline, subscribeUser } from "resolvers/user";
+import { getChats, subscribeChats } from "resolvers/chats";
+import { subscribeMessages } from "resolvers/messages";
+import { Contacts } from "components/contacts";
+import { Edits } from "components/forms";
+import { Chats } from "components/chats";
+import { Settings } from "components";
 import {
   actionAddChats,
   actionAddContact,
   actionAddMessages,
   actionAddUser,
-  getChat,
-  getContacts,
   getUser,
 } from "store";
-import { IChat, IUser } from "interface";
-import { Chats, Contacts, Settings, Edits } from "components";
-import { useTheme, theme, animation } from "context";
-import {
-  getChats,
-  getContact,
-  subscribeChats,
-  subscribeContacts,
-  subscribeMessages,
-  subscribeUser,
-  updateUserOnline,
-} from "mutation";
-import { checkAuthorization, minutesFormat, outLogin } from "helpers";
 
+import { LayoutProps } from "./Layout.props";
 import styles from "./Layout.module.css";
-import { toast } from "react-toastify";
 
 export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -98,17 +93,13 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
     data: dataContact,
     loading: loadingContact,
     error: errorContact,
-  } = useSubscription(subscribeContacts, { fetchPolicy: "network-only" });
-
-  const [contact, setContact] = useState<boolean>(false);
-  const [settings, setSettings] = useState<boolean>(false);
-  const [edit, setEdit] = useState<boolean>(false);
+  } = useSubscription(subscribeContacts, {
+    fetchPolicy: "network-only",
+  });
 
   let searchContact = useRef<HTMLInputElement>(null);
 
-  const user: IUser | null = useAppSelector(getUser);
-  const chats: IChat[] | null = useAppSelector(getChat);
-  const contacts: IUser[] | null = useAppSelector(getContacts);
+  const user: IUser | undefined = useAppSelector(getUser);
   const token: string | null = localStorage.getItem("token");
 
   if (errorUser) toast.error(errorUser.message);
@@ -191,25 +182,10 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
       {...props}
     >
       <section className={styles.chatWrapper}>
-        <Chats
-          chats={chats}
-          searchContact={searchContact}
-          setContact={setContact}
-          setSettings={setSettings}
-        />
-        <Contacts
-          contacts={contacts}
-          searchContact={searchContact}
-          setContact={setContact}
-          contact={contact}
-        />
-        <Settings
-          settings={settings}
-          setSettings={setSettings}
-          setEdit={setEdit}
-          user={user}
-        />
-        <Edits edit={edit} setEdit={setEdit} user={user} />
+        <Chats searchContact={searchContact} />
+        <Contacts searchContact={searchContact} />
+        <Settings />
+        <Edits />
       </section>
       <Outlet />
     </main>

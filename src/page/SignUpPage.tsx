@@ -5,9 +5,11 @@ import { SignUp } from "pages-components";
 
 export const SignUpPage = (): JSX.Element => {
   const token = localStorage.getItem("token");
+
   if (token) {
     return <Navigate to={"/"} />;
   }
+
   return (
     <>
       <SignUp />

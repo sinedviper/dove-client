@@ -16,7 +16,7 @@ import { getMainDefinition } from "@apollo/client/utilities";
 
 import App from "./App";
 import { persistor, store } from "./store";
-import { ThemeProvider } from "context";
+import { ThemeProvider } from "utils/context";
 
 import "./index.css";
 
