@@ -4,17 +4,15 @@ import { useLazyQuery, useQuery, useSubscription } from "@apollo/client";
 import cn from "classnames";
 
 import { useAppDispatch, useAppSelector } from "utils/hooks";
-import {
-  checkAuthorization,
-  checkAuthorizationSearch,
-  formatDay,
-} from "utils/helpers";
+import { checkAuthorization, formatDay } from "utils/helpers";
 import { IChat, IMessage, IUser } from "utils/interface";
 import { useTheme } from "utils/context";
-import { getMessage } from "resolvers/messages";
+import { getMessage, subscribeMessages } from "resolvers/messages";
 import { MessageCard, MessageHeader, MessageInput } from "components/message";
 import { Settings } from "components";
 import {
+  actionAddError,
+  actionAddLoading,
   actionAddMessages,
   actionAddRecipient,
   getChat,
@@ -25,7 +23,7 @@ import {
 
 import { HomeProps } from "./Home.props";
 import styles from "./Home.module.css";
-import { getUserSender, subscribeUser } from "resolvers/user";
+import { getUserSender } from "resolvers/user";
 
 export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
   const { username } = useParams();
@@ -33,7 +31,17 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
   const navigate = useNavigate();
   const themeChange = useTheme();
 
-  const [queryFunction] = useLazyQuery(getMessage, {
+  const user: IUser | undefined = useAppSelector(getUser);
+  const sender: IUser | undefined = useAppSelector(getRecipient);
+  const chat: IChat | undefined = useAppSelector(getChat)?.filter(
+    (chat) => chat?.user?.id === sender?.id
+  )[0];
+  const messages: IMessage[] | undefined = useAppSelector(getMessages);
+
+  const [
+    queryFunction,
+    { loading: loadingQueryMessage, error: errorQueryMessage },
+  ] = useLazyQuery(getMessage, {
     onCompleted(data) {
       checkAuthorization({
         dispatch,
@@ -45,33 +53,28 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
     },
   });
 
-  const { loading: lodingUser, error: errorUser } = useSubscription(
-    subscribeUser,
+  const {
+    data: dataMessage,
+    loading: loadingMessage,
+    error: errorMessage,
+  } = useSubscription(subscribeMessages, { fetchPolicy: "network-only" });
+
+  const { loading: loadingSender, error: errorSender } = useQuery(
+    getUserSender,
     {
+      variables: { input: { userId: Number(user?.id), username } },
+      onCompleted(data) {
+        checkAuthorization({
+          dispatch,
+          navigate,
+          data: data.getUserSender,
+          actionAdd: actionAddRecipient,
+          themeChange,
+        });
+      },
       fetchPolicy: "network-only",
     }
   );
-
-  const user: IUser | undefined = useAppSelector(getUser);
-  const sender: IUser | undefined = useAppSelector(getRecipient);
-  const {} = useQuery(getUserSender, {
-    variables: { input: { userId: Number(user?.id), username } },
-    onCompleted(data) {
-      checkAuthorization({
-        dispatch,
-        navigate,
-        data: data.getUserSender,
-        actionAdd: actionAddRecipient,
-        themeChange,
-      });
-    },
-    fetchPolicy: "network-only",
-  });
-
-  const chat: IChat | undefined = useAppSelector(getChat)?.filter(
-    (chat) => chat?.user?.id === sender?.id
-  )[0];
-  const messages: IMessage[] | undefined = useAppSelector(getMessages);
 
   const [settings, setSettings] = useState<boolean>(false);
   const messagesEndRef = useRef<HTMLLIElement>(null);
@@ -81,9 +84,39 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
   };
 
   useEffect(() => {
-    messages && scrollToBottom();
-    chat &&
-      !messages &&
+    if (loadingQueryMessage || loadingSender) dispatch(actionAddLoading(true));
+    if (!loadingSender && !loadingQueryMessage)
+      dispatch(actionAddLoading(false));
+
+    if (errorQueryMessage) dispatch(actionAddError(errorQueryMessage.message));
+    if (errorMessage) dispatch(actionAddError(errorMessage.message));
+    if (errorSender) dispatch(actionAddError(errorSender.message));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    loadingSender,
+    loadingQueryMessage,
+    errorQueryMessage,
+    errorSender,
+    errorMessage,
+  ]);
+
+  useEffect(() => {
+    if (!loadingMessage) {
+      checkAuthorization({
+        dispatch,
+        navigate,
+        data: dataMessage?.messageSubscription,
+        actionAdd: actionAddMessages,
+        themeChange,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadingMessage, dataMessage]);
+
+  useEffect(() => {
+    if (messages) scrollToBottom();
+    if (chat && !messages) {
       queryFunction({
         variables: {
           message: {
@@ -92,6 +125,7 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
           },
         },
       });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages, chat, user]);
 

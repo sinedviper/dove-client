@@ -5,11 +5,12 @@ import cn from "classnames";
 import { useAppDispatch, useAppSelector } from "utils/hooks";
 import { IUser } from "utils/interface";
 import { deleteMessages } from "resolvers/messages";
-import { actionAddMessageEdit, getUser } from "store";
+import { actionAddError, actionAddMessageEdit, getUser } from "store";
 import { CopyIcon, DeleteIcon, EditIcon, ReplyIcon } from "assets";
 
 import { MessageEditProps } from "./MessageEdit.props";
 import styles from "./MessageEdit.module.css";
+import { useEffect } from "react";
 
 export const MessageEdit = ({
   setEditMessage,
@@ -23,9 +24,10 @@ export const MessageEdit = ({
 }: MessageEditProps): JSX.Element => {
   const dispatch = useAppDispatch();
 
-  const [mutationFunction] = useMutation(deleteMessages);
-
   const user: IUser | undefined = useAppSelector(getUser);
+
+  const [mutationFunction, { error: errorMutationMessageDelete }] =
+    useMutation(deleteMessages);
 
   const handleCopy = (value: string) => {
     navigator.clipboard.writeText(value);
@@ -37,7 +39,7 @@ export const MessageEdit = ({
       variables: {
         message: {
           id: Number(client.id),
-          chatId: client.chatId,
+          chatId: Number(client.chatId),
           senderMessage: Number(client.user),
         },
       },
@@ -56,6 +58,12 @@ export const MessageEdit = ({
       })
     );
   };
+
+  useEffect(() => {
+    if (errorMutationMessageDelete)
+      dispatch(actionAddError(errorMutationMessageDelete.message));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errorMutationMessageDelete]);
 
   return (
     <div

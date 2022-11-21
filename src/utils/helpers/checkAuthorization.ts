@@ -1,5 +1,4 @@
-import { toast } from "react-toastify";
-
+import { actionAddError } from "store";
 import { outLogin } from "utils/helpers";
 
 interface check {
@@ -23,10 +22,11 @@ export const checkAuthorization = ({
         outLogin(dispatch, themeChange);
         navigate("/login");
       }
-      toast.error(data.message);
+      dispatch(actionAddError(data.message));
     }
     if (data.status === "Success") {
-      dispatch(actionAdd(data.data));
+      data.code === 200 && dispatch(actionAdd(data.data));
+      data.code === 201 && dispatch(actionAdd(data.data));
     }
   }
 };
@@ -43,7 +43,7 @@ export const checkAuthorizationSearch = ({
         outLogin(dispatch, themeChange);
         navigate("/login");
       }
-      toast.error(data.message);
+      dispatch(actionAddError(data.message));
     }
     if (data.status === "Success") {
       return data.data;

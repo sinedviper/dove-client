@@ -2,6 +2,7 @@
 
 :root {
   --white: white;
+  --error: rgb(217, 72, 72);
   --transition-static: all 0.23s;
 
   --primary: #3390ec;
@@ -32,8 +33,6 @@
   --opacity-box-dark: rgba(0, 0, 0, 0.1);
   --opacity-box-second: rgba(255, 255, 255, 0.7);
   --primary-opacity: rgba(51, 144, 236, 0.3);
-
-  --error: #d94848;
 
   --transition: all 0.23s;
   --transition-input: all 0.1s;

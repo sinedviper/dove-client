@@ -33,12 +33,46 @@ export const deleteUser = gql`
 
 export const updateUser = gql`
   mutation Mutation($input: UpdateInput!) {
-    updateUser(input: $input)
+    updateUser(input: $input) {
+      status
+      code
+      data {
+        id
+        username
+        email
+        name
+        surname
+        online
+        bio
+        theme
+        animation
+        createdAt
+        updatedAt
+      }
+      message
+    }
   }
 `;
 
 export const updateUserOnline = gql`
   mutation Mutation($input: UpdateInputOnline!) {
-    updateUserOnline(input: $input)
+    updateUserOnline(input: $input) {
+      status
+      code
+      data {
+        id
+        username
+        email
+        name
+        surname
+        online
+        bio
+        theme
+        animation
+        createdAt
+        updatedAt
+      }
+      message
+    }
   }
 `;

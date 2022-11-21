@@ -1,16 +1,23 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
+import { useNavigate } from "react-router-dom";
 import cn from "classnames";
 
-import { colorCard, formateDateOnline } from "utils/helpers";
-import { useAppSelector } from "utils/hooks";
+import {
+  checkAuthorization,
+  colorCard,
+  formateDateOnline,
+} from "utils/helpers";
+import { useAppDispatch, useAppSelector } from "utils/hooks";
 import { IUser } from "utils/interface";
+import { useTheme } from "utils/context";
 import { addContact, deleteContact } from "resolvers/contacts";
-import { getContacts, getUser } from "store";
+import { actionAddContact, actionAddError, getContacts, getUser } from "store";
 import { AddUserIcon, RemoveUserIcon } from "assets";
 
 import { MessageHeaderProps } from "./MessageHeader.props";
 import styles from "./MessageHeader.module.css";
+import { useEffect } from "react";
 
 export const MessageHeader = ({
   setSettings,
@@ -18,17 +25,46 @@ export const MessageHeader = ({
   className,
   ...props
 }: MessageHeaderProps): JSX.Element => {
-  const [mutationFunctionDelete] = useMutation(deleteContact);
-  const [mutationFunctionAdd] = useMutation(addContact);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const themeChange = useTheme();
+  let color = colorCard();
 
   const contact: IUser | undefined = useAppSelector(getContacts)?.filter(
     (contact) => contact.id === receipt?.id
   )[0];
   const user: IUser | undefined = useAppSelector(getUser);
 
-  const [menuMessage, setmenuMessage] = useState<boolean>(false);
+  const [mutationFunctionDelete, { error: errorMutationContactDelete }] =
+    useMutation(deleteContact, {
+      fetchPolicy: "network-only",
+      onCompleted(data) {
+        checkAuthorization({
+          dispatch,
+          navigate,
+          data: data.deleteContact,
+          actionAdd: actionAddContact,
+          themeChange,
+        });
+      },
+    });
+  const [mutationFunctionAdd, { error: errorMutationContactAdd }] = useMutation(
+    addContact,
+    {
+      fetchPolicy: "network-only",
+      onCompleted(data) {
+        checkAuthorization({
+          dispatch,
+          navigate,
+          data: data.addContact,
+          actionAdd: actionAddContact,
+          themeChange,
+        });
+      },
+    }
+  );
 
-  let color = colorCard();
+  const [menuMessage, setmenuMessage] = useState<boolean>(false);
 
   if (receipt) {
     color = colorCard(receipt?.name && receipt?.name.toUpperCase()[0]);
@@ -50,6 +86,14 @@ export const MessageHeader = ({
       });
     }
   };
+
+  useEffect(() => {
+    if (errorMutationContactDelete)
+      dispatch(actionAddError(errorMutationContactDelete.message));
+    if (errorMutationContactAdd)
+      dispatch(actionAddError(errorMutationContactAdd.message));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errorMutationContactDelete, errorMutationContactAdd]);
 
   return (
     <section

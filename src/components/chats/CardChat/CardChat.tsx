@@ -3,11 +3,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import cn from "classnames";
 
-import { colorCard, formateDate } from "utils/helpers";
+import { checkAuthorization, colorCard, formateDate } from "utils/helpers";
 import { useAppDispatch } from "utils/hooks";
 import { removeChat } from "resolvers/chats";
 import { ButtonMenu } from "components/layouts";
 import {
+  actionAddChats,
+  actionAddError,
   actionAddRecipient,
   actionClearMessages,
   actionClearRecipient,
@@ -15,6 +17,7 @@ import {
 
 import { CardChatProps } from "./CardChat.props";
 import styles from "./CardChat.module.css";
+import { useTheme } from "utils/context";
 
 export const CardChat = ({
   className,
@@ -23,13 +26,25 @@ export const CardChat = ({
 }: CardChatProps): JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const themeChange = useTheme();
   const { username } = useParams();
 
-  const [mutationFunction] = useMutation(removeChat, {
-    onCompleted() {
-      navigate("");
-    },
-  });
+  const [mutationFunction, { error: errorMutationChat }] = useMutation(
+    removeChat,
+    {
+      fetchPolicy: "network-only",
+      onCompleted(data) {
+        checkAuthorization({
+          dispatch,
+          navigate,
+          data: data.removeChat,
+          actionAdd: actionAddChats,
+          themeChange,
+        });
+        navigate("");
+      },
+    }
+  );
 
   const [top, setTop] = useState<number>(0);
   const [left, setLeft] = useState<number>(0);
@@ -55,7 +70,9 @@ export const CardChat = ({
     if (username !== user.username) {
       setClick(false);
     }
-  }, [username, user]);
+    if (errorMutationChat) dispatch(actionAddError(errorMutationChat.message));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [username, user, errorMutationChat]);
 
   return (
     <li

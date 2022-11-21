@@ -27,11 +27,11 @@ export const Contacts = ({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const [valueContact, setValueContact] = useState<string>("");
-  const [swiper, setSwiper] = useState<boolean>(false);
-
   const contacts: IUser[] | undefined = useAppSelector(getContacts);
   const contact: boolean = useAppSelector(getMenuContact);
+
+  const [valueContact, setValueContact] = useState<string>("");
+  const [swiper, setSwiper] = useState<boolean>(false);
 
   const handleFocus = (contact: IUser) => {
     dispatch(actionMenuContact(false));

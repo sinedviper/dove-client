@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import cn from "classnames";
 
-import { colorCard } from "utils/helpers";
+import { checkAuthorization, colorCard } from "utils/helpers";
 import { updateUser } from "resolvers/user";
 import { Input } from "components/layouts";
 import { BackIcon, SupheedIcon } from "assets";
@@ -13,7 +13,15 @@ import { EditsProps } from "./Edits.props";
 import styles from "./Edits.module.css";
 import { IUser } from "utils/interface";
 import { useAppDispatch, useAppSelector } from "utils/hooks";
-import { actionMenuEdit, getMenuEdit, getUser } from "store";
+import {
+  actionAddError,
+  actionAddUser,
+  actionMenuEdit,
+  getMenuEdit,
+  getUser,
+} from "store";
+import { useNavigate } from "react-router-dom";
+import { useTheme } from "utils/context";
 
 interface IFormInput {
   name: string;
@@ -32,22 +40,34 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
     formState: { errors },
     handleSubmit,
   } = useForm<IFormInput>();
-  const disparch = useAppDispatch();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const themeChange = useTheme();
+
+  //res in db
+  const [mutateFunction, { error: errorMutationUpdateUser }] = useMutation(
+    updateUser,
+    {
+      onCompleted(data) {
+        checkAuthorization({
+          dispatch,
+          navigate,
+          data: data.updateUser,
+          actionAdd: actionAddUser,
+          themeChange,
+        });
+        setPassword("");
+        setPasswordNew("");
+        setPasswordReapeat("");
+        setSubmit(false);
+        dispatch(actionMenuEdit(false));
+        toast.success("Account update");
+      },
+    }
+  );
 
   const user: IUser | undefined = useAppSelector(getUser);
   const edit: boolean = useAppSelector(getMenuEdit);
-
-  //res in db
-  const [mutateFunction] = useMutation(updateUser, {
-    onCompleted() {
-      setPassword("");
-      setPasswordNew("");
-      setPasswordReapeat("");
-      setSubmit(false);
-      disparch(actionMenuEdit(false));
-      toast.success("Account update");
-    },
-  });
 
   const [swiper, setSwiper] = useState<boolean>(false);
   const [submit, setSubmit] = useState<boolean>(false);
@@ -141,6 +161,13 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
     //Update user
     await mutateFunction({ variables: { input: obj } });
   };
+
+  useEffect(() => {
+    if (errorMutationUpdateUser)
+      dispatch(actionAddError(errorMutationUpdateUser.message));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errorMutationUpdateUser]);
+
   //Check values in input, changed or not, when changed button has see
   useEffect(() => {
     if (
@@ -189,7 +216,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
         <div>
           <BackIcon
             className={styles.back}
-            onClick={() => disparch(actionMenuEdit(false))}
+            onClick={() => dispatch(actionMenuEdit(false))}
           />
           <h2>Edit Profile</h2>
         </div>

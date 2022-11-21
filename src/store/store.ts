@@ -24,6 +24,8 @@ import {
   userReducer,
   recipientReducer,
   menuReducer,
+  loadingReducer,
+  errorsReducer,
 } from "./slice";
 
 const reducer = combineReducers({
@@ -34,6 +36,8 @@ const reducer = combineReducers({
   message: messageEditReducer,
   recipient: recipientReducer,
   menu: menuReducer,
+  loading: loadingReducer,
+  errors: errorsReducer,
 });
 
 const persistConfig = {

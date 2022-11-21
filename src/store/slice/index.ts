@@ -5,3 +5,5 @@ export * from "./message.slice";
 export * from "./messageEdit.slice";
 export * from "./recipient.slice";
 export * from "./menu.slice";
+export * from "./loading.slice";
+export * from "./error.slice";

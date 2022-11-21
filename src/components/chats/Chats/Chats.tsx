@@ -11,6 +11,7 @@ import { getUsersSearch } from "resolvers/user";
 import { CardChat, ChatsHeader } from "components/chats";
 import { CardContact } from "components/contacts";
 import {
+  actionAddError,
   actionAddRecipient,
   actionClearMessages,
   actionClearRecipient,
@@ -36,13 +37,8 @@ export const Chats = ({
   const contacts: IUser[] | undefined = useAppSelector(getContacts);
   const chats: IChat[] | undefined = useAppSelector(getChat);
 
-  const [click, setClick] = useState<boolean>(false);
-  const [swiper, setSwiper] = useState<boolean>(false);
-  const [searchUser, setSearchUser] = useState<boolean>(false);
-  const [valueAll, setValueAll] = useState<string>("");
-  const [length, setLength] = useState<number>(0);
-
-  const [querySearch, { data: dataSearch }] = useLazyQuery(getUsersSearch);
+  const [querySearch, { data: dataSearch, error: errorQueryUser }] =
+    useLazyQuery(getUsersSearch);
 
   let searchUsers: IUser[] | undefined = dataSearch
     ? checkAuthorizationSearch({
@@ -52,6 +48,12 @@ export const Chats = ({
         themeChange,
       })
     : undefined;
+
+  const [click, setClick] = useState<boolean>(false);
+  const [swiper, setSwiper] = useState<boolean>(false);
+  const [searchUser, setSearchUser] = useState<boolean>(false);
+  const [valueAll, setValueAll] = useState<string>("");
+  const [length, setLength] = useState<number>(0);
 
   const handleFocus = async (contact: IUser) => {
     setSearchUser(false);
@@ -74,8 +76,9 @@ export const Chats = ({
       debouncedCheck();
       setLength(valueAll.replaceAll(" ", "").length);
     }
+    if (errorQueryUser) dispatch(actionAddError(errorQueryUser.message));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [valueAll, length]);
+  }, [valueAll, length, errorQueryUser]);
 
   return (
     <section

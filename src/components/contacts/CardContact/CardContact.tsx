@@ -1,16 +1,23 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
+import { useNavigate } from "react-router-dom";
 import cn from "classnames";
 
-import { colorCard, formateDateOnline } from "utils/helpers";
-import { useAppSelector } from "utils/hooks";
+import {
+  checkAuthorization,
+  colorCard,
+  formateDateOnline,
+} from "utils/helpers";
+import { useAppDispatch, useAppSelector } from "utils/hooks";
 import { IUser } from "utils/interface";
+import { useTheme } from "utils/context";
 import { deleteContact } from "resolvers/contacts";
 import { ButtonMenu } from "components/layouts";
-import { getUser } from "store";
+import { actionAddContact, actionAddError, getUser } from "store";
 
 import { CardContactProps } from "./CardContact.props";
 import styles from "./CardContact.module.css";
+import { useEffect } from "react";
 
 export const CardContact = ({
   className,
@@ -20,9 +27,27 @@ export const CardContact = ({
   search,
   ...props
 }: CardContactProps): JSX.Element => {
-  const [mutationFunctionDelete] = useMutation(deleteContact);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const themeChange = useTheme();
 
   const user: IUser | undefined = useAppSelector(getUser);
+
+  const [mutationFunctionDelete, { error: errorDeleteContact }] = useMutation(
+    deleteContact,
+    {
+      fetchPolicy: "network-only",
+      onCompleted(data) {
+        checkAuthorization({
+          dispatch,
+          navigate,
+          data: data.deleteContact,
+          actionAdd: actionAddContact,
+          themeChange,
+        });
+      },
+    }
+  );
 
   const [top, setTop] = useState<number>(0);
   const [left, setLeft] = useState<number>(0);
@@ -40,6 +65,12 @@ export const CardContact = ({
   };
 
   const color = colorCard(contact?.name.toUpperCase().split("")[0]);
+
+  useEffect(() => {
+    if (errorDeleteContact)
+      dispatch(actionAddError(errorDeleteContact.message));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errorDeleteContact]);
 
   return (
     <li

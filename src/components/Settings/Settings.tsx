@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { toast } from "react-toastify";
 import cn from "classnames";
 
-import { colorCard, formateDateOnline } from "utils/helpers";
+import { colorCard, formateDateOnline, outLogin } from "utils/helpers";
 import { IUser } from "utils/interface";
+import { useTheme } from "utils/context";
 import { useAppDispatch, useAppSelector } from "utils/hooks";
 import { deleteUser } from "resolvers/user";
 import {
+  actionAddError,
   actionMenuEdit,
   actionMenuSetting,
   getMenuSetting,
@@ -25,6 +26,7 @@ import {
 
 import { SettingsProps } from "./Settings.props";
 import styles from "./Settings.module.css";
+import { useEffect } from "react";
 
 export const Settings = ({
   className,
@@ -34,10 +36,7 @@ export const Settings = ({
   ...props
 }: SettingsProps): JSX.Element => {
   const dispatch = useAppDispatch();
-
-  const [mutationFunction] = useMutation(deleteUser, {
-    fetchPolicy: "network-only",
-  });
+  const themeChange = useTheme();
 
   let user: IUser | undefined = useAppSelector(getUser);
   if (sender) {
@@ -45,16 +44,31 @@ export const Settings = ({
   }
   const settings: boolean = useAppSelector(getMenuSetting);
 
+  const [mutationFunction, { error: errorMutationUser }] = useMutation(
+    deleteUser,
+    {
+      fetchPolicy: "network-only",
+      onCompleted() {
+        outLogin(dispatch, themeChange);
+      },
+    }
+  );
+
   const [deleteUsera, setDeleteUser] = useState<boolean>(false);
 
   const color = colorCard(String(user?.name.toUpperCase().slice()[0]));
 
   const handleCopy = (value: string) => {
     navigator.clipboard.writeText(value);
-    toast.success("Copy!");
+    //toast.success("Copy!");
   };
 
   const handleRemoveUser = async () => await mutationFunction();
+
+  useEffect(() => {
+    if (errorMutationUser) dispatch(actionAddError(errorMutationUser.message));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errorMutationUser]);
 
   return (
     <section

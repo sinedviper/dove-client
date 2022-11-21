@@ -1,17 +1,27 @@
 import React, { useState } from "react";
-import { useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import { useNavigate } from "react-router-dom";
 import cn from "classnames";
 
-import { outLogin } from "utils/helpers";
+import { checkAuthorization, outLogin } from "utils/helpers";
 import { IUser } from "utils/interface";
 import { useAppDispatch, useAppSelector } from "utils/hooks";
 import { useTheme, theme, animation } from "utils/context";
 import { updateUser } from "resolvers/user";
 import { ButtonMenuMain, Search } from "components/layouts";
-import { actionMenuContact, actionMenuSetting, getUser } from "store";
+import {
+  actionAddContact,
+  actionAddError,
+  actionAddUser,
+  actionMenuContact,
+  actionMenuSetting,
+  getUser,
+} from "store";
 
 import { ChatsHeaderProps } from "./ChatsHeader.props";
 import styles from "./ChatsHeader.module.css";
+import { getContact } from "resolvers/contacts";
+import { useEffect } from "react";
 
 export const ChatsHeader = ({
   searchContact,
@@ -24,24 +34,52 @@ export const ChatsHeader = ({
   ...props
 }: ChatsHeaderProps): JSX.Element => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const themeChange = useTheme();
 
   const user: IUser | undefined = useAppSelector(getUser);
 
-  const [mutationFunctionUser] = useMutation(updateUser, {
-    onCompleted() {
-      themeChange?.changeAnimation(
-        user?.animation ? animation.ANIMATION_ON : animation.ANIMATION_OFF
-      );
-      themeChange?.changeTheme(
-        user?.theme ? theme.THEME_DARK : theme.THEME_LIGHT
-      );
-    },
-  });
+  const [mutationFunctionUser, { error: errorUpdateUser }] = useMutation(
+    updateUser,
+    {
+      fetchPolicy: "network-only",
+      onCompleted(data) {
+        checkAuthorization({
+          dispatch,
+          navigate,
+          data: data.updateUser,
+          actionAdd: actionAddUser,
+          themeChange,
+        });
+        themeChange?.changeAnimation(
+          user?.animation ? animation.ANIMATION_ON : animation.ANIMATION_OFF
+        );
+        themeChange?.changeTheme(
+          user?.theme ? theme.THEME_DARK : theme.THEME_LIGHT
+        );
+      },
+    }
+  );
+  const [queryFunctionContactGet, { error: errorQueryContact }] = useLazyQuery(
+    getContact,
+    {
+      fetchPolicy: "network-only",
+      onCompleted(data) {
+        checkAuthorization({
+          dispatch,
+          navigate,
+          themeChange,
+          data: data.getContact,
+          actionAdd: actionAddContact,
+        });
+      },
+    }
+  );
 
   const [menu, setMenu] = useState<boolean>(false);
 
-  const handleContact = () => {
+  const handleContact = async () => {
+    await queryFunctionContactGet();
     dispatch(actionMenuContact(true));
     setMenu(false);
     setTimeout(() => searchContact.current?.focus(), 300);
@@ -66,6 +104,12 @@ export const ChatsHeader = ({
     await mutationFunctionUser({
       variables: { input: { animation: !user?.animation } },
     });
+
+  useEffect(() => {
+    if (errorUpdateUser) dispatch(actionAddError(errorUpdateUser.message));
+    if (errorQueryContact) dispatch(actionAddError(errorQueryContact.message));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errorUpdateUser, errorQueryContact]);
 
   return (
     <nav

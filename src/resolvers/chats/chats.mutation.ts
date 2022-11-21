@@ -2,12 +2,54 @@ import { gql } from "@apollo/client";
 
 export const addChat = gql`
   mutation Mutation($chat: ChatInput!) {
-    addChat(chat: $chat)
+    addChat(chat: $chat) {
+      status
+      code
+      data {
+        id
+        user {
+          id
+          username
+          email
+          name
+          surname
+          online
+          bio
+        }
+        lastMessage {
+          id
+          text
+          createdAt
+        }
+      }
+      message
+    }
   }
 `;
 
 export const removeChat = gql`
   mutation Mutation($idChat: Float!) {
-    deleteChat(idChat: $idChat)
+    deleteChat(idChat: $idChat) {
+      status
+      code
+      data {
+        id
+        user {
+          id
+          username
+          email
+          name
+          surname
+          online
+          bio
+        }
+        lastMessage {
+          id
+          text
+          createdAt
+        }
+      }
+      message
+    }
   }
 `;

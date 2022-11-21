@@ -2,12 +2,42 @@ import { gql } from "@apollo/client";
 
 export const addContact = gql`
   mutation Mutation($contact: ContactInput!) {
-    addContact(contact: $contact)
+    addContact(contact: $contact) {
+      status
+      code
+      data {
+        id
+        username
+        email
+        name
+        surname
+        online
+        bio
+        createdAt
+        updatedAt
+      }
+      message
+    }
   }
 `;
 
 export const deleteContact = gql`
   mutation Mutation($contact: ContactInput!) {
-    deleteContact(contact: $contact)
+    deleteContact(contact: $contact) {
+      status
+      code
+      data {
+        id
+        username
+        email
+        name
+        surname
+        online
+        bio
+        createdAt
+        updatedAt
+      }
+      message
+    }
   }
 `;

@@ -5,7 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import cn from "classnames";
 
+import { checkAuthorization } from "utils/helpers";
 import { useAppDispatch } from "utils/hooks";
+import { useTheme } from "utils/context";
 import { getMe, loginUser } from "resolvers/user";
 import { Input } from "components/layouts";
 import { actionAddUser } from "store";
@@ -25,6 +27,8 @@ export const FormLogin = ({
 }: FormLoginProps): JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const themeChange = useTheme();
+
   const {
     register,
     formState: { errors },
@@ -33,7 +37,19 @@ export const FormLogin = ({
 
   const [queryFunctionUser, { loading: loadingQueryUser }] = useLazyQuery(
     getMe,
-    { fetchPolicy: "network-only" }
+    {
+      fetchPolicy: "network-only",
+      onCompleted(data) {
+        checkAuthorization({
+          dispatch,
+          navigate,
+          data: data.getMe,
+          themeChange,
+          actionAdd: actionAddUser,
+        });
+        navigate("/");
+      },
+    }
   );
 
   const [mutateFunction, { loading: loadingMutation }] = useMutation(
@@ -50,17 +66,7 @@ export const FormLogin = ({
         }
         if (data.status === "Success") {
           localStorage.setItem("token", data.access_token);
-          await queryFunctionUser().then(async (res) => {
-            const user = res.data.getMe;
-            if (user.status === "Invalid") {
-              toast.error(user.message);
-            }
-            if (user.status === "Success") {
-              toast.success("Data confirmed");
-              dispatch(actionAddUser(user.data));
-            }
-          });
-          navigate("/");
+          await queryFunctionUser();
         }
       })
       .catch((err) => {

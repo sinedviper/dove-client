@@ -8,11 +8,20 @@ import { useAppDispatch, useAppSelector } from "utils/hooks";
 import { IUser } from "utils/interface";
 import { addChat } from "resolvers/chats";
 import { addMessages, updateMessages } from "resolvers/messages";
-import { actionClearMessageEdit, getMessageEdit, getRecipient } from "store";
+import {
+  actionAddChats,
+  actionAddError,
+  actionClearMessageEdit,
+  getMessageEdit,
+  getRecipient,
+} from "store";
 import { EditIcon, RemoveIcon, ReplyIcon, SendIcon, SmileIcon } from "assets";
 
 import { MessageInputProps } from "./MessageInput.props";
 import styles from "./MessageInput.module.css";
+import { checkAuthorization } from "utils/helpers";
+import { useNavigate } from "react-router-dom";
+import { useTheme } from "utils/context";
 
 export const MessageInput = forwardRef(
   (
@@ -20,15 +29,35 @@ export const MessageInput = forwardRef(
     ref: ForwardedRef<HTMLInputElement>
   ): JSX.Element => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    const themeChange = useTheme();
 
-    const [metationFunctionAddMessage] = useMutation(addMessages);
-    const [mutationFunctionAddChat] = useMutation(addChat);
-    const [mutationFunctionUpdateMessage] = useMutation(updateMessages);
     const {
       message: { message, edit },
     } = useAppSelector(getMessageEdit);
-
     const sender: IUser | undefined = useAppSelector(getRecipient);
+
+    const [mutationFunctionAddChat, { error: errorMutationChat }] = useMutation(
+      addChat,
+      {
+        fetchPolicy: "network-only",
+        onCompleted(data) {
+          checkAuthorization({
+            dispatch,
+            navigate,
+            data: data.addChat,
+            actionAdd: actionAddChats,
+            themeChange,
+          });
+        },
+      }
+    );
+    const [mutationFunctionAddMessage, { error: errorMutationMessageAdd }] =
+      useMutation(addMessages);
+    const [
+      mutationFunctionUpdateMessage,
+      { error: errorMutationMessageUpdate },
+    ] = useMutation(updateMessages);
 
     const [emoji, setEmoji] = useState<boolean>(false);
     const [send, setSend] = useState<string>(message ? message.text : "");
@@ -47,30 +76,32 @@ export const MessageInput = forwardRef(
 
     const handleMessageUpdate = async () => {
       setSend("");
-      dispatch(actionClearMessageEdit());
       await mutationFunctionUpdateMessage({
         variables: {
           message: {
             id: Number(message?.id),
-            chatId: Number(message?.chatId),
+            chatId: Number(chat?.id),
             text: send,
             senderMessage: Number(user?.id),
           },
         },
       });
+      dispatch(actionClearMessageEdit());
     };
 
     const handleMessageAdd = async () => {
       setSend("");
-      await metationFunctionAddMessage({
+      await mutationFunctionAddMessage({
         variables: {
           message: {
             text: send,
             senderMessage: Number(user?.id),
             chatId: Number(chat?.id),
+            reply: message && Number(message?.id),
           },
         },
       });
+      dispatch(actionClearMessageEdit());
     };
 
     const handleSend = async (e) => {
@@ -78,7 +109,7 @@ export const MessageInput = forwardRef(
         if (message) {
           if (e.code === "Enter") {
             edit && (await handleMessageUpdate());
-            !edit && (await handleMessageUpdate());
+            !edit && (await handleMessageAdd());
           }
         } else {
           send.replaceAll(" ", "") !== "" &&
@@ -94,7 +125,7 @@ export const MessageInput = forwardRef(
       if (chat) {
         if (message) {
           edit && (await handleMessageUpdate());
-          !edit && (await handleMessageUpdate());
+          !edit && (await handleMessageAdd());
         } else {
           if (send.replaceAll(" ", "") !== "") {
             await handleMessageAdd();
@@ -108,6 +139,20 @@ export const MessageInput = forwardRef(
     const handleRemoveEditMessage = () => {
       dispatch(actionClearMessageEdit());
     };
+
+    useEffect(() => {
+      if (errorMutationChat)
+        dispatch(actionAddError(errorMutationChat.message));
+      if (errorMutationMessageAdd)
+        dispatch(actionAddError(errorMutationMessageAdd.message));
+      if (errorMutationMessageUpdate)
+        dispatch(actionAddError(errorMutationMessageUpdate.message));
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+      errorMutationChat,
+      errorMutationMessageAdd,
+      errorMutationMessageUpdate,
+    ]);
 
     useEffect(() => {
       if (message) {

@@ -1,17 +1,15 @@
 import React, { useRef, useEffect } from "react";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
-import { useMutation, useQuery, useSubscription } from "@apollo/client";
-import { toast } from "react-toastify";
+import { useMutation, useQuery } from "@apollo/client";
 import cn from "classnames";
 
 import { checkAuthorization, minutesFormat, outLogin } from "utils/helpers";
 import { useAppDispatch, useAppSelector, useDebounce } from "utils/hooks";
 import { useTheme, theme, animation } from "utils/context";
 import { IUser } from "utils/interface";
-import { getContact, subscribeContacts } from "resolvers/contacts";
-import { updateUserOnline, subscribeUser } from "resolvers/user";
-import { getChats, subscribeChats } from "resolvers/chats";
-import { subscribeMessages } from "resolvers/messages";
+import { getContact } from "resolvers/contacts";
+import { updateUserOnline } from "resolvers/user";
+import { getChats } from "resolvers/chats";
 import { Contacts } from "components/contacts";
 import { Edits } from "components/forms";
 import { Chats } from "components/chats";
@@ -19,10 +17,15 @@ import { Settings } from "components";
 import {
   actionAddChats,
   actionAddContact,
-  actionAddMessages,
+  actionAddError,
+  actionAddLoading,
   actionAddUser,
+  actionDeleteError,
+  getErrors,
+  getLoading,
   getUser,
 } from "store";
+import { LoadingIcon } from "assets";
 
 import { LayoutProps } from "./Layout.props";
 import styles from "./Layout.module.css";
@@ -32,9 +35,19 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   const navigate = useNavigate();
   const themeChange = useTheme();
 
-  const [mutationUserOnlineFunction] = useMutation(updateUserOnline, {
-    fetchPolicy: "network-only",
-  });
+  const [mutationUserOnlineFunction, { error: errorMutationUserOnline }] =
+    useMutation(updateUserOnline, {
+      fetchPolicy: "network-only",
+      onCompleted(data) {
+        checkAuthorization({
+          dispatch,
+          navigate,
+          themeChange,
+          data: data.updateUserOnline,
+          actionAdd: actionAddUser,
+        });
+      },
+    });
 
   const debouncedMutation = useDebounce(() => {
     mutationUserOnlineFunction({
@@ -48,112 +61,60 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
     });
   }, 1000);
 
-  const { loading: loadQueryContact } = useQuery(getContact, {
-    fetchPolicy: "network-only",
-    onCompleted(data) {
-      checkAuthorization({
-        dispatch,
-        navigate,
-        data: data.getContacts,
-        actionAdd: actionAddContact,
-        themeChange,
-      });
-    },
-  });
-  const { loading: loadQueryChat } = useQuery(getChats, {
-    fetchPolicy: "network-only",
-    onCompleted(data) {
-      checkAuthorization({
-        dispatch,
-        navigate,
-        data: data.getChats,
-        actionAdd: actionAddChats,
-        themeChange,
-      });
-    },
-  });
-
-  const {
-    data: dataUser,
-    loading: lodingUser,
-    error: errorUser,
-  } = useSubscription(subscribeUser, { fetchPolicy: "network-only" });
-  const {
-    data: dataChats,
-    loading: loadingChats,
-    error: errorChats,
-  } = useSubscription(subscribeChats, { fetchPolicy: "network-only" });
-  const {
-    data: dataMessage,
-    loading: loadingMessage,
-    error: errorMessage,
-  } = useSubscription(subscribeMessages, { fetchPolicy: "network-only" });
-
-  const {
-    data: dataContact,
-    loading: loadingContact,
-    error: errorContact,
-  } = useSubscription(subscribeContacts, {
-    fetchPolicy: "network-only",
-  });
+  const { loading: loadQueryContact, error: errorQueryContact } = useQuery(
+    getContact,
+    {
+      fetchPolicy: "network-only",
+      onCompleted(data) {
+        checkAuthorization({
+          dispatch,
+          navigate,
+          data: data.getContacts,
+          actionAdd: actionAddContact,
+          themeChange,
+        });
+      },
+    }
+  );
+  const { loading: loadQueryChat, error: errorQueryChats } = useQuery(
+    getChats,
+    {
+      fetchPolicy: "network-only",
+      onCompleted(data) {
+        checkAuthorization({
+          dispatch,
+          navigate,
+          data: data.getChats,
+          actionAdd: actionAddChats,
+          themeChange,
+        });
+      },
+    }
+  );
 
   let searchContact = useRef<HTMLInputElement>(null);
 
+  const errors: string[] = useAppSelector(getErrors);
+  const loading: boolean = useAppSelector(getLoading);
   const user: IUser | undefined = useAppSelector(getUser);
   const token: string | null = localStorage.getItem("token");
 
-  if (errorUser) toast.error(errorUser.message);
-  if (errorChats) toast.error(errorChats.message);
-  if (errorMessage) toast.error(errorMessage.message);
-  if (errorContact) toast.error(errorContact.message);
-
   useEffect(() => {
-    if (!loadingChats) {
-      checkAuthorization({
-        dispatch,
-        navigate,
-        data: dataChats?.chatSubscription,
-        actionAdd: actionAddChats,
-        themeChange,
-      });
-    }
-    if (!loadingMessage) {
-      checkAuthorization({
-        dispatch,
-        navigate,
-        data: dataMessage?.messageSubscription,
-        actionAdd: actionAddMessages,
-        themeChange,
-      });
-    }
-    if (!loadingContact) {
-      checkAuthorization({
-        dispatch,
-        navigate,
-        data: dataContact?.contactSubscription,
-        actionAdd: actionAddContact,
-        themeChange,
-      });
-    }
-    if (!lodingUser) {
-      checkAuthorization({
-        dispatch,
-        navigate,
-        data: dataUser?.userSubscription,
-        actionAdd: actionAddUser,
-        themeChange,
-      });
-    }
+    //loading
+    if (loadQueryContact || loadQueryChat) dispatch(actionAddLoading(true));
+    if (!loadQueryContact && !loadQueryChat) dispatch(actionAddLoading(false));
+    //error
+    if (errorQueryContact) dispatch(actionAddError(errorQueryContact.message));
+    if (errorQueryChats) dispatch(actionAddError(errorQueryChats.message));
+    if (errorMutationUserOnline)
+      dispatch(actionAddError(errorMutationUserOnline.message));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    loadingChats,
-    dataChats,
-    loadingMessage,
-    dataMessage,
-    lodingUser,
-    dataUser,
-    loadingContact,
-    dataContact,
+    loadQueryChat,
+    loadQueryContact,
+    errorQueryContact,
+    errorQueryChats,
+    errorMutationUserOnline,
   ]);
 
   useEffect(() => {
@@ -181,6 +142,27 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
       }
       {...props}
     >
+      <div className={styles.loadingWrapper}>
+        {loading && (
+          <div className={styles.loading}>
+            <span className={styles.loadingIcon}>
+              <LoadingIcon />
+            </span>
+            <p>loading...</p>
+          </div>
+        )}
+        {errors !== null &&
+          errors.map((error, index) => {
+            setTimeout(() => {
+              dispatch(actionDeleteError(index));
+            }, 3000);
+            return (
+              <div key={index} className={styles.error}>
+                <p>Error: {error}</p>
+              </div>
+            );
+          })}
+      </div>
       <section className={styles.chatWrapper}>
         <Chats searchContact={searchContact} />
         <Contacts searchContact={searchContact} />
