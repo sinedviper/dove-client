@@ -21,11 +21,12 @@ import {
   actionAddLoading,
   actionAddUser,
   actionDeleteError,
+  getCopy,
   getErrors,
   getLoading,
   getUser,
 } from "store";
-import { LoadingIcon } from "assets";
+import { CopyIcon, InfoIcon, LoadingIcon } from "assets";
 
 import { LayoutProps } from "./Layout.props";
 import styles from "./Layout.module.css";
@@ -96,6 +97,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
 
   const errors: string[] = useAppSelector(getErrors);
   const loading: boolean = useAppSelector(getLoading);
+  const copy: boolean = useAppSelector(getCopy);
   const user: IUser | undefined = useAppSelector(getUser);
   const token: string | null = localStorage.getItem("token");
 
@@ -143,6 +145,14 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
       {...props}
     >
       <div className={styles.loadingWrapper}>
+        {copy && (
+          <div className={styles.loading}>
+            <span className={styles.copyIcon}>
+              <CopyIcon />
+            </span>
+            <p>Copy</p>
+          </div>
+        )}
         {loading && (
           <div className={styles.loading}>
             <span className={styles.loadingIcon}>
@@ -158,6 +168,9 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
             }, 3000);
             return (
               <div key={index} className={styles.error}>
+                <span className={styles.errorIcon}>
+                  <InfoIcon />
+                </span>
                 <p>Error: {error}</p>
               </div>
             );

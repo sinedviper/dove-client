@@ -67,6 +67,23 @@
   position: relative;
 }
 
+.errorIcon {
+  height: 25px;
+  width: 25px;
+  transform: rotate(180deg);
+}
+
+.copyIcon {
+  width: 25px;
+  height: 25px;
+}
+
+.copyIcon svg {
+  width: 25px;
+  height: 25px;
+  fill: var(--text-first);
+}
+
 .loadingIcon svg {
   position: absolute;
   top: 50%;

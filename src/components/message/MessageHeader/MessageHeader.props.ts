@@ -1,4 +1,3 @@
-import { IUser } from "utils/interface";
 import { DetailedHTMLProps, HTMLAttributes } from "react";
 
 export interface MessageHeaderProps
@@ -7,5 +6,4 @@ export interface MessageHeaderProps
     HTMLInputElement
   > {
   setSettings: Function;
-  receipt: IUser | undefined;
 }

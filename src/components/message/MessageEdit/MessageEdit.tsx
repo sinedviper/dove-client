@@ -4,13 +4,21 @@ import cn from "classnames";
 
 import { useAppDispatch, useAppSelector } from "utils/hooks";
 import { IUser } from "utils/interface";
+import { checkAuthorization } from "utils/helpers";
 import { deleteMessages } from "resolvers/messages";
-import { actionAddError, actionAddMessageEdit, getUser } from "store";
+import {
+  actionAddError,
+  actionAddMessageEdit,
+  actionAddMessages,
+  getUser,
+} from "store";
 import { CopyIcon, DeleteIcon, EditIcon, ReplyIcon } from "assets";
 
 import { MessageEditProps } from "./MessageEdit.props";
 import styles from "./MessageEdit.module.css";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useTheme } from "utils/context";
 
 export const MessageEdit = ({
   setEditMessage,
@@ -23,11 +31,26 @@ export const MessageEdit = ({
   ...props
 }: MessageEditProps): JSX.Element => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const themeChange = useTheme();
 
   const user: IUser | undefined = useAppSelector(getUser);
 
-  const [mutationFunction, { error: errorMutationMessageDelete }] =
-    useMutation(deleteMessages);
+  const [mutationFunction, { error: errorMutationMessageDelete }] = useMutation(
+    deleteMessages,
+    {
+      fetchPolicy: "network-only",
+      onCompleted(data) {
+        checkAuthorization({
+          dispatch,
+          navigate,
+          themeChange,
+          data: data.addMessages,
+          actionAdd: actionAddMessages,
+        });
+      },
+    }
+  );
 
   const handleCopy = (value: string) => {
     navigator.clipboard.writeText(value);

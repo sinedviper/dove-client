@@ -12,7 +12,13 @@ import { useAppDispatch, useAppSelector } from "utils/hooks";
 import { IUser } from "utils/interface";
 import { useTheme } from "utils/context";
 import { addContact, deleteContact } from "resolvers/contacts";
-import { actionAddContact, actionAddError, getContacts, getUser } from "store";
+import {
+  actionAddContact,
+  actionAddError,
+  getContacts,
+  getRecipient,
+  getUser,
+} from "store";
 import { AddUserIcon, RemoveUserIcon } from "assets";
 
 import { MessageHeaderProps } from "./MessageHeader.props";
@@ -21,7 +27,6 @@ import { useEffect } from "react";
 
 export const MessageHeader = ({
   setSettings,
-  receipt,
   className,
   ...props
 }: MessageHeaderProps): JSX.Element => {
@@ -30,6 +35,7 @@ export const MessageHeader = ({
   const themeChange = useTheme();
   let color = colorCard();
 
+  const receipt: IUser | undefined = useAppSelector(getRecipient);
   const contact: IUser | undefined = useAppSelector(getContacts)?.filter(
     (contact) => contact.id === receipt?.id
   )[0];

@@ -2,6 +2,8 @@
 import {
   actionClearChats,
   actionClearContact,
+  actionClearError,
+  actionClearLoading,
   actionClearMessageEdit,
   actionClearMessages,
   actionClearRecipient,
@@ -18,6 +20,8 @@ export const outLogin = (dispatch, themeChange): void => {
   dispatch(actionClearMessages());
   dispatch(actionClearMessageEdit());
   dispatch(actionClearRecipient());
+  dispatch(actionClearLoading());
+  dispatch(actionClearError());
 
   themeChange?.changeTheme(theme.THEME_LIGHT);
   themeChange?.changeAnimation(animation.ANIMATION_ON);

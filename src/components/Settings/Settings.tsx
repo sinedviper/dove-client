@@ -5,9 +5,10 @@ import cn from "classnames";
 import { colorCard, formateDateOnline, outLogin } from "utils/helpers";
 import { IUser } from "utils/interface";
 import { useTheme } from "utils/context";
-import { useAppDispatch, useAppSelector } from "utils/hooks";
+import { useAppDispatch, useAppSelector, useDebounce } from "utils/hooks";
 import { deleteUser } from "resolvers/user";
 import {
+  actionAddCopy,
   actionAddError,
   actionMenuEdit,
   actionMenuSetting,
@@ -58,9 +59,14 @@ export const Settings = ({
 
   const color = colorCard(String(user?.name.toUpperCase().slice()[0]));
 
+  const debouncedMutation = useDebounce(() => {
+    dispatch(actionAddCopy(false));
+  }, 3000);
+
   const handleCopy = (value: string) => {
     navigator.clipboard.writeText(value);
-    //toast.success("Copy!");
+    dispatch(actionAddCopy(true));
+    debouncedMutation();
   };
 
   const handleRemoveUser = async () => await mutationFunction();

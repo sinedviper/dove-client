@@ -1,16 +1,17 @@
 import React, { ForwardedRef, forwardRef, useEffect, useState } from "react";
-import { useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
 import cn from "classnames";
 
 import { useAppDispatch, useAppSelector } from "utils/hooks";
 import { IUser } from "utils/interface";
-import { addChat } from "resolvers/chats";
+import { addChat, getChats } from "resolvers/chats";
 import { addMessages, updateMessages } from "resolvers/messages";
 import {
   actionAddChats,
   actionAddError,
+  actionAddMessages,
   actionClearMessageEdit,
   getMessageEdit,
   getRecipient,
@@ -37,6 +38,22 @@ export const MessageInput = forwardRef(
     } = useAppSelector(getMessageEdit);
     const sender: IUser | undefined = useAppSelector(getRecipient);
 
+    const [queryFunctionChat, { error: errorQueryChat }] = useLazyQuery(
+      getChats,
+      {
+        fetchPolicy: "network-only",
+        onCompleted(data) {
+          checkAuthorization({
+            dispatch,
+            navigate,
+            data: data.getChats,
+            actionAdd: actionAddChats,
+            themeChange,
+          });
+        },
+      }
+    );
+
     const [mutationFunctionAddChat, { error: errorMutationChat }] = useMutation(
       addChat,
       {
@@ -53,11 +70,33 @@ export const MessageInput = forwardRef(
       }
     );
     const [mutationFunctionAddMessage, { error: errorMutationMessageAdd }] =
-      useMutation(addMessages);
+      useMutation(addMessages, {
+        fetchPolicy: "network-only",
+        onCompleted(data) {
+          checkAuthorization({
+            dispatch,
+            navigate,
+            themeChange,
+            data: data.addMessage,
+            actionAdd: actionAddMessages,
+          });
+        },
+      });
     const [
       mutationFunctionUpdateMessage,
       { error: errorMutationMessageUpdate },
-    ] = useMutation(updateMessages);
+    ] = useMutation(updateMessages, {
+      fetchPolicy: "network-only",
+      onCompleted(data) {
+        checkAuthorization({
+          dispatch,
+          navigate,
+          themeChange,
+          data: data.updateMessages,
+          actionAdd: actionAddMessages,
+        });
+      },
+    });
 
     const [emoji, setEmoji] = useState<boolean>(false);
     const [send, setSend] = useState<string>(message ? message.text : "");
@@ -101,6 +140,7 @@ export const MessageInput = forwardRef(
           },
         },
       });
+      await queryFunctionChat();
       dispatch(actionClearMessageEdit());
     };
 
@@ -147,6 +187,7 @@ export const MessageInput = forwardRef(
         dispatch(actionAddError(errorMutationMessageAdd.message));
       if (errorMutationMessageUpdate)
         dispatch(actionAddError(errorMutationMessageUpdate.message));
+      if (errorQueryChat) dispatch(actionAddError(errorQueryChat.message));
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
       errorMutationChat,

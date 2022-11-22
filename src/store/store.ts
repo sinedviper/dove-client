@@ -26,6 +26,7 @@ import {
   menuReducer,
   loadingReducer,
   errorsReducer,
+  copyReducer,
 } from "./slice";
 
 const reducer = combineReducers({
@@ -38,6 +39,7 @@ const reducer = combineReducers({
   menu: menuReducer,
   loading: loadingReducer,
   errors: errorsReducer,
+  copy: copyReducer,
 });
 
 const persistConfig = {

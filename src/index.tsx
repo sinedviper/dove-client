@@ -28,23 +28,23 @@ const httpLink = createHttpLink({
   uri: `http://localhost:3001/graphql`,
 });
 
-const wsLink = new GraphQLWsLink(
-  createClient({
-    url: `ws://localhost:3001/graphql`,
-  })
-);
+// const wsLink = new GraphQLWsLink(
+//   createClient({
+//     url: `ws://localhost:3001/graphql`,
+//   })
+// );
 
-const splitLink = split(
-  ({ query }) => {
-    const definition = getMainDefinition(query);
-    return (
-      definition.kind === "OperationDefinition" &&
-      definition.operation === "subscription"
-    );
-  },
-  wsLink,
-  httpLink
-);
+// const splitLink = split(
+//   ({ query }) => {
+//     const definition = getMainDefinition(query);
+//     return (
+//       definition.kind === "OperationDefinition" &&
+//       definition.operation === "subscription"
+//     );
+//   },
+//   wsLink,
+//   httpLink
+// );
 
 const authLink = setContext(() => {
   // get the authentication token from local storage if it exists
@@ -58,7 +58,7 @@ const authLink = setContext(() => {
 });
 
 export const client = new ApolloClient({
-  link: authLink.concat(splitLink),
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 

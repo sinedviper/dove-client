@@ -82,7 +82,7 @@ export const ChatsHeader = ({
     await queryFunctionContactGet();
     dispatch(actionMenuContact(true));
     setMenu(false);
-    setTimeout(() => searchContact.current?.focus(), 300);
+    setTimeout(() => searchContact?.current?.focus(), 300);
   };
 
   const handleSettings = () => {

@@ -5,7 +5,7 @@ export interface ChatsHeaderProps
   setSwiper: Function;
   setSearchUser: Function;
   searchUser: boolean;
-  searchContact: RefObject<HTMLInputElement>;
+  searchContact: RefObject<HTMLInputElement> | null;
   valueAll: string;
   setValueAll: Function;
 }
