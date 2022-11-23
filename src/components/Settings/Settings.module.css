@@ -58,11 +58,11 @@
   border-radius: 50%;
   margin-right: 10px;
   cursor: pointer;
-  transition: var(--transition);
+  transition: var(--transition-static);
 }
 
 .back:hover {
-  transition: var(--transition);
+  transition: var(--transition-static);
   background-color: var(--opacity-box);
 }
 
@@ -80,11 +80,11 @@
   padding: 7.5px 3.5px;
   border-radius: 50%;
   cursor: pointer;
-  transition: var(--transition);
+  transition: var(--transition-static);
 }
 
 .edit:hover {
-  transition: var(--transition);
+  transition: var(--transition-static);
   background-color: var(--opacity-box);
 }
 
@@ -102,11 +102,11 @@
   border: none;
   background-color: initial;
   cursor: pointer;
-  transition: var(--transition);
+  transition: var(--transition-static);
 }
 
 .delete:hover {
-  transition: var(--transition);
+  transition: var(--transition-static);
   background-color: var(--opacity-box);
 }
 
@@ -175,12 +175,12 @@
   gap: 20px;
   cursor: pointer;
   background-color: initial;
-  transition: var(--transition);
+  transition: var(--transition-static);
 }
 
 .deleteButton:hover {
   background-color: var(--opacity-box-dark);
-  transition: var(--transition);
+  transition: var(--transition-static);
 }
 .deleteButton span {
   color: var(--icon-second);
@@ -237,12 +237,12 @@
   padding: 10px 15px;
   gap: 20px;
   border-radius: 10px;
-  transition: var(--transition);
+  transition: var(--transition-static);
   cursor: pointer;
 }
 
 .info:hover {
-  transition: var(--transition);
+  transition: var(--transition-static);
   background-color: var(--opacity-box);
 }
 

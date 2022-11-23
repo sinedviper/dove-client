@@ -85,11 +85,11 @@
   border-radius: 50%;
   margin-right: 10px;
   cursor: pointer;
-  transition: var(--transition);
+  transition: var(--transition-static);
 }
 
 .back:hover {
-  transition: var(--transition);
+  transition: var(--transition-static);
   background-color: var(--opacity-box);
 }
 
@@ -113,7 +113,7 @@
   box-shadow: 1px 1px 5px var(--opacity-box-dark);
   opacity: 0;
   fill: var(--white);
-  transition: var(--transition);
+  transition: var(--transition-static);
 }
 
 .supheed svg {
@@ -131,7 +131,7 @@
   cursor: pointer;
   pointer-events: all;
   opacity: 1;
-  transition: var(--transition);
+  transition: var(--transition-static);
 }
 
 .contactsList {

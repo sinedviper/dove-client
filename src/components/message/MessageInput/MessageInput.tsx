@@ -4,13 +4,17 @@ import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
 import cn from "classnames";
 
-import { useAppDispatch, useAppSelector } from "utils/hooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useAuthorization,
+  useError,
+} from "utils/hooks";
 import { IUser } from "utils/interface";
 import { addChat, getChats } from "resolvers/chats";
 import { addMessages, updateMessages } from "resolvers/messages";
 import {
   actionAddChats,
-  actionAddError,
   actionAddMessages,
   actionClearMessageEdit,
   getMessageEdit,
@@ -20,9 +24,6 @@ import { EditIcon, RemoveIcon, ReplyIcon, SendIcon, SmileIcon } from "assets";
 
 import { MessageInputProps } from "./MessageInput.props";
 import styles from "./MessageInput.module.css";
-import { checkAuthorization } from "utils/helpers";
-import { useNavigate } from "react-router-dom";
-import { useTheme } from "utils/context";
 
 export const MessageInput = forwardRef(
   (
@@ -30,8 +31,8 @@ export const MessageInput = forwardRef(
     ref: ForwardedRef<HTMLInputElement>
   ): JSX.Element => {
     const dispatch = useAppDispatch();
-    const navigate = useNavigate();
-    const themeChange = useTheme();
+    const error = useError();
+    const authorization = useAuthorization();
 
     const {
       message: { message, edit },
@@ -43,13 +44,7 @@ export const MessageInput = forwardRef(
       {
         fetchPolicy: "network-only",
         onCompleted(data) {
-          checkAuthorization({
-            dispatch,
-            navigate,
-            data: data.getChats,
-            actionAdd: actionAddChats,
-            themeChange,
-          });
+          authorization({ data: data.getChats, actionAdd: actionAddChats });
         },
       }
     );
@@ -59,13 +54,7 @@ export const MessageInput = forwardRef(
       {
         fetchPolicy: "network-only",
         onCompleted(data) {
-          checkAuthorization({
-            dispatch,
-            navigate,
-            data: data.addChat,
-            actionAdd: actionAddChats,
-            themeChange,
-          });
+          authorization({ data: data.addChat, actionAdd: actionAddChats });
         },
       }
     );
@@ -73,25 +62,20 @@ export const MessageInput = forwardRef(
       useMutation(addMessages, {
         fetchPolicy: "network-only",
         onCompleted(data) {
-          checkAuthorization({
-            dispatch,
-            navigate,
-            themeChange,
+          authorization({
             data: data.addMessage,
             actionAdd: actionAddMessages,
           });
         },
       });
+
     const [
       mutationFunctionUpdateMessage,
       { error: errorMutationMessageUpdate },
     ] = useMutation(updateMessages, {
       fetchPolicy: "network-only",
       onCompleted(data) {
-        checkAuthorization({
-          dispatch,
-          navigate,
-          themeChange,
+        authorization({
           data: data.updateMessages,
           actionAdd: actionAddMessages,
         });
@@ -109,6 +93,9 @@ export const MessageInput = forwardRef(
       await mutationFunctionAddChat({
         variables: {
           chat: { sender: Number(user?.id), recipient: Number(sender?.id) },
+        },
+        onCompleted: async () => {
+          if (send.replaceAll(" ", "") !== "") await handleMessageAdd();
         },
       });
     };
@@ -157,7 +144,9 @@ export const MessageInput = forwardRef(
             (await handleMessageAdd());
         }
       } else {
-        handleAddChat();
+        if (send.replaceAll(" ", "") !== "" && e.code === "Enter") {
+          await handleAddChat();
+        }
       }
     };
 
@@ -172,7 +161,9 @@ export const MessageInput = forwardRef(
           }
         }
       } else {
-        handleAddChat();
+        if (send.replaceAll(" ", "") !== "") {
+          await handleAddChat();
+        }
       }
     };
 
@@ -181,13 +172,10 @@ export const MessageInput = forwardRef(
     };
 
     useEffect(() => {
-      if (errorMutationChat)
-        dispatch(actionAddError(errorMutationChat.message));
-      if (errorMutationMessageAdd)
-        dispatch(actionAddError(errorMutationMessageAdd.message));
-      if (errorMutationMessageUpdate)
-        dispatch(actionAddError(errorMutationMessageUpdate.message));
-      if (errorQueryChat) dispatch(actionAddError(errorQueryChat.message));
+      if (errorMutationChat) error(errorMutationChat.message);
+      if (errorMutationMessageAdd) error(errorMutationMessageAdd.message);
+      if (errorMutationMessageUpdate) error(errorMutationMessageUpdate.message);
+      if (errorQueryChat) error(errorQueryChat.message);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
       errorMutationChat,

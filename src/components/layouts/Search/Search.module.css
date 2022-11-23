@@ -5,17 +5,17 @@
   width: 330px;
   font-size: 16px;
   color: var(--text-first);
-  transition: var(--transition);
+  transition: var(--transition-static);
   background-color: var(--background-third);
 }
 
 .search:hover {
-  transition: var(--transition);
+  transition: var(--transition-static);
   border: 1px solid var(--border-first);
 }
 
 .search:focus {
-  transition: var(--transition);
+  transition: var(--transition-static);
   border: 1px solid var(--primary);
   outline: 1px solid var(--primary);
   background-color: var(--background-first);
@@ -32,11 +32,11 @@
   width: 21px;
   height: 21px;
   fill: var(--icon-first);
-  transition: var(--transition);
+  transition: var(--transition-static);
 }
 
 .focusSearch {
-  transition: var(--transition);
+  transition: var(--transition-static);
   fill: var(--primary);
 }
 

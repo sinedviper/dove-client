@@ -1,10 +1,17 @@
 import React, { useRef, useEffect } from "react";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
 import cn from "classnames";
 
-import { checkAuthorization, minutesFormat, outLogin } from "utils/helpers";
-import { useAppDispatch, useAppSelector, useDebounce } from "utils/hooks";
+import { minutesFormat } from "utils/helpers";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useAuthorization,
+  useDebounce,
+  useError,
+  useExit,
+} from "utils/hooks";
 import { useTheme, theme, animation } from "utils/context";
 import { IUser } from "utils/interface";
 import { getContact } from "resolvers/contacts";
@@ -13,40 +20,30 @@ import { getChats } from "resolvers/chats";
 import { Contacts } from "components/contacts";
 import { Edits } from "components/forms";
 import { Chats } from "components/chats";
-import { Settings } from "components";
+import { Settings, Notification } from "components";
 import {
   actionAddChats,
   actionAddContact,
-  actionAddError,
   actionAddLoading,
   actionAddUser,
-  actionDeleteError,
-  getCopy,
-  getErrors,
-  getLoading,
   getUser,
 } from "store";
-import { CopyIcon, InfoIcon, LoadingIcon } from "assets";
 
 import { LayoutProps } from "./Layout.props";
 import styles from "./Layout.module.css";
 
 export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const themeChange = useTheme();
+  const exit = useExit();
+  const autorization = useAuthorization();
+  const error = useError();
 
   const [mutationUserOnlineFunction, { error: errorMutationUserOnline }] =
     useMutation(updateUserOnline, {
       fetchPolicy: "network-only",
       onCompleted(data) {
-        checkAuthorization({
-          dispatch,
-          navigate,
-          themeChange,
-          data: data.updateUserOnline,
-          actionAdd: actionAddUser,
-        });
+        autorization({ data: data.updateUserOnline, actionAdd: actionAddUser });
       },
     });
 
@@ -67,13 +64,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
     {
       fetchPolicy: "network-only",
       onCompleted(data) {
-        checkAuthorization({
-          dispatch,
-          navigate,
-          data: data.getContacts,
-          actionAdd: actionAddContact,
-          themeChange,
-        });
+        autorization({ data: data.getContacts, actionAdd: actionAddContact });
       },
     }
   );
@@ -82,42 +73,30 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
     {
       fetchPolicy: "network-only",
       onCompleted(data) {
-        checkAuthorization({
-          dispatch,
-          navigate,
-          data: data.getChats,
-          actionAdd: actionAddChats,
-          themeChange,
-        });
+        autorization({ data: data.getChats, actionAdd: actionAddChats });
       },
     }
   );
 
   let searchContact = useRef<HTMLInputElement>(null);
 
-  const errors: string[] = useAppSelector(getErrors);
-  const loading: boolean = useAppSelector(getLoading);
-  const copy: boolean = useAppSelector(getCopy);
   const user: IUser | undefined = useAppSelector(getUser);
   const token: string | null = localStorage.getItem("token");
+
+  useEffect(() => {
+    //error
+    if (errorQueryContact) error(errorQueryContact.message);
+    if (errorQueryChats) error(errorQueryChats.message);
+    if (errorMutationUserOnline) error(errorMutationUserOnline.message);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errorQueryContact, errorQueryChats, errorMutationUserOnline]);
 
   useEffect(() => {
     //loading
     if (loadQueryContact || loadQueryChat) dispatch(actionAddLoading(true));
     if (!loadQueryContact && !loadQueryChat) dispatch(actionAddLoading(false));
-    //error
-    if (errorQueryContact) dispatch(actionAddError(errorQueryContact.message));
-    if (errorQueryChats) dispatch(actionAddError(errorQueryChats.message));
-    if (errorMutationUserOnline)
-      dispatch(actionAddError(errorMutationUserOnline.message));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    loadQueryChat,
-    loadQueryContact,
-    errorQueryContact,
-    errorQueryChats,
-    errorMutationUserOnline,
-  ]);
+  }, [loadQueryChat, loadQueryContact]);
 
   useEffect(() => {
     themeChange?.changeTheme(
@@ -130,7 +109,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   }, [user?.animation, user?.theme]);
 
   if (!token) {
-    outLogin(dispatch, themeChange);
+    exit();
     return <Navigate to='/login' />;
   }
 
@@ -144,38 +123,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
       }
       {...props}
     >
-      <div className={styles.loadingWrapper}>
-        {copy && (
-          <div className={styles.loading}>
-            <span className={styles.copyIcon}>
-              <CopyIcon />
-            </span>
-            <p>Copy</p>
-          </div>
-        )}
-        {loading && (
-          <div className={styles.loading}>
-            <span className={styles.loadingIcon}>
-              <LoadingIcon />
-            </span>
-            <p>loading...</p>
-          </div>
-        )}
-        {errors !== null &&
-          errors.map((error, index) => {
-            setTimeout(() => {
-              dispatch(actionDeleteError(index));
-            }, 3000);
-            return (
-              <div key={index} className={styles.error}>
-                <span className={styles.errorIcon}>
-                  <InfoIcon />
-                </span>
-                <p>Error: {error}</p>
-              </div>
-            );
-          })}
-      </div>
+      <Notification />
       <section className={styles.chatWrapper}>
         <Chats searchContact={searchContact} />
         <Contacts searchContact={searchContact} />

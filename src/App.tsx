@@ -1,29 +1,30 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 
 import { LoginPage, SignUpPage } from "page";
+import { Notification } from "components";
 import { Home, Layout } from "pages-components";
-
-import "react-toastify/dist/ReactToastify.css";
+import { IUser } from "utils/interface";
 import { useAppSelector } from "utils/hooks";
 import { getUser } from "store";
-import { IUser } from "utils/interface";
 
 function App(): JSX.Element {
   const user: IUser | undefined = useAppSelector(getUser);
 
   return (
     <>
-      <ToastContainer
-        autoClose={1300}
-        pauseOnFocusLoss
-        newestOnTop
-        draggable
-        hideProgressBar={false}
-        closeOnClick={false}
-        theme={user?.theme ? "dark" : "light"}
-      />
+      {!user && (
+        <Notification
+          style={{
+            bottom: "auto",
+            top: "75px",
+            right: "75px",
+            left: "auto",
+            position: "fixed",
+          }}
+        />
+      )}
+
       <Router>
         <Routes>
           <Route path='/' element={<Layout />}>

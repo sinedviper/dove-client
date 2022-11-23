@@ -4,8 +4,9 @@
   overflow: hidden;
   width: 100%;
   height: 100vh;
-  transition: var(--transition);
-  background-color: var(--background-first);
+  transition: var(--transition-static);
+  overflow: hidden;
+  background: var(--background-fourth);
 }
 
 .profileWrap {
@@ -25,7 +26,6 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: var(--primary-middle);
 }
 
 .chatsWrapper {
@@ -76,10 +76,29 @@
   max-width: 600px;
   display: flex;
   margin: 0 auto;
-  background-color: var(--primary-middle);
   z-index: 1;
   padding: 0 10px;
   justify-content: center;
   bottom: 0;
   padding-bottom: 10px;
+}
+
+.backgroundDark {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-image: url("../../assets/png/animal.dark.png");
+}
+
+.backgroundLight {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-image: url("../../assets/png/animal.light.png");
+}
+
+.backgroundWrapper {
+  width: 100%;
 }

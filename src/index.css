@@ -7,7 +7,7 @@
 
   --primary: #3390ec;
   --primary-dark: #225991;
-  --primary-light: #e2f1ff;
+  --primary-light: #eeffde;
   --primary-middle: #9ccdfd;
 
   --text-first: #000;
@@ -16,12 +16,20 @@
   --text-third: #a4a4a4;
   --text-fourth: #c4c9cc;
   --text-fiveth: #fff;
-  --text-seventh: #5a99b5;
+  --text-seventh: #58b356;
   --text-eighth: #cecece;
 
   --background-first: #fff;
   --background-second: #f4f4f5;
   --background-third: #fff;
+  --background-fourth: linear-gradient(
+    37deg,
+    rgba(121, 172, 137, 1) 0%,
+    rgba(199, 211, 161, 1) 40%,
+    rgba(201, 212, 161, 1) 50%,
+    rgba(195, 209, 159, 1) 60%,
+    rgba(121, 172, 137, 1) 100%
+  );
 
   --icon-first: #707579;
   --icon-second: #000;
@@ -40,7 +48,7 @@
   /* ------------------------ LIGHT THEME ------------------------*/
   --theme-light-primary: #3390ec;
   --theme-light-primary-dark: #225991;
-  --theme-light-primary-light: #e2f1ff;
+  --theme-light-primary-light: #eeffde;
   --theme-light-primary-middle: #9ccdfd;
 
   --theme-light-text-first: #000;
@@ -49,12 +57,20 @@
   --theme-light-text-third: #a4a4a4;
   --theme-light-text-fourth: #c4c9cc;
   --theme-light-text-fiveth: #fff;
-  --theme-light-text-seventh: #5a99b5;
+  --theme-light-text-seventh: #58b356;
   --theme-light-text-eighth: #cecece;
 
   --theme-light-background-first: #fff;
   --theme-light-background-second: #f4f4f5;
   --theme-light-background-third: #fff;
+  --theme-light-background-fourth: linear-gradient(
+    37deg,
+    rgba(121, 172, 137, 1) 0%,
+    rgba(199, 211, 161, 1) 40%,
+    rgba(201, 212, 161, 1) 50%,
+    rgba(195, 209, 159, 1) 60%,
+    rgba(121, 172, 137, 1) 100%
+  );
 
   --theme-light-icon-first: #707579;
   --theme-light-icon-second: #000;
@@ -86,6 +102,7 @@
   --theme-dark-background-first: #212121;
   --theme-dark-background-second: #181818;
   --theme-dark-background-third: #181818;
+  --theme-dark-background-fourth: #000;
 
   --theme-dark-icon-first: #707579;
   --theme-dark-icon-second: #fff;

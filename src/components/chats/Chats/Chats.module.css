@@ -70,7 +70,7 @@
 }
 
 .contactWrapper:hover {
-  transition: var(--transition);
+  transition: var(--transition-static);
   background-color: var(--opacity-box);
 }
 

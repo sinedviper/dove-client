@@ -11,10 +11,9 @@
   position: relative;
   gap: 15px;
   text-align: center;
-  margin: 170px auto 50px;
+  margin: 100px auto 0px;
   width: 100%;
   max-width: 360px;
-  padding: 30px;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -50,11 +49,11 @@
   border-radius: 10px;
   border: none;
   cursor: pointer;
-  transition: var(--transition);
+  transition: var(--transition-static);
 }
 
 .button:hover {
-  transition: var(--transition);
+  transition: var(--transition-static);
   background-color: var(--primary-dark);
 }
 

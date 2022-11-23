@@ -18,7 +18,7 @@
 }
 
 .contacts:hover {
-  transition: var(--transition);
+  transition: var(--transition-static);
   background-color: var(--opacity-box);
 }
 
@@ -27,11 +27,13 @@
   color: var(--white);
   background-color: var(--primary);
 }
+
 .contactActive span {
   color: var(--white);
 }
+
 .contactActive:hover {
-  transition: var(--transition);
+  transition: var(--transition-static);
   color: var(--white);
   background-color: var(--primary);
 }

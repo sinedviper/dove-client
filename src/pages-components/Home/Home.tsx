@@ -1,18 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import cn from "classnames";
 
-import { useAppDispatch, useAppSelector } from "utils/hooks";
-import { checkAuthorization, formatDay } from "utils/helpers";
+import { useAppSelector, useAuthorization, useError } from "utils/hooks";
 import { IChat, IMessage, IUser } from "utils/interface";
-import { useTheme } from "utils/context";
 import { getMessage } from "resolvers/messages";
 import { getUserSender } from "resolvers/user";
 import { MessageCard, MessageHeader, MessageInput } from "components/message";
 import { Settings } from "components";
 import {
-  actionAddError,
   actionAddMessages,
   actionAddRecipient,
   getChat,
@@ -23,12 +20,12 @@ import {
 
 import { HomeProps } from "./Home.props";
 import styles from "./Home.module.css";
+import { formatDay } from "utils/helpers";
 
 export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
   const { username } = useParams();
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const themeChange = useTheme();
+  const error = useError();
+  const authorization = useAuthorization();
 
   const user: IUser | undefined = useAppSelector(getUser);
   const sender: IUser | undefined = useAppSelector(getRecipient);
@@ -46,27 +43,15 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
     },
     fetchPolicy: "network-only",
     onCompleted(data) {
-      checkAuthorization({
-        dispatch,
-        navigate,
-        data: data.getMessages,
-        actionAdd: actionAddMessages,
-        themeChange,
-      });
+      authorization({ data: data.getMessages, actionAdd: actionAddMessages });
     },
-    pollInterval: 500,
+    pollInterval: chat && 500,
   });
 
   const { error: errorSender } = useQuery(getUserSender, {
     variables: { input: { userId: Number(user?.id), username } },
     onCompleted(data) {
-      checkAuthorization({
-        dispatch,
-        navigate,
-        data: data.getUser,
-        actionAdd: actionAddRecipient,
-        themeChange,
-      });
+      authorization({ data: data.getUser, actionAdd: actionAddRecipient });
     },
     fetchPolicy: "network-only",
     pollInterval: 500,
@@ -80,8 +65,8 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
   };
 
   useEffect(() => {
-    if (errorQueryMessage) dispatch(actionAddError(errorQueryMessage.message));
-    if (errorSender) dispatch(actionAddError(errorSender.message));
+    if (errorQueryMessage && chat) error(errorQueryMessage.message);
+    if (errorSender) error(errorSender.message);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errorQueryMessage, errorSender]);
 
@@ -91,6 +76,11 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
 
   return (
     <section className={cn(className, styles.wrapper)} {...props}>
+      {user?.theme ? (
+        <section className={styles.backgroundDark}></section>
+      ) : (
+        <section className={styles.backgroundLight}></section>
+      )}
       <section className={styles.chatWrapper}>
         <MessageHeader setSettings={setSettings} />
         <section className={styles.chatsWrapper}>

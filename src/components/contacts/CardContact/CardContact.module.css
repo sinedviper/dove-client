@@ -17,7 +17,7 @@
 }
 
 .contacts:hover {
-  transition: var(--transition);
+  transition: var(--transition-static);
   background-color: var(--opacity-box);
 }
 
@@ -32,7 +32,7 @@
 }
 
 .contactActive:hover {
-  transition: var(--transition);
+  transition: var(--transition-static);
   color: var(--white);
   background-color: var(--primary);
 }
@@ -111,7 +111,7 @@
 
 .menuCard {
   display: flex;
-  transition: var(--transition);
+  transition: var(--transition-static);
   border-radius: 5px;
   align-items: center;
   padding: 5px 15px;
@@ -121,7 +121,7 @@
 }
 
 .menuCard:hover {
-  transition: var(--transition);
+  transition: var(--transition-static);
   background-color: var(--opacity-box);
 }
 

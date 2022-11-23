@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import cn from "classnames";
 
-import { colorCard, formateDateOnline, outLogin } from "utils/helpers";
+import { colorCard, formateDateOnline } from "utils/helpers";
 import { IUser } from "utils/interface";
-import { useTheme } from "utils/context";
-import { useAppDispatch, useAppSelector, useDebounce } from "utils/hooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useDebounce,
+  useError,
+  useExit,
+} from "utils/hooks";
 import { deleteUser } from "resolvers/user";
 import {
   actionAddCopy,
-  actionAddError,
   actionMenuEdit,
   actionMenuSetting,
   getMenuSetting,
@@ -27,7 +31,6 @@ import {
 
 import { SettingsProps } from "./Settings.props";
 import styles from "./Settings.module.css";
-import { useEffect } from "react";
 
 export const Settings = ({
   className,
@@ -37,7 +40,8 @@ export const Settings = ({
   ...props
 }: SettingsProps): JSX.Element => {
   const dispatch = useAppDispatch();
-  const themeChange = useTheme();
+  const exit = useExit();
+  const error = useError();
 
   let user: IUser | undefined = useAppSelector(getUser);
   if (sender) {
@@ -49,9 +53,7 @@ export const Settings = ({
     deleteUser,
     {
       fetchPolicy: "network-only",
-      onCompleted() {
-        outLogin(dispatch, themeChange);
-      },
+      onCompleted: () => exit(),
     }
   );
 
@@ -72,7 +74,7 @@ export const Settings = ({
   const handleRemoveUser = async () => await mutationFunction();
 
   useEffect(() => {
-    if (errorMutationUser) dispatch(actionAddError(errorMutationUser.message));
+    if (errorMutationUser) error(errorMutationUser.message);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errorMutationUser]);
 

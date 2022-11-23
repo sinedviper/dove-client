@@ -137,10 +137,11 @@
   margin: 0 5px;
   border-radius: 50%;
   cursor: pointer;
-  transition: var(--transition);
+  transition: var(--transition-static);
 }
 
 .iconRemoveEdit:hover {
+  transition: var(--transition-static);
   background-color: var(--primary-opacity);
 }
 

@@ -2,11 +2,9 @@ import React, { useEffect } from "react";
 import { useMutation, useLazyQuery } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import cn from "classnames";
 
-import { checkAuthorization } from "utils/helpers";
-import { useAppDispatch } from "utils/hooks";
+import { useAuthorization, useError } from "utils/hooks";
 import { useTheme } from "utils/context";
 import { getMe, loginUser } from "resolvers/user";
 import { Input } from "components/layouts";
@@ -26,8 +24,9 @@ export const FormLogin = ({
   ...props
 }: FormLoginProps): JSX.Element => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const themeChange = useTheme();
+  const error = useError();
+  const autorization = useAuthorization();
 
   const {
     register,
@@ -40,13 +39,7 @@ export const FormLogin = ({
     {
       fetchPolicy: "network-only",
       onCompleted(data) {
-        checkAuthorization({
-          dispatch,
-          navigate,
-          data: data.getMe,
-          themeChange,
-          actionAdd: actionAddUser,
-        });
+        autorization({ data: data.getMe, actionAdd: actionAddUser });
         navigate("/");
       },
     }
@@ -58,20 +51,14 @@ export const FormLogin = ({
   );
 
   const onSubmit = async (input: IFormInput): Promise<void> => {
-    await mutateFunction({ variables: { input } })
-      .then(async (res) => {
-        const data = res?.data.loginUser;
-        if (data.status === "Invalid") {
-          toast.error(data.message);
-        }
-        if (data.status === "Success") {
-          localStorage.setItem("token", data.access_token);
-          await queryFunctionUser();
-        }
-      })
-      .catch((err) => {
-        toast.error(err?.message);
-      });
+    await mutateFunction({ variables: { input } }).then(async (res) => {
+      const data = res?.data.loginUser;
+      data.status === "Invalid" && error(data.message);
+      if (data.status === "Success") {
+        localStorage.setItem("token", data.access_token);
+        await queryFunctionUser();
+      }
+    });
   };
 
   useEffect(() => {

@@ -78,11 +78,11 @@
   border: none;
   background-color: initial;
   cursor: pointer;
-  transition: var(--transition);
+  transition: var(--transition-static);
 }
 
 .delete:hover {
-  transition: var(--transition);
+  transition: var(--transition-static);
   background-color: var(--opacity-box);
 }
 
@@ -151,12 +151,12 @@
   gap: 20px;
   cursor: pointer;
   background-color: initial;
-  transition: var(--transition);
+  transition: var(--transition-static);
 }
 
 .deleteButton:hover {
   background-color: var(--opacity-box-dark);
-  transition: var(--transition);
+  transition: var(--transition-static);
 }
 .deleteButton span {
   color: var(--icon-second);

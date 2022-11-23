@@ -1,23 +1,18 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { useNavigate } from "react-router-dom";
 import cn from "classnames";
 
-import {
-  checkAuthorization,
-  colorCard,
-  formateDateOnline,
-} from "utils/helpers";
-import { useAppDispatch, useAppSelector } from "utils/hooks";
+import { formateDateOnline, colorCard } from "utils/helpers";
+import { useAppSelector, useAuthorization, useError } from "utils/hooks";
 import { IUser } from "utils/interface";
-import { useTheme } from "utils/context";
 import { deleteContact } from "resolvers/contacts";
 import { ButtonMenu } from "components/layouts";
-import { actionAddContact, actionAddError, getUser } from "store";
+import { actionAddContact, getUser } from "store";
 
 import { CardContactProps } from "./CardContact.props";
 import styles from "./CardContact.module.css";
 import { useEffect } from "react";
+import {} from "utils/helpers";
 
 export const CardContact = ({
   className,
@@ -27,9 +22,8 @@ export const CardContact = ({
   search,
   ...props
 }: CardContactProps): JSX.Element => {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const themeChange = useTheme();
+  const autorization = useAuthorization();
+  const error = useError();
 
   const user: IUser | undefined = useAppSelector(getUser);
 
@@ -38,13 +32,7 @@ export const CardContact = ({
     {
       fetchPolicy: "network-only",
       onCompleted(data) {
-        checkAuthorization({
-          dispatch,
-          navigate,
-          data: data.deleteContact,
-          actionAdd: actionAddContact,
-          themeChange,
-        });
+        autorization({ data: data.deleteContact, actionAdd: actionAddContact });
       },
     }
   );
@@ -67,8 +55,7 @@ export const CardContact = ({
   const color = colorCard(contact?.name.toUpperCase().split("")[0]);
 
   useEffect(() => {
-    if (errorDeleteContact)
-      dispatch(actionAddError(errorDeleteContact.message));
+    if (errorDeleteContact) error(errorDeleteContact.message);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errorDeleteContact]);
 

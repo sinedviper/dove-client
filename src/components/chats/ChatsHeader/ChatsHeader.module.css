@@ -17,14 +17,14 @@
   border-radius: 50%;
   border: none;
   background-color: inherit;
-  transition: var(--transition);
+  transition: var(--transition-static);
   position: relative;
   margin-right: 7px;
   cursor: pointer;
 }
 
 .menu:hover {
-  transition: var(--transition);
+  transition: var(--transition-static);
   background-color: var(--opacity-box);
 }
 
@@ -38,7 +38,7 @@
   position: absolute;
   top: 18px;
   left: 11px;
-  transition: var(--transition);
+  transition: var(--transition-static);
 }
 
 .line::after {
@@ -51,7 +51,7 @@
   border-radius: 30px;
   background-color: var(--icon-first);
   display: block;
-  transition: var(--transition);
+  transition: var(--transition-static);
 }
 
 .line::before {
@@ -64,13 +64,13 @@
   border-radius: 30px;
   background-color: var(--icon-first);
   display: block;
-  transition: var(--transition);
+  transition: var(--transition-static);
 }
 
 .lineBack {
   top: 18px;
   width: 18px;
-  transition: var(--transition);
+  transition: var(--transition-static);
   transform: rotate(180deg);
 }
 
@@ -79,7 +79,7 @@
   left: 7px;
   width: 12px;
   transform: rotate(-45deg);
-  transition: var(--transition);
+  transition: var(--transition-static);
 }
 
 .lineBack::before {
@@ -87,7 +87,7 @@
   width: 12px;
   left: 7px;
   transform: rotate(45deg);
-  transition: var(--transition);
+  transition: var(--transition-static);
 }
 
 .menuClose {

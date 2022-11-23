@@ -24,7 +24,8 @@ export const changeCssColor = (theme) => {
     "opacity-box-dark",
     "opacity-box-second",
     "primary-opacity",
-    "--text-eighth",
+    "text-eighth",
+    "background-fourth",
   ];
 
   cssVariable.forEach((element) => {
@@ -41,8 +42,3 @@ export const changeCssTransition = (theme) => {
     root.style.setProperty(`--${element}`, `var(--${element}-${theme})`);
   });
 };
-
-/*
-  
-
-*/

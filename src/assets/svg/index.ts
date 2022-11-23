@@ -23,6 +23,8 @@ import { ReactComponent as Moon } from "./moon.svg";
 import { ReactComponent as Meteor } from "./meteor.svg";
 import { ReactComponent as Info } from "./information.svg";
 import { ReactComponent as AddUser } from "./addUser.svg";
+import { ReactComponent as Animal } from "./animal.svg";
+import { ReactComponent as Tail } from "./tail.svg";
 
 export const TelegramIcon = Telegram;
 export const SearchIcon = Search;
@@ -49,3 +51,5 @@ export const MoonIcon = Moon;
 export const MeteorIcon = Meteor;
 export const InfoIcon = Info;
 export const AddUserIcon = AddUser;
+export const AnimalIcon = Animal;
+export const TailIcon = Tail;

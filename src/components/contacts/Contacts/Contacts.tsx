@@ -17,13 +17,14 @@ import { BackIcon } from "assets";
 
 import { ContactsProps } from "./Contacts.props";
 import styles from "./Contacts.module.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const Contacts = ({
   className,
   searchContact,
   ...props
 }: ContactsProps): JSX.Element => {
+  const { username } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -34,11 +35,13 @@ export const Contacts = ({
   const [swiper, setSwiper] = useState<boolean>(false);
 
   const handleFocus = (contact: IUser) => {
-    dispatch(actionMenuContact(false));
-    dispatch(actionClearMessages());
-    dispatch(actionClearRecipient());
-    dispatch(actionAddRecipient(contact));
-    navigate(`${contact?.username}`);
+    if (String(contact.username) !== String(username)) {
+      dispatch(actionMenuContact(false));
+      dispatch(actionClearMessages());
+      dispatch(actionClearRecipient());
+      dispatch(actionAddRecipient(contact));
+      navigate(`${contact?.username}`);
+    }
   };
 
   return (

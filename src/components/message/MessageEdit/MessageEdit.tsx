@@ -2,23 +2,20 @@ import React from "react";
 import { useMutation } from "@apollo/client";
 import cn from "classnames";
 
-import { useAppDispatch, useAppSelector } from "utils/hooks";
-import { IUser } from "utils/interface";
-import { checkAuthorization } from "utils/helpers";
-import { deleteMessages } from "resolvers/messages";
 import {
-  actionAddError,
-  actionAddMessageEdit,
-  actionAddMessages,
-  getUser,
-} from "store";
+  useAppDispatch,
+  useAppSelector,
+  useAuthorization,
+  useError,
+} from "utils/hooks";
+import { IUser } from "utils/interface";
+import { deleteMessages } from "resolvers/messages";
+import { actionAddMessageEdit, actionAddMessages, getUser } from "store";
 import { CopyIcon, DeleteIcon, EditIcon, ReplyIcon } from "assets";
 
 import { MessageEditProps } from "./MessageEdit.props";
 import styles from "./MessageEdit.module.css";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useTheme } from "utils/context";
 
 export const MessageEdit = ({
   setEditMessage,
@@ -31,8 +28,8 @@ export const MessageEdit = ({
   ...props
 }: MessageEditProps): JSX.Element => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const themeChange = useTheme();
+  const autorization = useAuthorization();
+  const error = useError();
 
   const user: IUser | undefined = useAppSelector(getUser);
 
@@ -41,13 +38,7 @@ export const MessageEdit = ({
     {
       fetchPolicy: "network-only",
       onCompleted(data) {
-        checkAuthorization({
-          dispatch,
-          navigate,
-          themeChange,
-          data: data.addMessages,
-          actionAdd: actionAddMessages,
-        });
+        autorization({ data: data.addMessages, actionAdd: actionAddMessages });
       },
     }
   );
@@ -83,8 +74,7 @@ export const MessageEdit = ({
   };
 
   useEffect(() => {
-    if (errorMutationMessageDelete)
-      dispatch(actionAddError(errorMutationMessageDelete.message));
+    if (errorMutationMessageDelete) error(errorMutationMessageDelete.message);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errorMutationMessageDelete]);
 

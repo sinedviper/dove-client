@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import cn from "classnames";
 
-import { formatHours } from "utils/helpers";
 import { IMessage } from "utils/interface";
+import { formatHours } from "utils/helpers";
 import { MessageEdit } from "components/message";
 
 import { MessageCardProps } from "./MessageCard.props";
 import styles from "./MessageCard.module.css";
+import { TailIcon } from "assets";
 
 export const MessageCard = ({
   chat,
@@ -119,13 +120,20 @@ export const MessageCard = ({
           <span className={styles.messageEdit}>
             {message?.createdAt !== message?.updatedAt ? "edited" : null}
           </span>
-          <span className={styles.messageDate}>
+          <span
+            className={cn(styles.messageDate, {
+              [styles.receipt]:
+                message.senderMessage.username !== user?.username,
+            })}
+          >
             {formatHours(new Date(message?.createdAt))}
           </span>
         </div>
       </div>
-      <span
+
+      <TailIcon
         className={cn(
+          styles.tailIcon,
           messages[Number(index + 1)]?.senderMessage.username !==
             user?.username && user?.username === message?.senderMessage.username
             ? styles.messageStyleLeft
@@ -146,7 +154,8 @@ export const MessageCard = ({
               : styles.messageStyleRight
             : null
         )}
-      ></span>
+      />
+
       <MessageEdit
         editMessage={editMessage}
         client={client}

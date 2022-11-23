@@ -2,6 +2,7 @@
   width: 160px;
   height: 160px;
   margin: 0 auto;
+
   fill: var(--primary);
 }
 
@@ -11,10 +12,9 @@
   position: relative;
   gap: 15px;
   text-align: center;
-  margin: 170px auto 50px;
+  margin: 100px auto 0px;
   width: 100%;
   max-width: 360px;
-  padding: 30px;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -52,7 +52,7 @@
   border-radius: 10px;
   border: none;
   cursor: pointer;
-  transition: var(--transition);
+  transition: var(--transition-static);
 }
 
 .loading {
@@ -67,7 +67,7 @@
 }
 
 .button:hover {
-  transition: var(--transition);
+  transition: var(--transition-static);
   background-color: var(--primary-dark);
 }
 
@@ -90,12 +90,6 @@
   color: var(--primary);
   cursor: pointer;
   pointer-events: all;
-}
-
-@media screen and (max-width: 1000px) {
-  .form {
-    margin-top: 100px;
-  }
 }
 
 @media screen and (max-width: 700px) {

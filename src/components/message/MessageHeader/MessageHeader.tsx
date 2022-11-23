@@ -1,24 +1,12 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { useNavigate } from "react-router-dom";
 import cn from "classnames";
 
-import {
-  checkAuthorization,
-  colorCard,
-  formateDateOnline,
-} from "utils/helpers";
-import { useAppDispatch, useAppSelector } from "utils/hooks";
+import { colorCard, formateDateOnline } from "utils/helpers";
+import { useAppSelector, useAuthorization, useError } from "utils/hooks";
 import { IUser } from "utils/interface";
-import { useTheme } from "utils/context";
 import { addContact, deleteContact } from "resolvers/contacts";
-import {
-  actionAddContact,
-  actionAddError,
-  getContacts,
-  getRecipient,
-  getUser,
-} from "store";
+import { actionAddContact, getContacts, getRecipient, getUser } from "store";
 import { AddUserIcon, RemoveUserIcon } from "assets";
 
 import { MessageHeaderProps } from "./MessageHeader.props";
@@ -30,9 +18,8 @@ export const MessageHeader = ({
   className,
   ...props
 }: MessageHeaderProps): JSX.Element => {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const themeChange = useTheme();
+  const error = useError();
+  const authorization = useAuthorization();
   let color = colorCard();
 
   const receipt: IUser | undefined = useAppSelector(getRecipient);
@@ -45,12 +32,9 @@ export const MessageHeader = ({
     useMutation(deleteContact, {
       fetchPolicy: "network-only",
       onCompleted(data) {
-        checkAuthorization({
-          dispatch,
-          navigate,
+        authorization({
           data: data.deleteContact,
           actionAdd: actionAddContact,
-          themeChange,
         });
       },
     });
@@ -59,13 +43,7 @@ export const MessageHeader = ({
     {
       fetchPolicy: "network-only",
       onCompleted(data) {
-        checkAuthorization({
-          dispatch,
-          navigate,
-          data: data.addContact,
-          actionAdd: actionAddContact,
-          themeChange,
-        });
+        authorization({ data: data.addContact, actionAdd: actionAddContact });
       },
     }
   );
@@ -94,10 +72,8 @@ export const MessageHeader = ({
   };
 
   useEffect(() => {
-    if (errorMutationContactDelete)
-      dispatch(actionAddError(errorMutationContactDelete.message));
-    if (errorMutationContactAdd)
-      dispatch(actionAddError(errorMutationContactAdd.message));
+    if (errorMutationContactDelete) error(errorMutationContactDelete.message);
+    if (errorMutationContactAdd) error(errorMutationContactAdd.message);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errorMutationContactDelete, errorMutationContactAdd]);
 

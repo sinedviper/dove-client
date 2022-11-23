@@ -27,7 +27,7 @@
 
 .menuCard {
   display: flex;
-  transition: var(--transition);
+  transition: var(--transition-static);
   border-radius: 5px;
   align-items: center;
   padding: 5px 15px;
@@ -36,7 +36,7 @@
 }
 
 .menuCard:hover {
-  transition: var(--transition);
+  transition: var(--transition-static);
   background-color: var(--opacity-box);
 }
 

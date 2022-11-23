@@ -5,7 +5,7 @@
   width: 100%;
   background-color: rgba(0, 0, 0, 0);
   color: var(--text-first);
-  transition: var(--transition);
+  transition: var(--transition-static);
   border-radius: 7px;
   font-weight: 600;
   display: flex;
@@ -14,7 +14,7 @@
 }
 
 .menuCard:hover {
-  transition: var(--transition);
+  transition: var(--transition-static);
   background-color: var(--opacity-box);
 }
 
@@ -64,7 +64,7 @@ input[type="checkbox"] {
   background: var(--white);
 
   border-radius: 50px;
-  transition: var(--transition);
+  transition: var(--transition-static);
   cursor: pointer;
   position: absolute;
   top: -3px;
@@ -82,7 +82,7 @@ input[type="checkbox"] {
 
 .checkBoxClick {
   background: var(--primary);
-  transition: var(--transition);
+  transition: var(--transition-static);
 }
 
 .menuClick {

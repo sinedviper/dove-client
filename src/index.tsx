@@ -5,14 +5,10 @@ import {
   InMemoryCache,
   ApolloProvider,
   createHttpLink,
-  split,
 } from "@apollo/client";
 import { Provider } from "react-redux";
 import { setContext } from "@apollo/client/link/context";
 import { PersistGate } from "redux-persist/integration/react";
-import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
-import { createClient } from "graphql-ws";
-import { getMainDefinition } from "@apollo/client/utilities";
 
 import App from "./App";
 import { persistor, store } from "./store";
@@ -27,24 +23,6 @@ const root = ReactDOM.createRoot(
 const httpLink = createHttpLink({
   uri: `http://localhost:3001/graphql`,
 });
-
-// const wsLink = new GraphQLWsLink(
-//   createClient({
-//     url: `ws://localhost:3001/graphql`,
-//   })
-// );
-
-// const splitLink = split(
-//   ({ query }) => {
-//     const definition = getMainDefinition(query);
-//     return (
-//       definition.kind === "OperationDefinition" &&
-//       definition.operation === "subscription"
-//     );
-//   },
-//   wsLink,
-//   httpLink
-// );
 
 const authLink = setContext(() => {
   // get the authentication token from local storage if it exists

@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useLazyQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { useNavigate, useParams } from "react-router-dom";
 import cn from "classnames";
 
-import { useTheme } from "utils/context";
 import { IChat, IUser } from "utils/interface";
-import { useAppDispatch, useAppSelector, useDebounce } from "utils/hooks";
-import { checkAuthorizationSearch, colorCard } from "utils/helpers";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useAuthorizationSearch,
+} from "utils/hooks";
+import { colorCard } from "utils/helpers";
 import { getUsersSearch } from "resolvers/user";
 import { CardChat, ChatsHeader } from "components/chats";
 import { CardContact } from "components/contacts";
@@ -28,57 +31,51 @@ export const Chats = ({
   className,
   ...props
 }: ChatsProps): JSX.Element => {
+  const { username } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const themeChange = useTheme();
-  const { username } = useParams();
+  const autorizationSearch = useAuthorizationSearch();
 
   const user: IUser | undefined = useAppSelector(getUser);
   const contacts: IUser[] | undefined = useAppSelector(getContacts);
   const chats: IChat[] | undefined = useAppSelector(getChat);
-
-  const [querySearch, { data: dataSearch, error: errorQueryUser }] =
-    useLazyQuery(getUsersSearch);
+  const [valueAll, setValueAll] = useState<string>("");
+  const { data: dataSearch, error: errorQueryUser } = useQuery(getUsersSearch, {
+    variables: {
+      input: { userId: Number(user?.id), username: String(valueAll) },
+    },
+    pollInterval: 200,
+  });
 
   let searchUsers: IUser[] | undefined = dataSearch
-    ? checkAuthorizationSearch({
-        dispatch,
-        navigate,
+    ? autorizationSearch({
         data: dataSearch?.searchUsers,
-        themeChange,
       })
     : undefined;
 
   const [click, setClick] = useState<boolean>(false);
   const [swiper, setSwiper] = useState<boolean>(false);
   const [searchUser, setSearchUser] = useState<boolean>(false);
-  const [valueAll, setValueAll] = useState<string>("");
-  const [length, setLength] = useState<number>(0);
 
   const handleFocus = async (contact: IUser) => {
-    setSearchUser(false);
-    dispatch(actionClearMessages());
-    dispatch(actionClearRecipient());
-    dispatch(actionAddRecipient(contact));
-    navigate(`${contact?.username}`);
+    if (String(contact.username) !== String(username)) {
+      setValueAll("");
+      setSearchUser(false);
+      dispatch(actionClearMessages());
+      dispatch(actionClearRecipient());
+      dispatch(actionAddRecipient(contact));
+      navigate(`${contact?.username}`);
+    }
+    if (String(contact.username) === String(username)) {
+      setValueAll("");
+      setSearchUser(false);
+    }
   };
 
-  const debouncedCheck = useDebounce(() => {
-    querySearch({
-      variables: {
-        input: { userId: Number(user?.id), username: String(valueAll) },
-      },
-    });
-  }, 200);
-
   useEffect(() => {
-    if (length !== valueAll.replaceAll(" ", "").length) {
-      debouncedCheck();
-      setLength(valueAll.replaceAll(" ", "").length);
-    }
     if (errorQueryUser) dispatch(actionAddError(errorQueryUser.message));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [valueAll, length, errorQueryUser]);
+  }, [errorQueryUser]);
 
   return (
     <section
@@ -158,9 +155,7 @@ export const Chats = ({
       >
         <ul>
           {chats &&
-            chats.map((contact: IChat) => (
-              <CardChat contact={contact} key={contact.id} />
-            ))}
+            chats.map((chat: IChat) => <CardChat chat={chat} key={chat.id} />)}
         </ul>
       </section>
     </section>

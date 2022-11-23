@@ -2,8 +2,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { RootState } from "store";
 
+interface error {
+  text: string;
+  id: any;
+}
+
 interface IErrorState {
-  errors: string[];
+  errors: error[];
 }
 
 const initialState: IErrorState = {
@@ -20,7 +25,7 @@ export const errorsSlice = createSlice({
     },
     actionDeleteError: (state, action) => {
       state.errors = state.errors.filter(
-        (error, index) => index === action.payload
+        (error) => String(error.id) !== String(action.payload)
       );
     },
   },

@@ -3,13 +3,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import cn from "classnames";
 
-import { checkAuthorization, colorCard, formateDate } from "utils/helpers";
-import { useAppDispatch } from "utils/hooks";
+import { colorCard, formateDate } from "utils/helpers";
+import { useAppDispatch, useAuthorization, useError } from "utils/hooks";
 import { removeChat } from "resolvers/chats";
 import { ButtonMenu } from "components/layouts";
 import {
   actionAddChats,
-  actionAddError,
   actionAddRecipient,
   actionClearMessages,
   actionClearRecipient,
@@ -17,30 +16,24 @@ import {
 
 import { CardChatProps } from "./CardChat.props";
 import styles from "./CardChat.module.css";
-import { useTheme } from "utils/context";
 
 export const CardChat = ({
   className,
-  contact: { id, user, lastMessage },
+  chat: { id, user, lastMessage },
   ...props
 }: CardChatProps): JSX.Element => {
+  const { username } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const themeChange = useTheme();
-  const { username } = useParams();
+  const error = useError();
+  const autorization = useAuthorization();
 
   const [mutationFunction, { error: errorMutationChat }] = useMutation(
     removeChat,
     {
       fetchPolicy: "network-only",
       onCompleted(data) {
-        checkAuthorization({
-          dispatch,
-          navigate,
-          data: data.removeChat,
-          actionAdd: actionAddChats,
-          themeChange,
-        });
+        autorization({ data: data.deleteChat, actionAdd: actionAddChats });
         navigate("");
       },
     }
@@ -54,10 +47,12 @@ export const CardChat = ({
   const color = colorCard(user.name.toUpperCase().split("")[0]);
 
   const handleFocus = () => {
-    dispatch(actionClearMessages());
-    dispatch(actionClearRecipient());
-    dispatch(actionAddRecipient(user));
-    navigate(`${user.username}`);
+    if (String(user.username) !== String(username)) {
+      dispatch(actionClearMessages());
+      dispatch(actionClearRecipient());
+      dispatch(actionAddRecipient(user));
+      navigate(`${user.username}`);
+    }
   };
 
   const handleDeleteChat = async () =>
@@ -70,7 +65,7 @@ export const CardChat = ({
     if (username !== user.username) {
       setClick(false);
     }
-    if (errorMutationChat) dispatch(actionAddError(errorMutationChat.message));
+    if (errorMutationChat) error(errorMutationChat.message);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username, user, errorMutationChat]);
 

@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import { useLazyQuery, useMutation } from "@apollo/client";
-import { useNavigate } from "react-router-dom";
 import cn from "classnames";
 
-import { checkAuthorization, outLogin } from "utils/helpers";
 import { IUser } from "utils/interface";
-import { useAppDispatch, useAppSelector } from "utils/hooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useAuthorization,
+  useError,
+  useExit,
+} from "utils/hooks";
 import { useTheme, theme, animation } from "utils/context";
 import { updateUser } from "resolvers/user";
 import { ButtonMenuMain, Search } from "components/layouts";
 import {
   actionAddContact,
-  actionAddError,
   actionAddUser,
   actionMenuContact,
   actionMenuSetting,
@@ -34,8 +37,10 @@ export const ChatsHeader = ({
   ...props
 }: ChatsHeaderProps): JSX.Element => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const themeChange = useTheme();
+  const error = useError();
+  const exit = useExit();
+  const autorization = useAuthorization();
 
   const user: IUser | undefined = useAppSelector(getUser);
 
@@ -44,13 +49,7 @@ export const ChatsHeader = ({
     {
       fetchPolicy: "network-only",
       onCompleted(data) {
-        checkAuthorization({
-          dispatch,
-          navigate,
-          data: data.updateUser,
-          actionAdd: actionAddUser,
-          themeChange,
-        });
+        autorization({ data: data.updateUser, actionAdd: actionAddUser });
         themeChange?.changeAnimation(
           user?.animation ? animation.ANIMATION_ON : animation.ANIMATION_OFF
         );
@@ -65,13 +64,7 @@ export const ChatsHeader = ({
     {
       fetchPolicy: "network-only",
       onCompleted(data) {
-        checkAuthorization({
-          dispatch,
-          navigate,
-          themeChange,
-          data: data.getContact,
-          actionAdd: actionAddContact,
-        });
+        autorization({ data: data.getContact, actionAdd: actionAddContact });
       },
     }
   );
@@ -106,8 +99,8 @@ export const ChatsHeader = ({
     });
 
   useEffect(() => {
-    if (errorUpdateUser) dispatch(actionAddError(errorUpdateUser.message));
-    if (errorQueryContact) dispatch(actionAddError(errorQueryContact.message));
+    if (errorUpdateUser) error(errorUpdateUser.message);
+    if (errorQueryContact) error(errorQueryContact.message);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errorUpdateUser, errorQueryContact]);
 
@@ -162,7 +155,7 @@ export const ChatsHeader = ({
         />
         <ButtonMenuMain
           text={"Log Out"}
-          handleAction={() => outLogin(dispatch, themeChange)}
+          handleAction={() => exit()}
           action={"out"}
         />
         <a

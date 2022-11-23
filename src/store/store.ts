@@ -45,6 +45,7 @@ const reducer = combineReducers({
 const persistConfig = {
   key: "root",
   storage,
+  blacklist: ["errors", "loading", "copy", "menu", "message"],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducer);

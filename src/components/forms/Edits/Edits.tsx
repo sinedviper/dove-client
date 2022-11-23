@@ -1,27 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import cn from "classnames";
 
-import { checkAuthorization, colorCard } from "utils/helpers";
+import { colorCard } from "utils/helpers";
+import { IUser } from "utils/interface";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useAuthorization,
+  useError,
+} from "utils/hooks";
 import { updateUser } from "resolvers/user";
 import { Input } from "components/layouts";
+import { actionAddUser, actionMenuEdit, getMenuEdit, getUser } from "store";
 import { BackIcon, SupheedIcon } from "assets";
 
 import { EditsProps } from "./Edits.props";
 import styles from "./Edits.module.css";
-import { IUser } from "utils/interface";
-import { useAppDispatch, useAppSelector } from "utils/hooks";
-import {
-  actionAddError,
-  actionAddUser,
-  actionMenuEdit,
-  getMenuEdit,
-  getUser,
-} from "store";
-import { useNavigate } from "react-router-dom";
-import { useTheme } from "utils/context";
 
 interface IFormInput {
   name: string;
@@ -41,27 +37,20 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
     handleSubmit,
   } = useForm<IFormInput>();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const themeChange = useTheme();
+  const autorization = useAuthorization();
+  const error = useError();
 
   //res in db
   const [mutateFunction, { error: errorMutationUpdateUser }] = useMutation(
     updateUser,
     {
       onCompleted(data) {
-        checkAuthorization({
-          dispatch,
-          navigate,
-          data: data.updateUser,
-          actionAdd: actionAddUser,
-          themeChange,
-        });
+        autorization({ data: data.updateUser, actionAdd: actionAddUser });
         setPassword("");
         setPasswordNew("");
         setPasswordReapeat("");
         setSubmit(false);
         dispatch(actionMenuEdit(false));
-        toast.success("Account update");
       },
     }
   );
@@ -163,8 +152,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
   };
 
   useEffect(() => {
-    if (errorMutationUpdateUser)
-      dispatch(actionAddError(errorMutationUpdateUser.message));
+    if (errorMutationUpdateUser) error(errorMutationUpdateUser.message);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errorMutationUpdateUser]);
 
@@ -181,7 +169,8 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
       passwordNew !== ""
     ) {
       setSubmit(true);
-    } else if (
+    }
+    if (
       user?.username === username ||
       user?.name === name ||
       user?.surname === surname ||

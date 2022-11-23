@@ -2,12 +2,12 @@ import React from "react";
 import { useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import cn from "classnames";
 
 import { signUp } from "resolvers/user";
 import { Input } from "components/layouts";
 import { DoveIcon, LoadingIcon } from "assets";
+import { useError } from "utils/hooks";
 
 import { FormSignUpProps } from "./FormSignUp.props";
 import styles from "./FormSignUp.module.css";
@@ -25,23 +25,20 @@ export const FormSignUp = ({
   ...props
 }: FormSignUpProps): JSX.Element => {
   const navigate = useNavigate();
+  const error = useError();
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm<IFormInput>();
+
   const [mutateFunction, { loading: loadingMutation }] = useMutation(signUp);
 
   const onSubmit = async (input: IFormInput): Promise<void> => {
     await mutateFunction({ variables: { input } }).then((res) => {
       const data = res?.data.signupUser;
-      if (data.status === "Invalid") {
-        toast.error(data?.message);
-      }
-      if (data.status === "Success") {
-        toast.success("Account created");
-        navigate("/login");
-      }
+      data.status === "Invalid" && error(data.message);
+      data.status === "Success" && navigate("/login");
     });
   };
 
