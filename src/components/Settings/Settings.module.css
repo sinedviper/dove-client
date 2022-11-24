@@ -218,9 +218,52 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
 .userOnline {
   font-size: 14px;
   color: var(--text-eighth);
+}
+
+.uploadWrapper {
+  position: absolute;
+  bottom: -25px;
+  right: 20px;
+}
+
+.uploadPhoto {
+  position: relative;
+  width: 55px;
+  height: 55px;
+  background-color: var(--primary);
+  border-radius: 50%;
+  border: none;
+  transition: var(--transition-static);
+}
+
+.uploadPhoto:hover {
+  transition: var(--transition-static);
+  background-color: var(--primary-dark);
+}
+
+.uploadPhoto svg {
+  width: 25px;
+  height: 25px;
+}
+
+.uploadPhoto svg path {
+  fill: var(--white);
+}
+
+.input {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 55px;
+  height: 55px;
+  z-index: 0;
+  border-radius: 50%;
+  background-color: var(--primary);
 }
 
 .infoLast {

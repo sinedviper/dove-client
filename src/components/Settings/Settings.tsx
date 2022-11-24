@@ -27,6 +27,7 @@ import {
   RemoveIcon,
   RemoveUserIcon,
   UsernameIcon,
+  PhotoIcon,
 } from "assets";
 
 import { SettingsProps } from "./Settings.props";
@@ -167,6 +168,18 @@ export const Settings = ({
               {user?.online && formateDateOnline(new Date(user?.online))}
             </p>
           </div>
+          {!profile && (
+            <div className={styles.uploadWrapper}>
+              <button className={styles.uploadPhoto}>
+                <PhotoIcon />
+                <input
+                  type='file'
+                  className={styles.input}
+                  onClick={(e) => {}}
+                />
+              </button>
+            </div>
+          )}
         </div>
         <div className={styles.infoLast}>
           <div

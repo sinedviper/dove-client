@@ -25,6 +25,7 @@ import { ReactComponent as Info } from "./information.svg";
 import { ReactComponent as AddUser } from "./addUser.svg";
 import { ReactComponent as Animal } from "./animal.svg";
 import { ReactComponent as Tail } from "./tail.svg";
+import { ReactComponent as Photo } from "./photo.svg";
 
 export const TelegramIcon = Telegram;
 export const SearchIcon = Search;
@@ -53,3 +54,4 @@ export const InfoIcon = Info;
 export const AddUserIcon = AddUser;
 export const AnimalIcon = Animal;
 export const TailIcon = Tail;
+export const PhotoIcon = Photo;
