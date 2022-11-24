@@ -117,7 +117,12 @@ export const MessageCard = ({
             [styles.messageTextLen]: message?.text.length < 45,
           })}
         >
-          <span className={styles.messageEdit}>
+          <span
+            className={cn(styles.messageEdit, {
+              [styles.receipt]:
+                message.senderMessage.username !== user?.username,
+            })}
+          >
             {message?.createdAt !== message?.updatedAt ? "edited" : null}
           </span>
           <span

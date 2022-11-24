@@ -8,9 +8,10 @@ import {
   useAppDispatch,
   useAppSelector,
   useAuthorization,
+  useAuthorizationSearch,
   useError,
 } from "utils/hooks";
-import { IUser } from "utils/interface";
+import { IChat, IUser } from "utils/interface";
 import { addChat, getChats } from "resolvers/chats";
 import { addMessages, updateMessages } from "resolvers/messages";
 import {
@@ -33,6 +34,7 @@ export const MessageInput = forwardRef(
     const dispatch = useAppDispatch();
     const error = useError();
     const authorization = useAuthorization();
+    const atorizationSearch = useAuthorizationSearch();
 
     const {
       message: { message, edit },
@@ -49,15 +51,6 @@ export const MessageInput = forwardRef(
       }
     );
 
-    const [mutationFunctionAddChat, { error: errorMutationChat }] = useMutation(
-      addChat,
-      {
-        fetchPolicy: "network-only",
-        onCompleted(data) {
-          authorization({ data: data.addChat, actionAdd: actionAddChats });
-        },
-      }
-    );
     const [mutationFunctionAddMessage, { error: errorMutationMessageAdd }] =
       useMutation(addMessages, {
         fetchPolicy: "network-only",
@@ -68,6 +61,20 @@ export const MessageInput = forwardRef(
           });
         },
       });
+
+    const [mutationFunctionAddChat, { error: errorMutationChat }] = useMutation(
+      addChat,
+      {
+        fetchPolicy: "network-only",
+        onCompleted: async (data) => {
+          authorization({ data: data.addChat, actionAdd: actionAddChats });
+          const chat: IChat | undefined = atorizationSearch({
+            data: data.addChat,
+          })?.filter((chat) => chat?.user?.id === sender?.id)[0];
+          if (send.replaceAll(" ", "") !== "") await handleMessageAdd(chat);
+        },
+      }
+    );
 
     const [
       mutationFunctionUpdateMessage,
@@ -94,41 +101,42 @@ export const MessageInput = forwardRef(
         variables: {
           chat: { sender: Number(user?.id), recipient: Number(sender?.id) },
         },
-        onCompleted: async () => {
-          if (send.replaceAll(" ", "") !== "") await handleMessageAdd();
-        },
       });
     };
 
     const handleMessageUpdate = async () => {
-      setSend("");
-      await mutationFunctionUpdateMessage({
-        variables: {
-          message: {
-            id: Number(message?.id),
-            chatId: Number(chat?.id),
-            text: send,
-            senderMessage: Number(user?.id),
+      if (chat) {
+        setSend("");
+        await mutationFunctionUpdateMessage({
+          variables: {
+            message: {
+              id: Number(message?.id),
+              chatId: Number(chat?.id),
+              text: send,
+              senderMessage: Number(user?.id),
+            },
           },
-        },
-      });
-      dispatch(actionClearMessageEdit());
+        });
+        dispatch(actionClearMessageEdit());
+      }
     };
 
-    const handleMessageAdd = async () => {
-      setSend("");
-      await mutationFunctionAddMessage({
-        variables: {
-          message: {
-            text: send,
-            senderMessage: Number(user?.id),
-            chatId: Number(chat?.id),
-            reply: message && Number(message?.id),
+    const handleMessageAdd = async (chat) => {
+      if (chat) {
+        setSend("");
+        await mutationFunctionAddMessage({
+          variables: {
+            message: {
+              text: send,
+              senderMessage: Number(user?.id),
+              chatId: Number(chat?.id),
+              reply: message && Number(message?.id),
+            },
           },
-        },
-      });
-      await queryFunctionChat();
-      dispatch(actionClearMessageEdit());
+        });
+        await queryFunctionChat();
+        dispatch(actionClearMessageEdit());
+      }
     };
 
     const handleSend = async (e) => {
@@ -136,12 +144,12 @@ export const MessageInput = forwardRef(
         if (message) {
           if (e.code === "Enter") {
             edit && (await handleMessageUpdate());
-            !edit && (await handleMessageAdd());
+            !edit && (await handleMessageAdd(chat));
           }
         } else {
           send.replaceAll(" ", "") !== "" &&
             e.code === "Enter" &&
-            (await handleMessageAdd());
+            (await handleMessageAdd(chat));
         }
       } else {
         if (send.replaceAll(" ", "") !== "" && e.code === "Enter") {
@@ -154,10 +162,10 @@ export const MessageInput = forwardRef(
       if (chat) {
         if (message) {
           edit && (await handleMessageUpdate());
-          !edit && (await handleMessageAdd());
+          !edit && (await handleMessageAdd(chat));
         } else {
           if (send.replaceAll(" ", "") !== "") {
-            await handleMessageAdd();
+            await handleMessageAdd(chat);
           }
         }
       } else {

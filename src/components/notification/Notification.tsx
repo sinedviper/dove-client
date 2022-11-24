@@ -40,7 +40,7 @@ export const Notification = ({
             <span className={styles.errorIcon}>
               <InfoIcon />
             </span>
-            <p>Error: {error?.text}</p>
+            <p>{error?.text}</p>
           </div>
         ))}
     </section>

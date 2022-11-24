@@ -38,7 +38,7 @@
   position: absolute;
   top: 18px;
   left: 11px;
-  transition: var(--transition-static);
+  transition: var(--transition);
 }
 
 .line::after {
@@ -51,7 +51,7 @@
   border-radius: 30px;
   background-color: var(--icon-first);
   display: block;
-  transition: var(--transition-static);
+  transition: var(--transition);
 }
 
 .line::before {
@@ -64,13 +64,13 @@
   border-radius: 30px;
   background-color: var(--icon-first);
   display: block;
-  transition: var(--transition-static);
+  transition: var(--transition);
 }
 
 .lineBack {
   top: 18px;
   width: 18px;
-  transition: var(--transition-static);
+  transition: var(--transition);
   transform: rotate(180deg);
 }
 
@@ -79,7 +79,7 @@
   left: 7px;
   width: 12px;
   transform: rotate(-45deg);
-  transition: var(--transition-static);
+  transition: var(--transition);
 }
 
 .lineBack::before {
@@ -87,7 +87,7 @@
   width: 12px;
   left: 7px;
   transform: rotate(45deg);
-  transition: var(--transition-static);
+  transition: var(--transition);
 }
 
 .menuClose {
