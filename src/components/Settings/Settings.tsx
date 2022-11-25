@@ -29,6 +29,7 @@ import {
   UsernameIcon,
   PhotoIcon,
 } from "assets";
+import axios from "../../axios";
 
 import { SettingsProps } from "./Settings.props";
 import styles from "./Settings.module.css";
@@ -54,7 +55,7 @@ export const Settings = ({
     deleteUser,
     {
       fetchPolicy: "network-only",
-      onCompleted: () => exit(),
+      onCompleted: exit,
     }
   );
 
@@ -73,6 +74,15 @@ export const Settings = ({
   };
 
   const handleRemoveUser = async () => await mutationFunction();
+
+  const handleLoadPhoto = async (e) => {
+    const formData = new FormData();
+    const file = e.target.files[0];
+    formData.append("image", file);
+
+    const { data } = await axios.post("/upload", formData);
+    console.log(data);
+  };
 
   useEffect(() => {
     if (errorMutationUser) error(errorMutationUser.message);
@@ -171,11 +181,15 @@ export const Settings = ({
           {!profile && (
             <div className={styles.uploadWrapper}>
               <button className={styles.uploadPhoto}>
-                <PhotoIcon />
+                <div className={styles.iconPhotoWrapper}>
+                  <PhotoIcon />
+                </div>
                 <input
-                  type='file'
                   className={styles.input}
-                  onClick={(e) => {}}
+                  name='image'
+                  type='file'
+                  accept='image/*'
+                  onChange={handleLoadPhoto}
                 />
               </button>
             </div>
