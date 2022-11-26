@@ -51,9 +51,10 @@
   font-weight: 600;
   margin: 10px auto;
   color: var(--white);
-  width: 120px;
+  min-width: 120px;
   height: 120px;
   border-radius: 50%;
+  position: relative;
 }
 
 .editUser {
@@ -144,6 +145,85 @@
 
 .info {
   padding-bottom: 20px;
+}
+
+.userImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  z-index: 2;
+  pointer-events: none;
+  display: block;
+}
+
+.uploadWrapper {
+  position: relative;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+}
+
+.uploadPhoto {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  min-width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: none;
+  background: none;
+}
+
+.iconPhotoWrapper {
+  top: 0;
+  position: absolute;
+  z-index: 2;
+  min-width: 120px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.iconPhotoWrapper svg {
+  width: 40px;
+  height: 40px;
+  transition: var(--transition-static);
+}
+
+.uploadWrapper:hover svg {
+  width: 50px;
+  height: 50px;
+  transition: var(--transition-static);
+}
+
+.iconPhotoWrapper svg path {
+  fill: var(--white);
+}
+
+.input {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 120px;
+  height: 120px;
+  display: none;
+}
+
+.wrapperLoadNoPhoto {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
 }
 
 @media screen and (min-height: 1250px) {

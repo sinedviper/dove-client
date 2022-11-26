@@ -29,7 +29,7 @@ export const Notification = ({
           <span className={styles.copyIcon}>
             <CopyIcon />
           </span>
-          <p>Copy the stroke</p>
+          <p>Row copied</p>
         </div>
       )}
       {loading && (

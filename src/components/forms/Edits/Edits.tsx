@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import cn from "classnames";
 
 import { colorCard } from "utils/helpers";
-import { IUser } from "utils/interface";
+import { IImage, IUser } from "utils/interface";
 import {
   useAppDispatch,
   useAppSelector,
@@ -13,8 +13,16 @@ import {
 } from "utils/hooks";
 import { updateUser } from "resolvers/user";
 import { Input } from "components/layouts";
-import { actionAddUser, actionMenuEdit, getMenuEdit, getUser } from "store";
-import { BackIcon, SupheedIcon } from "assets";
+import {
+  actionAddImageUser,
+  actionAddUser,
+  actionMenuEdit,
+  getImageUser,
+  getMenuEdit,
+  getUser,
+} from "store";
+import { BackIcon, PhotoIcon, SupheedIcon } from "assets";
+import axios from "../../../axios";
 
 import { EditsProps } from "./Edits.props";
 import styles from "./Edits.module.css";
@@ -37,7 +45,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
     handleSubmit,
   } = useForm<IFormInput>();
   const dispatch = useAppDispatch();
-  const autorization = useAuthorization();
+  const auhtorization = useAuthorization();
   const error = useError();
 
   //res in db
@@ -45,7 +53,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
     updateUser,
     {
       onCompleted(data) {
-        autorization({ data: data.updateUser, actionAdd: actionAddUser });
+        auhtorization({ data: data.updateUser, actionAdd: actionAddUser });
         setPassword("");
         setPasswordNew("");
         setPasswordReapeat("");
@@ -57,6 +65,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
 
   const user: IUser | undefined = useAppSelector(getUser);
   const edit: boolean = useAppSelector(getMenuEdit);
+  const imageUser: IImage | undefined = useAppSelector(getImageUser)?.[0];
 
   const [swiper, setSwiper] = useState<boolean>(false);
   const [submit, setSubmit] = useState<boolean>(false);
@@ -79,6 +88,15 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
   const [errorPasswordReapeat, setErrorPasswordReapeat] = useState<string>("");
 
   const color = colorCard(String(user?.name.toUpperCase().slice()[0]));
+
+  const handleLoadPhoto = async (e) => {
+    const formData = new FormData();
+    const file = e.target.files[0];
+    formData.append("image", file);
+    const { data } = await axios.post("/upload", formData);
+    auhtorization({ data, actionAdd: actionAddImageUser });
+    e.target.value = null;
+  };
 
   const onSubmit = async (input: IFormInput): Promise<void> => {
     let obj = {};
@@ -218,14 +236,52 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
         onMouseOut={() => setSwiper(true)}
       >
         <div className={styles.editUser}>
-          <div
-            className={styles.editPhoto}
-            style={{
-              background: `linear-gradient(${color?.color1}, ${color?.color2})`,
-            }}
-          >
-            {user?.surname.toUpperCase().slice()[0]}
-            {user?.name.toUpperCase().slice()[0]}
+          <div className={styles.editPhoto}>
+            {imageUser ? (
+              <div className={styles.uploadWrapper}>
+                <img
+                  className={styles.userImage}
+                  src={`http://localhost:3001/images/` + imageUser.file}
+                  alt='User'
+                />
+                <label className={styles.iconPhotoWrapper} htmlFor='loadphotod'>
+                  <PhotoIcon />
+                </label>
+                <input
+                  className={styles.input}
+                  accept='.jpg, .jpeg, .png'
+                  onChange={(e) => {
+                    handleLoadPhoto(e);
+                    setPassword("");
+                    setPasswordNew("");
+                    setPasswordReapeat("");
+                    setSubmit(false);
+                    dispatch(actionMenuEdit(false));
+                  }}
+                  type='file'
+                  id='loadphotod'
+                />
+              </div>
+            ) : (
+              <div className={styles.uploadWrapper}>
+                <div
+                  className={styles.wrapperLoadNoPhoto}
+                  style={{
+                    background: `linear-gradient(${color?.color1}, ${color?.color2})`,
+                  }}
+                ></div>
+                <label className={styles.iconPhotoWrapper} htmlFor='loadphoto'>
+                  <PhotoIcon />
+                </label>
+                <input
+                  className={styles.input}
+                  accept='.jpg, .jpeg, .png'
+                  onChange={handleLoadPhoto}
+                  type='file'
+                  id='loadphoto'
+                />
+              </div>
+            )}
           </div>
           <Input
             error={Boolean(errors.name)}

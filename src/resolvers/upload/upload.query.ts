@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const getUploads = gql`
-  query Query {
+  query GetUpload {
     getUpload {
       status
       code

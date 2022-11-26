@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import cn from "classnames";
+import Carousel from "nuka-carousel";
 
 import { colorCard, formateDateOnline } from "utils/helpers";
 import { IImage, IUser } from "utils/interface";
@@ -13,6 +14,7 @@ import {
   useExit,
 } from "utils/hooks";
 import { deleteUser } from "resolvers/user";
+import { deleteUpload, getUploads } from "resolvers/upload";
 import {
   actionAddCopy,
   actionAddImageUser,
@@ -31,12 +33,13 @@ import {
   RemoveUserIcon,
   UsernameIcon,
   PhotoIcon,
+  UpPhotoIcon,
+  BackPhotoIcon,
 } from "assets";
 import axios from "../../axios";
 
 import { SettingsProps } from "./Settings.props";
 import styles from "./Settings.module.css";
-import { getUploads } from "resolvers/upload";
 
 export const Settings = ({
   className,
@@ -60,8 +63,7 @@ export const Settings = ({
   const { error: errorQueryFunctionImageUser } = useQuery(getUploads, {
     fetchPolicy: "network-only",
     onCompleted(data) {
-      console.log(data);
-      auhtorization({ data: data.getUploads, actionAdd: actionAddImageUser });
+      auhtorization({ data: data.getUpload, actionAdd: actionAddImageUser });
     },
     pollInterval: 5000,
   });
@@ -74,7 +76,19 @@ export const Settings = ({
     }
   );
 
+  const [mutationFunctionDeletePhoto, { error: errorMutationDeletePhoto }] =
+    useMutation(deleteUpload, {
+      fetchPolicy: "network-only",
+      onCompleted(data) {
+        auhtorization({
+          data: data.deleteUpload,
+          actionAdd: actionAddImageUser,
+        });
+      },
+    });
+
   const [deleteUsera, setDeleteUser] = useState<boolean>(false);
+  const [buttonPhoto, setButtonPhoto] = useState<boolean>(false);
 
   const color = colorCard(String(user?.name.toUpperCase().slice()[0]));
 
@@ -97,11 +111,19 @@ export const Settings = ({
 
     const { data } = await axios.post("/upload", formData);
     auhtorization({ data, actionAdd: actionAddImageUser });
+    e.target.value = null;
+  };
+
+  const handleRemovePhoto = async (idPhoto: number, file: string) => {
+    await mutationFunctionDeletePhoto({
+      variables: { idPhoto: Number(idPhoto), file: String(file) },
+    });
   };
 
   useEffect(() => {
     if (errorMutationUser) error(errorMutationUser.message);
     if (errorQueryFunctionImageUser) error(errorQueryFunctionImageUser.message);
+    if (errorMutationDeletePhoto) error(errorMutationDeletePhoto.message);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errorMutationUser]);
 
@@ -181,28 +203,90 @@ export const Settings = ({
         <div
           className={styles.userPhoto}
           style={{
-            background: !imageUser
-              ? `linear-gradient(${color?.color1}, ${color?.color2})`
-              : "none",
+            background:
+              imageUser?.length === 0
+                ? `linear-gradient(${color?.color1}, ${color?.color2})`
+                : "none",
           }}
         >
-          {!imageUser ? (
+          {imageUser?.length === 0 ? (
             <>
               {user?.name.toUpperCase().slice()[0]}
-              {user?.surname.toUpperCase().slice()[0]})
+              {user?.surname.toUpperCase().slice()[0]}
             </>
           ) : (
-            <img
-              className={styles.userImage}
-              src={`http://localhost:3001/images/` + imageUser[0].file}
-              alt='User'
-            />
+            <div
+              className={styles.wrapperImage}
+              onMouseMove={() => setButtonPhoto(true)}
+              onMouseLeave={() => setButtonPhoto(false)}
+            >
+              {imageUser?.length === 1 ? (
+                <div key={imageUser[0].id} className={styles.userImageWrapper}>
+                  <img
+                    className={styles.userImage}
+                    src={`http://localhost:3001/images/` + imageUser[0].file}
+                    alt='User'
+                  />
+                  {buttonPhoto && (
+                    <button
+                      onClick={() =>
+                        handleRemovePhoto(imageUser[0].id, imageUser[0].file)
+                      }
+                      className={styles.buttonWrapperRemove}
+                    >
+                      <RemoveIcon className={styles.removeIconButton} />
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <Carousel
+                  defaultControlsConfig={{
+                    nextButtonText: (
+                      <UpPhotoIcon className={styles.iconButton} />
+                    ),
+                    nextButtonStyle: {
+                      background: "none",
+                      transition: "var(--transition)",
+                    },
+                    prevButtonText: (
+                      <BackPhotoIcon className={styles.iconButton} />
+                    ),
+                    prevButtonStyle: {
+                      background: "none",
+                      transition: "var(--transition)",
+                    },
+                    pagingDotsStyle: { display: "none" },
+                  }}
+                  withoutControls={!buttonPhoto}
+                >
+                  {imageUser &&
+                    imageUser?.map((image) => (
+                      <div key={image.id} className={styles.userImageWrapper}>
+                        <img
+                          className={styles.userImage}
+                          src={`http://localhost:3001/images/` + image.file}
+                          alt='User'
+                        />
+                        {buttonPhoto && (
+                          <button
+                            onClick={() =>
+                              handleRemovePhoto(image.id, image.file)
+                            }
+                            className={styles.buttonWrapperRemove}
+                          >
+                            <RemoveIcon className={styles.removeIconButton} />
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                </Carousel>
+              )}
+            </div>
           )}
           <div className={styles.photoFIO}>
             <p>
               {user?.name} {user?.surname}
             </p>
-
             <p className={styles.userOnline}>
               {user?.online && formateDateOnline(new Date(user?.online))}
             </p>
@@ -210,15 +294,16 @@ export const Settings = ({
           {!profile && (
             <div className={styles.uploadWrapper}>
               <button className={styles.uploadPhoto}>
-                <div className={styles.iconPhotoWrapper}>
+                <label className={styles.iconPhotoWrapper} htmlFor='loadphoto'>
                   <PhotoIcon />
-                </div>
+                </label>
                 <input
-                  className={styles.input}
                   name='image'
-                  type='file'
-                  accept='image/*'
+                  className={styles.input}
+                  accept='.jpg, .jpeg, .png'
                   onChange={handleLoadPhoto}
+                  type='file'
+                  id='loadphoto'
                 />
               </button>
             </div>
