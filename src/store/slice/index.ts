@@ -8,3 +8,4 @@ export * from "./menu.slice";
 export * from "./loading.slice";
 export * from "./error.slice";
 export * from "./copy.slice";
+export * from "./imageUser.slice";

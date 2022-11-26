@@ -4,18 +4,20 @@
   flex-direction: column;
   z-index: 10;
   position: absolute;
-  left: 20px;
+  left: 0px;
   bottom: 20px;
   padding: 5px;
   max-width: 400px;
   pointer-events: none;
   user-select: none;
+  width: 100%;
+  max-width: 418px;
 }
 
 .loading,
 .error {
   display: flex;
-  gap: 10px;
+  gap: 20px;
   padding: 5px 30px 5px 15px;
   border-radius: 10px;
   align-items: center;
@@ -35,6 +37,8 @@
 }
 
 .error {
+  width: 100%;
+  padding: 5px 15px;
   background-color: rgba(217, 72, 72, 0.4);
   border: 1px solid var(--error);
 }
@@ -46,6 +50,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  width: 100%;
 }
 
 .loadingIcon {
@@ -83,4 +88,27 @@
 
 .loadingIcon svg circle {
   stroke: var(--primary);
+}
+
+.removeWrapper {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  cursor: pointer;
+  pointer-events: all;
+  user-select: all;
+}
+
+.removeIcon {
+  min-width: 25px;
+  height: 25px;
+  transition: var(--transition-static);
+  border-radius: 50%;
+}
+
+.removeIcon:hover {
+  transition: var(--transition-static);
+  background-color: var(--opacity-box-dark);
 }

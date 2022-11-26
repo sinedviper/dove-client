@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import cn from "classnames";
 
 import { colorCard, formateDateOnline } from "utils/helpers";
-import { IUser } from "utils/interface";
+import { IImage, IUser } from "utils/interface";
 import {
   useAppDispatch,
   useAppSelector,
+  useAuthorization,
   useDebounce,
   useError,
   useExit,
@@ -14,8 +15,10 @@ import {
 import { deleteUser } from "resolvers/user";
 import {
   actionAddCopy,
+  actionAddImageUser,
   actionMenuEdit,
   actionMenuSetting,
+  getImageUser,
   getMenuSetting,
   getUser,
 } from "store";
@@ -33,6 +36,7 @@ import axios from "../../axios";
 
 import { SettingsProps } from "./Settings.props";
 import styles from "./Settings.module.css";
+import { getUploads } from "resolvers/upload";
 
 export const Settings = ({
   className,
@@ -42,6 +46,7 @@ export const Settings = ({
   ...props
 }: SettingsProps): JSX.Element => {
   const dispatch = useAppDispatch();
+  const auhtorization = useAuthorization();
   const exit = useExit();
   const error = useError();
 
@@ -50,6 +55,16 @@ export const Settings = ({
     user = sender;
   }
   const settings: boolean = useAppSelector(getMenuSetting);
+  const imageUser: IImage[] | undefined = useAppSelector(getImageUser);
+
+  const { error: errorQueryFunctionImageUser } = useQuery(getUploads, {
+    fetchPolicy: "network-only",
+    onCompleted(data) {
+      console.log(data);
+      auhtorization({ data: data.getUploads, actionAdd: actionAddImageUser });
+    },
+    pollInterval: 5000,
+  });
 
   const [mutationFunction, { error: errorMutationUser }] = useMutation(
     deleteUser,
@@ -81,11 +96,12 @@ export const Settings = ({
     formData.append("image", file);
 
     const { data } = await axios.post("/upload", formData);
-    console.log(data);
+    auhtorization({ data, actionAdd: actionAddImageUser });
   };
 
   useEffect(() => {
     if (errorMutationUser) error(errorMutationUser.message);
+    if (errorQueryFunctionImageUser) error(errorQueryFunctionImageUser.message);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errorMutationUser]);
 
@@ -165,15 +181,28 @@ export const Settings = ({
         <div
           className={styles.userPhoto}
           style={{
-            background: `linear-gradient(${color?.color1}, ${color?.color2})`,
+            background: !imageUser
+              ? `linear-gradient(${color?.color1}, ${color?.color2})`
+              : "none",
           }}
         >
-          {user?.name.toUpperCase().slice()[0]}
-          {user?.surname.toUpperCase().slice()[0]}
+          {!imageUser ? (
+            <>
+              {user?.name.toUpperCase().slice()[0]}
+              {user?.surname.toUpperCase().slice()[0]})
+            </>
+          ) : (
+            <img
+              className={styles.userImage}
+              src={`http://localhost:3001/images/` + imageUser[0].file}
+              alt='User'
+            />
+          )}
           <div className={styles.photoFIO}>
             <p>
               {user?.name} {user?.surname}
             </p>
+
             <p className={styles.userOnline}>
               {user?.online && formateDateOnline(new Date(user?.online))}
             </p>

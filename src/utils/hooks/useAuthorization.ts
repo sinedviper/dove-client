@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useExit } from "utils/hooks";
-import { actionAddError } from "store";
+import { useAppDispatch, useError, useExit } from "utils/hooks";
 
 interface check {
   data: any;
@@ -11,6 +10,7 @@ export const useAuthorization = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const exit = useExit();
+  const error = useError();
 
   return ({ data, actionAdd }: check): void => {
     if (data) {
@@ -19,7 +19,7 @@ export const useAuthorization = () => {
           exit();
           navigate("/login");
         }
-        dispatch(actionAddError(data.message));
+        error(data.message);
       }
       if (data.status === "Success") {
         data.code === 200 && dispatch(actionAdd(data.data));
@@ -30,9 +30,9 @@ export const useAuthorization = () => {
 };
 
 export const useAuthorizationSearch = () => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const exit = useExit();
+  const error = useError();
 
   return ({ data }: Omit<check, "actionAdd">) => {
     if (data) {
@@ -41,7 +41,7 @@ export const useAuthorizationSearch = () => {
           exit();
           navigate("/login");
         }
-        dispatch(actionAddError(data.message));
+        error(data.message);
       }
       if (data.status === "Success") {
         return data.data;

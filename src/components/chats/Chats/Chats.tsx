@@ -8,13 +8,13 @@ import {
   useAppDispatch,
   useAppSelector,
   useAuthorizationSearch,
+  useError,
 } from "utils/hooks";
 import { colorCard } from "utils/helpers";
 import { getUsersSearch } from "resolvers/user";
 import { CardChat, ChatsHeader } from "components/chats";
 import { CardContact } from "components/contacts";
 import {
-  actionAddError,
   actionAddRecipient,
   actionClearMessages,
   actionClearRecipient,
@@ -34,6 +34,7 @@ export const Chats = ({
   const { username } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const error = useError();
   const autorizationSearch = useAuthorizationSearch();
 
   const user: IUser | undefined = useAppSelector(getUser);
@@ -73,7 +74,7 @@ export const Chats = ({
   };
 
   useEffect(() => {
-    if (errorQueryUser) dispatch(actionAddError(errorQueryUser.message));
+    if (errorQueryUser) error(errorQueryUser.message);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errorQueryUser]);
 

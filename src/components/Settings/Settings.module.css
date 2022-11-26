@@ -200,6 +200,12 @@
   font-size: 40px;
 }
 
+.userImage {
+  height: 240px;
+  width: 100%;
+  object-fit: cover;
+}
+
 .photoFIO {
   position: absolute;
   display: flex;

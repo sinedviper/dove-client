@@ -4,10 +4,10 @@ import cn from "classnames";
 import { IMessage } from "utils/interface";
 import { formatHours } from "utils/helpers";
 import { MessageEdit } from "components/message";
+import { TailIcon } from "assets";
 
 import { MessageCardProps } from "./MessageCard.props";
 import styles from "./MessageCard.module.css";
-import { TailIcon } from "assets";
 
 export const MessageCard = ({
   chat,

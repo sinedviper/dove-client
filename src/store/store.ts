@@ -27,6 +27,7 @@ import {
   loadingReducer,
   errorsReducer,
   copyReducer,
+  iamgeUserReducer,
 } from "./slice";
 
 const reducer = combineReducers({
@@ -40,6 +41,7 @@ const reducer = combineReducers({
   loading: loadingReducer,
   errors: errorsReducer,
   copy: copyReducer,
+  imageUser: iamgeUserReducer,
 });
 
 const persistConfig = {
