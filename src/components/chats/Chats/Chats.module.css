@@ -112,3 +112,34 @@
 .results {
   font-size: 12px;
 }
+
+.fetchError {
+  border-radius: 10px;
+  display: flex;
+  padding: 20px;
+  padding-left: 80px;
+  text-align: left;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  background-color: var(--fetch);
+  pointer-events: none;
+  user-select: none;
+  margin-bottom: 5px;
+}
+
+.fetchError p {
+  font-size: 18px;
+  color: var(--black);
+}
+.fetchErrorLoading {
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  left: 0;
+}
+
+.fetchErrorLoading circle {
+  display: block;
+  stroke: var(--black);
+}

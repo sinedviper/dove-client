@@ -157,6 +157,7 @@
   z-index: 2;
   pointer-events: none;
   display: block;
+  object-fit: cover;
 }
 
 .uploadWrapper {

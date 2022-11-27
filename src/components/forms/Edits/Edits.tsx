@@ -49,19 +49,19 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
   const error = useError();
 
   //res in db
-  const [mutateFunction, { error: errorMutationUpdateUser }] = useMutation(
-    updateUser,
-    {
-      onCompleted(data) {
-        auhtorization({ data: data.updateUser, actionAdd: actionAddUser });
-        setPassword("");
-        setPasswordNew("");
-        setPasswordReapeat("");
-        setSubmit(false);
-        dispatch(actionMenuEdit(false));
-      },
-    }
-  );
+  const [mutateFunction] = useMutation(updateUser, {
+    onCompleted(data) {
+      auhtorization({ data: data.updateUser, actionAdd: actionAddUser });
+      setPassword("");
+      setPasswordNew("");
+      setPasswordReapeat("");
+      setSubmit(false);
+      dispatch(actionMenuEdit(false));
+    },
+    onError(errorData) {
+      error(errorData.message);
+    },
+  });
 
   const user: IUser | undefined = useAppSelector(getUser);
   const edit: boolean = useAppSelector(getMenuEdit);
@@ -168,11 +168,6 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
     //Update user
     await mutateFunction({ variables: { input: obj } });
   };
-
-  useEffect(() => {
-    if (errorMutationUpdateUser) error(errorMutationUpdateUser.message);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [errorMutationUpdateUser]);
 
   //Check values in input, changed or not, when changed button has see
   useEffect(() => {

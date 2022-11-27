@@ -12,6 +12,7 @@ import {
 } from "utils/hooks";
 import { useTheme, theme, animation } from "utils/context";
 import { updateUser } from "resolvers/user";
+import { getContact } from "resolvers/contacts";
 import { ButtonMenuMain, Search } from "components/layouts";
 import {
   actionAddContact,
@@ -23,8 +24,6 @@ import {
 
 import { ChatsHeaderProps } from "./ChatsHeader.props";
 import styles from "./ChatsHeader.module.css";
-import { getContact } from "resolvers/contacts";
-import { useEffect } from "react";
 
 export const ChatsHeader = ({
   searchContact,
@@ -44,30 +43,30 @@ export const ChatsHeader = ({
 
   const user: IUser | undefined = useAppSelector(getUser);
 
-  const [mutationFunctionUser, { error: errorUpdateUser }] = useMutation(
-    updateUser,
-    {
-      fetchPolicy: "network-only",
-      onCompleted(data) {
-        autorization({ data: data.updateUser, actionAdd: actionAddUser });
-        themeChange?.changeAnimation(
-          user?.animation ? animation.ANIMATION_ON : animation.ANIMATION_OFF
-        );
-        themeChange?.changeTheme(
-          user?.theme ? theme.THEME_DARK : theme.THEME_LIGHT
-        );
-      },
-    }
-  );
-  const [queryFunctionContactGet, { error: errorQueryContact }] = useLazyQuery(
-    getContact,
-    {
-      fetchPolicy: "network-only",
-      onCompleted(data) {
-        autorization({ data: data.getContact, actionAdd: actionAddContact });
-      },
-    }
-  );
+  const [mutationFunctionUser] = useMutation(updateUser, {
+    fetchPolicy: "network-only",
+    onCompleted(data) {
+      autorization({ data: data.updateUser, actionAdd: actionAddUser });
+      themeChange?.changeAnimation(
+        user?.animation ? animation.ANIMATION_ON : animation.ANIMATION_OFF
+      );
+      themeChange?.changeTheme(
+        user?.theme ? theme.THEME_DARK : theme.THEME_LIGHT
+      );
+    },
+    onError(errorData) {
+      error(errorData.message);
+    },
+  });
+  const [queryFunctionContactGet] = useLazyQuery(getContact, {
+    fetchPolicy: "network-only",
+    onCompleted(data) {
+      autorization({ data: data.getContact, actionAdd: actionAddContact });
+    },
+    onError(errorData) {
+      error(errorData.message);
+    },
+  });
 
   const [menu, setMenu] = useState<boolean>(false);
 
@@ -97,12 +96,6 @@ export const ChatsHeader = ({
     await mutationFunctionUser({
       variables: { input: { animation: !user?.animation } },
     });
-
-  useEffect(() => {
-    if (errorUpdateUser) error(errorUpdateUser.message);
-    if (errorQueryContact) error(errorQueryContact.message);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [errorUpdateUser, errorQueryContact]);
 
   return (
     <nav

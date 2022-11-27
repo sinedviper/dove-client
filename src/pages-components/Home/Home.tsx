@@ -3,13 +3,22 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import cn from "classnames";
 
-import { useAppSelector, useAuthorization, useError } from "utils/hooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useAuthorization,
+  useError,
+} from "utils/hooks";
 import { IChat, IMessage, IUser } from "utils/interface";
 import { getMessage } from "resolvers/messages";
 import { getUserSender } from "resolvers/user";
+import { formatDay } from "utils/helpers";
+import { getUploadUser } from "resolvers/upload";
 import { MessageCard, MessageHeader, MessageInput } from "components/message";
 import { Settings } from "components";
 import {
+  actionAddFetch,
+  actionAddImageSender,
   actionAddMessages,
   actionAddRecipient,
   getChat,
@@ -20,11 +29,11 @@ import {
 
 import { HomeProps } from "./Home.props";
 import styles from "./Home.module.css";
-import { formatDay } from "utils/helpers";
 
 export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
   const { username } = useParams();
   const error = useError();
+  const dispatch = useAppDispatch();
   const authorization = useAuthorization();
 
   const user: IUser | undefined = useAppSelector(getUser);
@@ -45,6 +54,9 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
     onCompleted(data) {
       authorization({ data: data.getMessages, actionAdd: actionAddMessages });
     },
+    onError(errorData) {
+      error(errorData.message);
+    },
     pollInterval: chat && 500,
   });
 
@@ -53,8 +65,26 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
     onCompleted(data) {
       authorization({ data: data.getUser, actionAdd: actionAddRecipient });
     },
+    onError(errorData) {
+      error(errorData.message);
+    },
     fetchPolicy: "network-only",
     pollInterval: 500,
+  });
+
+  const { error: errorQueryFunctionImageSender } = useQuery(getUploadUser, {
+    onCompleted(data) {
+      authorization({
+        data: data.getUploadUser,
+        actionAdd: actionAddImageSender,
+      });
+    },
+    onError(errorData) {
+      error(errorData.message);
+    },
+    fetchPolicy: "network-only",
+    pollInterval: 5000,
+    variables: { idUser: Number(sender?.id) },
   });
 
   const [settings, setSettings] = useState<boolean>(false);
@@ -65,8 +95,8 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
   };
 
   useEffect(() => {
-    if (errorQueryMessage && chat) error(errorQueryMessage.message);
-    if (errorSender) error(errorSender.message);
+    if (!errorQueryMessage && !errorSender && !errorQueryFunctionImageSender)
+      dispatch(actionAddFetch(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errorQueryMessage, errorSender]);
 

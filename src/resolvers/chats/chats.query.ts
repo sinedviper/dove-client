@@ -21,6 +21,12 @@ export const getChats = gql`
           text
           createdAt
         }
+        image {
+          id
+          userUploadId
+          file
+          createdAt
+        }
       }
       message
     }

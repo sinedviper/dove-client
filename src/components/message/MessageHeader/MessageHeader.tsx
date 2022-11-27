@@ -3,15 +3,27 @@ import { useMutation } from "@apollo/client";
 import cn from "classnames";
 
 import { colorCard, formateDateOnline } from "utils/helpers";
-import { useAppSelector, useAuthorization, useError } from "utils/hooks";
-import { IUser } from "utils/interface";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useAuthorization,
+  useError,
+} from "utils/hooks";
+import { IImage, IUser } from "utils/interface";
 import { addContact, deleteContact } from "resolvers/contacts";
-import { actionAddContact, getContacts, getRecipient, getUser } from "store";
-import { AddUserIcon, RemoveUserIcon } from "assets";
+import {
+  actionAddContact,
+  actionMenuMain,
+  getContacts,
+  getImageSender,
+  getMenuMain,
+  getRecipient,
+  getUser,
+} from "store";
+import { AddUserIcon, BackIcon, RemoveUserIcon } from "assets";
 
 import { MessageHeaderProps } from "./MessageHeader.props";
 import styles from "./MessageHeader.module.css";
-import { useEffect } from "react";
 
 export const MessageHeader = ({
   setSettings,
@@ -19,6 +31,7 @@ export const MessageHeader = ({
   ...props
 }: MessageHeaderProps): JSX.Element => {
   const error = useError();
+  const dispatch = useAppDispatch();
   const authorization = useAuthorization();
   let color = colorCard();
 
@@ -27,26 +40,30 @@ export const MessageHeader = ({
     (contact) => contact.id === receipt?.id
   )[0];
   const user: IUser | undefined = useAppSelector(getUser);
+  const imageSender: IImage | undefined = useAppSelector(getImageSender);
+  const main: boolean = useAppSelector(getMenuMain);
 
-  const [mutationFunctionDelete, { error: errorMutationContactDelete }] =
-    useMutation(deleteContact, {
-      fetchPolicy: "network-only",
-      onCompleted(data) {
-        authorization({
-          data: data.deleteContact,
-          actionAdd: actionAddContact,
-        });
-      },
-    });
-  const [mutationFunctionAdd, { error: errorMutationContactAdd }] = useMutation(
-    addContact,
-    {
-      fetchPolicy: "network-only",
-      onCompleted(data) {
-        authorization({ data: data.addContact, actionAdd: actionAddContact });
-      },
-    }
-  );
+  const [mutationFunctionDelete] = useMutation(deleteContact, {
+    fetchPolicy: "network-only",
+    onCompleted(data) {
+      authorization({
+        data: data.deleteContact,
+        actionAdd: actionAddContact,
+      });
+    },
+    onError(errorData) {
+      error(errorData.message);
+    },
+  });
+  const [mutationFunctionAdd] = useMutation(addContact, {
+    fetchPolicy: "network-only",
+    onCompleted(data) {
+      authorization({ data: data.addContact, actionAdd: actionAddContact });
+    },
+    onError(errorData) {
+      error(errorData.message);
+    },
+  });
 
   const [menuMessage, setmenuMessage] = useState<boolean>(false);
 
@@ -71,29 +88,47 @@ export const MessageHeader = ({
     }
   };
 
-  useEffect(() => {
-    if (errorMutationContactDelete) error(errorMutationContactDelete.message);
-    if (errorMutationContactAdd) error(errorMutationContactAdd.message);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [errorMutationContactDelete, errorMutationContactAdd]);
-
   return (
     <section
       className={cn(className, styles.headerReceiptWrapper)}
       onMouseLeave={() => setmenuMessage(false)}
       {...props}
     >
+      <button
+        onClick={(e: any) => {
+          if (e.view.innerWidth < 900) {
+            dispatch(actionMenuMain(!main));
+          }
+        }}
+        className={cn(styles.buttonBackMain)}
+      >
+        <BackIcon
+          className={cn({
+            [styles.menuMainOn]: main,
+          })}
+        />
+      </button>
       <div className={styles.headerWrapper} onClick={() => setSettings(true)}>
         <div className={styles.headerReceiptPhoto}>
-          <span
-            className={styles.receiptNamePhoto}
-            style={{
-              background: `linear-gradient(${color?.color1}, ${color?.color2})`,
-            }}
-          >
-            {receipt?.name && receipt?.name.toUpperCase()[0]}
-            {receipt?.surname && receipt?.surname.toUpperCase()[0]}
-          </span>
+          {imageSender ? (
+            <img
+              src={`http://localhost:3001/images/${imageSender.file}`}
+              alt='sender'
+              className={styles.imageSender}
+            />
+          ) : (
+            <span
+              className={styles.receiptNamePhoto}
+              style={{
+                background: imageSender
+                  ? ""
+                  : `linear-gradient(${color?.color1}, ${color?.color2})`,
+              }}
+            >
+              {receipt?.name && receipt?.name.toUpperCase()[0]}
+              {receipt?.surname && receipt?.surname.toUpperCase()[0]}
+            </span>
+          )}
         </div>
         <div className={styles.headerReceiptInfo}>
           <p className={styles.infoName}>

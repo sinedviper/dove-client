@@ -42,6 +42,9 @@ export const FormLogin = ({
         autorization({ data: data.getMe, actionAdd: actionAddUser });
         navigate("/");
       },
+      onError(errorData) {
+        error(errorData.message);
+      },
     }
   );
 

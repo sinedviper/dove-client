@@ -19,7 +19,7 @@
 }
 
 .profile {
-  width: 320px;
+  width: 420px;
   position: relative;
   right: 0px;
   border-left: 1px solid var(--border-second);
@@ -203,19 +203,28 @@
 .wrapperImage {
   height: 240px;
   width: 100%;
+  max-width: 420px;
+  overflow: hidden;
 }
 
 .userImageWrapper {
   height: 240px;
   max-width: 420px;
   width: 100%;
+  display: flex;
   position: relative;
+  justify-content: center;
+  align-items: center;
 }
 
 .userImage {
+  display: block;
   height: 240px;
   min-width: 420px;
+  background-position: center;
   object-fit: cover;
+  pointer-events: none;
+  user-select: none;
 }
 
 .iconButton {
@@ -383,4 +392,13 @@
 .secondInfo {
   font-size: 14px;
   color: var(--text-sixth);
+}
+
+@media screen and (max-width: 1275px) {
+}
+
+@media screen and (max-width: 1350px) and (min-width: 1275px) {
+  .profile {
+    width: 320px;
+  }
 }

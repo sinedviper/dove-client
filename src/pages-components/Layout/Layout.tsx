@@ -24,13 +24,18 @@ import { Settings, Notification } from "components";
 import {
   actionAddChats,
   actionAddContact,
+  actionAddFetch,
+  actionAddImageUser,
   actionAddLoading,
   actionAddUser,
+  actionMenuMain,
+  getMenuMain,
   getUser,
 } from "store";
 
 import { LayoutProps } from "./Layout.props";
 import styles from "./Layout.module.css";
+import { getUploads } from "resolvers/upload";
 
 export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -41,23 +46,28 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
 
   const [mutationUserOnlineFunction, { error: errorMutationUserOnline }] =
     useMutation(updateUserOnline, {
-      fetchPolicy: "network-only",
+      fetchPolicy: "no-cache",
       onCompleted(data) {
         autorization({ data: data.updateUserOnline, actionAdd: actionAddUser });
       },
+      onError(errorData) {
+        error(errorData.message);
+      },
     });
 
-  const debouncedMutation = useDebounce(() => {
-    mutationUserOnlineFunction({
-      variables: { input: { online: "ping" } },
-    });
-  }, 300000);
-
-  const debouncedCheck = useDebounce(() => {
-    mutationUserOnlineFunction({
-      variables: { input: { online: "ping" } },
-    });
-  }, 1000);
+  const { loading: loadQueryImage, error: errorQueryImage } = useQuery(
+    getUploads,
+    {
+      fetchPolicy: "network-only",
+      onCompleted(data) {
+        autorization({ data: data.getUpload, actionAdd: actionAddImageUser });
+      },
+      onError(errorData) {
+        error(errorData.message);
+      },
+      pollInterval: 5000,
+    }
+  );
 
   const { loading: loadQueryContact, error: errorQueryContact } = useQuery(
     getContact,
@@ -66,8 +76,12 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
       onCompleted(data) {
         autorization({ data: data.getContacts, actionAdd: actionAddContact });
       },
+      onError(errorData) {
+        error(errorData.message);
+      },
     }
   );
+
   const { loading: loadQueryChat, error: errorQueryChats } = useQuery(
     getChats,
     {
@@ -75,6 +89,10 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
       onCompleted(data) {
         autorization({ data: data.getChats, actionAdd: actionAddChats });
       },
+      onError(errorData) {
+        error(errorData.message);
+      },
+      pollInterval: 500,
     }
   );
 
@@ -82,19 +100,35 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
 
   const user: IUser | undefined = useAppSelector(getUser);
   const token: string | null = localStorage.getItem("token");
+  const main: boolean = useAppSelector(getMenuMain);
+
+  const debouncedMutation = useDebounce(() => {
+    mutationUserOnlineFunction({ variables: { input: { online: "ping" } } });
+  }, 300000);
 
   useEffect(() => {
-    //error
-    if (errorQueryContact) error(errorQueryContact.message);
-    if (errorQueryChats) error(errorQueryChats.message);
-    if (errorMutationUserOnline) error(errorMutationUserOnline.message);
+    if (
+      !errorQueryContact &&
+      !errorQueryChats &&
+      !errorMutationUserOnline &&
+      !errorQueryImage
+    ) {
+      dispatch(actionAddFetch(false));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [errorQueryContact, errorQueryChats, errorMutationUserOnline]);
+  }, [
+    errorQueryContact,
+    errorQueryChats,
+    errorMutationUserOnline,
+    errorQueryImage,
+  ]);
 
   useEffect(() => {
     //loading
-    if (loadQueryContact || loadQueryChat) dispatch(actionAddLoading(true));
-    if (!loadQueryContact && !loadQueryChat) dispatch(actionAddLoading(false));
+    if (loadQueryContact || loadQueryChat || loadQueryImage)
+      dispatch(actionAddLoading(true));
+    if (!loadQueryContact && !loadQueryChat && !loadQueryImage)
+      dispatch(actionAddLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadQueryChat, loadQueryContact]);
 
@@ -116,15 +150,24 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   return (
     <main
       className={cn(className, styles.main)}
-      onMouseMove={
-        user?.online && minutesFormat(new Date(), new Date(user?.online)) > 4
-          ? debouncedCheck
-          : debouncedMutation
-      }
+      onMouseMove={(e: any) => {
+        if (e.view.innerWidth > 900) {
+          dispatch(actionMenuMain(true));
+        }
+        return user?.online &&
+          minutesFormat(new Date(), new Date(user?.online)) > 4
+          ? mutationUserOnlineFunction({
+              variables: { input: { online: "ping" } },
+            })
+          : debouncedMutation;
+      }}
       {...props}
     >
       <Notification />
-      <section className={styles.chatWrapper}>
+      <section
+        className={styles.chatWrapper}
+        style={{ width: main ? "800px" : "0px" }}
+      >
         <Chats searchContact={searchContact} />
         <Contacts searchContact={searchContact} />
         <Settings />

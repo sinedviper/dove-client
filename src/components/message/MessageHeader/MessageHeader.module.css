@@ -2,6 +2,7 @@
   position: relative;
   display: flex;
   width: 100%;
+  gap: 20px;
   padding: 8px 20px;
   justify-content: left;
   align-items: center;
@@ -162,4 +163,50 @@
   color: var(--icon-second);
   font-size: 14px;
   font-weight: 600;
+}
+
+.imageSender {
+  display: block;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
+.buttonBackMain {
+  display: none;
+  min-width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  transition: var(--transition-static);
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttonBackMain:hover {
+  background: var(--opacity-box-dark);
+}
+
+.buttonBackMain svg {
+  width: 23px;
+  height: 23px;
+  transition: var(--transition);
+}
+
+.buttonBackMain svg path {
+  fill: var(--icon-first);
+  width: 30px;
+}
+
+.menuMainOn {
+  transform: rotateY(180deg);
+  transition: var(--transition);
+}
+
+@media screen and (max-width: 900px) {
+  .buttonBackMain {
+    display: flex;
+  }
 }

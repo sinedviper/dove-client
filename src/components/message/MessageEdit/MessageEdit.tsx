@@ -15,7 +15,6 @@ import { CopyIcon, DeleteIcon, EditIcon, ReplyIcon } from "assets";
 
 import { MessageEditProps } from "./MessageEdit.props";
 import styles from "./MessageEdit.module.css";
-import { useEffect } from "react";
 
 export const MessageEdit = ({
   setEditMessage,
@@ -33,15 +32,15 @@ export const MessageEdit = ({
 
   const user: IUser | undefined = useAppSelector(getUser);
 
-  const [mutationFunction, { error: errorMutationMessageDelete }] = useMutation(
-    deleteMessages,
-    {
-      fetchPolicy: "network-only",
-      onCompleted(data) {
-        autorization({ data: data.addMessages, actionAdd: actionAddMessages });
-      },
-    }
-  );
+  const [mutationFunction] = useMutation(deleteMessages, {
+    fetchPolicy: "network-only",
+    onCompleted(data) {
+      autorization({ data: data.addMessages, actionAdd: actionAddMessages });
+    },
+    onError(errorData) {
+      error(errorData.message);
+    },
+  });
 
   const handleCopy = (value: string) => {
     navigator.clipboard.writeText(value);
@@ -72,11 +71,6 @@ export const MessageEdit = ({
       })
     );
   };
-
-  useEffect(() => {
-    if (errorMutationMessageDelete) error(errorMutationMessageDelete.message);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [errorMutationMessageDelete]);
 
   return (
     <div

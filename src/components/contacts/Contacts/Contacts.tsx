@@ -7,6 +7,7 @@ import { CardContact } from "components/contacts";
 import { Search } from "components/layouts";
 import {
   actionAddRecipient,
+  actionClearImageSender,
   actionClearMessages,
   actionClearRecipient,
   actionMenuContact,
@@ -40,6 +41,7 @@ export const Contacts = ({
       dispatch(actionClearMessages());
       dispatch(actionClearRecipient());
       dispatch(actionAddRecipient(contact));
+      dispatch(actionClearImageSender());
       navigate(`${contact?.username}`);
     }
   };

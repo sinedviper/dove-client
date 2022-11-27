@@ -13,12 +13,26 @@
   height: 100vh;
   background-color: var(--background-first);
   border-right: 1px solid var(--border-second);
+  transition: var(--transition);
 }
 
-@media screen and (min-width: 1920px) {
+@media screen and (min-width: 1400px) {
   .main {
     margin: 0 auto;
-    width: 1350px;
+    width: 1400px;
+    border-right: 1px solid;
+    border-left: 1px solid;
+    border-color: var(--border-second);
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .chatWrapper {
+    width: 0px;
+  }
+  .main {
+    margin: 0 auto;
+    width: 100%;
     border-right: 1px solid;
     border-left: 1px solid;
     border-color: var(--border-second);

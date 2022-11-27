@@ -21,6 +21,12 @@ export const addChat = gql`
           text
           createdAt
         }
+        image {
+          id
+          userUploadId
+          file
+          createdAt
+        }
       }
       message
     }
@@ -46,6 +52,12 @@ export const removeChat = gql`
         lastMessage {
           id
           text
+          createdAt
+        }
+        image {
+          id
+          userUploadId
+          file
           createdAt
         }
       }

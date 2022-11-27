@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { useNavigate, useParams } from "react-router-dom";
 import cn from "classnames";
@@ -20,11 +20,13 @@ import {
   actionClearRecipient,
   getChat,
   getContacts,
+  getFetch,
   getUser,
 } from "store";
 
 import { ChatsProps } from "./Chats.props";
 import styles from "./Chats.module.css";
+import { LoadingIcon } from "assets";
 
 export const Chats = ({
   searchContact,
@@ -37,13 +39,18 @@ export const Chats = ({
   const error = useError();
   const autorizationSearch = useAuthorizationSearch();
 
+  const fetch: boolean = useAppSelector(getFetch);
   const user: IUser | undefined = useAppSelector(getUser);
   const contacts: IUser[] | undefined = useAppSelector(getContacts);
   const chats: IChat[] | undefined = useAppSelector(getChat);
   const [valueAll, setValueAll] = useState<string>("");
-  const { data: dataSearch, error: errorQueryUser } = useQuery(getUsersSearch, {
+
+  const { data: dataSearch } = useQuery(getUsersSearch, {
     variables: {
       input: { userId: Number(user?.id), username: String(valueAll) },
+    },
+    onError(errorData) {
+      error(errorData.message);
     },
     pollInterval: 200,
   });
@@ -72,11 +79,6 @@ export const Chats = ({
       setSearchUser(false);
     }
   };
-
-  useEffect(() => {
-    if (errorQueryUser) error(errorQueryUser.message);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [errorQueryUser]);
 
   return (
     <section
@@ -155,6 +157,12 @@ export const Chats = ({
         })}
       >
         <ul>
+          {fetch && (
+            <li className={styles.fetchError}>
+              <LoadingIcon className={styles.fetchErrorLoading} />
+              <p>The server is not responding</p>
+            </li>
+          )}
           {chats &&
             chats.map((chat: IChat) => <CardChat chat={chat} key={chat.id} />)}
         </ul>

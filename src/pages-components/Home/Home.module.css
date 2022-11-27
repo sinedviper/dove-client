@@ -16,7 +16,7 @@
 
 .profileOn {
   transition: var(--transition);
-  width: 320px;
+  width: 420px;
 }
 
 .chatWrapper {
@@ -101,4 +101,22 @@
 
 .backgroundWrapper {
   width: 100%;
+}
+
+@media screen and (max-width: 1275px) {
+  .profileWrap {
+    position: absolute;
+    width: 420px;
+    right: -425px;
+  }
+
+  .profileOn {
+    right: 0px;
+  }
+}
+
+@media screen and (max-width: 1350px) and (min-width: 1275px) {
+  .profileOn {
+    width: 320px;
+  }
 }

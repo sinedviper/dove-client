@@ -10,6 +10,7 @@ import { ButtonMenu } from "components/layouts";
 import {
   actionAddChats,
   actionAddRecipient,
+  actionClearImageSender,
   actionClearMessages,
   actionClearRecipient,
 } from "store";
@@ -19,7 +20,7 @@ import styles from "./CardChat.module.css";
 
 export const CardChat = ({
   className,
-  chat: { id, user, lastMessage },
+  chat: { id, user, lastMessage, image },
   ...props
 }: CardChatProps): JSX.Element => {
   const { username } = useParams();
@@ -51,6 +52,7 @@ export const CardChat = ({
       dispatch(actionClearMessages());
       dispatch(actionClearRecipient());
       dispatch(actionAddRecipient(user));
+      dispatch(actionClearImageSender());
       navigate(`${user.username}`);
     }
   };
@@ -98,13 +100,25 @@ export const CardChat = ({
       <div
         className={styles.contactsPhoto}
         style={{
-          background: `linear-gradient(${color?.color1}, ${color?.color2})`,
+          background:
+            image === null
+              ? `linear-gradient(${color?.color1}, ${color?.color2})`
+              : "",
         }}
       >
-        <span>
-          {user.name && user.name.toUpperCase().split("")[0]}
-          {user.surname && user.surname.toUpperCase().split("")[0]}
-        </span>
+        {image === null ? (
+          <span>
+            {user.name && user.name.toUpperCase().split("")[0]}
+            {user.surname && user.surname.toUpperCase().split("")[0]}
+          </span>
+        ) : (
+          <span>
+            <img
+              src={`http://localhost:3001/images/${image.file}`}
+              alt='user'
+            />
+          </span>
+        )}
       </div>
       <div className={styles.contactInfo}>
         <span className={styles.contactName}>

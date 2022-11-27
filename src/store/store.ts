@@ -28,6 +28,8 @@ import {
   errorsReducer,
   copyReducer,
   iamgeUserReducer,
+  fetchReducer,
+  imageSenderReducer,
 } from "./slice";
 
 const reducer = combineReducers({
@@ -42,6 +44,8 @@ const reducer = combineReducers({
   errors: errorsReducer,
   copy: copyReducer,
   imageUser: iamgeUserReducer,
+  fetch: fetchReducer,
+  imageSender: imageSenderReducer,
 });
 
 const persistConfig = {

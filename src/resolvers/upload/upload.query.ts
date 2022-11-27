@@ -15,3 +15,19 @@ export const getUploads = gql`
     }
   }
 `;
+
+export const getUploadUser = gql`
+  query GetUploadUser($idUser: Float!) {
+    getUploadUser(idUser: $idUser) {
+      status
+      code
+      data {
+        id
+        userUploadId
+        file
+        createdAt
+      }
+      message
+    }
+  }
+`;

@@ -11,8 +11,6 @@ import { actionAddContact, getUser } from "store";
 
 import { CardContactProps } from "./CardContact.props";
 import styles from "./CardContact.module.css";
-import { useEffect } from "react";
-import {} from "utils/helpers";
 
 export const CardContact = ({
   className,
@@ -27,15 +25,15 @@ export const CardContact = ({
 
   const user: IUser | undefined = useAppSelector(getUser);
 
-  const [mutationFunctionDelete, { error: errorDeleteContact }] = useMutation(
-    deleteContact,
-    {
-      fetchPolicy: "network-only",
-      onCompleted(data) {
-        autorization({ data: data.deleteContact, actionAdd: actionAddContact });
-      },
-    }
-  );
+  const [mutationFunctionDelete] = useMutation(deleteContact, {
+    fetchPolicy: "network-only",
+    onCompleted(data) {
+      autorization({ data: data.deleteContact, actionAdd: actionAddContact });
+    },
+    onError(errorData) {
+      error(errorData.message);
+    },
+  });
 
   const [top, setTop] = useState<number>(0);
   const [left, setLeft] = useState<number>(0);
@@ -53,11 +51,6 @@ export const CardContact = ({
   };
 
   const color = colorCard(contact?.name.toUpperCase().split("")[0]);
-
-  useEffect(() => {
-    if (errorDeleteContact) error(errorDeleteContact.message);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [errorDeleteContact]);
 
   return (
     <li

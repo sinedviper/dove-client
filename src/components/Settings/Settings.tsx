@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useMutation, useQuery } from "@apollo/client";
+import React, { useState } from "react";
+import { useMutation } from "@apollo/client";
 import cn from "classnames";
 import Carousel from "nuka-carousel";
 
@@ -14,12 +14,13 @@ import {
   useExit,
 } from "utils/hooks";
 import { deleteUser } from "resolvers/user";
-import { deleteUpload, getUploads } from "resolvers/upload";
+import { deleteUpload } from "resolvers/upload";
 import {
   actionAddCopy,
   actionAddImageUser,
   actionMenuEdit,
   actionMenuSetting,
+  getImageSender,
   getImageUser,
   getMenuSetting,
   getUser,
@@ -57,35 +58,30 @@ export const Settings = ({
   if (sender) {
     user = sender;
   }
+  const imageSender: IImage | undefined = useAppSelector(getImageSender);
   const settings: boolean = useAppSelector(getMenuSetting);
   const imageUser: IImage[] | undefined = useAppSelector(getImageUser);
 
-  const { error: errorQueryFunctionImageUser } = useQuery(getUploads, {
+  const [mutationFunction] = useMutation(deleteUser, {
     fetchPolicy: "network-only",
-    onCompleted(data) {
-      auhtorization({ data: data.getUpload, actionAdd: actionAddImageUser });
+    onCompleted: exit,
+    onError(errorData) {
+      error(errorData.message);
     },
-    pollInterval: 5000,
   });
 
-  const [mutationFunction, { error: errorMutationUser }] = useMutation(
-    deleteUser,
-    {
-      fetchPolicy: "network-only",
-      onCompleted: exit,
-    }
-  );
-
-  const [mutationFunctionDeletePhoto, { error: errorMutationDeletePhoto }] =
-    useMutation(deleteUpload, {
-      fetchPolicy: "network-only",
-      onCompleted(data) {
-        auhtorization({
-          data: data.deleteUpload,
-          actionAdd: actionAddImageUser,
-        });
-      },
-    });
+  const [mutationFunctionDeletePhoto] = useMutation(deleteUpload, {
+    fetchPolicy: "network-only",
+    onCompleted(data) {
+      auhtorization({
+        data: data.deleteUpload,
+        actionAdd: actionAddImageUser,
+      });
+    },
+    onError(errorData) {
+      error(errorData.message);
+    },
+  });
 
   const [deleteUsera, setDeleteUser] = useState<boolean>(false);
   const [buttonPhoto, setButtonPhoto] = useState<boolean>(false);
@@ -119,13 +115,6 @@ export const Settings = ({
       variables: { idPhoto: Number(idPhoto), file: String(file) },
     });
   };
-
-  useEffect(() => {
-    if (errorMutationUser) error(errorMutationUser.message);
-    if (errorQueryFunctionImageUser) error(errorQueryFunctionImageUser.message);
-    if (errorMutationDeletePhoto) error(errorMutationDeletePhoto.message);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [errorMutationUser]);
 
   return (
     <section
@@ -203,13 +192,33 @@ export const Settings = ({
         <div
           className={styles.userPhoto}
           style={{
-            background:
-              imageUser?.length === 0
+            background: profile
+              ? !imageSender
                 ? `linear-gradient(${color?.color1}, ${color?.color2})`
-                : "none",
+                : "none"
+              : imageUser?.length === 0
+              ? `linear-gradient(${color?.color1}, ${color?.color2})`
+              : "none",
           }}
         >
-          {imageUser?.length === 0 ? (
+          {profile ? (
+            imageSender ? (
+              <div className={styles.wrapperImage}>
+                <div className={styles.userImageWrapper}>
+                  <img
+                    className={styles.userImage}
+                    src={`http://localhost:3001/images/` + imageSender?.file}
+                    alt='User'
+                  />
+                </div>
+              </div>
+            ) : (
+              <>
+                {user?.name.toUpperCase().slice()[0]}
+                {user?.surname.toUpperCase().slice()[0]}
+              </>
+            )
+          ) : imageUser?.length === 0 ? (
             <>
               {user?.name.toUpperCase().slice()[0]}
               {user?.surname.toUpperCase().slice()[0]}
@@ -227,7 +236,7 @@ export const Settings = ({
                     src={`http://localhost:3001/images/` + imageUser[0].file}
                     alt='User'
                   />
-                  {buttonPhoto && (
+                  {buttonPhoto && !profile && (
                     <button
                       onClick={() =>
                         handleRemovePhoto(imageUser[0].id, imageUser[0].file)
@@ -259,26 +268,25 @@ export const Settings = ({
                   }}
                   withoutControls={!buttonPhoto}
                 >
-                  {imageUser &&
-                    imageUser?.map((image) => (
-                      <div key={image.id} className={styles.userImageWrapper}>
-                        <img
-                          className={styles.userImage}
-                          src={`http://localhost:3001/images/` + image.file}
-                          alt='User'
-                        />
-                        {buttonPhoto && (
-                          <button
-                            onClick={() =>
-                              handleRemovePhoto(image.id, image.file)
-                            }
-                            className={styles.buttonWrapperRemove}
-                          >
-                            <RemoveIcon className={styles.removeIconButton} />
-                          </button>
-                        )}
-                      </div>
-                    ))}
+                  {imageUser?.map((image) => (
+                    <div key={image.id} className={styles.userImageWrapper}>
+                      <img
+                        className={styles.userImage}
+                        src={`http://localhost:3001/images/` + image.file}
+                        alt='User'
+                      />
+                      {buttonPhoto && (
+                        <button
+                          onClick={() =>
+                            handleRemovePhoto(image.id, image.file)
+                          }
+                          className={styles.buttonWrapperRemove}
+                        >
+                          <RemoveIcon className={styles.removeIconButton} />
+                        </button>
+                      )}
+                    </div>
+                  ))}
                 </Carousel>
               )}
             </div>
