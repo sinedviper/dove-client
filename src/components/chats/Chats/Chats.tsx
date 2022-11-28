@@ -9,6 +9,7 @@ import {
   useAppSelector,
   useAuthorizationSearch,
   useError,
+  useWindowSize,
 } from "utils/hooks";
 import { colorCard } from "utils/helpers";
 import { getUsersSearch } from "resolvers/user";
@@ -18,6 +19,7 @@ import {
   actionAddRecipient,
   actionClearMessages,
   actionClearRecipient,
+  actionMenuMain,
   getChat,
   getContacts,
   getFetch,
@@ -37,6 +39,7 @@ export const Chats = ({
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const error = useError();
+  const windowSize = useWindowSize();
   const autorizationSearch = useAuthorizationSearch();
 
   const fetch: boolean = useAppSelector(getFetch);
@@ -77,6 +80,9 @@ export const Chats = ({
     if (String(contact.username) === String(username)) {
       setValueAll("");
       setSearchUser(false);
+    }
+    if (windowSize[0] < 1000) {
+      dispatch(actionMenuMain(false));
     }
   };
 

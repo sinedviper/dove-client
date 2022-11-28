@@ -6,4 +6,5 @@ export interface MessageHeaderProps
     HTMLInputElement
   > {
   setSettings: Function;
+  settings: boolean;
 }

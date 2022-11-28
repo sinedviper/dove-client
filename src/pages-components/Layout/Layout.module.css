@@ -1,6 +1,6 @@
 .main {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   display: flex;
   position: relative;
 }
@@ -26,13 +26,39 @@
   }
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1000px) and (min-width: 600px) {
   .chatWrapper {
-    width: 0px;
+    position: absolute;
+    left: -420px;
   }
+
+  .chatWrapperOn {
+    left: 0px;
+  }
+
   .main {
     margin: 0 auto;
     width: 100%;
+    border-right: 1px solid;
+    border-left: 1px solid;
+    border-color: var(--border-second);
+    overflow: hidden;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .chatWrapper {
+    position: absolute;
+    left: -105%;
+  }
+
+  .chatWrapperOn {
+    left: 0px;
+    max-width: 600px;
+  }
+  .main {
+    width: 100%;
+    padding: 0;
     border-right: 1px solid;
     border-left: 1px solid;
     border-color: var(--border-second);

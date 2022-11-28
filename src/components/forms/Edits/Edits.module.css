@@ -232,3 +232,14 @@
     overflow-y: hidden;
   }
 }
+
+@media screen and (max-width: 600px) {
+  .editWrapper {
+    right: -105%;
+    width: 100%;
+  }
+
+  .editWrapperOpen {
+    right: 0px;
+  }
+}

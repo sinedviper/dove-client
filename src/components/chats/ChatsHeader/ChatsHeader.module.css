@@ -9,16 +9,17 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  min-width: 300px;
 }
 
 .menu {
-  width: 40px;
+  position: relative;
+  min-width: 40px;
   height: 40px;
   border-radius: 50%;
   border: none;
   background-color: inherit;
   transition: var(--transition-static);
-  position: relative;
   margin-right: 7px;
   cursor: pointer;
 }
@@ -95,7 +96,8 @@
   flex-direction: column;
   position: absolute;
   z-index: -1;
-  width: 300px;
+  max-width: 300px;
+  width: 100%;
   background-color: var(--opacity-box-second);
   backdrop-filter: blur(30px);
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
@@ -118,4 +120,10 @@
   margin: 10px 0 5px;
   font-size: 15px;
   color: var(--primary);
+}
+
+@media screen and (max-width: 400px) {
+  .menuClose {
+    max-width: 250px;
+  }
 }

@@ -8,6 +8,7 @@ import {
   useAppSelector,
   useAuthorization,
   useError,
+  useWindowSize,
 } from "utils/hooks";
 import { IImage, IUser } from "utils/interface";
 import { addContact, deleteContact } from "resolvers/contacts";
@@ -27,12 +28,14 @@ import styles from "./MessageHeader.module.css";
 
 export const MessageHeader = ({
   setSettings,
+  settings,
   className,
   ...props
 }: MessageHeaderProps): JSX.Element => {
   const error = useError();
   const dispatch = useAppDispatch();
   const authorization = useAuthorization();
+  const windowSize = useWindowSize();
   let color = colorCard();
 
   const receipt: IUser | undefined = useAppSelector(getRecipient);
@@ -91,13 +94,18 @@ export const MessageHeader = ({
   return (
     <section
       className={cn(className, styles.headerReceiptWrapper)}
-      onMouseLeave={() => setmenuMessage(false)}
+      onMouseLeave={() => {
+        setmenuMessage(false);
+      }}
       {...props}
     >
       <button
-        onClick={(e: any) => {
-          if (e.view.innerWidth < 900) {
+        onClick={() => {
+          if (windowSize[0] < 1000) {
             dispatch(actionMenuMain(!main));
+            if (settings === true) {
+              setSettings(false);
+            }
           }
         }}
         className={cn(styles.buttonBackMain)}
@@ -108,7 +116,13 @@ export const MessageHeader = ({
           })}
         />
       </button>
-      <div className={styles.headerWrapper} onClick={() => setSettings(true)}>
+      <div
+        className={styles.headerWrapper}
+        onClick={() => {
+          setSettings(true);
+          if (settings === true) dispatch(actionMenuMain(false));
+        }}
+      >
         <div className={styles.headerReceiptPhoto}>
           {imageSender ? (
             <img

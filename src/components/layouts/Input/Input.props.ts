@@ -9,5 +9,9 @@ export interface InputProps
   error?: boolean;
   password?: boolean;
   text?: string;
+  check?: boolean;
   setText?: Function;
+  notification?: boolean;
+  notificationText?: string;
+  textCheckPassNew?: string;
 }

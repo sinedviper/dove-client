@@ -17,10 +17,12 @@ function App(): JSX.Element {
         <Notification
           style={{
             bottom: "auto",
-            top: "75px",
-            right: "75px",
-            left: "auto",
+            top: "40px",
+            right: "50%",
+            left: "50%",
             position: "fixed",
+            maxWidth: "280px",
+            transform: "translate(-50%, -50%)",
           }}
         />
       )}

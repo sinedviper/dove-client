@@ -1,5 +1,6 @@
 .contacts {
   width: 100%;
+  min-width: 290px;
   height: 75px;
   border-radius: 15px;
   transition: var(--transition);

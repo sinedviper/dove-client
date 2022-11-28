@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ import { useError } from "utils/hooks";
 
 import { FormSignUpProps } from "./FormSignUp.props";
 import styles from "./FormSignUp.module.css";
+import { useTheme } from "utils/context";
 
 interface IFormInput {
   name: string;
@@ -25,6 +26,7 @@ export const FormSignUp = ({
   ...props
 }: FormSignUpProps): JSX.Element => {
   const navigate = useNavigate();
+  const themeChange = useTheme();
   const error = useError();
   const {
     register,
@@ -42,6 +44,22 @@ export const FormSignUp = ({
     });
   };
 
+  useEffect(() => {
+    if (
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+    ) {
+      themeChange?.changeTheme("dark");
+    }
+
+    if (
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: light)").matches
+    ) {
+      themeChange?.changeTheme("light");
+    }
+  }, [themeChange]);
+
   return (
     <section className={cn(className, styles.form)} {...props}>
       <DoveIcon className={styles.svg} />
@@ -53,6 +71,8 @@ export const FormSignUp = ({
         <Input
           placeholderName={"Name"}
           error={Boolean(errors.name)}
+          notification={true}
+          notificationText={"Name must be between 1 and 40 characters"}
           {...register("name", {
             required: true,
             minLength: 1,
@@ -67,6 +87,8 @@ export const FormSignUp = ({
         <Input
           placeholderName={"Surname(optional)"}
           error={Boolean(errors.surname)}
+          notification={true}
+          notificationText={"Surname must be between 1 and 40 characters"}
           {...register("surname", {
             required: false,
             minLength: 1,
@@ -81,6 +103,8 @@ export const FormSignUp = ({
         <Input
           placeholderName={"Username"}
           error={Boolean(errors.username)}
+          notification={true}
+          notificationText={"Username must be between 3 and 40 characters"}
           {...register("username", {
             required: true,
             minLength: 3,
@@ -95,6 +119,8 @@ export const FormSignUp = ({
         <Input
           placeholderName={"Email"}
           error={Boolean(errors.email)}
+          notification={true}
+          notificationText={"Email must be between 3 and 40 characters"}
           {...register("email", {
             required: true,
             minLength: 3,
@@ -109,16 +135,22 @@ export const FormSignUp = ({
         <Input
           error={Boolean(errors.password)}
           placeholderName={"Password"}
+          notification={true}
+          notificationText={
+            "Password must be between 8 and 40 characters and have a capital letter and a number"
+          }
           {...register("password", {
             required: true,
             minLength: 8,
             maxLength: 40,
           })}
+          check={true}
           password={true}
         />
         {errors.password && (
           <span className={styles.error}>
-            Password must be between 8 and 40 characters
+            Password must be between 8 and 40 characters and have a capital
+            letter and a number
           </span>
         )}
         <button type='submit' className={styles.button}>

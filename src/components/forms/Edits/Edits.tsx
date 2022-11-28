@@ -87,15 +87,38 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
   const [errorPasswordNew, setErrorPasswordNew] = useState<string>("");
   const [errorPasswordReapeat, setErrorPasswordReapeat] = useState<string>("");
 
+  const [permission, setPermission] = useState<{
+    width: number;
+    height: number;
+  }>({ width: 0, height: 0 });
+
   const color = colorCard(String(user?.name.toUpperCase().slice()[0]));
 
   const handleLoadPhoto = async (e) => {
     const formData = new FormData();
     const file = e.target.files[0];
-    formData.append("image", file);
-    const { data } = await axios.post("/upload", formData);
-    auhtorization({ data, actionAdd: actionAddImageUser });
-    e.target.value = null;
+    if (e.target.files[0] > 5000000) {
+      error("The file is over 5MB");
+      e.target.value = null;
+    }
+    if (e.target.files[0] < 5000000) {
+      const URL = window.URL || window.webkitURL;
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+      img.onload = (e: any) => {
+        setPermission({ width: e.path[0].width, height: e.path[0].height });
+      };
+      if (permission.width > 1200 || permission.height > 800) {
+        error("Choose a different photo, the resolution is too high");
+        setPermission({ width: 0, height: 0 });
+      } else {
+        formData.append("image", file);
+        const { data } = await axios.post("/upload", formData);
+        auhtorization({ data, actionAdd: actionAddImageUser });
+        setPermission({ width: 0, height: 0 });
+        e.target.value = null;
+      }
+    }
   };
 
   const onSubmit = async (input: IFormInput): Promise<void> => {
@@ -182,8 +205,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
       passwordNew !== ""
     ) {
       setSubmit(true);
-    }
-    if (
+    } else if (
       user?.username === username ||
       user?.name === name ||
       user?.surname === surname ||
@@ -205,6 +227,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
     surname,
     email,
     bio,
+    submit,
   ]);
 
   return (
@@ -281,6 +304,8 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
           <Input
             error={Boolean(errors.name)}
             placeholderName='Name'
+            notification={true}
+            notificationText={"Name must be between 1 and 40 characters"}
             {...register("name", {
               minLength: 1,
               maxLength: 40,
@@ -296,6 +321,8 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
           <Input
             error={Boolean(errors.surname)}
             placeholderName='Surname(optional)'
+            notification={true}
+            notificationText={"Surname must be between 1 and 40 characters"}
             {...register("surname", {
               minLength: 1,
               maxLength: 40,
@@ -328,6 +355,8 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
           <Input
             error={Boolean(errors.email)}
             placeholderName='Email'
+            notification={true}
+            notificationText={"Email must be between 3 and 40 characters"}
             {...register("email", {
               minLength: 3,
               maxLength: 40,
@@ -349,6 +378,8 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
           <Input
             error={Boolean(errors.username)}
             placeholderName='Username'
+            notification={true}
+            notificationText={"Username must be between 3 and 40 characters"}
             {...register("username", {
               minLength: 3,
               maxLength: 40,
@@ -373,6 +404,8 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
           <Input
             error={Boolean(errorPassword ? errorPassword : errors.mainPassword)}
             placeholderName='Main password'
+            notification={true}
+            notificationText={"Password must be between 8 and 40 characters"}
             {...register("mainPassword", {
               minLength: 8,
               maxLength: 40,
@@ -394,6 +427,10 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
               errorPasswordNew ? errorPasswordNew : errors.newPassword
             )}
             placeholderName='New password'
+            notification={true}
+            notificationText={
+              "Password must be between 8 and 40 characters and have a capital letter and a number"
+            }
             {...register("newPassword", {
               minLength: 8,
               maxLength: 40,
@@ -404,7 +441,8 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
           />
           {errors.newPassword && (
             <span className={styles.error}>
-              Password must be between 8 and 40 characters
+              Password must be between 8 and 40 characters and have a capital
+              letter and a number
             </span>
           )}
           {errorPasswordNew && (
@@ -417,6 +455,9 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
                 : errors.repeatPassword
             )}
             placeholderName='Repeat password'
+            textCheckPassNew={passwordNew}
+            notification={true}
+            notificationText={"Please re-enter your password correctly"}
             {...register("repeatPassword", {
               minLength: 8,
               maxLength: 40,
@@ -427,7 +468,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
           />
           {errors.repeatPassword && (
             <span className={styles.error}>
-              Password must be between 8 and 40 characters
+              Please re-enter your password correctly
             </span>
           )}
           {errorPasswordReapeat && (

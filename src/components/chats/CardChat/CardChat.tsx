@@ -4,7 +4,12 @@ import { useMutation } from "@apollo/client";
 import cn from "classnames";
 
 import { colorCard, formateDate } from "utils/helpers";
-import { useAppDispatch, useAuthorization, useError } from "utils/hooks";
+import {
+  useAppDispatch,
+  useAuthorization,
+  useError,
+  useWindowSize,
+} from "utils/hooks";
 import { removeChat } from "resolvers/chats";
 import { ButtonMenu } from "components/layouts";
 import {
@@ -13,6 +18,7 @@ import {
   actionClearImageSender,
   actionClearMessages,
   actionClearRecipient,
+  actionMenuMain,
 } from "store";
 
 import { CardChatProps } from "./CardChat.props";
@@ -28,6 +34,7 @@ export const CardChat = ({
   const dispatch = useAppDispatch();
   const error = useError();
   const autorization = useAuthorization();
+  const windowSize = useWindowSize();
 
   const [mutationFunction, { error: errorMutationChat }] = useMutation(
     removeChat,
@@ -54,6 +61,9 @@ export const CardChat = ({
       dispatch(actionAddRecipient(user));
       dispatch(actionClearImageSender());
       navigate(`${user.username}`);
+    }
+    if (windowSize[0] < 600) {
+      dispatch(actionMenuMain(false));
     }
   };
 

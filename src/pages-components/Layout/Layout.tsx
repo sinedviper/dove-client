@@ -11,6 +11,7 @@ import {
   useDebounce,
   useError,
   useExit,
+  useWindowSize,
 } from "utils/hooks";
 import { useTheme, theme, animation } from "utils/context";
 import { IUser } from "utils/interface";
@@ -43,6 +44,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   const exit = useExit();
   const autorization = useAuthorization();
   const error = useError();
+  const sizeWindow = useWindowSize();
 
   const [mutationUserOnlineFunction, { error: errorMutationUserOnline }] =
     useMutation(updateUserOnline, {
@@ -124,6 +126,13 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   ]);
 
   useEffect(() => {
+    if (sizeWindow[0] > 1000) {
+      dispatch(actionMenuMain(true));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sizeWindow[0]]);
+
+  useEffect(() => {
     //loading
     if (loadQueryContact || loadQueryChat || loadQueryImage)
       dispatch(actionAddLoading(true));
@@ -142,6 +151,13 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.animation, user?.theme]);
 
+  useEffect(() => {
+    if (sizeWindow[0] < 800) {
+      dispatch(actionMenuMain(true));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if (!token) {
     exit();
     return <Navigate to='/login' />;
@@ -150,10 +166,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   return (
     <main
       className={cn(className, styles.main)}
-      onMouseMove={(e: any) => {
-        if (e.view.innerWidth > 900) {
-          dispatch(actionMenuMain(true));
-        }
+      onMouseMove={() => {
         return user?.online &&
           minutesFormat(new Date(), new Date(user?.online)) > 4
           ? mutationUserOnlineFunction({
@@ -165,8 +178,9 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
     >
       <Notification />
       <section
-        className={styles.chatWrapper}
-        style={{ width: main ? "800px" : "0px" }}
+        className={cn(styles.chatWrapper, {
+          [styles.chatWrapperOn]: main === true,
+        })}
       >
         <Chats searchContact={searchContact} />
         <Contacts searchContact={searchContact} />

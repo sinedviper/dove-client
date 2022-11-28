@@ -135,7 +135,6 @@ export const MessageCard = ({
           </span>
         </div>
       </div>
-
       <TailIcon
         className={cn(
           styles.tailIcon,

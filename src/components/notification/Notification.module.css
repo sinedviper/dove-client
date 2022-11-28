@@ -11,7 +11,6 @@
   pointer-events: none;
   user-select: none;
   width: 100%;
-  max-width: 418px;
 }
 
 .loading,
@@ -111,4 +110,10 @@
 .removeIcon:hover {
   transition: var(--transition-static);
   background-color: var(--opacity-box-dark);
+}
+
+@media screen and (max-width: 600px) {
+  .loadingWrapper {
+    width: 100%;
+  }
 }

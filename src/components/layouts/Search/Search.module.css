@@ -1,8 +1,9 @@
 .search {
+  display: flex;
   border-radius: 40px;
   border: 1px solid var(--border-second);
   padding: 9px 45px;
-  width: 330px;
+  width: 100%;
   font-size: 16px;
   color: var(--text-first);
   transition: var(--transition-static);
@@ -23,6 +24,7 @@
 
 .searchWrapper {
   position: relative;
+  width: 100%;
 }
 
 .iconSearch {

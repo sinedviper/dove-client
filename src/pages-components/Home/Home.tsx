@@ -22,6 +22,7 @@ import {
   actionAddMessages,
   actionAddRecipient,
   getChat,
+  getMenuMain,
   getMessages,
   getRecipient,
   getUser,
@@ -42,6 +43,7 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
     (chat) => chat?.user?.id === sender?.id
   )[0];
   const messages: IMessage[] | undefined = useAppSelector(getMessages);
+  const main: boolean = useAppSelector(getMenuMain);
 
   const { error: errorQueryMessage } = useQuery(getMessage, {
     variables: {
@@ -105,14 +107,19 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
   }, [messages]);
 
   return (
-    <section className={cn(className, styles.wrapper)} {...props}>
+    <section
+      className={cn(className, styles.wrapper, {
+        [styles.wrapperMainOn]: main === true,
+      })}
+      {...props}
+    >
       {user?.theme ? (
         <section className={styles.backgroundDark}></section>
       ) : (
         <section className={styles.backgroundLight}></section>
       )}
       <section className={styles.chatWrapper}>
-        <MessageHeader setSettings={setSettings} />
+        <MessageHeader setSettings={setSettings} settings={settings} />
         <section className={styles.chatsWrapper}>
           <ul className={cn(styles.messageWrapper)}>
             {messages &&

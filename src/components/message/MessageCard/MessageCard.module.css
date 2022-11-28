@@ -24,6 +24,7 @@
   flex-direction: column;
   justify-content: space-between;
   pointer-events: none;
+  gap: 5px;
 }
 
 .messageTextWrap {

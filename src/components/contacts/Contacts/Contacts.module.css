@@ -2,7 +2,9 @@
   position: absolute;
   top: 0;
   left: 420px;
-  width: 420px;
+  max-width: 420px;
+  width: 100%;
+  min-width: 300px;
   height: 100vh;
   background-color: var(--background-first);
   display: flex;
@@ -30,7 +32,7 @@
 }
 
 .back {
-  width: 40px;
+  min-width: 40px;
   height: 40px;
   padding: 10px;
   border-radius: 50%;
@@ -57,4 +59,16 @@
 .swiper {
   padding-right: 1px;
   overflow-y: scroll;
+}
+
+@media screen and (max-width: 600px) {
+  .contactsWrapper {
+    top: 0;
+    left: 100%;
+    max-width: 100%;
+  }
+
+  .contactWrapperOpen {
+    left: 0px;
+  }
 }

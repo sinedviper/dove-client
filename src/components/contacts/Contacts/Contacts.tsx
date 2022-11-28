@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import cn from "classnames";
 
 import { IUser } from "utils/interface";
-import { useAppDispatch, useAppSelector } from "utils/hooks";
+import { useAppDispatch, useAppSelector, useWindowSize } from "utils/hooks";
 import { CardContact } from "components/contacts";
 import { Search } from "components/layouts";
 import {
@@ -11,6 +11,7 @@ import {
   actionClearMessages,
   actionClearRecipient,
   actionMenuContact,
+  actionMenuMain,
   getContacts,
   getMenuContact,
 } from "store";
@@ -28,6 +29,7 @@ export const Contacts = ({
   const { username } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const windowSize = useWindowSize();
 
   const contacts: IUser[] | undefined = useAppSelector(getContacts);
   const contact: boolean = useAppSelector(getMenuContact);
@@ -43,6 +45,12 @@ export const Contacts = ({
       dispatch(actionAddRecipient(contact));
       dispatch(actionClearImageSender());
       navigate(`${contact?.username}`);
+    }
+    if (String(contact.username) === String(username)) {
+      dispatch(actionMenuContact(false));
+    }
+    if (windowSize[0] < 1000) {
+      dispatch(actionMenuMain(false));
     }
   };
 

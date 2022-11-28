@@ -62,6 +62,11 @@ export const Settings = ({
   const settings: boolean = useAppSelector(getMenuSetting);
   const imageUser: IImage[] | undefined = useAppSelector(getImageUser);
 
+  const [permission, setPermission] = useState<{
+    width: number;
+    height: number;
+  }>({ width: 0, height: 0 });
+
   const [mutationFunction] = useMutation(deleteUser, {
     fetchPolicy: "network-only",
     onCompleted: exit,
@@ -103,11 +108,28 @@ export const Settings = ({
   const handleLoadPhoto = async (e) => {
     const formData = new FormData();
     const file = e.target.files[0];
-    formData.append("image", file);
-
-    const { data } = await axios.post("/upload", formData);
-    auhtorization({ data, actionAdd: actionAddImageUser });
-    e.target.value = null;
+    if (e.target.files[0].size > 5000000) {
+      error("File have many size, please select file with 5MB");
+      e.target.value = null;
+    }
+    if (e.target.files[0].size < 5000000) {
+      const URL = window.URL || window.webkitURL;
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+      img.onload = (e: any) => {
+        setPermission({ width: e.path[0].width, height: e.path[0].height });
+      };
+      if (permission.width > 1200 || permission.height > 800) {
+        error("Choose a different photo, the resolution is too high");
+        setPermission({ width: 0, height: 0 });
+      } else {
+        formData.append("image", file);
+        const { data } = await axios.post("/upload", formData);
+        auhtorization({ data, actionAdd: actionAddImageUser });
+        setPermission({ width: 0, height: 0 });
+        e.target.value = null;
+      }
+    }
   };
 
   const handleRemovePhoto = async (idPhoto: number, file: string) => {

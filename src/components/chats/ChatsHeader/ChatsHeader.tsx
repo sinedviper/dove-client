@@ -119,6 +119,12 @@ export const ChatsHeader = ({
           })}
         ></span>
       </button>
+      <Search
+        value={valueAll}
+        setValue={setValueAll}
+        setSearchUser={setSearchUser}
+        setMenu={setMenu}
+      />
       <div
         className={cn(styles.menuClose, {
           [styles.menuOpen]: menu === true,
@@ -160,12 +166,6 @@ export const ChatsHeader = ({
           github repyev denis
         </a>
       </div>
-      <Search
-        value={valueAll}
-        setValue={setValueAll}
-        setSearchUser={setSearchUser}
-        setMenu={setMenu}
-      />
     </nav>
   );
 };

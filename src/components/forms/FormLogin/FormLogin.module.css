@@ -14,6 +14,7 @@
   text-align: center;
   margin: 100px auto 0px;
   width: 100%;
+  padding: 0px 10px 50px 10px;
   max-width: 360px;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -26,12 +27,16 @@
   margin-top: 30px;
   font-size: 30px;
   cursor: default;
+  word-wrap: break-word;
+  user-select: none;
 }
 .text {
   font-size: 15px;
   line-height: 1.5;
   color: var(--text-second);
   cursor: default;
+  word-wrap: break-word;
+  user-select: none;
 }
 
 .login {
@@ -92,8 +97,13 @@
   pointer-events: all;
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 600px) {
   .form {
-    margin-top: 50px;
+    margin-top: 30px;
+  }
+
+  .svg {
+    width: 130px;
+    height: 130px;
   }
 }

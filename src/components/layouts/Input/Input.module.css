@@ -90,3 +90,76 @@
 .errorOn {
   stroke: var(--error);
 }
+
+.checkWrapper {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  left: 0;
+  bottom: -8px;
+  transition: var(--transition-static);
+}
+
+.checkOne,
+.checkTwo,
+.checkThree {
+  height: 3px;
+  background-color: var(--border-first);
+  width: 30%;
+  border-radius: 10px;
+}
+
+.checkOn {
+  background-color: var(--error);
+}
+
+.checkText {
+  background-color: var(--success);
+}
+
+.checkTextBefore {
+  background-color: var(--fetch);
+}
+
+.infoIcon {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  user-select: none;
+  background-color: var(--background-first);
+}
+
+.infoIcon svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--text-second);
+}
+
+.notificaText {
+  position: absolute;
+  top: -40px;
+  right: 15px;
+  border: 1px solid var(--border-second);
+  word-wrap: break-word;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 10px;
+  color: var(--text-first);
+  background: var(--background-third);
+  transition: var(--transition-static);
+  z-index: 3;
+}
+
+.checkPasswordNes {
+  border-color: var(--error);
+}
+
+.checkPasswordNesOn {
+  border-color: var(--success);
+}
