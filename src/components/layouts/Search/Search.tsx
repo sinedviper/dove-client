@@ -5,6 +5,8 @@ import { RemoveIcon, SearchIcon } from "assets";
 
 import { SearchProps } from "./Search.props";
 import styles from "./Search.module.css";
+import { useAppDispatch } from "utils/hooks";
+import { actionAddTabIndexFirst, actionAddTabIndexSecond } from "store";
 
 export const Search = forwardRef(
   (
@@ -13,23 +15,47 @@ export const Search = forwardRef(
       setSearchUser,
       setMenu,
       setValue,
+      tabIndex,
       className,
       ...props
     }: SearchProps,
     ref?: ForwardedRef<HTMLInputElement>
   ): JSX.Element => {
+    const dispatch = useAppDispatch();
+
     const [focus, setFocus] = useState<boolean>(false);
 
     return (
       <div className={cn(styles.searchWrapper)}>
         <input
+          tabIndex={tabIndex}
           ref={ref}
           type='text'
           className={cn(className, styles.search)}
           onFocus={() => {
             setFocus(true);
-            setSearchUser && setSearchUser(true);
-            setMenu && setMenu(false);
+          }}
+          onClick={() => {
+            if (setSearchUser) {
+              setSearchUser(true);
+              dispatch(actionAddTabIndexFirst(-1));
+              dispatch(actionAddTabIndexSecond(0));
+            }
+            if (setMenu) {
+              setMenu(false);
+            }
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              if (setSearchUser) {
+                setSearchUser(true);
+                dispatch(actionAddTabIndexFirst(-1));
+                dispatch(actionAddTabIndexSecond(0));
+              }
+              if (setMenu) {
+                setMenu(false);
+              }
+            }
           }}
           onBlur={() => setFocus(false)}
           placeholder='Search'
@@ -44,6 +70,12 @@ export const Search = forwardRef(
         />
         <button
           onClick={() => setValue("")}
+          tabIndex={tabIndex}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              setValue("");
+            }
+          }}
           className={cn(styles.buttonRemove, {
             [styles.focusRemove]: focus === true,
           })}

@@ -29,6 +29,11 @@ export const ButtonMenuMain = ({
         [styles.menuClick]: click === true,
       })}
       onClick={handleAction}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          handleAction();
+        }
+      }}
       onMouseDown={() => setClick(true)}
       onMouseUp={() => setClick(false)}
       {...props}

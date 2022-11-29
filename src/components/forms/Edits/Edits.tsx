@@ -15,10 +15,13 @@ import { updateUser } from "resolvers/user";
 import { Input } from "components/layouts";
 import {
   actionAddImageUser,
+  actionAddTabIndexFiveth,
+  actionAddTabIndexFourth,
   actionAddUser,
   actionMenuEdit,
   getImageUser,
   getMenuEdit,
+  getTabIndexFiveth,
   getUser,
 } from "store";
 import { BackIcon, PhotoIcon, SupheedIcon } from "assets";
@@ -66,6 +69,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
   const user: IUser | undefined = useAppSelector(getUser);
   const edit: boolean = useAppSelector(getMenuEdit);
   const imageUser: IImage | undefined = useAppSelector(getImageUser)?.[0];
+  const tabIndexFivth: number = useAppSelector(getTabIndexFiveth);
 
   const [swiper, setSwiper] = useState<boolean>(false);
   const [submit, setSubmit] = useState<boolean>(false);
@@ -240,13 +244,26 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
       <div className={styles.editHead}>
         <div>
           <BackIcon
+            tabIndex={tabIndexFivth}
             className={styles.back}
-            onClick={() => dispatch(actionMenuEdit(false))}
+            onClick={() => {
+              dispatch(actionMenuEdit(false));
+              dispatch(actionAddTabIndexFiveth(-1));
+              dispatch(actionAddTabIndexFourth(0));
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                dispatch(actionMenuEdit(false));
+                dispatch(actionAddTabIndexFiveth(-1));
+                dispatch(actionAddTabIndexFourth(0));
+              }
+            }}
           />
           <h2>Edit Profile</h2>
         </div>
       </div>
       <form
+        tabIndex={tabIndexFivth}
         className={cn(styles.contactsList, {
           [styles.swiper]: swiper === true,
         })}
@@ -256,7 +273,10 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
         <div className={styles.editUser}>
           <div className={styles.editPhoto}>
             {imageUser ? (
-              <div className={styles.uploadWrapper}>
+              <div
+                className={styles.uploadWrapper}
+                style={{ display: imageUser ? "block" : "none" }}
+              >
                 <img
                   className={styles.userImage}
                   src={`http://localhost:3001/images/` + imageUser.file}
@@ -266,6 +286,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
                   <PhotoIcon />
                 </label>
                 <input
+                  tabIndex={tabIndexFivth}
                   className={styles.input}
                   accept='.jpg, .jpeg, .png'
                   onChange={(e) => {
@@ -281,7 +302,10 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
                 />
               </div>
             ) : (
-              <div className={styles.uploadWrapper}>
+              <div
+                className={styles.uploadWrapper}
+                style={{ display: imageUser ? "block" : "none" }}
+              >
                 <div
                   className={styles.wrapperLoadNoPhoto}
                   style={{
@@ -292,6 +316,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
                   <PhotoIcon />
                 </label>
                 <input
+                  tabIndex={tabIndexFivth}
                   className={styles.input}
                   accept='.jpg, .jpeg, .png'
                   onChange={handleLoadPhoto}
@@ -302,6 +327,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
             )}
           </div>
           <Input
+            tabIndex={tabIndexFivth}
             error={Boolean(errors.name)}
             placeholderName='Name'
             notification={true}
@@ -319,6 +345,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
             </span>
           )}
           <Input
+            tabIndex={tabIndexFivth}
             error={Boolean(errors.surname)}
             placeholderName='Surname(optional)'
             notification={true}
@@ -336,6 +363,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
             </span>
           )}
           <Input
+            tabIndex={tabIndexFivth}
             placeholderName='Bio(optional)'
             error={Boolean(errors.bio)}
             {...register("bio", {
@@ -353,6 +381,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
         <div className={styles.editUser}>
           <h2 className={styles.usernameEdit}>Email</h2>
           <Input
+            tabIndex={tabIndexFivth}
             error={Boolean(errors.email)}
             placeholderName='Email'
             notification={true}
@@ -376,6 +405,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
         <div className={styles.editUser}>
           <h2 className={styles.usernameEdit}>Username</h2>
           <Input
+            tabIndex={tabIndexFivth}
             error={Boolean(errors.username)}
             placeholderName='Username'
             notification={true}
@@ -402,6 +432,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
         <div className={styles.editUser}>
           <h2 className={styles.usernameEdit}>Password</h2>
           <Input
+            tabIndex={tabIndexFivth}
             error={Boolean(errorPassword ? errorPassword : errors.mainPassword)}
             placeholderName='Main password'
             notification={true}
@@ -423,6 +454,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
             <span className={styles.error}>{errorPassword}</span>
           )}
           <Input
+            tabIndex={tabIndexFivth}
             error={Boolean(
               errorPasswordNew ? errorPasswordNew : errors.newPassword
             )}
@@ -449,6 +481,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
             <span className={styles.error}>{errorPasswordNew}</span>
           )}
           <Input
+            tabIndex={tabIndexFivth}
             error={Boolean(
               errorPasswordReapeat
                 ? errorPasswordReapeat
@@ -479,10 +512,16 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
           <p>You can change the your password on Dove.</p>
         </div>
         <button
+          tabIndex={tabIndexFivth}
           className={cn(styles.supheed, {
             [styles.submit]: submit === true,
           })}
           onClick={handleSubmit(onSubmit)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleSubmit(onSubmit);
+            }
+          }}
         >
           <SupheedIcon />
         </button>

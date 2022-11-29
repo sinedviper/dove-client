@@ -16,6 +16,7 @@ export const Input = forwardRef(
       setText,
       placeholderName,
       className,
+      tabIndex,
       notification = false,
       notificationText = "Please enter correctly",
       textCheckPassNew,
@@ -87,6 +88,7 @@ export const Input = forwardRef(
           {error && " Invalid"}
         </label>
         <input
+          tabIndex={tabIndex}
           className={cn(className, styles.input, {
             [styles.inputOn]: type === true,
             [styles.error]: error === true,
@@ -117,6 +119,12 @@ export const Input = forwardRef(
                   [styles.errorOn]: error === true,
                 })}
                 onClick={() => setEye(false)}
+                tabIndex={tabIndex}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    setEye(false);
+                  }
+                }}
               />
             ) : (
               <EyeCloseIcon
@@ -125,6 +133,12 @@ export const Input = forwardRef(
                   [styles.errorOn]: error === true,
                 })}
                 onClick={() => setEye(true)}
+                tabIndex={tabIndex}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    setEye(true);
+                  }
+                }}
               />
             )
           ) : (
@@ -175,6 +189,12 @@ export const Input = forwardRef(
               className={styles.infoIcon}
               onMouseMove={() => setNotifica(true)}
               onMouseLeave={() => setNotifica(false)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  setNotifica(!notifica);
+                }
+              }}
+              tabIndex={tabIndex}
             >
               <InfoIcon />
             </span>

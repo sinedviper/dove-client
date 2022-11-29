@@ -23,6 +23,8 @@ import {
   getChat,
   getContacts,
   getFetch,
+  getTabIndexFirst,
+  getTabIndexSecond,
   getUser,
 } from "store";
 
@@ -46,6 +48,9 @@ export const Chats = ({
   const user: IUser | undefined = useAppSelector(getUser);
   const contacts: IUser[] | undefined = useAppSelector(getContacts);
   const chats: IChat[] | undefined = useAppSelector(getChat);
+  const tabIndexFirst: number = useAppSelector(getTabIndexFirst);
+  const tabIndexSecond: number = useAppSelector(getTabIndexSecond);
+
   const [valueAll, setValueAll] = useState<string>("");
 
   const { data: dataSearch } = useQuery(getUsersSearch, {
@@ -127,6 +132,12 @@ export const Chats = ({
                     onClick={() => handleFocus(contact)}
                     onMouseDown={() => setClick(true)}
                     onMouseUp={() => setClick(false)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        handleFocus(contact);
+                      }
+                    }}
+                    tabIndex={tabIndexSecond}
                   >
                     <div
                       className={styles.contactPhoto}
@@ -152,6 +163,12 @@ export const Chats = ({
                 handleFocus={() => handleFocus(user)}
                 setValue={setValueAll}
                 search={true}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleFocus(user);
+                  }
+                }}
+                tabIndex={tabIndexSecond}
               />
             ))}
           </div>
@@ -164,13 +181,15 @@ export const Chats = ({
       >
         <ul>
           {fetch && (
-            <li className={styles.fetchError}>
+            <li className={styles.fetchError} tabIndex={-1}>
               <LoadingIcon className={styles.fetchErrorLoading} />
               <p>The server is not responding</p>
             </li>
           )}
           {chats &&
-            chats.map((chat: IChat) => <CardChat chat={chat} key={chat.id} />)}
+            chats.map((chat: IChat) => (
+              <CardChat chat={chat} key={chat.id} tabIndex={tabIndexFirst} />
+            ))}
         </ul>
       </section>
     </section>

@@ -18,6 +18,11 @@ import { deleteUpload } from "resolvers/upload";
 import {
   actionAddCopy,
   actionAddImageUser,
+  actionAddTabIndexFirst,
+  actionAddTabIndexFiveth,
+  actionAddTabIndexFourth,
+  actionAddTabIndexSeventh,
+  actionAddTabIndexSixth,
   actionMenuEdit,
   actionMenuSetting,
   getImageSender,
@@ -47,6 +52,7 @@ export const Settings = ({
   setSettings,
   sender,
   profile = false,
+  tabIndex,
   ...props
 }: SettingsProps): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -154,11 +160,28 @@ export const Settings = ({
           {profile ? (
             <RemoveIcon
               className={cn(styles.back, styles.remove)}
-              onClick={() =>
-                setSettings
-                  ? setSettings(false)
-                  : dispatch(actionMenuSetting(false))
-              }
+              onClick={() => {
+                if (setSettings) {
+                  setSettings(false);
+                }
+                if (!setSettings) {
+                  dispatch(actionMenuSetting(false));
+                }
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  if (setSettings) {
+                    setSettings(false);
+                    dispatch(actionAddTabIndexFirst(0));
+                    dispatch(actionAddTabIndexSixth(0));
+                    dispatch(actionAddTabIndexSeventh(-1));
+                  }
+                  if (!setSettings) {
+                    dispatch(actionMenuSetting(false));
+                  }
+                }
+              }}
+              tabIndex={tabIndex}
             />
           ) : (
             <BackIcon
@@ -168,7 +191,18 @@ export const Settings = ({
                   ? setSettings(false)
                   : dispatch(actionMenuSetting(false));
                 setDeleteUser(false);
+                dispatch(actionAddTabIndexFourth(-1));
               }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  setSettings
+                    ? setSettings(false)
+                    : dispatch(actionMenuSetting(false));
+                  setDeleteUser(false);
+                  dispatch(actionAddTabIndexFourth(-1));
+                }
+              }}
+              tabIndex={tabIndex}
             />
           )}
           <h2>{!profile ? "Settings" : "Profile"}</h2>
@@ -182,7 +216,20 @@ export const Settings = ({
                   ? setSettings(false)
                   : dispatch(actionMenuEdit(true));
                 setDeleteUser(false);
+                dispatch(actionAddTabIndexFourth(-1));
+                dispatch(actionAddTabIndexFiveth(0));
               }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  setSettings
+                    ? setSettings(false)
+                    : dispatch(actionMenuEdit(true));
+                  setDeleteUser(false);
+                  dispatch(actionAddTabIndexFourth(-1));
+                  dispatch(actionAddTabIndexFiveth(0));
+                }
+              }}
+              tabIndex={tabIndex}
             />
           )}
           {!profile && (
@@ -190,6 +237,17 @@ export const Settings = ({
               <button
                 className={styles.delete}
                 onClick={() => setDeleteUser(!deleteUsera)}
+                onKeyUp={(e) => {
+                  if (e.key === "Enter") {
+                    setDeleteUser(!deleteUsera);
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    setDeleteUser(!deleteUsera);
+                  }
+                }}
+                tabIndex={tabIndex}
               >
                 <span className={styles.dot}></span>
               </button>
@@ -201,6 +259,17 @@ export const Settings = ({
                 <button
                   className={styles.deleteButton}
                   onClick={handleRemoveUser}
+                  onKeyUp={(e) => {
+                    if (e.key === "Enter") {
+                      handleRemoveUser();
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleRemoveUser();
+                    }
+                  }}
+                  tabIndex={tabIndex}
                 >
                   <RemoveUserIcon className={styles.removeIcon} />
                   <span>Delete account</span>
@@ -250,6 +319,7 @@ export const Settings = ({
               className={styles.wrapperImage}
               onMouseMove={() => setButtonPhoto(true)}
               onMouseLeave={() => setButtonPhoto(false)}
+              tabIndex={tabIndex}
             >
               {imageUser?.length === 1 ? (
                 <div key={imageUser[0].id} className={styles.userImageWrapper}>
@@ -263,7 +333,13 @@ export const Settings = ({
                       onClick={() =>
                         handleRemovePhoto(imageUser[0].id, imageUser[0].file)
                       }
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleRemovePhoto(imageUser[0].id, imageUser[0].file);
+                        }
+                      }}
                       className={styles.buttonWrapperRemove}
+                      tabIndex={tabIndex}
                     >
                       <RemoveIcon className={styles.removeIconButton} />
                     </button>
@@ -323,7 +399,7 @@ export const Settings = ({
           </div>
           {!profile && (
             <div className={styles.uploadWrapper}>
-              <button className={styles.uploadPhoto}>
+              <button className={styles.uploadPhoto} tabIndex={tabIndex}>
                 <label className={styles.iconPhotoWrapper} htmlFor='loadphoto'>
                   <PhotoIcon />
                 </label>
@@ -343,6 +419,12 @@ export const Settings = ({
           <div
             className={styles.info}
             onClick={() => handleCopy(String(user?.email))}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleCopy(String(user?.username));
+              }
+            }}
+            tabIndex={tabIndex}
           >
             <MailIcon className={styles.iconInfo} />
             <span>
@@ -353,6 +435,12 @@ export const Settings = ({
           <div
             className={styles.info}
             onClick={() => handleCopy(String(user?.username))}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleCopy(String(user?.username));
+              }
+            }}
+            tabIndex={tabIndex}
           >
             <UsernameIcon className={styles.iconInfo} />
             <span>
@@ -364,6 +452,12 @@ export const Settings = ({
             <div
               className={styles.info}
               onClick={() => handleCopy(String(user?.username))}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleCopy(String(user?.username));
+                }
+              }}
+              tabIndex={tabIndex}
             >
               <InfoIcon className={styles.iconInfo} />
               <span>

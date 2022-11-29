@@ -129,7 +129,16 @@ export const FormLogin = ({
             </span>
           </button>
           <p className={styles.link}>
-            <span className={styles.reg} onClick={() => navigate("/sigup")}>
+            <span
+              className={styles.reg}
+              onClick={() => navigate("/sigup")}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  navigate("/sigup");
+                }
+              }}
+              tabIndex={0}
+            >
               SIGN UP
             </span>
           </p>

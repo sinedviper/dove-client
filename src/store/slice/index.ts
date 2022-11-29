@@ -11,3 +11,4 @@ export * from "./copy.slice";
 export * from "./imageUser.slice";
 export * from "./fetch.slice";
 export * from "./imageSender.slice";
+export * from "./tabIndexGroupe.slice";

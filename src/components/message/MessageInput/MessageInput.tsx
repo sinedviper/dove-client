@@ -18,9 +18,12 @@ import { addMessages, updateMessages } from "resolvers/messages";
 import {
   actionAddChats,
   actionAddMessages,
+  actionAddTabIndexEighth,
   actionClearMessageEdit,
   getMessageEdit,
   getRecipient,
+  getTabIndexEighth,
+  getTabIndexSixth,
 } from "store";
 import { EditIcon, RemoveIcon, ReplyIcon, SendIcon, SmileIcon } from "assets";
 
@@ -42,6 +45,8 @@ export const MessageInput = ({
     message: { message, edit },
   } = useAppSelector(getMessageEdit);
   const sender: IUser | undefined = useAppSelector(getRecipient);
+  const tabIndexEighth: number = useAppSelector(getTabIndexEighth);
+  const tabIndexSixth: number = useAppSelector(getTabIndexSixth);
 
   const [queryFunctionChat] = useLazyQuery(getChats, {
     fetchPolicy: "network-only",
@@ -221,6 +226,7 @@ export const MessageInput = ({
         ) : null
       ) : null}
       <TextareaAutosize
+        tabIndex={tabIndexSixth}
         value={String(send)}
         placeholder='Message'
         className={cn(className, styles.input, {
@@ -233,9 +239,8 @@ export const MessageInput = ({
         }}
         onFocus={() => setEmoji(false)}
         onKeyDown={(e) => {
-          handleSend(e);
-          if (e.keyCode === 13 && !e.shiftKey) {
-            // prevent default behavior
+          if (e.key === "Enter") {
+            handleSend(e);
           }
         }}
         maxLength={1000}
@@ -243,27 +248,52 @@ export const MessageInput = ({
         minRows={1}
         maxRows={21}
       />
-      <SmileIcon
-        className={cn(styles.smileIcon, {
-          [styles.emojiIconOn]: emoji === true,
-        })}
-        onClick={() => setEmoji(!emoji)}
-      />
-      <span className={cn(styles.send)} onClick={handleSendClick}>
+      <button
+        className={cn(styles.smileIconWrapper)}
+        tabIndex={tabIndexSixth}
+        onClick={() => {
+          setEmoji(!emoji);
+          dispatch(actionAddTabIndexEighth(tabIndexEighth === 0 ? -1 : 0));
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            setEmoji(!emoji);
+            dispatch(actionAddTabIndexEighth(tabIndexEighth === 0 ? -1 : 0));
+          }
+        }}
+        onKeyUp={(e) => {
+          if (e.key === "Enter") {
+            setEmoji(!emoji);
+            dispatch(actionAddTabIndexEighth(tabIndexEighth === 0 ? -1 : 0));
+          }
+        }}
+      >
+        <SmileIcon
+          className={cn(styles.smileIcon, {
+            [styles.emojiIconOn]: emoji === true,
+          })}
+        />
+      </button>
+      <button
+        className={cn(styles.send)}
+        onClick={handleSendClick}
+        tabIndex={tabIndexSixth}
+      >
         <SendIcon className={cn(styles.sendIcon)} />
-      </span>
+      </button>
       <div
         className={cn(styles.emojiWrapper, {
           [styles.emojiWrapperOn]: emoji === true,
         })}
+        tabIndex={tabIndexEighth}
       >
         <Picker
           theme={user?.theme ? "dark" : "light"}
           data={data}
           onEmojiSelect={handleEmoji}
+          tabIndex={tabIndexEighth}
         />
       </div>
-      <span className={styles.inputStyles}></span>
     </div>
   );
 };

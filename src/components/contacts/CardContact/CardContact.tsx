@@ -18,6 +18,7 @@ export const CardContact = ({
   handleFocus,
   setValue,
   search,
+  tabIndex,
   ...props
 }: CardContactProps): JSX.Element => {
   const autorization = useAuthorization();
@@ -58,7 +59,14 @@ export const CardContact = ({
       className={cn(className, styles.contacts, {
         [styles.contactActive]: click === true,
       })}
-      onClick={handleFocus}
+      onClick={() => {
+        handleFocus(contact);
+      }}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          handleFocus(contact);
+        }
+      }}
       onMouseDown={(e) => {
         if (e.buttons === 2) {
           setMenu(true);
@@ -78,6 +86,7 @@ export const CardContact = ({
         e.preventDefault();
         return false;
       }}
+      tabIndex={tabIndex}
     >
       <div
         className={styles.contactsPhoto}

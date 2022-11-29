@@ -7,6 +7,8 @@ import { CardContact } from "components/contacts";
 import { Search } from "components/layouts";
 import {
   actionAddRecipient,
+  actionAddTabIndexFirst,
+  actionAddTabIndexThree,
   actionClearImageSender,
   actionClearMessages,
   actionClearRecipient,
@@ -14,6 +16,7 @@ import {
   actionMenuMain,
   getContacts,
   getMenuContact,
+  getTabIndexThree,
 } from "store";
 import { BackIcon } from "assets";
 
@@ -33,6 +36,7 @@ export const Contacts = ({
 
   const contacts: IUser[] | undefined = useAppSelector(getContacts);
   const contact: boolean = useAppSelector(getMenuContact);
+  const tabIndexThree = useAppSelector(getTabIndexThree);
 
   const [valueContact, setValueContact] = useState<string>("");
   const [swiper, setSwiper] = useState<boolean>(false);
@@ -44,10 +48,14 @@ export const Contacts = ({
       dispatch(actionClearRecipient());
       dispatch(actionAddRecipient(contact));
       dispatch(actionClearImageSender());
+      dispatch(actionAddTabIndexFirst(0));
+      dispatch(actionAddTabIndexThree(-1));
       navigate(`${contact?.username}`);
     }
     if (String(contact.username) === String(username)) {
       dispatch(actionMenuContact(false));
+      dispatch(actionAddTabIndexFirst(0));
+      dispatch(actionAddTabIndexThree(-1));
     }
     if (windowSize[0] < 1000) {
       dispatch(actionMenuMain(false));
@@ -63,13 +71,26 @@ export const Contacts = ({
     >
       <div className={styles.contactSearch}>
         <BackIcon
+          tabIndex={tabIndexThree}
           className={styles.back}
-          onClick={() => dispatch(actionMenuContact(false))}
+          onClick={() => {
+            dispatch(actionMenuContact(false));
+            dispatch(actionAddTabIndexThree(-1));
+            dispatch(actionAddTabIndexFirst(0));
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              dispatch(actionMenuContact(false));
+              dispatch(actionAddTabIndexThree(-1));
+              dispatch(actionAddTabIndexFirst(0));
+            }
+          }}
         />
         <Search
           value={valueContact}
           setValue={setValueContact}
           ref={searchContact}
+          tabIndex={tabIndexThree}
         />
       </div>
       <section
@@ -87,7 +108,8 @@ export const Contacts = ({
                   contact={contact}
                   key={contact.id}
                   setValue={setValueContact}
-                  handleFocus={() => handleFocus(contact)}
+                  handleFocus={handleFocus}
+                  tabIndex={tabIndexThree}
                 />
               ))
               .filter((val) => {

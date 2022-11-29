@@ -31,12 +31,31 @@ import {
   actionAddUser,
   actionMenuMain,
   getMenuMain,
+  getTabIndexFourth,
   getUser,
 } from "store";
 
 import { LayoutProps } from "./Layout.props";
 import styles from "./Layout.module.css";
 import { getUploads } from "resolvers/upload";
+
+(function () {
+  const tabHistory = [{}];
+
+  window.addEventListener("keyup", function (e) {
+    const code = e.keyCode || e.which;
+    const index = tabHistory.length === 0 ? 1 : tabHistory.length + 1;
+
+    if (code === 9) {
+      tabHistory.push({
+        element: e.target,
+        index,
+      });
+
+      console.log(index, e.target, tabHistory);
+    }
+  });
+})();
 
 export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -103,6 +122,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   const user: IUser | undefined = useAppSelector(getUser);
   const token: string | null = localStorage.getItem("token");
   const main: boolean = useAppSelector(getMenuMain);
+  const getIndexFourth: number = useAppSelector(getTabIndexFourth);
 
   const debouncedMutation = useDebounce(() => {
     mutationUserOnlineFunction({ variables: { input: { online: "ping" } } });
@@ -184,7 +204,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
       >
         <Chats searchContact={searchContact} />
         <Contacts searchContact={searchContact} />
-        <Settings />
+        <Settings tabIndex={getIndexFourth} />
         <Edits />
       </section>
       <Outlet />

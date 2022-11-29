@@ -142,8 +142,8 @@
 
 .notificaText {
   position: absolute;
-  top: -40px;
-  right: 15px;
+  bottom: 60px;
+  right: 10px;
   border: 1px solid var(--border-second);
   word-wrap: break-word;
   padding: 10px;

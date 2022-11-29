@@ -15,6 +15,8 @@ import { ButtonMenu } from "components/layouts";
 import {
   actionAddChats,
   actionAddRecipient,
+  actionAddTabIndexFirst,
+  actionAddTabIndexSixth,
   actionClearImageSender,
   actionClearMessages,
   actionClearRecipient,
@@ -26,6 +28,7 @@ import styles from "./CardChat.module.css";
 
 export const CardChat = ({
   className,
+  tabIndex,
   chat: { id, user, lastMessage, image },
   ...props
 }: CardChatProps): JSX.Element => {
@@ -42,6 +45,7 @@ export const CardChat = ({
       fetchPolicy: "network-only",
       onCompleted(data) {
         autorization({ data: data.deleteChat, actionAdd: actionAddChats });
+        dispatch(actionAddTabIndexSixth(-1));
         navigate("");
       },
     }
@@ -60,10 +64,12 @@ export const CardChat = ({
       dispatch(actionClearRecipient());
       dispatch(actionAddRecipient(user));
       dispatch(actionClearImageSender());
+      dispatch(actionAddTabIndexSixth(0));
       navigate(`${user.username}`);
     }
-    if (windowSize[0] < 600) {
+    if (windowSize[0] < 1000) {
       dispatch(actionMenuMain(false));
+      dispatch(actionAddTabIndexFirst(-1));
     }
   };
 
@@ -83,10 +89,16 @@ export const CardChat = ({
 
   return (
     <li
+      tabIndex={tabIndex}
       className={cn(className, styles.contacts, {
         [styles.contactActive]: click === true,
       })}
       onClick={handleFocus}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          handleFocus();
+        }
+      }}
       onMouseMoveCapture={(e: any) => {
         if (!menu) {
           setTop(e.nativeEvent.layerY);
@@ -147,6 +159,7 @@ export const CardChat = ({
         menu={menu}
         handleDelete={handleDeleteChat}
         text={"Delete"}
+        tabIndex={-1}
       />
     </li>
   );

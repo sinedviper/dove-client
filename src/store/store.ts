@@ -1,3 +1,4 @@
+import { tabIndexGroupeReducer } from "./slice/tabIndexGroupe.slice";
 import {
   Action,
   configureStore,
@@ -46,12 +47,22 @@ const reducer = combineReducers({
   imageUser: iamgeUserReducer,
   fetch: fetchReducer,
   imageSender: imageSenderReducer,
+  tabIndexGroupe: tabIndexGroupeReducer,
 });
 
 const persistConfig = {
   key: "root",
   storage,
-  blacklist: ["errors", "loading", "copy", "menu", "message"],
+  blacklist: [
+    "errors",
+    "loading",
+    "copy",
+    "menu",
+    "message",
+    "tabIndexGroupe",
+    "fetch",
+    "imageSender",
+  ],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducer);

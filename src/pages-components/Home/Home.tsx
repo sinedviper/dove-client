@@ -25,6 +25,7 @@ import {
   getMenuMain,
   getMessages,
   getRecipient,
+  getTabIndexSeventh,
   getUser,
 } from "store";
 
@@ -44,6 +45,7 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
   )[0];
   const messages: IMessage[] | undefined = useAppSelector(getMessages);
   const main: boolean = useAppSelector(getMenuMain);
+  const tabIndexSeventh: number = useAppSelector(getTabIndexSeventh);
 
   const { error: errorQueryMessage } = useQuery(getMessage, {
     variables: {
@@ -170,7 +172,12 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
           [styles.profileOn]: settings === true,
         })}
       >
-        <Settings setSettings={setSettings} sender={sender} profile={true} />
+        <Settings
+          setSettings={setSettings}
+          sender={sender}
+          profile={true}
+          tabIndex={tabIndexSeventh}
+        />
       </section>
     </section>
   );

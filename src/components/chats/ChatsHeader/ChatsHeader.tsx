@@ -16,9 +16,19 @@ import { getContact } from "resolvers/contacts";
 import { ButtonMenuMain, Search } from "components/layouts";
 import {
   actionAddContact,
+  actionAddTabIndexFirst,
+  actionAddTabIndexFourth,
+  actionAddTabIndexSecond,
+  actionAddTabIndexSixth,
+  actionAddTabIndexThree,
   actionAddUser,
   actionMenuContact,
   actionMenuSetting,
+  getTabIndexFirst,
+  getTabIndexFiveth,
+  getTabIndexFourth,
+  getTabIndexSixth,
+  getTabIndexThree,
   getUser,
 } from "store";
 
@@ -42,6 +52,11 @@ export const ChatsHeader = ({
   const autorization = useAuthorization();
 
   const user: IUser | undefined = useAppSelector(getUser);
+  const tabIndexFirst: number = useAppSelector(getTabIndexFirst);
+  const tabIndexThree: number = useAppSelector(getTabIndexThree);
+  const tabIndexFourth: number = useAppSelector(getTabIndexFourth);
+  const tabIndexFiveth: number = useAppSelector(getTabIndexFiveth);
+  const tabIndexSixth: number = useAppSelector(getTabIndexSixth);
 
   const [mutationFunctionUser] = useMutation(updateUser, {
     fetchPolicy: "network-only",
@@ -75,11 +90,15 @@ export const ChatsHeader = ({
     dispatch(actionMenuContact(true));
     setMenu(false);
     setTimeout(() => searchContact?.current?.focus(), 300);
+    dispatch(actionAddTabIndexFirst(-1));
+    dispatch(actionAddTabIndexThree(0));
   };
 
   const handleSettings = () => {
     dispatch(actionMenuSetting(true));
     setMenu(false);
+    dispatch(actionAddTabIndexFirst(-1));
+    dispatch(actionAddTabIndexFourth(0));
   };
 
   const handleLeavMouseInBlockChats = () => {
@@ -105,12 +124,49 @@ export const ChatsHeader = ({
     >
       <button
         className={styles.menu}
+        tabIndex={
+          tabIndexThree === 0 || tabIndexFourth === 0 || tabIndexFiveth === 0
+            ? -1
+            : 0
+        }
         onClick={() => {
           if (searchUser) {
             setSearchUser(false);
             setValueAll("");
           }
-          if (!searchUser) setMenu(!menu);
+          if (searchUser === false) {
+            setMenu(!menu);
+            //dispatch(actionAddTabIndexFirst(tabIndexFirst === 0 ? -1 : 0));
+            //dispatch(actionAddTabIndexSixth(tabIndexSixth === 0 ? -1 : 0));
+          }
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            if (searchUser) {
+              console.log("1");
+              setSearchUser(false);
+              setValueAll("");
+              dispatch(actionAddTabIndexFirst(0));
+              dispatch(actionAddTabIndexSecond(-1));
+            }
+            if (searchUser === false) {
+              console.log("2");
+              setMenu(!menu);
+              dispatch(actionAddTabIndexFirst(tabIndexFirst === 0 ? -1 : 0));
+              dispatch(actionAddTabIndexSixth(tabIndexSixth === 0 ? -1 : 0));
+            }
+          }
+        }}
+        onKeyUp={(e) => {
+          if (e.key === "Enter") {
+            if (searchUser) {
+              setSearchUser(false);
+              setValueAll("");
+            }
+            if (searchUser === false) {
+              setMenu(menu === false ? true : false);
+            }
+          }
         }}
       >
         <span
@@ -124,11 +180,17 @@ export const ChatsHeader = ({
         setValue={setValueAll}
         setSearchUser={setSearchUser}
         setMenu={setMenu}
+        tabIndex={
+          tabIndexThree === 0 || tabIndexFourth === 0 || tabIndexFiveth === 0
+            ? -1
+            : 0
+        }
       />
       <div
         className={cn(styles.menuClose, {
           [styles.menuOpen]: menu === true,
         })}
+        style={{ display: menu ? "block" : "none" }}
       >
         <ButtonMenuMain
           text={"Contacts"}

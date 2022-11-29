@@ -14,11 +14,15 @@ import { IImage, IUser } from "utils/interface";
 import { addContact, deleteContact } from "resolvers/contacts";
 import {
   actionAddContact,
+  actionAddTabIndexFirst,
+  actionAddTabIndexSeventh,
+  actionAddTabIndexSixth,
   actionMenuMain,
   getContacts,
   getImageSender,
   getMenuMain,
   getRecipient,
+  getTabIndexSixth,
   getUser,
 } from "store";
 import { AddUserIcon, BackIcon, RemoveUserIcon } from "assets";
@@ -45,6 +49,7 @@ export const MessageHeader = ({
   const user: IUser | undefined = useAppSelector(getUser);
   const imageSender: IImage | undefined = useAppSelector(getImageSender);
   const main: boolean = useAppSelector(getMenuMain);
+  const tabIndexSixth = useAppSelector(getTabIndexSixth);
 
   const [mutationFunctionDelete] = useMutation(deleteContact, {
     fetchPolicy: "network-only",
@@ -108,6 +113,16 @@ export const MessageHeader = ({
             }
           }
         }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter")
+            if (windowSize[0] < 1000) {
+              dispatch(actionMenuMain(!main));
+              if (settings === true) {
+                setSettings(false);
+              }
+            }
+        }}
+        tabIndex={windowSize[0] < 1000 ? tabIndexSixth : -1}
         className={cn(styles.buttonBackMain)}
       >
         <BackIcon
@@ -122,6 +137,22 @@ export const MessageHeader = ({
           setSettings(true);
           if (settings === true) dispatch(actionMenuMain(false));
         }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            setSettings(true);
+            dispatch(actionAddTabIndexSeventh(0));
+            dispatch(actionAddTabIndexFirst(-1));
+            dispatch(actionAddTabIndexSixth(-1));
+            if (settings === true) dispatch(actionMenuMain(false));
+          }
+        }}
+        onKeyUp={(e) => {
+          if (e.key === "Enter") {
+            setSettings(true);
+            if (settings === true) dispatch(actionMenuMain(false));
+          }
+        }}
+        tabIndex={tabIndexSixth}
       >
         <div className={styles.headerReceiptPhoto}>
           {imageSender ? (
@@ -158,6 +189,17 @@ export const MessageHeader = ({
       <button
         className={styles.delete}
         onClick={() => setmenuMessage(!menuMessage)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            setmenuMessage(!menuMessage);
+          }
+        }}
+        onKeyUp={(e) => {
+          if (e.key === "Enter") {
+            setmenuMessage(!menuMessage);
+          }
+        }}
+        tabIndex={tabIndexSixth}
       >
         <span className={styles.dot}></span>
       </button>
@@ -165,8 +207,18 @@ export const MessageHeader = ({
         className={cn(styles.menuMessageWrapper, {
           [styles.menuMessageWrapperOn]: menuMessage === true,
         })}
+        style={{ display: menuMessage ? "block" : "none" }}
       >
-        <button className={styles.deleteButton} onClick={handleEditContact}>
+        <button
+          className={styles.deleteButton}
+          onClick={handleEditContact}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleEditContact();
+            }
+          }}
+          tabIndex={tabIndexSixth}
+        >
           {contact ? (
             <>
               <RemoveUserIcon className={styles.removeIcon} />

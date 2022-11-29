@@ -23,14 +23,20 @@
   background-color: var(--background-third);
 }
 
-.smileIcon {
+.smileIconWrapper {
   z-index: 1;
+  display: block;
   position: absolute;
   width: 27px;
   height: 27px;
   bottom: 15px;
   left: 15px;
   cursor: pointer;
+  border: none;
+  background: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
 }
 
 .send {
@@ -46,6 +52,7 @@
   cursor: pointer;
   background-color: var(--primary);
   border-radius: 50%;
+  border: none;
 }
 
 .sendIcon {
@@ -53,6 +60,10 @@
   height: 23px;
   fill: var(--white);
   pointer-events: none;
+}
+.smileIcon {
+  width: 27px;
+  height: 27px;
 }
 
 .smileIcon path {
@@ -76,11 +87,15 @@
   transition: var(--transition);
   opacity: 0;
   transform-origin: left bottom;
+  user-select: none;
+  display: none;
 }
 
 .emojiWrapperOn {
+  display: block;
   opacity: 1;
   pointer-events: all;
+  user-select: all;
   transition: var(--transition);
   bottom: 70px;
   left: 0px;
