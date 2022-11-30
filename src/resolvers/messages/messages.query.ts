@@ -15,6 +15,7 @@ export const getMessage = gql`
           surname
         }
         text
+        read
         reply {
           id
           senderMessage {

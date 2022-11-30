@@ -36,6 +36,11 @@
   background-color: var(--background-first);
 }
 
+.wrapperUserId {
+  align-self: end;
+  background-color: var(--primary-light);
+}
+
 .messageDown {
   margin-bottom: 10px;
 }
@@ -66,6 +71,7 @@
   white-space: nowrap;
   justify-content: flex-end;
   pointer-events: none;
+  align-items: center;
 }
 
 .messageEdit {
@@ -156,4 +162,18 @@
 .wrapperReply {
   display: flex;
   flex-direction: column;
+}
+
+.messageRead {
+  width: 20px;
+  height: 20px;
+  fill: var(--text-seventh);
+}
+
+.readMessage {
+  fill: var(--primary);
+}
+
+.readMessageUser {
+  fill: var(--white);
 }

@@ -4,7 +4,7 @@ import cn from "classnames";
 import { IMessage } from "utils/interface";
 import { formatHours } from "utils/helpers";
 import { MessageEdit } from "components/message";
-import { TailIcon } from "assets";
+import { CheckIcon, TailIcon } from "assets";
 
 import { MessageCardProps } from "./MessageCard.props";
 import styles from "./MessageCard.module.css";
@@ -54,23 +54,6 @@ export const MessageCard = ({
         text: message?.text,
       });
     }
-    if (e.buttons === 1) {
-      timer = setTimeout(() => {
-        setEditMessage(true);
-        setClientX(e.nativeEvent.layerX);
-        setClientY(e.nativeEvent.layerY);
-        if (e.nativeEvent.screenY > 400) {
-          setPosition(true);
-        }
-        setClient({
-          id: message?.id,
-          chatId: chat?.id ? chat.id : 0,
-          senderMessage: message?.senderMessage.id,
-          user: Number(user?.id),
-          text: message?.text,
-        });
-      }, 1000);
-    }
   };
 
   return (
@@ -82,6 +65,7 @@ export const MessageCard = ({
             message?.senderMessage.username &&
           messages[Number(index + 1)]?.senderMessage.username !== undefined,
         [styles.wrapperReply]: message?.reply !== null,
+        [styles.wrapperUserId]: message?.senderMessage.id === user?.id,
       })}
       onMouseMove={(e: any) => {
         if (!editMessage) {
@@ -100,10 +84,25 @@ export const MessageCard = ({
         e.preventDefault();
         return false;
       }}
-      onMouseUp={(e) => {
-        if (e.buttons === 1) {
-          clearTimeout(timer);
-        }
+      onTouchEnd={() => {
+        clearTimeout(timer);
+      }}
+      onTouchStart={(e: any) => {
+        timer = setTimeout(() => {
+          setEditMessage(true);
+          setClientX(e.nativeEvent.layerX);
+          setClientY(e.nativeEvent.layerY);
+          if (e.nativeEvent.screenY > 400) {
+            setPosition(true);
+          }
+          setClient({
+            id: message?.id,
+            chatId: chat?.id ? chat.id : 0,
+            senderMessage: message?.senderMessage.id,
+            user: Number(user?.id),
+            text: message?.text,
+          });
+        }, 1000);
       }}
       {...props}
     >
@@ -155,6 +154,15 @@ export const MessageCard = ({
             })}
           >
             {formatHours(new Date(message?.createdAt))}
+          </span>
+          <span
+            className={cn(styles.messageRead, {
+              [styles.readMessage]: message.read,
+              [styles.readMessageUser]:
+                message.read && username !== message?.senderMessage.username,
+            })}
+          >
+            <CheckIcon />
           </span>
         </div>
       </div>

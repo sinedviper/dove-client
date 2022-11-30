@@ -19,6 +19,7 @@ export const getChats = gql`
         lastMessage {
           id
           text
+          read
           createdAt
         }
         image {

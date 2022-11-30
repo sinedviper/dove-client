@@ -89,14 +89,20 @@ export const CardContact = ({
         if (e.buttons === 2) {
           setMenu(true);
         }
-        if (e.buttons === 1) {
-          setClick(true);
-          timer = setTimeout(() => {
-            setMenu(true);
-          }, 1000);
-        }
+      }}
+      onTouchStart={() => {
+        setClick(true);
+        timer = setTimeout(() => {
+          setMenu(true);
+        }, 1000);
+      }}
+      onClick={() => {
+        handleFocus(contact);
       }}
       onMouseUp={() => {
+        setClick(false);
+      }}
+      onTouchEnd={() => {
         setClick(false);
         if (!menu) {
           handleFocus(contact);

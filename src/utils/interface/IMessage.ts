@@ -4,6 +4,7 @@ export interface IMessage {
   text: string;
   senderMessage: IUser;
   chatId: IChat;
+  read: boolean;
   reply: IMessage;
   createdAt: Date;
   updatedAt: Date;

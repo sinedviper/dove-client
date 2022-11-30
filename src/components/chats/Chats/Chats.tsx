@@ -203,9 +203,17 @@ export const Chats = ({
             </li>
           )}
           {chats &&
-            chats.map((chat: IChat) => (
-              <CardChat chat={chat} key={uuidv4()} tabIndex={tabIndexFirst} />
-            ))}
+            chats
+              .filter((chat: IChat) => chat.user.username === user?.username)
+              .map((chat: IChat) => (
+                <CardChat chat={chat} key={uuidv4()} tabIndex={tabIndexFirst} />
+              ))}
+          {chats &&
+            chats
+              .filter((chat: IChat) => chat.user.username !== user?.username)
+              .map((chat: IChat) => (
+                <CardChat chat={chat} key={uuidv4()} tabIndex={tabIndexFirst} />
+              ))}
         </ul>
       </section>
     </section>

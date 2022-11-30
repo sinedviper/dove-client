@@ -28,6 +28,8 @@ import { ReactComponent as Tail } from "./tail.svg";
 import { ReactComponent as Photo } from "./photo.svg";
 import { ReactComponent as BackPhoto } from "./backPhoto.svg";
 import { ReactComponent as UpPhoto } from "./upPhoto.svg";
+import { ReactComponent as Check } from "./check.svg";
+import { ReactComponent as Bookmark } from "./bookmark.svg";
 
 export const TelegramIcon = Telegram;
 export const SearchIcon = Search;
@@ -59,3 +61,5 @@ export const TailIcon = Tail;
 export const PhotoIcon = Photo;
 export const BackPhotoIcon = BackPhoto;
 export const UpPhotoIcon = UpPhoto;
+export const CheckIcon = Check;
+export const BookmarkIcon = Bookmark;

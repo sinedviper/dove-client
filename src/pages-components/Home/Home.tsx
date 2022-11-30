@@ -59,9 +59,9 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
       authorization({ data: data.getMessages, actionAdd: actionAddMessages });
     },
     onError(errorData) {
-      error(errorData.message);
+      chat && error(errorData.message);
     },
-    pollInterval: chat && 500,
+    pollInterval: chat === undefined ? 300000 : 500,
   });
 
   const { error: errorSender } = useQuery(getUserSender, {

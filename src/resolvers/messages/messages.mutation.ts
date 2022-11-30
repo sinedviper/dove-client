@@ -15,6 +15,7 @@ export const addMessages = gql`
           surname
         }
         text
+        read
         reply {
           id
           senderMessage {
@@ -50,6 +51,7 @@ export const deleteMessages = gql`
           surname
         }
         text
+        read
         reply {
           id
           senderMessage {

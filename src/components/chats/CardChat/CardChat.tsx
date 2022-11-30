@@ -6,6 +6,7 @@ import cn from "classnames";
 import { colorCard, formateDate } from "utils/helpers";
 import {
   useAppDispatch,
+  useAppSelector,
   useAuthorization,
   useError,
   useWindowSize,
@@ -21,10 +22,13 @@ import {
   actionClearMessages,
   actionClearRecipient,
   actionMenuMain,
+  getUser,
 } from "store";
 
 import { CardChatProps } from "./CardChat.props";
 import styles from "./CardChat.module.css";
+import { BookmarkIcon, CheckIcon } from "assets";
+import { IUser } from "utils/interface";
 
 export const CardChat = ({
   className,
@@ -50,6 +54,8 @@ export const CardChat = ({
       },
     }
   );
+
+  const userMain: IUser | undefined = useAppSelector(getUser);
 
   const [top, setTop] = useState<number>(0);
   const [left, setLeft] = useState<number>(0);
@@ -94,12 +100,8 @@ export const CardChat = ({
       className={cn(className, styles.contacts, {
         [styles.contactActive]: click === true,
       })}
-      onMouseUp={(e) => {
-        if (e.buttons === 1) {
-          if (!menu) {
-            handleFocus();
-          }
-        }
+      onClick={() => {
+        handleFocus();
       }}
       onKeyDown={(e) => {
         if (e.key === "Enter") {
@@ -111,6 +113,16 @@ export const CardChat = ({
         }
         if (e.key === "Delete") {
           setMenu(!menu);
+        }
+      }}
+      onTouchStart={() => {
+        timer = setTimeout(() => {
+          setMenu(true);
+        }, 1000);
+      }}
+      onTouchEnd={() => {
+        if (!menu) {
+          clearTimeout(timer);
         }
       }}
       onMouseMoveCapture={(e: any) => {
@@ -125,11 +137,6 @@ export const CardChat = ({
       onMouseDown={(e) => {
         if (e.buttons === 2) {
           setMenu(true);
-        }
-        if (e.buttons === 1) {
-          setTimeout(() => {
-            setMenu(true);
-          }, 1000);
         }
       }}
       onContextMenu={(e) => {
@@ -147,7 +154,15 @@ export const CardChat = ({
               : "",
         }}
       >
-        {image === null ? (
+        {userMain?.username === user.username ? (
+          <span
+            className={cn(styles.bookMarkerWrapper, {
+              [styles.bookMarkerWrapperOn]: click,
+            })}
+          >
+            <BookmarkIcon />
+          </span>
+        ) : image === null ? (
           <span>
             {user.name && user.name.toUpperCase().split("")[0]}
             {user.surname && user.surname.toUpperCase().split("")[0]}
@@ -169,9 +184,21 @@ export const CardChat = ({
           {lastMessage && lastMessage.text}
         </span>
       </div>
-      <span className={styles.contactDate}>
-        {lastMessage && formateDate(new Date(lastMessage.createdAt))}
-      </span>
+      <div className={styles.contactDate}>
+        <CheckIcon
+          className={cn(styles.wrapperIcon, {
+            [styles.wrapperIconOne]:
+              click === false && lastMessage?.read === true,
+            [styles.wrapperIconMark]:
+              click === true && lastMessage?.read === true,
+            [styles.wrapperIconMarkNotRead]:
+              click === true && lastMessage?.read === false,
+          })}
+        />
+        <span>
+          {lastMessage && formateDate(new Date(lastMessage.createdAt))}
+        </span>
+      </div>
       <ButtonMenu
         top={top}
         left={left}
