@@ -36,9 +36,10 @@ export const MessageCard = ({
     text: "",
     user: 0,
   });
+  let timer: any;
 
   const handleMouseDown = (e, message: IMessage) => {
-    if (e.nativeEvent?.which === 3) {
+    if (e.buttons === 2) {
       setEditMessage(true);
       setClientX(e.nativeEvent.layerX);
       setClientY(e.nativeEvent.layerY);
@@ -52,6 +53,23 @@ export const MessageCard = ({
         user: Number(user?.id),
         text: message?.text,
       });
+    }
+    if (e.buttons === 1) {
+      timer = setTimeout(() => {
+        setEditMessage(true);
+        setClientX(e.nativeEvent.layerX);
+        setClientY(e.nativeEvent.layerY);
+        if (e.nativeEvent.screenY > 400) {
+          setPosition(true);
+        }
+        setClient({
+          id: message?.id,
+          chatId: chat?.id ? chat.id : 0,
+          senderMessage: message?.senderMessage.id,
+          user: Number(user?.id),
+          text: message?.text,
+        });
+      }, 1000);
     }
   };
 
@@ -81,6 +99,11 @@ export const MessageCard = ({
       onContextMenu={(e) => {
         e.preventDefault();
         return false;
+      }}
+      onMouseUp={(e) => {
+        if (e.buttons === 1) {
+          clearTimeout(timer);
+        }
       }}
       {...props}
     >
@@ -159,7 +182,6 @@ export const MessageCard = ({
             : null
         )}
       />
-
       <MessageEdit
         editMessage={editMessage}
         client={client}

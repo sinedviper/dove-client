@@ -3,11 +3,22 @@ import { useMutation } from "@apollo/client";
 import cn from "classnames";
 
 import { formateDateOnline, colorCard } from "utils/helpers";
-import { useAppSelector, useAuthorization, useError } from "utils/hooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useAuthorization,
+  useError,
+  useWindowSize,
+} from "utils/hooks";
 import { IUser } from "utils/interface";
 import { deleteContact } from "resolvers/contacts";
 import { ButtonMenu } from "components/layouts";
-import { actionAddContact, getUser } from "store";
+import {
+  actionAddContact,
+  actionAddTabIndexFirst,
+  actionAddTabIndexSixth,
+  getUser,
+} from "store";
 
 import { CardContactProps } from "./CardContact.props";
 import styles from "./CardContact.module.css";
@@ -23,6 +34,8 @@ export const CardContact = ({
 }: CardContactProps): JSX.Element => {
   const autorization = useAuthorization();
   const error = useError();
+  const dispatch = useAppDispatch();
+  const sizeWindow = useWindowSize();
 
   const user: IUser | undefined = useAppSelector(getUser);
 
@@ -40,6 +53,7 @@ export const CardContact = ({
   const [left, setLeft] = useState<number>(0);
   const [menu, setMenu] = useState<boolean>(false);
   const [click, setClick] = useState<boolean>(false);
+  let timer: any = undefined;
 
   const handleDeleteContact = async () => {
     if (!search) {
@@ -59,20 +73,36 @@ export const CardContact = ({
       className={cn(className, styles.contacts, {
         [styles.contactActive]: click === true,
       })}
-      onClick={() => {
-        handleFocus(contact);
-      }}
       onKeyDown={(e) => {
         if (e.key === "Enter") {
           handleFocus(contact);
+          if (sizeWindow[0] < 1000) {
+            dispatch(actionAddTabIndexFirst(-1));
+            dispatch(actionAddTabIndexSixth(0));
+          }
+        }
+        if (e.key === "Delete") {
+          setMenu(!menu);
         }
       }}
       onMouseDown={(e) => {
         if (e.buttons === 2) {
           setMenu(true);
-        } else setClick(true);
+        }
+        if (e.buttons === 1) {
+          setClick(true);
+          timer = setTimeout(() => {
+            setMenu(true);
+          }, 1000);
+        }
       }}
-      onMouseUp={() => setClick(false)}
+      onMouseUp={() => {
+        setClick(false);
+        if (!menu) {
+          handleFocus(contact);
+          clearTimeout(timer);
+        }
+      }}
       onMouseMoveCapture={(e: any) => {
         if (!menu) {
           setTop(e.nativeEvent.layerY);
@@ -118,6 +148,7 @@ export const CardContact = ({
           left={left}
           handleDelete={handleDeleteContact}
           text={"Delete"}
+          tabIndex={menu === true ? 0 : -1}
         />
       )}
     </li>

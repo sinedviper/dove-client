@@ -28,6 +28,7 @@ import {
   actionAddFetch,
   actionAddImageUser,
   actionAddLoading,
+  actionAddTabIndexSixth,
   actionAddUser,
   actionMenuMain,
   getMenuMain,
@@ -172,8 +173,9 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   }, [user?.animation, user?.theme]);
 
   useEffect(() => {
-    if (sizeWindow[0] < 800) {
+    if (sizeWindow[0] < 1000) {
       dispatch(actionMenuMain(true));
+      dispatch(actionAddTabIndexSixth(-1));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -187,6 +189,22 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
     <main
       className={cn(className, styles.main)}
       onMouseMove={() => {
+        return user?.online &&
+          minutesFormat(new Date(), new Date(user?.online)) > 4
+          ? mutationUserOnlineFunction({
+              variables: { input: { online: "ping" } },
+            })
+          : debouncedMutation;
+      }}
+      onKeyDown={() => {
+        return user?.online &&
+          minutesFormat(new Date(), new Date(user?.online)) > 4
+          ? mutationUserOnlineFunction({
+              variables: { input: { online: "ping" } },
+            })
+          : debouncedMutation;
+      }}
+      onMouseDown={() => {
         return user?.online &&
           minutesFormat(new Date(), new Date(user?.online)) > 4
           ? mutationUserOnlineFunction({

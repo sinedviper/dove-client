@@ -13,6 +13,7 @@ export const ButtonMenu = ({
   handleDelete,
   text,
   className,
+  tabIndex,
   ...props
 }: ButtonMenuProps): JSX.Element => {
   return (
@@ -23,7 +24,16 @@ export const ButtonMenu = ({
       style={{ top: top, left: left }}
       {...props}
     >
-      <span className={styles.menuCard} onClick={handleDelete}>
+      <span
+        className={styles.menuCard}
+        onClick={handleDelete}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleDelete();
+          }
+        }}
+        tabIndex={tabIndex}
+      >
         <DeleteIcon className={styles.iconDeleteMenu} />
         <p>{text}</p>
       </span>

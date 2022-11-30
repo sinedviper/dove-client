@@ -108,19 +108,16 @@ export const MessageHeader = ({
         onClick={() => {
           if (windowSize[0] < 1000) {
             dispatch(actionMenuMain(!main));
+            dispatch(actionAddTabIndexSixth(tabIndexSixth === -1 ? 0 : -1));
+            dispatch(actionAddTabIndexFirst(0));
+            if (windowSize[0] < 600) {
+              dispatch(actionAddTabIndexSixth(-1));
+              dispatch(actionAddTabIndexFirst(0));
+            }
             if (settings === true) {
               setSettings(false);
             }
           }
-        }}
-        onKeyDown={(e) => {
-          if (e.key === "Enter")
-            if (windowSize[0] < 1000) {
-              dispatch(actionMenuMain(!main));
-              if (settings === true) {
-                setSettings(false);
-              }
-            }
         }}
         tabIndex={windowSize[0] < 1000 ? tabIndexSixth : -1}
         className={cn(styles.buttonBackMain)}
@@ -189,16 +186,6 @@ export const MessageHeader = ({
       <button
         className={styles.delete}
         onClick={() => setmenuMessage(!menuMessage)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            setmenuMessage(!menuMessage);
-          }
-        }}
-        onKeyUp={(e) => {
-          if (e.key === "Enter") {
-            setmenuMessage(!menuMessage);
-          }
-        }}
         tabIndex={tabIndexSixth}
       >
         <span className={styles.dot}></span>
@@ -212,11 +199,6 @@ export const MessageHeader = ({
         <button
           className={styles.deleteButton}
           onClick={handleEditContact}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleEditContact();
-            }
-          }}
           tabIndex={tabIndexSixth}
         >
           {contact ? (

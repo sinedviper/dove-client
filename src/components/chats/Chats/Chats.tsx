@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { useNavigate, useParams } from "react-router-dom";
 import cn from "classnames";
+import { v4 as uuidv4 } from "uuid";
 
 import { IChat, IUser } from "utils/interface";
 import {
@@ -17,6 +18,9 @@ import { CardChat, ChatsHeader } from "components/chats";
 import { CardContact } from "components/contacts";
 import {
   actionAddRecipient,
+  actionAddTabIndexFirst,
+  actionAddTabIndexSecond,
+  actionAddTabIndexSixth,
   actionClearMessages,
   actionClearRecipient,
   actionMenuMain,
@@ -80,14 +84,22 @@ export const Chats = ({
       dispatch(actionClearMessages());
       dispatch(actionClearRecipient());
       dispatch(actionAddRecipient(contact));
+      dispatch(actionAddTabIndexFirst(0));
+      dispatch(actionAddTabIndexSixth(0));
+      dispatch(actionAddTabIndexSecond(-1));
       navigate(`${contact?.username}`);
     }
     if (String(contact.username) === String(username)) {
       setValueAll("");
       setSearchUser(false);
+      dispatch(actionAddTabIndexFirst(0));
+      dispatch(actionAddTabIndexSixth(0));
+      dispatch(actionAddTabIndexSecond(-1));
     }
     if (windowSize[0] < 1000) {
       dispatch(actionMenuMain(false));
+      dispatch(actionAddTabIndexFirst(-1));
+      dispatch(actionAddTabIndexSixth(0));
     }
   };
 
@@ -124,7 +136,7 @@ export const Chats = ({
                 );
                 return (
                   <div
-                    key={contact.id}
+                    key={uuidv4()}
                     className={cn(styles.contactWrapper, {
                       [styles.contactWrapperOn]: username === contact.username,
                       [styles.contactWrapperClick]: click === true,
@@ -135,6 +147,10 @@ export const Chats = ({
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         handleFocus(contact);
+                        if (windowSize[0] < 1000) {
+                          dispatch(actionAddTabIndexFirst(-1));
+                          dispatch(actionAddTabIndexSixth(0));
+                        }
                       }
                     }}
                     tabIndex={tabIndexSecond}
@@ -158,7 +174,7 @@ export const Chats = ({
             <p>Global users</p>
             {searchUsers.map((user) => (
               <CardContact
-                key={user.id}
+                key={uuidv4()}
                 contact={user}
                 handleFocus={() => handleFocus(user)}
                 setValue={setValueAll}
@@ -188,7 +204,7 @@ export const Chats = ({
           )}
           {chats &&
             chats.map((chat: IChat) => (
-              <CardChat chat={chat} key={chat.id} tabIndex={tabIndexFirst} />
+              <CardChat chat={chat} key={uuidv4()} tabIndex={tabIndexFirst} />
             ))}
         </ul>
       </section>

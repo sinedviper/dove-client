@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import cn from "classnames";
+import { v4 as uuidv4 } from "uuid";
 
 import { IUser } from "utils/interface";
 import { useAppDispatch, useAppSelector, useWindowSize } from "utils/hooks";
@@ -8,6 +9,7 @@ import { Search } from "components/layouts";
 import {
   actionAddRecipient,
   actionAddTabIndexFirst,
+  actionAddTabIndexSixth,
   actionAddTabIndexThree,
   actionClearImageSender,
   actionClearMessages,
@@ -50,15 +52,18 @@ export const Contacts = ({
       dispatch(actionClearImageSender());
       dispatch(actionAddTabIndexFirst(0));
       dispatch(actionAddTabIndexThree(-1));
+      dispatch(actionAddTabIndexSixth(0));
       navigate(`${contact?.username}`);
     }
     if (String(contact.username) === String(username)) {
       dispatch(actionMenuContact(false));
       dispatch(actionAddTabIndexFirst(0));
       dispatch(actionAddTabIndexThree(-1));
+      dispatch(actionAddTabIndexSixth(0));
     }
     if (windowSize[0] < 1000) {
       dispatch(actionMenuMain(false));
+      dispatch(actionAddTabIndexSixth(-1));
     }
   };
 
@@ -77,12 +82,20 @@ export const Contacts = ({
             dispatch(actionMenuContact(false));
             dispatch(actionAddTabIndexThree(-1));
             dispatch(actionAddTabIndexFirst(0));
+            dispatch(actionAddTabIndexSixth(0));
+            if (windowSize[0] < 1000) {
+              dispatch(actionAddTabIndexSixth(-1));
+            }
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               dispatch(actionMenuContact(false));
               dispatch(actionAddTabIndexThree(-1));
               dispatch(actionAddTabIndexFirst(0));
+              dispatch(actionAddTabIndexSixth(0));
+              if (windowSize[0] < 1000) {
+                dispatch(actionAddTabIndexSixth(-1));
+              }
             }
           }}
         />
@@ -106,7 +119,7 @@ export const Contacts = ({
               .map((contact: IUser) => (
                 <CardContact
                   contact={contact}
-                  key={contact.id}
+                  key={uuidv4()}
                   setValue={setValueContact}
                   handleFocus={handleFocus}
                   tabIndex={tabIndexThree}

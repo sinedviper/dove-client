@@ -103,7 +103,19 @@
   width: 100%;
 }
 
-@media screen and (max-width: 1275px) and (min-width: 600px) {
+@media screen and (max-width: 1275px) and (min-width: 1000px) {
+  .profileWrap {
+    position: absolute;
+    width: 320px;
+    right: -325px;
+  }
+
+  .profileOn {
+    right: 0px;
+  }
+}
+
+@media screen and (max-width: 1000px) and (min-width: 600px) {
   .profileWrap {
     position: absolute;
     width: 320px;

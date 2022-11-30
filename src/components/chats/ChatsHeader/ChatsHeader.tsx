@@ -9,6 +9,7 @@ import {
   useAuthorization,
   useError,
   useExit,
+  useWindowSize,
 } from "utils/hooks";
 import { useTheme, theme, animation } from "utils/context";
 import { updateUser } from "resolvers/user";
@@ -50,6 +51,7 @@ export const ChatsHeader = ({
   const error = useError();
   const exit = useExit();
   const autorization = useAuthorization();
+  const windowSize = useWindowSize();
 
   const user: IUser | undefined = useAppSelector(getUser);
   const tabIndexFirst: number = useAppSelector(getTabIndexFirst);
@@ -99,6 +101,7 @@ export const ChatsHeader = ({
     setMenu(false);
     dispatch(actionAddTabIndexFirst(-1));
     dispatch(actionAddTabIndexFourth(0));
+    dispatch(actionAddTabIndexSixth(-1));
   };
 
   const handleLeavMouseInBlockChats = () => {
@@ -133,38 +136,19 @@ export const ChatsHeader = ({
           if (searchUser) {
             setSearchUser(false);
             setValueAll("");
+            dispatch(actionAddTabIndexFirst(0));
+            dispatch(actionAddTabIndexSecond(-1));
+            dispatch(actionAddTabIndexSixth(0));
+            if (windowSize[0] < 1000) {
+              dispatch(actionAddTabIndexSixth(-1));
+            }
           }
           if (searchUser === false) {
             setMenu(!menu);
-            //dispatch(actionAddTabIndexFirst(tabIndexFirst === 0 ? -1 : 0));
-            //dispatch(actionAddTabIndexSixth(tabIndexSixth === 0 ? -1 : 0));
-          }
-        }}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            if (searchUser) {
-              console.log("1");
-              setSearchUser(false);
-              setValueAll("");
-              dispatch(actionAddTabIndexFirst(0));
-              dispatch(actionAddTabIndexSecond(-1));
-            }
-            if (searchUser === false) {
-              console.log("2");
-              setMenu(!menu);
-              dispatch(actionAddTabIndexFirst(tabIndexFirst === 0 ? -1 : 0));
-              dispatch(actionAddTabIndexSixth(tabIndexSixth === 0 ? -1 : 0));
-            }
-          }
-        }}
-        onKeyUp={(e) => {
-          if (e.key === "Enter") {
-            if (searchUser) {
-              setSearchUser(false);
-              setValueAll("");
-            }
-            if (searchUser === false) {
-              setMenu(menu === false ? true : false);
+            dispatch(actionAddTabIndexFirst(tabIndexFirst === 0 ? -1 : 0));
+            dispatch(actionAddTabIndexSixth(tabIndexSixth === 0 ? -1 : 0));
+            if (windowSize[0] < 1000) {
+              dispatch(actionAddTabIndexSixth(-1));
             }
           }
         }}
@@ -181,7 +165,13 @@ export const ChatsHeader = ({
         setSearchUser={setSearchUser}
         setMenu={setMenu}
         tabIndex={
-          tabIndexThree === 0 || tabIndexFourth === 0 || tabIndexFiveth === 0
+          menu === true
+            ? -1
+            : tabIndexSixth === 0
+            ? -1
+            : tabIndexThree === 0 ||
+              tabIndexFourth === 0 ||
+              tabIndexFiveth === 0
             ? -1
             : 0
         }

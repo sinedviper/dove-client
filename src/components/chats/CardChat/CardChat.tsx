@@ -55,6 +55,7 @@ export const CardChat = ({
   const [left, setLeft] = useState<number>(0);
   const [menu, setMenu] = useState<boolean>(false);
   const [click, setClick] = useState<boolean>(false);
+  let timer: any;
 
   const color = colorCard(user.name.toUpperCase().split("")[0]);
 
@@ -93,10 +94,23 @@ export const CardChat = ({
       className={cn(className, styles.contacts, {
         [styles.contactActive]: click === true,
       })}
-      onClick={handleFocus}
+      onMouseUp={(e) => {
+        if (e.buttons === 1) {
+          if (!menu) {
+            handleFocus();
+          }
+        }
+      }}
       onKeyDown={(e) => {
         if (e.key === "Enter") {
           handleFocus();
+          if (windowSize[0] < 1000) {
+            dispatch(actionAddTabIndexFirst(-1));
+            dispatch(actionAddTabIndexSixth(0));
+          }
+        }
+        if (e.key === "Delete") {
+          setMenu(!menu);
         }
       }}
       onMouseMoveCapture={(e: any) => {
@@ -111,6 +125,11 @@ export const CardChat = ({
       onMouseDown={(e) => {
         if (e.buttons === 2) {
           setMenu(true);
+        }
+        if (e.buttons === 1) {
+          setTimeout(() => {
+            setMenu(true);
+          }, 1000);
         }
       }}
       onContextMenu={(e) => {
@@ -159,7 +178,7 @@ export const CardChat = ({
         menu={menu}
         handleDelete={handleDeleteChat}
         text={"Delete"}
-        tabIndex={-1}
+        tabIndex={menu === true ? 0 : -1}
       />
     </li>
   );

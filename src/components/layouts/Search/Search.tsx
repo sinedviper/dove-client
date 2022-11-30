@@ -6,7 +6,11 @@ import { RemoveIcon, SearchIcon } from "assets";
 import { SearchProps } from "./Search.props";
 import styles from "./Search.module.css";
 import { useAppDispatch } from "utils/hooks";
-import { actionAddTabIndexFirst, actionAddTabIndexSecond } from "store";
+import {
+  actionAddTabIndexFirst,
+  actionAddTabIndexSecond,
+  actionAddTabIndexSixth,
+} from "store";
 
 export const Search = forwardRef(
   (
@@ -40,6 +44,7 @@ export const Search = forwardRef(
               setSearchUser(true);
               dispatch(actionAddTabIndexFirst(-1));
               dispatch(actionAddTabIndexSecond(0));
+              dispatch(actionAddTabIndexSixth(-1));
             }
             if (setMenu) {
               setMenu(false);
@@ -51,6 +56,7 @@ export const Search = forwardRef(
                 setSearchUser(true);
                 dispatch(actionAddTabIndexFirst(-1));
                 dispatch(actionAddTabIndexSecond(0));
+                dispatch(actionAddTabIndexSixth(-1));
               }
               if (setMenu) {
                 setMenu(false);
@@ -71,11 +77,10 @@ export const Search = forwardRef(
         <button
           onClick={() => setValue("")}
           tabIndex={tabIndex}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              setValue("");
-            }
+          onFocus={() => {
+            setFocus(true);
           }}
+          onBlur={() => setFocus(false)}
           className={cn(styles.buttonRemove, {
             [styles.focusRemove]: focus === true,
           })}

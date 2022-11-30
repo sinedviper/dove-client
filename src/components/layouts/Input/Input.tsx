@@ -17,6 +17,7 @@ export const Input = forwardRef(
       placeholderName,
       className,
       tabIndex,
+      setPassword,
       notification = false,
       notificationText = "Please enter correctly",
       textCheckPassNew,
@@ -72,6 +73,8 @@ export const Input = forwardRef(
         check--;
         flagThree = false;
       }
+
+      setPassword && setPassword(check);
 
       return check;
     };

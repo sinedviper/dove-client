@@ -12,6 +12,7 @@ import {
   useDebounce,
   useError,
   useExit,
+  useWindowSize,
 } from "utils/hooks";
 import { deleteUser } from "resolvers/user";
 import { deleteUpload } from "resolvers/upload";
@@ -59,6 +60,7 @@ export const Settings = ({
   const auhtorization = useAuthorization();
   const exit = useExit();
   const error = useError();
+  const windowSize = useWindowSize();
 
   let user: IUser | undefined = useAppSelector(getUser);
   if (sender) {
@@ -175,6 +177,10 @@ export const Settings = ({
                     dispatch(actionAddTabIndexFirst(0));
                     dispatch(actionAddTabIndexSixth(0));
                     dispatch(actionAddTabIndexSeventh(-1));
+                    if (windowSize[0] < 1000) {
+                      dispatch(actionAddTabIndexFirst(-1));
+                      dispatch(actionAddTabIndexSixth(0));
+                    }
                   }
                   if (!setSettings) {
                     dispatch(actionMenuSetting(false));
@@ -200,6 +206,11 @@ export const Settings = ({
                     : dispatch(actionMenuSetting(false));
                   setDeleteUser(false);
                   dispatch(actionAddTabIndexFourth(-1));
+                  dispatch(actionAddTabIndexFirst(0));
+                  dispatch(actionAddTabIndexSixth(0));
+                  if (windowSize[0] < 1000) {
+                    dispatch(actionAddTabIndexSixth(-1));
+                  }
                 }
               }}
               tabIndex={tabIndex}
@@ -237,16 +248,6 @@ export const Settings = ({
               <button
                 className={styles.delete}
                 onClick={() => setDeleteUser(!deleteUsera)}
-                onKeyUp={(e) => {
-                  if (e.key === "Enter") {
-                    setDeleteUser(!deleteUsera);
-                  }
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    setDeleteUser(!deleteUsera);
-                  }
-                }}
                 tabIndex={tabIndex}
               >
                 <span className={styles.dot}></span>
@@ -259,17 +260,7 @@ export const Settings = ({
                 <button
                   className={styles.deleteButton}
                   onClick={handleRemoveUser}
-                  onKeyUp={(e) => {
-                    if (e.key === "Enter") {
-                      handleRemoveUser();
-                    }
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleRemoveUser();
-                    }
-                  }}
-                  tabIndex={tabIndex}
+                  tabIndex={deleteUsera === true ? 0 : -1}
                 >
                   <RemoveUserIcon className={styles.removeIcon} />
                   <span>Delete account</span>
@@ -319,7 +310,6 @@ export const Settings = ({
               className={styles.wrapperImage}
               onMouseMove={() => setButtonPhoto(true)}
               onMouseLeave={() => setButtonPhoto(false)}
-              tabIndex={tabIndex}
             >
               {imageUser?.length === 1 ? (
                 <div key={imageUser[0].id} className={styles.userImageWrapper}>
@@ -333,13 +323,8 @@ export const Settings = ({
                       onClick={() =>
                         handleRemovePhoto(imageUser[0].id, imageUser[0].file)
                       }
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          handleRemovePhoto(imageUser[0].id, imageUser[0].file);
-                        }
-                      }}
                       className={styles.buttonWrapperRemove}
-                      tabIndex={tabIndex}
+                      tabIndex={-1}
                     >
                       <RemoveIcon className={styles.removeIconButton} />
                     </button>
@@ -379,6 +364,7 @@ export const Settings = ({
                             handleRemovePhoto(image.id, image.file)
                           }
                           className={styles.buttonWrapperRemove}
+                          tabIndex={-1}
                         >
                           <RemoveIcon className={styles.removeIconButton} />
                         </button>
@@ -399,7 +385,7 @@ export const Settings = ({
           </div>
           {!profile && (
             <div className={styles.uploadWrapper}>
-              <button className={styles.uploadPhoto} tabIndex={tabIndex}>
+              <button className={styles.uploadPhoto} tabIndex={-1}>
                 <label className={styles.iconPhotoWrapper} htmlFor='loadphoto'>
                   <PhotoIcon />
                 </label>

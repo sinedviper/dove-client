@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -36,12 +36,19 @@ export const FormSignUp = ({
 
   const [mutateFunction, { loading: loadingMutation }] = useMutation(signUp);
 
+  const [password, setPassword] = useState<number>(0);
+
   const onSubmit = async (input: IFormInput): Promise<void> => {
-    await mutateFunction({ variables: { input } }).then((res) => {
-      const data = res?.data.signupUser;
-      data.status === "Invalid" && error(data.message);
-      data.status === "Success" && navigate("/login");
-    });
+    if (password < 3) {
+      error("Password uncorrectly");
+    }
+    if (password === 3) {
+      await mutateFunction({ variables: { input } }).then((res) => {
+        const data = res?.data.signupUser;
+        data.status === "Invalid" && error(data.message);
+        data.status === "Success" && navigate("/login");
+      });
+    }
   };
 
   useEffect(() => {
@@ -135,6 +142,7 @@ export const FormSignUp = ({
         <Input
           error={Boolean(errors.password)}
           placeholderName={"Password"}
+          setPassword={setPassword}
           notification={true}
           notificationText={
             "Password must be between 8 and 40 characters and have a capital letter and a number"

@@ -59,6 +59,8 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
       setPasswordNew("");
       setPasswordReapeat("");
       setSubmit(false);
+      dispatch(actionAddTabIndexFiveth(-1));
+      dispatch(actionAddTabIndexFourth(0));
       dispatch(actionMenuEdit(false));
     },
     onError(errorData) {
@@ -87,9 +89,12 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
   const [password, setPassword] = useState<string>("");
   const [passwordNew, setPasswordNew] = useState<string>("");
   const [passwordReapeat, setPasswordReapeat] = useState<string>("");
+
   const [errorPassword, setErrorPassword] = useState<string>("");
   const [errorPasswordNew, setErrorPasswordNew] = useState<string>("");
   const [errorPasswordReapeat, setErrorPasswordReapeat] = useState<string>("");
+
+  const [passwordCheck, setPasswordCheck] = useState<number>(0);
 
   const [permission, setPermission] = useState<{
     width: number;
@@ -145,21 +150,26 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
     }
     //Check password on value
     if (input.mainPassword && input.newPassword && input.repeatPassword) {
-      if (input.newPassword === input.repeatPassword) {
-        setErrorPassword("");
-        setErrorPasswordNew("");
-        setErrorPasswordReapeat("");
-        obj = {
-          ...obj,
-          password: input.mainPassword,
-          passwordNew: input.newPassword,
-        };
-      }
+      if (passwordCheck === 3) {
+        if (input.newPassword === input.repeatPassword) {
+          setErrorPassword("");
+          setErrorPasswordNew("");
+          setErrorPasswordReapeat("");
+          obj = {
+            ...obj,
+            password: input.mainPassword,
+            passwordNew: input.newPassword,
+          };
+        }
 
-      if (input.newPassword !== input.repeatPassword) {
-        setErrorPassword("");
-        setErrorPasswordNew("");
-        setErrorPasswordReapeat("Please correct repeat password");
+        if (input.newPassword !== input.repeatPassword) {
+          setErrorPassword("");
+          setErrorPasswordNew("");
+          setErrorPasswordReapeat("Please correct repeat password");
+        }
+      }
+      if (passwordCheck < 3) {
+        error("Please correct new password");
       }
     }
     if (!input.mainPassword && input.newPassword && input.repeatPassword) {
@@ -263,7 +273,6 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
         </div>
       </div>
       <form
-        tabIndex={tabIndexFivth}
         className={cn(styles.contactsList, {
           [styles.swiper]: swiper === true,
         })}
@@ -286,7 +295,6 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
                   <PhotoIcon />
                 </label>
                 <input
-                  tabIndex={tabIndexFivth}
                   className={styles.input}
                   accept='.jpg, .jpeg, .png'
                   onChange={(e) => {
@@ -316,7 +324,6 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
                   <PhotoIcon />
                 </label>
                 <input
-                  tabIndex={tabIndexFivth}
                   className={styles.input}
                   accept='.jpg, .jpeg, .png'
                   onChange={handleLoadPhoto}
@@ -459,6 +466,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
               errorPasswordNew ? errorPasswordNew : errors.newPassword
             )}
             placeholderName='New password'
+            setPassword={setPasswordCheck}
             notification={true}
             notificationText={
               "Password must be between 8 and 40 characters and have a capital letter and a number"

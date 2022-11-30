@@ -11,6 +11,7 @@ import {
   useAuthorization,
   useAuthorizationSearch,
   useError,
+  useWindowSize,
 } from "utils/hooks";
 import { IChat, IUser } from "utils/interface";
 import { addChat, getChats } from "resolvers/chats";
@@ -19,10 +20,13 @@ import {
   actionAddChats,
   actionAddMessages,
   actionAddTabIndexEighth,
+  actionAddTabIndexFirst,
+  actionAddTabIndexSixth,
   actionClearMessageEdit,
   getMessageEdit,
   getRecipient,
   getTabIndexEighth,
+  getTabIndexFirst,
   getTabIndexSixth,
 } from "store";
 import { EditIcon, RemoveIcon, ReplyIcon, SendIcon, SmileIcon } from "assets";
@@ -40,6 +44,7 @@ export const MessageInput = ({
   const error = useError();
   const authorization = useAuthorization();
   const atorizationSearch = useAuthorizationSearch();
+  const windowSize = useWindowSize();
 
   const {
     message: { message, edit },
@@ -47,6 +52,7 @@ export const MessageInput = ({
   const sender: IUser | undefined = useAppSelector(getRecipient);
   const tabIndexEighth: number = useAppSelector(getTabIndexEighth);
   const tabIndexSixth: number = useAppSelector(getTabIndexSixth);
+  const tabIndexFirst: number = useAppSelector(getTabIndexFirst);
 
   const [queryFunctionChat] = useLazyQuery(getChats, {
     fetchPolicy: "network-only",
@@ -250,21 +256,14 @@ export const MessageInput = ({
       />
       <button
         className={cn(styles.smileIconWrapper)}
-        tabIndex={tabIndexSixth}
+        tabIndex={tabIndexEighth === -1 ? (tabIndexSixth === 0 ? 0 : -1) : 0}
         onClick={() => {
           setEmoji(!emoji);
           dispatch(actionAddTabIndexEighth(tabIndexEighth === 0 ? -1 : 0));
-        }}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            setEmoji(!emoji);
-            dispatch(actionAddTabIndexEighth(tabIndexEighth === 0 ? -1 : 0));
-          }
-        }}
-        onKeyUp={(e) => {
-          if (e.key === "Enter") {
-            setEmoji(!emoji);
-            dispatch(actionAddTabIndexEighth(tabIndexEighth === 0 ? -1 : 0));
+          dispatch(actionAddTabIndexFirst(tabIndexFirst === 0 ? -1 : 0));
+          dispatch(actionAddTabIndexSixth(tabIndexSixth === 0 ? -1 : 0));
+          if (windowSize[0] < 1000) {
+            dispatch(actionAddTabIndexFirst(-1));
           }
         }}
       >

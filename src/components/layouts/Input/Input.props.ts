@@ -14,4 +14,5 @@ export interface InputProps
   notification?: boolean;
   notificationText?: string;
   textCheckPassNew?: string;
+  setPassword?: Function;
 }
