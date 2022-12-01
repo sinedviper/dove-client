@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import cn from "classnames";
+import { useParams } from "react-router-dom";
 
 import { IMessage } from "utils/interface";
 import { formatHours } from "utils/helpers";
@@ -13,12 +14,13 @@ export const MessageCard = ({
   chat,
   message,
   index,
-  username,
   messages,
   user,
   className,
   ...props
 }: MessageCardProps): JSX.Element => {
+  const { username } = useParams();
+
   const [editMessage, setEditMessage] = useState<boolean>(false);
   const [clientX, setClientX] = useState<number>(0);
   const [clientY, setClientY] = useState<number>(0);
@@ -145,7 +147,7 @@ export const MessageCard = ({
                 message.senderMessage.username !== user?.username,
             })}
           >
-            {message?.createdAt !== message?.updatedAt ? "edited" : null}
+            {message?.createdAt !== message?.dateUpdate ? "edited" : null}
           </span>
           <span
             className={cn(styles.messageDate, {
@@ -157,9 +159,10 @@ export const MessageCard = ({
           </span>
           <span
             className={cn(styles.messageRead, {
-              [styles.readMessage]: message.read,
+              [styles.readMessage]: message.read === true,
               [styles.readMessageUser]:
-                message.read && username !== message?.senderMessage.username,
+                message.read === true &&
+                username !== message?.senderMessage.username,
             })}
           >
             <CheckIcon />

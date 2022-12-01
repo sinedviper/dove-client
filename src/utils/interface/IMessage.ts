@@ -8,4 +8,5 @@ export interface IMessage {
   reply: IMessage;
   createdAt: Date;
   updatedAt: Date;
+  dateUpdate: Date;
 }

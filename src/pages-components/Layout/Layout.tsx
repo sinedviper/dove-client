@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
 import cn from "classnames";
@@ -40,23 +40,23 @@ import { LayoutProps } from "./Layout.props";
 import styles from "./Layout.module.css";
 import { getUploads } from "resolvers/upload";
 
-(function () {
-  const tabHistory = [{}];
+// (function () {
+//   const tabHistory = [{}];
 
-  window.addEventListener("keyup", function (e) {
-    const code = e.keyCode || e.which;
-    const index = tabHistory.length === 0 ? 1 : tabHistory.length + 1;
+//   window.addEventListener("keyup", function (e) {
+//     const code = e.keyCode || e.which;
+//     const index = tabHistory.length === 0 ? 1 : tabHistory.length + 1;
 
-    if (code === 9) {
-      tabHistory.push({
-        element: e.target,
-        index,
-      });
+//     if (code === 9) {
+//       tabHistory.push({
+//         element: e.target,
+//         index,
+//       });
 
-      console.log(index, e.target, tabHistory);
-    }
-  });
-})();
+//       console.log(index, e.target, tabHistory);
+//     }
+//   });
+// })();
 
 export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -65,6 +65,9 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   const autorization = useAuthorization();
   const error = useError();
   const sizeWindow = useWindowSize();
+
+  const [pollIntervalOne, setPollIntervalOne] = useState<number>(1000);
+  const [pollIntervalTwo, setPollIntervalTwo] = useState<number>(1000);
 
   const [mutationUserOnlineFunction, { error: errorMutationUserOnline }] =
     useMutation(updateUserOnline, {
@@ -83,11 +86,13 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
       fetchPolicy: "network-only",
       onCompleted(data) {
         autorization({ data: data.getUpload, actionAdd: actionAddImageUser });
+        setPollIntervalTwo(10000);
       },
       onError(errorData) {
         error(errorData.message);
+        setPollIntervalTwo(100000);
       },
-      pollInterval: 5000,
+      pollInterval: pollIntervalTwo,
     }
   );
 
@@ -110,11 +115,13 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
       fetchPolicy: "network-only",
       onCompleted(data) {
         autorization({ data: data.getChats, actionAdd: actionAddChats });
+        setPollIntervalOne(1000);
       },
       onError(errorData) {
         error(errorData.message);
+        setPollIntervalOne(10000);
       },
-      pollInterval: 500,
+      pollInterval: pollIntervalOne,
     }
   );
 
@@ -160,7 +167,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
     if (!loadQueryContact && !loadQueryChat && !loadQueryImage)
       dispatch(actionAddLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadQueryChat, loadQueryContact]);
+  }, [loadQueryChat, loadQueryContact, loadQueryImage]);
 
   useEffect(() => {
     themeChange?.changeTheme(

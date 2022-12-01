@@ -16,6 +16,7 @@ export const getMessage = gql`
         }
         text
         read
+        dateUpdate
         reply {
           id
           senderMessage {

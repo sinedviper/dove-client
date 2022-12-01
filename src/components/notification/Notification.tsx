@@ -50,6 +50,7 @@ export const Notification = ({
             <button
               className={styles.removeWrapper}
               onClick={() => handleRemove(error?.id)}
+              tabIndex={0}
             >
               <RemoveIcon className={styles.removeIcon} />
             </button>

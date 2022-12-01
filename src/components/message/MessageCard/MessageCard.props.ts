@@ -8,7 +8,6 @@ export interface MessageCardProps
   chat: IChat | undefined;
   message: IMessage;
   index: number;
-  username: string;
   messages: IMessage[];
   user: IUser | undefined;
 }

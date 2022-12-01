@@ -132,6 +132,9 @@ export const MessageHeader = ({
         className={styles.headerWrapper}
         onClick={() => {
           setSettings(true);
+          dispatch(actionAddTabIndexSeventh(0));
+          dispatch(actionAddTabIndexFirst(-1));
+          dispatch(actionAddTabIndexSixth(-1));
           if (settings === true) dispatch(actionMenuMain(false));
         }}
         onKeyDown={(e) => {

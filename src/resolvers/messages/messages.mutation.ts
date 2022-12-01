@@ -16,6 +16,7 @@ export const addMessages = gql`
         }
         text
         read
+        dateUpdate
         reply {
           id
           senderMessage {
@@ -52,6 +53,7 @@ export const deleteMessages = gql`
         }
         text
         read
+        dateUpdate
         reply {
           id
           senderMessage {

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import cn from "classnames";
@@ -73,7 +73,7 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
       error(errorData.message);
     },
     fetchPolicy: "network-only",
-    pollInterval: 500,
+    pollInterval: 5000,
   });
 
   const { error: errorQueryFunctionImageSender } = useQuery(getUploadUser, {
@@ -87,26 +87,17 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
       error(errorData.message);
     },
     fetchPolicy: "network-only",
-    pollInterval: 5000,
+    pollInterval: 10000,
     variables: { idUser: Number(sender?.id) },
   });
 
   const [settings, setSettings] = useState<boolean>(false);
-  const messagesEndRef = useRef<HTMLLIElement>(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
 
   useEffect(() => {
     if (!errorQueryMessage && !errorSender && !errorQueryFunctionImageSender)
       dispatch(actionAddFetch(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errorQueryMessage, errorSender]);
-
-  useEffect(() => {
-    if (messages) scrollToBottom();
-  }, [messages]);
 
   return (
     <section
@@ -140,7 +131,6 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
                           index={index}
                           user={user}
                           messages={messages}
-                          username={String(username)}
                         />
                         <p className={styles.dateMessage}>
                           {formatDay(new Date(messages[index + 1].createdAt))}
@@ -156,11 +146,9 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
                     user={user}
                     messages={messages}
                     key={message.id}
-                    username={String(username)}
                   />
                 );
               })}
-            <li ref={messagesEndRef}></li>
           </ul>
         </section>
         <div className={styles.inputWrap}>

@@ -207,7 +207,7 @@ export const MessageInput = ({
   }, [message, edit]);
 
   return (
-    <div className={styles.inputWrapper}>
+    <div className={cn(styles.inputWrapper)}>
       {chat ? (
         message ? (
           Number(message.chatId) === Number(chat?.id) ? (
@@ -235,10 +235,7 @@ export const MessageInput = ({
         tabIndex={tabIndexSixth}
         value={String(send)}
         placeholder='Message'
-        className={cn(className, styles.input, {
-          [styles.inputEdit]:
-            message !== null && Number(message?.chatId) === Number(chat?.id),
-        })}
+        className={cn(className, styles.input)}
         onChange={(e) => {
           setSend(e.target.value);
           setEmoji(false);

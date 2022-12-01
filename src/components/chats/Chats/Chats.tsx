@@ -78,6 +78,11 @@ export const Chats = ({
   const [searchUser, setSearchUser] = useState<boolean>(false);
 
   const handleFocus = async (contact: IUser) => {
+    console.log(
+      String(contact.username) !== String(username),
+      contact.username,
+      username
+    );
     if (String(contact.username) !== String(username)) {
       setValueAll("");
       setSearchUser(false);
@@ -141,9 +146,18 @@ export const Chats = ({
                       [styles.contactWrapperOn]: username === contact.username,
                       [styles.contactWrapperClick]: click === true,
                     })}
-                    onClick={() => handleFocus(contact)}
+                    onTouchStart={() => {
+                      setClick(true);
+                    }}
                     onMouseDown={() => setClick(true)}
-                    onMouseUp={() => setClick(false)}
+                    onMouseUp={() => {
+                      setClick(false);
+                      handleFocus(contact);
+                    }}
+                    onTouchEnd={() => {
+                      setClick(false);
+                      handleFocus(contact);
+                    }}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         handleFocus(contact);

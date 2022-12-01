@@ -165,6 +165,13 @@ export const Settings = ({
               onClick={() => {
                 if (setSettings) {
                   setSettings(false);
+                  dispatch(actionAddTabIndexFirst(0));
+                  dispatch(actionAddTabIndexSixth(0));
+                  dispatch(actionAddTabIndexSeventh(-1));
+                  if (windowSize[0] < 1000) {
+                    dispatch(actionAddTabIndexFirst(-1));
+                    dispatch(actionAddTabIndexSixth(0));
+                  }
                 }
                 if (!setSettings) {
                   dispatch(actionMenuSetting(false));
@@ -198,6 +205,11 @@ export const Settings = ({
                   : dispatch(actionMenuSetting(false));
                 setDeleteUser(false);
                 dispatch(actionAddTabIndexFourth(-1));
+                dispatch(actionAddTabIndexFirst(0));
+                dispatch(actionAddTabIndexSixth(0));
+                if (windowSize[0] < 1000) {
+                  dispatch(actionAddTabIndexSixth(-1));
+                }
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
@@ -407,7 +419,7 @@ export const Settings = ({
             onClick={() => handleCopy(String(user?.email))}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                handleCopy(String(user?.username));
+                handleCopy(String(user?.email));
               }
             }}
             tabIndex={tabIndex}
@@ -437,10 +449,10 @@ export const Settings = ({
           {user?.bio && (
             <div
               className={styles.info}
-              onClick={() => handleCopy(String(user?.username))}
+              onClick={() => handleCopy(String(user?.bio))}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  handleCopy(String(user?.username));
+                  handleCopy(String(user?.bio));
                 }
               }}
               tabIndex={tabIndex}
