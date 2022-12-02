@@ -253,7 +253,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
     >
       <div className={styles.editHead}>
         <div>
-          <BackIcon
+          <button
             tabIndex={tabIndexFivth}
             className={styles.back}
             onClick={() => {
@@ -261,14 +261,9 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
               dispatch(actionAddTabIndexFiveth(-1));
               dispatch(actionAddTabIndexFourth(0));
             }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                dispatch(actionMenuEdit(false));
-                dispatch(actionAddTabIndexFiveth(-1));
-                dispatch(actionAddTabIndexFourth(0));
-              }
-            }}
-          />
+          >
+            <BackIcon className={styles.backIcon} />
+          </button>
           <h2>Edit Profile</h2>
         </div>
       </div>

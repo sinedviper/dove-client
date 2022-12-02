@@ -160,8 +160,8 @@ export const Settings = ({
       >
         <div>
           {profile ? (
-            <RemoveIcon
-              className={cn(styles.back, styles.remove)}
+            <button
+              className={cn(styles.back, styles.backCorrcet)}
               onClick={() => {
                 if (setSettings) {
                   setSettings(false);
@@ -177,28 +177,12 @@ export const Settings = ({
                   dispatch(actionMenuSetting(false));
                 }
               }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  if (setSettings) {
-                    setSettings(false);
-                    dispatch(actionAddTabIndexFirst(0));
-                    dispatch(actionAddTabIndexSixth(0));
-                    dispatch(actionAddTabIndexSeventh(-1));
-                    if (windowSize[0] < 1000) {
-                      dispatch(actionAddTabIndexFirst(-1));
-                      dispatch(actionAddTabIndexSixth(0));
-                    }
-                  }
-                  if (!setSettings) {
-                    dispatch(actionMenuSetting(false));
-                  }
-                }
-              }}
               tabIndex={tabIndex}
-            />
+            >
+              <RemoveIcon className={styles.removeIcon} />
+            </button>
           ) : (
-            <BackIcon
-              className={styles.back}
+            <button
               onClick={() => {
                 setSettings
                   ? setSettings(false)
@@ -211,28 +195,17 @@ export const Settings = ({
                   dispatch(actionAddTabIndexSixth(-1));
                 }
               }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  setSettings
-                    ? setSettings(false)
-                    : dispatch(actionMenuSetting(false));
-                  setDeleteUser(false);
-                  dispatch(actionAddTabIndexFourth(-1));
-                  dispatch(actionAddTabIndexFirst(0));
-                  dispatch(actionAddTabIndexSixth(0));
-                  if (windowSize[0] < 1000) {
-                    dispatch(actionAddTabIndexSixth(-1));
-                  }
-                }
-              }}
+              className={styles.back}
               tabIndex={tabIndex}
-            />
+            >
+              <BackIcon className={styles.backIcon} />
+            </button>
           )}
           <h2>{!profile ? "Settings" : "Profile"}</h2>
         </div>
         <div>
           {!profile && (
-            <EditIcon
+            <button
               className={styles.edit}
               onClick={() => {
                 setSettings
@@ -242,18 +215,10 @@ export const Settings = ({
                 dispatch(actionAddTabIndexFourth(-1));
                 dispatch(actionAddTabIndexFiveth(0));
               }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  setSettings
-                    ? setSettings(false)
-                    : dispatch(actionMenuEdit(true));
-                  setDeleteUser(false);
-                  dispatch(actionAddTabIndexFourth(-1));
-                  dispatch(actionAddTabIndexFiveth(0));
-                }
-              }}
               tabIndex={tabIndex}
-            />
+            >
+              <EditIcon className={styles.editIcon} />
+            </button>
           )}
           {!profile && (
             <>

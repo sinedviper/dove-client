@@ -103,6 +103,25 @@
   width: 100%;
 }
 
+.buttonLoadMessage {
+  margin: 20px auto;
+  width: 150px;
+  padding: 8px 0px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  background: var(--primary);
+  color: var(--text-first);
+  transition: var(--transition-static);
+}
+
+.buttonLoadMessage:hover {
+  background: var(--primary-dark);
+  transition: var(--transition-static);
+}
+
 @media screen and (max-width: 1275px) and (min-width: 1000px) {
   .profileWrap {
     position: absolute;

@@ -75,7 +75,7 @@ export const Contacts = ({
       {...props}
     >
       <div className={styles.contactSearch}>
-        <BackIcon
+        <button
           tabIndex={tabIndexThree}
           className={styles.back}
           onClick={() => {
@@ -87,18 +87,9 @@ export const Contacts = ({
               dispatch(actionAddTabIndexSixth(-1));
             }
           }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              dispatch(actionMenuContact(false));
-              dispatch(actionAddTabIndexThree(-1));
-              dispatch(actionAddTabIndexFirst(0));
-              dispatch(actionAddTabIndexSixth(0));
-              if (windowSize[0] < 1000) {
-                dispatch(actionAddTabIndexSixth(-1));
-              }
-            }
-          }}
-        />
+        >
+          <BackIcon className={styles.backIcon} />
+        </button>
         <Search
           value={valueContact}
           setValue={setValueContact}

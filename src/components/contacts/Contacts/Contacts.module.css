@@ -38,6 +38,11 @@
   border-radius: 50%;
   margin-right: 10px;
   cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
   transition: var(--transition-static);
 }
 
@@ -46,7 +51,12 @@
   background-color: var(--opacity-box);
 }
 
-.back path {
+.backIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.backIcon path {
   fill: var(--icon-first);
 }
 

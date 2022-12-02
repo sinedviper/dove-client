@@ -36,3 +36,14 @@ export const getMessage = gql`
     }
   }
 `;
+
+export const getHaveMessages = gql`
+  query Query($message: MessageInput!) {
+    haveMessageFind(message: $message) {
+      status
+      code
+      data
+      message
+    }
+  }
+`;

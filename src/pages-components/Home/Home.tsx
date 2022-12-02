@@ -7,10 +7,11 @@ import {
   useAppDispatch,
   useAppSelector,
   useAuthorization,
+  useAuthorizationSearch,
   useError,
 } from "utils/hooks";
 import { IChat, IMessage, IUser } from "utils/interface";
-import { getMessage } from "resolvers/messages";
+import { getHaveMessages, getMessage } from "resolvers/messages";
 import { getUserSender } from "resolvers/user";
 import { formatDay } from "utils/helpers";
 import { getUploadUser } from "resolvers/upload";
@@ -37,6 +38,7 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
   const error = useError();
   const dispatch = useAppDispatch();
   const authorization = useAuthorization();
+  const authorizationHave = useAuthorizationSearch();
 
   const user: IUser | undefined = useAppSelector(getUser);
   const sender: IUser | undefined = useAppSelector(getRecipient);
@@ -46,6 +48,7 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
   const messages: IMessage[] | undefined = useAppSelector(getMessages);
   const main: boolean = useAppSelector(getMenuMain);
   const tabIndexSeventh: number = useAppSelector(getTabIndexSeventh);
+  const [haveMessage, setHaveMassge] = useState<Date | null>(null);
 
   const { error: errorQueryMessage } = useQuery(getMessage, {
     variables: {
@@ -57,6 +60,24 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
     fetchPolicy: "network-only",
     onCompleted(data) {
       authorization({ data: data.getMessages, actionAdd: actionAddMessages });
+    },
+    onError(errorData) {
+      chat && error(errorData.message);
+    },
+    pollInterval: chat === undefined ? 300000 : 500,
+  });
+
+  const {} = useQuery(getHaveMessages, {
+    variables: {
+      message: {
+        id: Number(messages?.slice(-1)[0].id),
+        chatId: Number(chat?.id),
+        senderMessage: Number(user?.id),
+      },
+    },
+    fetchPolicy: "network-only",
+    onCompleted(data) {
+      setHaveMassge(authorizationHave({ data: data.haveMessageFind }));
     },
     onError(errorData) {
       chat && error(errorData.message);
@@ -97,7 +118,7 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
     if (!errorQueryMessage && !errorSender && !errorQueryFunctionImageSender)
       dispatch(actionAddFetch(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [errorQueryMessage, errorSender]);
+  }, [errorQueryMessage, errorSender, errorQueryFunctionImageSender]);
 
   return (
     <section
@@ -115,6 +136,17 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
         <MessageHeader setSettings={setSettings} settings={settings} />
         <section className={styles.chatsWrapper}>
           <ul className={cn(styles.messageWrapper)}>
+            {haveMessage !== null ? (
+              <button
+                tabIndex={-1}
+                onClick={() => {}}
+                className={styles.buttonLoadMessage}
+              >
+                load message
+              </button>
+            ) : (
+              ""
+            )}
             {messages &&
               chat &&
               messages?.map((message, index) => {
