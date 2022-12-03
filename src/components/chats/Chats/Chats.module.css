@@ -144,3 +144,11 @@
   display: block;
   stroke: var(--black);
 }
+
+.contactImage {
+  width: 55px;
+  height: 55px;
+  object-fit: cover;
+  border-radius: 50%;
+  object-position: center center;
+}

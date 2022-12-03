@@ -6,6 +6,7 @@ interface check {
   actionAdd: Function;
 }
 
+//check user token for autorization in system and dispatch data in store
 export const useAuthorization = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ export const useAuthorization = () => {
   };
 };
 
+//that hook check also token and return data
 export const useAuthorizationSearch = () => {
   const navigate = useNavigate();
   const exit = useExit();

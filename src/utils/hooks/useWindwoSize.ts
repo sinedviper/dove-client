@@ -1,5 +1,6 @@
 import { useLayoutEffect, useState } from "react";
 
+//that hook need when will be resize display
 export function useWindowSize() {
   const [size, setSize] = useState([0, 0]);
   useLayoutEffect(() => {

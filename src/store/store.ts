@@ -25,13 +25,9 @@ import {
   userReducer,
   recipientReducer,
   menuReducer,
-  loadingReducer,
-  errorsReducer,
-  copyReducer,
   iamgeUserReducer,
-  fetchReducer,
-  imageSenderReducer,
 } from "./slice";
+import { notificationReducer } from "./slice/notification.slice";
 
 const reducer = combineReducers({
   user: userReducer,
@@ -41,12 +37,8 @@ const reducer = combineReducers({
   message: messageEditReducer,
   recipient: recipientReducer,
   menu: menuReducer,
-  loading: loadingReducer,
-  errors: errorsReducer,
-  copy: copyReducer,
+  notification: notificationReducer,
   imageUser: iamgeUserReducer,
-  fetch: fetchReducer,
-  imageSender: imageSenderReducer,
   tabIndexGroupe: tabIndexGroupeReducer,
 });
 
@@ -62,6 +54,7 @@ const persistConfig = {
     "tabIndexGroupe",
     "fetch",
     "imageSender",
+    "imageContact",
   ],
 };
 

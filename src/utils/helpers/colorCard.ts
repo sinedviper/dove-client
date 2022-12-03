@@ -1,3 +1,4 @@
+//this function need when user dont have image
 export const colorCard = (alpha?: string) => {
   const color1 = "a b c d e f";
   const color2 = "g h i j k l m";

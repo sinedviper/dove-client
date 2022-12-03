@@ -29,7 +29,7 @@ export const MessageEdit = ({
   const dispatch = useAppDispatch();
   const autorization = useAuthorization();
   const error = useError();
-
+  //store
   const user: IUser | undefined = useAppSelector(getUser);
 
   const [mutationFunction] = useMutation(deleteMessages, {
@@ -41,11 +41,11 @@ export const MessageEdit = ({
       error(errorData.message);
     },
   });
-
+  //copy string
   const handleCopy = (value: string) => {
     navigator.clipboard.writeText(value);
   };
-
+  //remove messega
   const handleDelete = async () => {
     setEditMessage(false);
     await mutationFunction({
@@ -58,7 +58,7 @@ export const MessageEdit = ({
       },
     });
   };
-
+  //add edit message in store
   const handleMessage = (edit) => {
     dispatch(
       actionAddMessageEdit({

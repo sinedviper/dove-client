@@ -13,6 +13,7 @@ export const getContact = gql`
         surname
         online
         bio
+        file
         createdAt
         updatedAt
       }

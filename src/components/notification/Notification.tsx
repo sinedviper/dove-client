@@ -17,7 +17,7 @@ export const Notification = ({
   const errors: { text: string; id: any }[] = useAppSelector(getErrors);
   const loading: boolean = useAppSelector(getLoading);
   const copy: boolean = useAppSelector(getCopy);
-
+  //remove error layout
   const handleRemove = (id) => {
     dispatch(actionDeleteError(id));
   };

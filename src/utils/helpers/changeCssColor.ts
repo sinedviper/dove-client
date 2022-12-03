@@ -1,3 +1,4 @@
+//that what it change theme
 export const changeCssColor = (theme) => {
   const root = document.querySelector(":root") as HTMLSelectElement;
 

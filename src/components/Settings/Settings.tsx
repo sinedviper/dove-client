@@ -26,7 +26,6 @@ import {
   actionAddTabIndexSixth,
   actionMenuEdit,
   actionMenuSetting,
-  getImageSender,
   getImageUser,
   getMenuSetting,
   getUser,
@@ -61,12 +60,11 @@ export const Settings = ({
   const exit = useExit();
   const error = useError();
   const windowSize = useWindowSize();
-
+  //store
   let user: IUser | undefined = useAppSelector(getUser);
   if (sender) {
     user = sender;
   }
-  const imageSender: IImage | undefined = useAppSelector(getImageSender);
   const settings: boolean = useAppSelector(getMenuSetting);
   const imageUser: IImage[] | undefined = useAppSelector(getImageUser);
 
@@ -104,15 +102,15 @@ export const Settings = ({
   const debouncedMutation = useDebounce(() => {
     dispatch(actionAddCopy(false));
   }, 3000);
-
+  //copy string
   const handleCopy = (value: string) => {
     navigator.clipboard.writeText(value);
     dispatch(actionAddCopy(true));
     debouncedMutation();
   };
-
+  //delete user function
   const handleRemoveUser = async () => await mutationFunction();
-
+  //load img function in server
   const handleLoadPhoto = async (e) => {
     const formData = new FormData();
     const file = e.target.files[0];
@@ -139,7 +137,7 @@ export const Settings = ({
       }
     }
   };
-
+  //delete photo
   const handleRemovePhoto = async (idPhoto: number, file: string) => {
     await mutationFunctionDeletePhoto({
       variables: { idPhoto: Number(idPhoto), file: String(file) },
@@ -252,7 +250,7 @@ export const Settings = ({
           className={styles.userPhoto}
           style={{
             background: profile
-              ? !imageSender
+              ? !user?.file
                 ? `linear-gradient(${color?.color1}, ${color?.color2})`
                 : "none"
               : imageUser?.length === 0
@@ -261,12 +259,12 @@ export const Settings = ({
           }}
         >
           {profile ? (
-            imageSender ? (
+            user?.file ? (
               <div className={styles.wrapperImage}>
                 <div className={styles.userImageWrapper}>
                   <img
                     className={styles.userImage}
-                    src={`http://localhost:3001/images/` + imageSender?.file}
+                    src={`http://localhost:3001/images/` + user?.file}
                     alt='User'
                   />
                 </div>
@@ -363,7 +361,11 @@ export const Settings = ({
           {!profile && (
             <div className={styles.uploadWrapper}>
               <button className={styles.uploadPhoto} tabIndex={-1}>
-                <label className={styles.iconPhotoWrapper} htmlFor='loadphoto'>
+                <label
+                  className={styles.iconPhotoWrapper}
+                  htmlFor='loadphoto'
+                  tabIndex={tabIndex}
+                >
                   <PhotoIcon />
                 </label>
                 <input
@@ -373,6 +375,7 @@ export const Settings = ({
                   onChange={handleLoadPhoto}
                   type='file'
                   id='loadphoto'
+                  data-required='true'
                 />
               </button>
             </div>

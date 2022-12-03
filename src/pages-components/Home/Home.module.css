@@ -113,7 +113,7 @@
   cursor: pointer;
   border: none;
   background: var(--primary);
-  color: var(--text-first);
+  color: var(--white);
   transition: var(--transition-static);
 }
 

@@ -36,7 +36,7 @@ export const CardContact = ({
   const error = useError();
   const dispatch = useAppDispatch();
   const sizeWindow = useWindowSize();
-
+  //store
   const user: IUser | undefined = useAppSelector(getUser);
 
   const [mutationFunctionDelete] = useMutation(deleteContact, {
@@ -54,7 +54,7 @@ export const CardContact = ({
   const [menu, setMenu] = useState<boolean>(false);
   const [click, setClick] = useState<boolean>(false);
   let timer: any = undefined;
-
+  //function delete contact
   const handleDeleteContact = async () => {
     if (!search) {
       await mutationFunctionDelete({
@@ -127,13 +127,23 @@ export const CardContact = ({
       <div
         className={styles.contactsPhoto}
         style={{
-          background: `linear-gradient(${color?.color1}, ${color?.color2})`,
+          background: contact.file
+            ? ""
+            : `linear-gradient(${color?.color1}, ${color?.color2})`,
         }}
       >
-        <span>
-          {contact?.name && contact?.name.toUpperCase().split("")[0]}
-          {contact?.surname && contact?.surname.toUpperCase().split("")[0]}
-        </span>
+        {contact.file ? (
+          <img
+            className={styles.imageContact}
+            src={`http://localhost:3001/images/${contact.file}`}
+            alt='user img'
+          />
+        ) : (
+          <span>
+            {contact?.name && contact?.name.toUpperCase().split("")[0]}
+            {contact?.surname && contact?.surname.toUpperCase().split("")[0]}
+          </span>
+        )}
       </div>
       <div className={styles.contactInfo}>
         <span className={styles.contactName}>

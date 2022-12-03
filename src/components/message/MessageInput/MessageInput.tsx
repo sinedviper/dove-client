@@ -106,11 +106,11 @@ export const MessageInput = ({
 
   const [emoji, setEmoji] = useState<boolean>(false);
   const [send, setSend] = useState<string>(message ? message.text : "");
-
+  //add emoji in text function
   const handleEmoji = (emoji) => {
     setSend(send + String(emoji.native));
   };
-
+  //add chat with user
   const handleAddChat = async () => {
     await mutationFunctionAddChat({
       variables: {
@@ -118,7 +118,7 @@ export const MessageInput = ({
       },
     });
   };
-
+  //function edit message
   const handleMessageUpdate = async () => {
     if (chat) {
       setSend("");
@@ -135,7 +135,7 @@ export const MessageInput = ({
       dispatch(actionClearMessageEdit());
     }
   };
-
+  //function add message
   const handleMessageAdd = async (chat) => {
     if (chat) {
       setSend("");
@@ -153,7 +153,7 @@ export const MessageInput = ({
       dispatch(actionClearMessageEdit());
     }
   };
-
+  //send processing function
   const handleSend = async (e) => {
     if (chat) {
       if (message) {
@@ -175,7 +175,7 @@ export const MessageInput = ({
       }
     }
   };
-
+  //send processing function for click
   const handleSendClick = async () => {
     if (chat) {
       if (message) {
@@ -192,11 +192,11 @@ export const MessageInput = ({
       }
     }
   };
-
+  //when have edit message but wont delete and not edit message
   const handleRemoveEditMessage = () => {
     dispatch(actionClearMessageEdit());
   };
-
+  //makes sure that in editing, if editing is true, then it adds text to the field, if not, it makes it empty
   useEffect(() => {
     if (message) {
       if (edit) setSend(message.text);

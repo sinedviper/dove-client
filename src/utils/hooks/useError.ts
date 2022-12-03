@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { actionAddError, actionAddFetch, actionDeleteError } from "store";
 import { useAppDispatch, useDebounce } from "utils/hooks";
 
+//take string and push in notification, then delete this notification
 export function useError() {
   const dispatch = useAppDispatch();
   const debouncedError = useDebounce((id, dispatch) => {

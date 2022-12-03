@@ -37,7 +37,7 @@ export const FormSignUp = ({
   const [mutateFunction, { loading: loadingMutation }] = useMutation(signUp);
 
   const [password, setPassword] = useState<number>(0);
-
+  //send data in server when user sign up
   const onSubmit = async (input: IFormInput): Promise<void> => {
     if (password < 3) {
       error("Password uncorrectly");
@@ -50,7 +50,7 @@ export const FormSignUp = ({
       });
     }
   };
-
+  //keeps track of the theme of the system
   useEffect(() => {
     if (
       window.matchMedia &&

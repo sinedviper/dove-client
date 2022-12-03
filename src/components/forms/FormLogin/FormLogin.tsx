@@ -52,7 +52,7 @@ export const FormLogin = ({
     loginUser,
     { fetchPolicy: "network-only" }
   );
-
+  //when a user logs in sends data and receives a user token
   const onSubmit = async (input: IFormInput): Promise<void> => {
     await mutateFunction({ variables: { input } }).then(async (res) => {
       const data = res?.data.loginUser;
@@ -63,7 +63,7 @@ export const FormLogin = ({
       }
     });
   };
-
+  //keeps track of the theme of the system
   useEffect(() => {
     if (
       window.matchMedia &&

@@ -39,7 +39,7 @@ export const MessageCard = ({
     user: 0,
   });
   let timer: any;
-
+  //keeps track of the right mouse button, if pressed, it sends data to the interaction menu block with the sent message, also fixed to the screen size
   const handleMouseDown = (e, message: IMessage) => {
     if (e.buttons === 2) {
       setEditMessage(true);
@@ -61,11 +61,11 @@ export const MessageCard = ({
   return (
     <li
       className={cn(className, styles.message, {
-        [styles.messageUser]: username === message?.senderMessage.username,
+        [styles.messageUser]: username === message?.senderMessage?.username,
         [styles.messageDown]:
-          messages[Number(index + 1)]?.senderMessage.username !==
+          messages[Number(index + 1)]?.senderMessage?.username !==
             message?.senderMessage.username &&
-          messages[Number(index + 1)]?.senderMessage.username !== undefined,
+          messages[Number(index + 1)]?.senderMessage?.username !== undefined,
         [styles.wrapperReply]: message?.reply !== null,
         [styles.wrapperUserId]: message?.senderMessage.id === user?.id,
       })}
@@ -100,7 +100,7 @@ export const MessageCard = ({
           setClient({
             id: message?.id,
             chatId: chat?.id ? chat.id : 0,
-            senderMessage: message?.senderMessage.id,
+            senderMessage: message?.senderMessage?.id,
             user: Number(user?.id),
             text: message?.text,
           });
@@ -122,7 +122,7 @@ export const MessageCard = ({
             <p
               className={cn(styles.textMessage, {
                 [styles.messageWrapperUser]:
-                  user?.username === message?.senderMessage.username,
+                  user?.username === message?.senderMessage?.username,
               })}
             >
               {message?.reply.text}
@@ -144,7 +144,7 @@ export const MessageCard = ({
           <span
             className={cn(styles.messageEdit, {
               [styles.receipt]:
-                message.senderMessage.username !== user?.username,
+                message?.senderMessage?.username !== user?.username,
             })}
           >
             {message?.createdAt !== message?.dateUpdate ? "edited" : null}
@@ -152,17 +152,17 @@ export const MessageCard = ({
           <span
             className={cn(styles.messageDate, {
               [styles.receipt]:
-                message.senderMessage.username !== user?.username,
+                message?.senderMessage?.username !== user?.username,
             })}
           >
-            {formatHours(new Date(message?.createdAt))}
+            {message && formatHours(new Date(message?.createdAt))}
           </span>
           <span
             className={cn(styles.messageRead, {
-              [styles.readMessage]: message.read === true,
+              [styles.readMessage]: message?.read === true,
               [styles.readMessageUser]:
-                message.read === true &&
-                username !== message?.senderMessage.username,
+                message?.read === true &&
+                username !== message?.senderMessage?.username,
             })}
           >
             <CheckIcon />
@@ -172,22 +172,24 @@ export const MessageCard = ({
       <TailIcon
         className={cn(
           styles.tailIcon,
-          messages[Number(index + 1)]?.senderMessage.username !==
-            user?.username && user?.username === message?.senderMessage.username
+          messages[Number(index + 1)]?.senderMessage?.username !==
+            user?.username &&
+            user?.username === message?.senderMessage?.username
             ? styles.messageStyleLeft
             : null,
-          messages[Number(index + 1)]?.senderMessage.username ===
-            user?.username && user?.username !== message?.senderMessage.username
+          messages[Number(index + 1)]?.senderMessage?.username ===
+            user?.username &&
+            user?.username !== message?.senderMessage?.username
             ? styles.messageStyleRight
             : null,
-          messages[Number(index + 1)]?.senderMessage.username === undefined
-            ? message?.senderMessage.username === user?.username
+          messages[Number(index + 1)]?.senderMessage?.username === undefined
+            ? message?.senderMessage?.username === user?.username
               ? styles.messageStyleLeft
               : styles.messageStyleRight
             : null,
           new Date(message?.createdAt).getDate() !==
             new Date(messages[index + 1]?.createdAt).getDate()
-            ? message?.senderMessage.username === user?.username
+            ? message?.senderMessage?.username === user?.username
               ? styles.messageStyleLeft
               : styles.messageStyleRight
             : null

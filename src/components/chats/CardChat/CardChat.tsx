@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import cn from "classnames";
@@ -18,7 +18,6 @@ import {
   actionAddRecipient,
   actionAddTabIndexFirst,
   actionAddTabIndexSixth,
-  actionClearImageSender,
   actionClearMessages,
   actionClearRecipient,
   actionMenuMain,
@@ -43,34 +42,32 @@ export const CardChat = ({
   const autorization = useAuthorization();
   const windowSize = useWindowSize();
 
-  const [mutationFunction, { error: errorMutationChat }] = useMutation(
-    removeChat,
-    {
-      fetchPolicy: "network-only",
-      onCompleted(data) {
-        autorization({ data: data.deleteChat, actionAdd: actionAddChats });
-        dispatch(actionAddTabIndexSixth(-1));
-        navigate("");
-      },
-    }
-  );
-
+  const [mutationFunction] = useMutation(removeChat, {
+    fetchPolicy: "network-only",
+    onCompleted(data) {
+      autorization({ data: data.deleteChat, actionAdd: actionAddChats });
+      dispatch(actionAddTabIndexSixth(-1));
+      navigate("");
+    },
+    onError(errorData) {
+      error(errorData.message);
+    },
+  });
+  //store
   const userMain: IUser | undefined = useAppSelector(getUser);
 
   const [top, setTop] = useState<number>(0);
   const [left, setLeft] = useState<number>(0);
   const [menu, setMenu] = useState<boolean>(false);
-  const [click, setClick] = useState<boolean>(false);
   let timer: any;
 
   const color = colorCard(user.name.toUpperCase().split("")[0]);
-
+  //function to process the request when clicking on the chat
   const handleFocus = () => {
     if (String(user.username) !== String(username)) {
       dispatch(actionClearMessages());
       dispatch(actionClearRecipient());
       dispatch(actionAddRecipient(user));
-      dispatch(actionClearImageSender());
       dispatch(actionAddTabIndexSixth(0));
       navigate(`${user.username}`);
     }
@@ -79,26 +76,15 @@ export const CardChat = ({
       dispatch(actionAddTabIndexFirst(-1));
     }
   };
-
+  //function delete chat
   const handleDeleteChat = async () =>
     await mutationFunction({ variables: { idChat: Number(id) } });
-
-  useEffect(() => {
-    if (username === user.username) {
-      setClick(true);
-    }
-    if (username !== user.username) {
-      setClick(false);
-    }
-    if (errorMutationChat) error(errorMutationChat.message);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [username, user, errorMutationChat]);
 
   return (
     <li
       tabIndex={tabIndex}
       className={cn(className, styles.contacts, {
-        [styles.contactActive]: click === true,
+        [styles.contactActive]: username === user.username,
       })}
       onClick={() => {
         handleFocus();
@@ -157,7 +143,7 @@ export const CardChat = ({
         {userMain?.username === user.username ? (
           <span
             className={cn(styles.bookMarkerWrapper, {
-              [styles.bookMarkerWrapperOn]: click,
+              [styles.bookMarkerWrapperOn]: username === user.username,
             })}
           >
             <BookmarkIcon />
@@ -188,11 +174,11 @@ export const CardChat = ({
         <CheckIcon
           className={cn(styles.wrapperIcon, {
             [styles.wrapperIconOne]:
-              click === false && lastMessage?.read === true,
+              username !== user.username && lastMessage?.read === true,
             [styles.wrapperIconMark]:
-              click === true && lastMessage?.read === true,
+              username === user.username && lastMessage?.read === true,
             [styles.wrapperIconMarkNotRead]:
-              click === true && lastMessage?.read === false,
+              username === user.username && lastMessage?.read === false,
           })}
         />
         <span>

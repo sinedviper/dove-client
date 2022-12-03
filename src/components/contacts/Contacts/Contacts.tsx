@@ -11,7 +11,6 @@ import {
   actionAddTabIndexFirst,
   actionAddTabIndexSixth,
   actionAddTabIndexThree,
-  actionClearImageSender,
   actionClearMessages,
   actionClearRecipient,
   actionMenuContact,
@@ -35,21 +34,20 @@ export const Contacts = ({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const windowSize = useWindowSize();
-
+  //store
   const contacts: IUser[] | undefined = useAppSelector(getContacts);
   const contact: boolean = useAppSelector(getMenuContact);
   const tabIndexThree = useAppSelector(getTabIndexThree);
 
   const [valueContact, setValueContact] = useState<string>("");
   const [swiper, setSwiper] = useState<boolean>(false);
-
+  //processing the transition to the chat with the user, if the users are not equal then it reloads the messages, if they are equal, then it clears the tabs
   const handleFocus = (contact: IUser) => {
     if (String(contact.username) !== String(username)) {
       dispatch(actionMenuContact(false));
       dispatch(actionClearMessages());
       dispatch(actionClearRecipient());
       dispatch(actionAddRecipient(contact));
-      dispatch(actionClearImageSender());
       dispatch(actionAddTabIndexFirst(0));
       dispatch(actionAddTabIndexThree(-1));
       dispatch(actionAddTabIndexSixth(0));
@@ -63,7 +61,7 @@ export const Contacts = ({
     }
     if (windowSize[0] < 1000) {
       dispatch(actionMenuMain(false));
-      dispatch(actionAddTabIndexSixth(-1));
+      dispatch(actionAddTabIndexFirst(-1));
     }
   };
 

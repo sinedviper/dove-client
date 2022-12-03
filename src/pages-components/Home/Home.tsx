@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import cn from "classnames";
 
 import {
@@ -11,20 +11,25 @@ import {
   useError,
 } from "utils/hooks";
 import { IChat, IMessage, IUser } from "utils/interface";
-import { getHaveMessages, getMessage } from "resolvers/messages";
+import {
+  getfindMessageDate,
+  getHaveMessages,
+  getMessage,
+} from "resolvers/messages";
 import { getUserSender } from "resolvers/user";
 import { formatDay } from "utils/helpers";
-import { getUploadUser } from "resolvers/upload";
 import { MessageCard, MessageHeader, MessageInput } from "components/message";
 import { Settings } from "components";
 import {
   actionAddFetch,
-  actionAddImageSender,
+  actionAddLoading,
   actionAddMessages,
+  actionAddMessagesLast,
   actionAddRecipient,
   getChat,
   getMenuMain,
   getMessages,
+  getMessagesBefore,
   getRecipient,
   getTabIndexSeventh,
   getUser,
@@ -39,16 +44,34 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const authorization = useAuthorization();
   const authorizationHave = useAuthorizationSearch();
-
+  //store
   const user: IUser | undefined = useAppSelector(getUser);
   const sender: IUser | undefined = useAppSelector(getRecipient);
   const chat: IChat | undefined = useAppSelector(getChat)?.filter(
     (chat) => chat?.user?.id === sender?.id
   )[0];
   const messages: IMessage[] | undefined = useAppSelector(getMessages);
+  const messagesBegore: IMessage[] | undefined =
+    useAppSelector(getMessagesBefore);
   const main: boolean = useAppSelector(getMenuMain);
   const tabIndexSeventh: number = useAppSelector(getTabIndexSeventh);
   const [haveMessage, setHaveMassge] = useState<Date | null>(null);
+
+  const [getFindLastMessage, { loading: dataFindLastMessage }] = useLazyQuery(
+    getfindMessageDate,
+    {
+      fetchPolicy: "network-only",
+      onCompleted(data) {
+        authorization({
+          data: data.findMessageDate,
+          actionAdd: actionAddMessagesLast,
+        });
+      },
+      onError(errorData) {
+        chat && error(errorData.message);
+      },
+    }
+  );
 
   const { error: errorQueryMessage } = useQuery(getMessage, {
     variables: {
@@ -67,10 +90,14 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
     pollInterval: chat === undefined ? 300000 : 500,
   });
 
-  const {} = useQuery(getHaveMessages, {
+  const { error: errorQueryDateMessage } = useQuery(getHaveMessages, {
     variables: {
       message: {
-        id: Number(messages?.slice(-1)[0].id),
+        id: Number(
+          messagesBegore !== undefined
+            ? messagesBegore?.[0]?.id
+            : messages?.[0]?.id
+        ),
         chatId: Number(chat?.id),
         senderMessage: Number(user?.id),
       },
@@ -86,7 +113,7 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
   });
 
   const { error: errorSender } = useQuery(getUserSender, {
-    variables: { input: { userId: Number(user?.id), username } },
+    variables: { input: { username } },
     onCompleted(data) {
       authorization({ data: data.getUser, actionAdd: actionAddRecipient });
     },
@@ -97,28 +124,19 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
     pollInterval: 5000,
   });
 
-  const { error: errorQueryFunctionImageSender } = useQuery(getUploadUser, {
-    onCompleted(data) {
-      authorization({
-        data: data.getUploadUser,
-        actionAdd: actionAddImageSender,
-      });
-    },
-    onError(errorData) {
-      error(errorData.message);
-    },
-    fetchPolicy: "network-only",
-    pollInterval: 10000,
-    variables: { idUser: Number(sender?.id) },
-  });
-
   const [settings, setSettings] = useState<boolean>(false);
-
+  //here we show the loading of the latest messages
   useEffect(() => {
-    if (!errorQueryMessage && !errorSender && !errorQueryFunctionImageSender)
+    if (dataFindLastMessage) dispatch(actionAddLoading(true));
+    if (!dataFindLastMessage) dispatch(actionAddLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataFindLastMessage]);
+  //this removes the load connection to the server
+  useEffect(() => {
+    if (!errorQueryMessage && !errorSender && !errorQueryDateMessage)
       dispatch(actionAddFetch(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [errorQueryMessage, errorSender, errorQueryFunctionImageSender]);
+  }, [errorQueryMessage, errorSender, errorQueryDateMessage]);
 
   return (
     <section
@@ -136,16 +154,79 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
         <MessageHeader setSettings={setSettings} settings={settings} />
         <section className={styles.chatsWrapper}>
           <ul className={cn(styles.messageWrapper)}>
-            {haveMessage !== null ? (
+            {chat && haveMessage !== null ? (
               <button
                 tabIndex={-1}
-                onClick={() => {}}
+                onClick={async () =>
+                  await getFindLastMessage({
+                    variables: {
+                      message: {
+                        dataLastMessage: String(haveMessage),
+                        chatId: Number(chat?.id),
+                        senderMessage: Number(user?.id),
+                      },
+                    },
+                  })
+                }
                 className={styles.buttonLoadMessage}
               >
-                load message
+                {messagesBegore !== undefined
+                  ? formatDay(new Date(haveMessage))
+                  : messages && formatDay(new Date(haveMessage))}
               </button>
             ) : (
               ""
+            )}
+            {chat && messagesBegore && messagesBegore?.length !== 0 && (
+              <div className={styles.wrapperWithDate}>
+                <p className={styles.dateMessage}>
+                  {messagesBegore[0] &&
+                    formatDay(new Date(messagesBegore[0]?.createdAt))}
+                </p>
+              </div>
+            )}
+            {chat &&
+              messagesBegore &&
+              messagesBegore?.map((message, index) => {
+                if (messagesBegore[index + 1]?.createdAt)
+                  if (
+                    new Date(message?.createdAt).getDate() !==
+                    new Date(messagesBegore[index + 1]?.createdAt).getDate()
+                  ) {
+                    return (
+                      <div key={message?.id} className={styles.wrapperWithDate}>
+                        <MessageCard
+                          chat={chat}
+                          message={message}
+                          index={index}
+                          user={user}
+                          messages={messagesBegore}
+                        />
+                        <p className={styles.dateMessage}>
+                          {formatDay(
+                            new Date(messagesBegore[index + 1]?.createdAt)
+                          )}
+                        </p>
+                      </div>
+                    );
+                  }
+                return (
+                  <MessageCard
+                    chat={chat}
+                    message={message}
+                    index={index}
+                    user={user}
+                    messages={messagesBegore}
+                    key={message?.id}
+                  />
+                );
+              })}
+            {chat && messages && messages.length !== 0 && (
+              <div className={styles.wrapperWithDate}>
+                <p className={styles.dateMessage}>
+                  {messages[0] && formatDay(new Date(messages[0]?.createdAt))}
+                </p>
+              </div>
             )}
             {messages &&
               chat &&

@@ -1,3 +1,5 @@
+//here function that show dat in format what need
+
 export const formateDate = (data: Date): string => {
   const todayDate = new Date();
 
@@ -65,7 +67,7 @@ export const formatHours = (data: Date): string => {
   return new Intl.DateTimeFormat("en-US", {
     hour: "2-digit",
     minute: "2-digit",
-  }).format(data);
+  }).format(new Date(data));
 };
 
 export const formateDateOnline = (data: Date): string => {

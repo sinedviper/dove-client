@@ -33,6 +33,7 @@ export const getUserSender = gql`
         username
         email
         name
+        file
         surname
         online
         bio
@@ -52,6 +53,7 @@ export const getUsersSearch = gql`
         username
         email
         name
+        file
         surname
         online
         bio

@@ -18,6 +18,7 @@ import { IUser } from "utils/interface";
 import { getContact } from "resolvers/contacts";
 import { updateUserOnline } from "resolvers/user";
 import { getChats } from "resolvers/chats";
+import { getUploads } from "resolvers/upload";
 import { Contacts } from "components/contacts";
 import { Edits } from "components/forms";
 import { Chats } from "components/chats";
@@ -38,26 +39,8 @@ import {
 
 import { LayoutProps } from "./Layout.props";
 import styles from "./Layout.module.css";
-import { getUploads } from "resolvers/upload";
 
-// (function () {
-//   const tabHistory = [{}];
-
-//   window.addEventListener("keyup", function (e) {
-//     const code = e.keyCode || e.which;
-//     const index = tabHistory.length === 0 ? 1 : tabHistory.length + 1;
-
-//     if (code === 9) {
-//       tabHistory.push({
-//         element: e.target,
-//         index,
-//       });
-
-//       console.log(index, e.target, tabHistory);
-//     }
-//   });
-// })();
-
+// that left block in dispaly, here all function what update data in store
 export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const themeChange = useTheme();
@@ -100,7 +83,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
     getContact,
     {
       fetchPolicy: "network-only",
-      onCompleted(data) {
+      onCompleted: async (data) => {
         autorization({ data: data.getContacts, actionAdd: actionAddContact });
       },
       onError(errorData) {
@@ -135,7 +118,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   const debouncedMutation = useDebounce(() => {
     mutationUserOnlineFunction({ variables: { input: { online: "ping" } } });
   }, 300000);
-
+  //here we update refacte when error have or haven't
   useEffect(() => {
     if (
       !errorQueryContact &&
@@ -152,14 +135,14 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
     errorMutationUserOnline,
     errorQueryImage,
   ]);
-
+  //here if size many 1000 to block left have show in display
   useEffect(() => {
     if (sizeWindow[0] > 1000) {
       dispatch(actionMenuMain(true));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sizeWindow[0]]);
-
+  //here we push in store true when data loading
   useEffect(() => {
     //loading
     if (loadQueryContact || loadQueryChat || loadQueryImage)
@@ -168,7 +151,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
       dispatch(actionAddLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadQueryChat, loadQueryContact, loadQueryImage]);
-
+  //here change theme when user change theme in menu in left block
   useEffect(() => {
     themeChange?.changeTheme(
       user?.theme ? theme.THEME_DARK : theme.THEME_LIGHT
@@ -178,7 +161,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.animation, user?.theme]);
-
+  //when user open site first that dispatch in store what meny show and right block not tab because in right block not have chat
   useEffect(() => {
     if (sizeWindow[0] < 1000) {
       dispatch(actionMenuMain(true));

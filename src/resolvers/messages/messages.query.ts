@@ -47,3 +47,40 @@ export const getHaveMessages = gql`
     }
   }
 `;
+
+export const getfindMessageDate = gql`
+  query GetUploadUser($message: MessageInput!) {
+    findMessageDate(message: $message) {
+      status
+      code
+      data {
+        id
+        senderMessage {
+          id
+          username
+          email
+          name
+          surname
+        }
+        text
+        read
+        dateUpdate
+        reply {
+          id
+          senderMessage {
+            id
+            username
+            email
+            name
+            surname
+          }
+          text
+          createdAt
+        }
+        updatedAt
+        createdAt
+      }
+      message
+    }
+  }
+`;

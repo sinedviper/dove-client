@@ -67,7 +67,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
       error(errorData.message);
     },
   });
-
+  //store
   const user: IUser | undefined = useAppSelector(getUser);
   const edit: boolean = useAppSelector(getMenuEdit);
   const imageUser: IImage | undefined = useAppSelector(getImageUser)?.[0];
@@ -100,9 +100,9 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
     width: number;
     height: number;
   }>({ width: 0, height: 0 });
-
+  //getting a color for a user if they don't have a photo
   const color = colorCard(String(user?.name.toUpperCase().slice()[0]));
-
+  //load photo
   const handleLoadPhoto = async (e) => {
     const formData = new FormData();
     const file = e.target.files[0];
@@ -172,6 +172,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
         error("Please correct new password");
       }
     }
+    //displaying information about an incorrect password
     if (!input.mainPassword && input.newPassword && input.repeatPassword) {
       setErrorPassword("Please enter your main password");
       setErrorPasswordNew("");

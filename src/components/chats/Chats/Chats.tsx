@@ -47,7 +47,7 @@ export const Chats = ({
   const error = useError();
   const windowSize = useWindowSize();
   const autorizationSearch = useAuthorizationSearch();
-
+  //store
   const fetch: boolean = useAppSelector(getFetch);
   const user: IUser | undefined = useAppSelector(getUser);
   const contacts: IUser[] | undefined = useAppSelector(getContacts);
@@ -59,14 +59,14 @@ export const Chats = ({
 
   const { data: dataSearch } = useQuery(getUsersSearch, {
     variables: {
-      input: { userId: Number(user?.id), username: String(valueAll) },
+      input: { username: String(valueAll) },
     },
     onError(errorData) {
       error(errorData.message);
     },
-    pollInterval: 200,
+    pollInterval: 500,
   });
-
+  //store
   let searchUsers: IUser[] | undefined = dataSearch
     ? autorizationSearch({
         data: dataSearch?.searchUsers,
@@ -76,13 +76,8 @@ export const Chats = ({
   const [click, setClick] = useState<boolean>(false);
   const [swiper, setSwiper] = useState<boolean>(false);
   const [searchUser, setSearchUser] = useState<boolean>(false);
-
+  //function to process the request when clicking on the chat
   const handleFocus = async (contact: IUser) => {
-    console.log(
-      String(contact.username) !== String(username),
-      contact.username,
-      username
-    );
     if (String(contact.username) !== String(username)) {
       setValueAll("");
       setSearchUser(false);
@@ -141,7 +136,7 @@ export const Chats = ({
                 );
                 return (
                   <div
-                    key={uuidv4()}
+                    key={contact.id}
                     className={cn(styles.contactWrapper, {
                       [styles.contactWrapperOn]: username === contact.username,
                       [styles.contactWrapperClick]: click === true,
@@ -172,10 +167,20 @@ export const Chats = ({
                     <div
                       className={styles.contactPhoto}
                       style={{
-                        background: `linear-gradient(${color1}, ${color2})`,
+                        background: contact.file
+                          ? ""
+                          : `linear-gradient(${color1}, ${color2})`,
                       }}
                     >
-                      <span>{contact.name.toUpperCase()[0]}</span>
+                      {contact.file ? (
+                        <img
+                          className={styles.contactImage}
+                          src={`http://localhost:3001/images/${contact.file}`}
+                          alt='contact img'
+                        />
+                      ) : (
+                        <span>{contact.name.toUpperCase()[0]}</span>
+                      )}
                     </div>
                     <p>{contact.name}</p>
                   </div>
@@ -188,7 +193,7 @@ export const Chats = ({
             <p>Global users</p>
             {searchUsers.map((user) => (
               <CardContact
-                key={uuidv4()}
+                key={user.id}
                 contact={user}
                 handleFocus={() => handleFocus(user)}
                 setValue={setValueAll}

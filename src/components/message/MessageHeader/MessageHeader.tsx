@@ -10,7 +10,7 @@ import {
   useError,
   useWindowSize,
 } from "utils/hooks";
-import { IImage, IUser } from "utils/interface";
+import { IUser } from "utils/interface";
 import { addContact, deleteContact } from "resolvers/contacts";
 import {
   actionAddContact,
@@ -19,7 +19,6 @@ import {
   actionAddTabIndexSixth,
   actionMenuMain,
   getContacts,
-  getImageSender,
   getMenuMain,
   getRecipient,
   getTabIndexSixth,
@@ -29,6 +28,7 @@ import { AddUserIcon, BackIcon, RemoveUserIcon } from "assets";
 
 import { MessageHeaderProps } from "./MessageHeader.props";
 import styles from "./MessageHeader.module.css";
+import { useParams } from "react-router-dom";
 
 export const MessageHeader = ({
   setSettings,
@@ -36,18 +36,18 @@ export const MessageHeader = ({
   className,
   ...props
 }: MessageHeaderProps): JSX.Element => {
+  const { username } = useParams();
   const error = useError();
   const dispatch = useAppDispatch();
   const authorization = useAuthorization();
   const windowSize = useWindowSize();
   let color = colorCard();
-
+  //store
   const receipt: IUser | undefined = useAppSelector(getRecipient);
   const contact: IUser | undefined = useAppSelector(getContacts)?.filter(
     (contact) => contact.id === receipt?.id
   )[0];
   const user: IUser | undefined = useAppSelector(getUser);
-  const imageSender: IImage | undefined = useAppSelector(getImageSender);
   const main: boolean = useAppSelector(getMenuMain);
   const tabIndexSixth = useAppSelector(getTabIndexSixth);
 
@@ -155,9 +155,9 @@ export const MessageHeader = ({
         tabIndex={tabIndexSixth}
       >
         <div className={styles.headerReceiptPhoto}>
-          {imageSender ? (
+          {receipt?.file ? (
             <img
-              src={`http://localhost:3001/images/${imageSender.file}`}
+              src={`http://localhost:3001/images/${receipt?.file}`}
               alt='sender'
               className={styles.imageSender}
             />
@@ -165,7 +165,7 @@ export const MessageHeader = ({
             <span
               className={styles.receiptNamePhoto}
               style={{
-                background: imageSender
+                background: receipt?.file
                   ? ""
                   : `linear-gradient(${color?.color1}, ${color?.color2})`,
               }}
@@ -186,37 +186,43 @@ export const MessageHeader = ({
           </p>
         </div>
       </div>
-      <button
-        className={styles.delete}
-        onClick={() => setmenuMessage(!menuMessage)}
-        tabIndex={tabIndexSixth}
-      >
-        <span className={styles.dot}></span>
-      </button>
-      <div
-        className={cn(styles.menuMessageWrapper, {
-          [styles.menuMessageWrapperOn]: menuMessage === true,
-        })}
-        style={{ display: menuMessage ? "block" : "none" }}
-      >
-        <button
-          className={styles.deleteButton}
-          onClick={handleEditContact}
-          tabIndex={tabIndexSixth}
-        >
-          {contact ? (
-            <>
-              <RemoveUserIcon className={styles.removeIcon} />
-              <span>Delete contact</span>
-            </>
-          ) : (
-            <>
-              <AddUserIcon className={styles.removeIcon} />
-              <span>Add contact</span>
-            </>
-          )}
-        </button>
-      </div>
+      {username === user?.username ? (
+        ""
+      ) : (
+        <>
+          <button
+            className={styles.delete}
+            onClick={() => setmenuMessage(!menuMessage)}
+            tabIndex={tabIndexSixth}
+          >
+            <span className={styles.dot}></span>
+          </button>
+          <div
+            className={cn(styles.menuMessageWrapper, {
+              [styles.menuMessageWrapperOn]: menuMessage === true,
+            })}
+            style={{ display: menuMessage ? "block" : "none" }}
+          >
+            <button
+              className={styles.deleteButton}
+              onClick={handleEditContact}
+              tabIndex={tabIndexSixth}
+            >
+              {contact ? (
+                <>
+                  <RemoveUserIcon className={styles.removeIcon} />
+                  <span>Delete contact</span>
+                </>
+              ) : (
+                <>
+                  <AddUserIcon className={styles.removeIcon} />
+                  <span>Add contact</span>
+                </>
+              )}
+            </button>
+          </div>
+        </>
+      )}
     </section>
   );
 };

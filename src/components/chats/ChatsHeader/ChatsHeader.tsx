@@ -52,7 +52,7 @@ export const ChatsHeader = ({
   const exit = useExit();
   const autorization = useAuthorization();
   const windowSize = useWindowSize();
-
+  //store
   const user: IUser | undefined = useAppSelector(getUser);
   const tabIndexFirst: number = useAppSelector(getTabIndexFirst);
   const tabIndexThree: number = useAppSelector(getTabIndexThree);
@@ -75,6 +75,7 @@ export const ChatsHeader = ({
       error(errorData.message);
     },
   });
+
   const [queryFunctionContactGet] = useLazyQuery(getContact, {
     fetchPolicy: "network-only",
     onCompleted(data) {
@@ -86,7 +87,7 @@ export const ChatsHeader = ({
   });
 
   const [menu, setMenu] = useState<boolean>(false);
-
+  //the function of obtaining contacts when opened in the menu
   const handleContact = async () => {
     await queryFunctionContactGet();
     dispatch(actionMenuContact(true));
@@ -95,7 +96,7 @@ export const ChatsHeader = ({
     dispatch(actionAddTabIndexFirst(-1));
     dispatch(actionAddTabIndexThree(0));
   };
-
+  //the function of opening settings, and downloading data to the store
   const handleSettings = () => {
     dispatch(actionMenuSetting(true));
     setMenu(false);
@@ -103,17 +104,17 @@ export const ChatsHeader = ({
     dispatch(actionAddTabIndexFourth(0));
     dispatch(actionAddTabIndexSixth(-1));
   };
-
+  //the function for mouse
   const handleLeavMouseInBlockChats = () => {
     menu && setMenu(false);
     setSwiper(false);
   };
-
+  //them function for change theme
   const handleTheme = async () =>
     await mutationFunctionUser({
       variables: { input: { theme: !user?.theme } },
     });
-
+  //the function for change animation
   const handleAnimation = async () =>
     await mutationFunctionUser({
       variables: { input: { animation: !user?.animation } },

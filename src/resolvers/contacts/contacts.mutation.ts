@@ -13,6 +13,7 @@ export const addContact = gql`
         surname
         online
         bio
+        file
         createdAt
         updatedAt
       }
@@ -34,6 +35,7 @@ export const deleteContact = gql`
         surname
         online
         bio
+        file
         createdAt
         updatedAt
       }
