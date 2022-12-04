@@ -12,9 +12,10 @@ import { Provider } from "react-redux";
 import { setContext } from "@apollo/client/link/context";
 import { PersistGate } from "redux-persist/integration/react";
 
+import { SERVER_LINK } from "utils/constants";
+import { ThemeProvider } from "utils/context";
 import App from "./App";
 import { persistor, store } from "./store";
-import { ThemeProvider } from "utils/context";
 
 import "./index.css";
 
@@ -33,7 +34,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 });
 
 const httpLink = createHttpLink({
-  uri: `http://localhost:3001/graphql`,
+  uri: `${SERVER_LINK}/graphql`,
 });
 
 const authLink = setContext(() => {

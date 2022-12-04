@@ -103,6 +103,8 @@ export const Chats = ({
     }
   };
 
+  console.log(contacts);
+
   return (
     <section
       className={className}
@@ -122,7 +124,7 @@ export const Chats = ({
           [styles.searchWrapperUsersOn]: searchUser === true,
         })}
       >
-        {valueAll.replaceAll(" ", "") === "" && (
+        {contacts?.length !== 0 && valueAll.replaceAll(" ", "") === "" && (
           <div
             className={cn(styles.contactListWrapper, {
               [styles.contactListWrapperOn]:

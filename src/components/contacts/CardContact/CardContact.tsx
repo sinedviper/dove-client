@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import cn from "classnames";
 
+import { SERVER_LINK } from "utils/constants";
 import { formateDateOnline, colorCard } from "utils/helpers";
 import {
   useAppDispatch,
@@ -135,7 +136,7 @@ export const CardContact = ({
         {contact.file ? (
           <img
             className={styles.imageContact}
-            src={`http://localhost:3001/images/${contact.file}`}
+            src={`${SERVER_LINK}/images/${contact.file}`}
             alt='user img'
           />
         ) : (

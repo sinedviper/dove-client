@@ -3,6 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import cn from "classnames";
 
+import { BookmarkIcon, CheckIcon } from "assets";
+import { IUser } from "utils/interface";
+import { SERVER_LINK } from "utils/constants";
 import { colorCard, formateDate } from "utils/helpers";
 import {
   useAppDispatch,
@@ -26,8 +29,6 @@ import {
 
 import { CardChatProps } from "./CardChat.props";
 import styles from "./CardChat.module.css";
-import { BookmarkIcon, CheckIcon } from "assets";
-import { IUser } from "utils/interface";
 
 export const CardChat = ({
   className,
@@ -155,10 +156,7 @@ export const CardChat = ({
           </span>
         ) : (
           <span>
-            <img
-              src={`http://localhost:3001/images/${image.file}`}
-              alt='user'
-            />
+            <img src={`${SERVER_LINK}/images/${image?.file}`} alt='user' />
           </span>
         )}
       </div>

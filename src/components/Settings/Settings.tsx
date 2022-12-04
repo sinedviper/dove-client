@@ -46,6 +46,7 @@ import axios from "../../axios";
 
 import { SettingsProps } from "./Settings.props";
 import styles from "./Settings.module.css";
+import { SERVER_LINK } from "utils/constants";
 
 export const Settings = ({
   className,
@@ -264,7 +265,7 @@ export const Settings = ({
                 <div className={styles.userImageWrapper}>
                   <img
                     className={styles.userImage}
-                    src={`http://localhost:3001/images/` + user?.file}
+                    src={`${SERVER_LINK}/images/` + user?.file}
                     alt='User'
                   />
                 </div>
@@ -290,7 +291,7 @@ export const Settings = ({
                 <div key={imageUser[0].id} className={styles.userImageWrapper}>
                   <img
                     className={styles.userImage}
-                    src={`http://localhost:3001/images/` + imageUser[0].file}
+                    src={`${SERVER_LINK}/images/` + imageUser[0].file}
                     alt='User'
                   />
                   {buttonPhoto && !profile && (
@@ -330,7 +331,7 @@ export const Settings = ({
                     <div key={image.id} className={styles.userImageWrapper}>
                       <img
                         className={styles.userImage}
-                        src={`http://localhost:3001/images/` + image.file}
+                        src={`${SERVER_LINK}/images/` + image.file}
                         alt='User'
                       />
                       {buttonPhoto && (

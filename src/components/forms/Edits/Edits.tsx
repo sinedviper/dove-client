@@ -3,6 +3,7 @@ import { useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import cn from "classnames";
 
+import { SERVER_LINK } from "utils/constants";
 import { colorCard } from "utils/helpers";
 import { IImage, IUser } from "utils/interface";
 import {
@@ -284,7 +285,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
               >
                 <img
                   className={styles.userImage}
-                  src={`http://localhost:3001/images/` + imageUser.file}
+                  src={`${SERVER_LINK}/images/` + imageUser.file}
                   alt='User'
                 />
                 <label className={styles.iconPhotoWrapper} htmlFor='loadphotod'>

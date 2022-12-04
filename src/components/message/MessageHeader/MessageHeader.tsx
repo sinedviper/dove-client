@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import cn from "classnames";
+import { useParams } from "react-router-dom";
 
+import { SERVER_LINK } from "utils/constants";
 import { colorCard, formateDateOnline } from "utils/helpers";
 import {
   useAppDispatch,
@@ -28,7 +30,6 @@ import { AddUserIcon, BackIcon, RemoveUserIcon } from "assets";
 
 import { MessageHeaderProps } from "./MessageHeader.props";
 import styles from "./MessageHeader.module.css";
-import { useParams } from "react-router-dom";
 
 export const MessageHeader = ({
   setSettings,
@@ -157,7 +158,7 @@ export const MessageHeader = ({
         <div className={styles.headerReceiptPhoto}>
           {receipt?.file ? (
             <img
-              src={`http://localhost:3001/images/${receipt?.file}`}
+              src={`${SERVER_LINK}/images/${receipt?.file}`}
               alt='sender'
               className={styles.imageSender}
             />
