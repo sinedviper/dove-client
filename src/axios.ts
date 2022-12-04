@@ -8,8 +8,8 @@ const instance = axios.create({
 
 instance.interceptors.request.use((config) => {
   config.headers.Authorization = window.localStorage.getItem("token");
-  config.headers["Access-Control-Allow-Origin"] =
-    "https://dove-client.vercel.app";
+  config.headers["Access-Control-Allow-Origin"] = "*";
+  config.headers["Access-Control-Allow-Headers"] = "*";
   return config;
 });
 
