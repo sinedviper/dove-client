@@ -43,8 +43,6 @@ const authLink = setContext(() => {
   // return the headers to the context so httpLink can read them
   return {
     headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers": "*",
       authorization: token && token,
     },
   };
