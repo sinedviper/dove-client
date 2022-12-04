@@ -43,6 +43,7 @@ const authLink = setContext(() => {
   // return the headers to the context so httpLink can read them
   return {
     headers: {
+      "Access-Control-Allow-Origin": "https://dove-client.vercel.app",
       authorization: token && token,
     },
   };
