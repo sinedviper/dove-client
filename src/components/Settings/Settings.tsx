@@ -43,10 +43,10 @@ import {
   BackPhotoIcon,
 } from "assets";
 import axios from "../../axios";
+import { SERVER_LINK } from "utils/constants";
 
 import { SettingsProps } from "./Settings.props";
 import styles from "./Settings.module.css";
-import { SERVER_LINK } from "utils/constants";
 
 export const Settings = ({
   className,
