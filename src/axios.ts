@@ -1,7 +1,9 @@
 import axios from "axios";
 
+import { SERVER_LINK } from "utils/constants";
+
 const instance = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: SERVER_LINK,
 });
 
 instance.interceptors.request.use((config) => {

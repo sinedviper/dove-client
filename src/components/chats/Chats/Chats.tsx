@@ -14,6 +14,8 @@ import {
 } from "utils/hooks";
 import { colorCard } from "utils/helpers";
 import { getUsersSearch } from "resolvers/user";
+import { LoadingIcon } from "assets";
+import { SERVER_LINK } from "utils/constants";
 import { CardChat, ChatsHeader } from "components/chats";
 import { CardContact } from "components/contacts";
 import {
@@ -34,7 +36,6 @@ import {
 
 import { ChatsProps } from "./Chats.props";
 import styles from "./Chats.module.css";
-import { LoadingIcon } from "assets";
 
 export const Chats = ({
   searchContact,
@@ -102,8 +103,6 @@ export const Chats = ({
       dispatch(actionAddTabIndexSixth(0));
     }
   };
-
-  console.log(contacts);
 
   return (
     <section
@@ -177,7 +176,7 @@ export const Chats = ({
                       {contact.file ? (
                         <img
                           className={styles.contactImage}
-                          src={`http://localhost:3001/images/${contact.file}`}
+                          src={`${SERVER_LINK}/images/${contact.file}`}
                           alt='contact img'
                         />
                       ) : (
