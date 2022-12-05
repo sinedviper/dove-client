@@ -87,7 +87,7 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
     onError(errorData) {
       chat && error(errorData.message);
     },
-    pollInterval: chat === undefined ? 300000 : 500,
+    pollInterval: chat === undefined ? 300000 : 200,
   });
 
   const { error: errorQueryDateMessage } = useQuery(getHaveMessages, {
@@ -109,7 +109,6 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
     onError(errorData) {
       chat && error(errorData.message);
     },
-    pollInterval: chat === undefined ? 300000 : 500,
   });
 
   const { error: errorSender } = useQuery(getUserSender, {

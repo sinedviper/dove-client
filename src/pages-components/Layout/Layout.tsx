@@ -49,7 +49,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   const error = useError();
   const sizeWindow = useWindowSize();
 
-  const [pollIntervalOne, setPollIntervalOne] = useState<number>(1000);
+  const [pollIntervalOne, setPollIntervalOne] = useState<number>(200);
   const [pollIntervalTwo, setPollIntervalTwo] = useState<number>(1000);
 
   const [mutationUserOnlineFunction, { error: errorMutationUserOnline }] =
@@ -98,7 +98,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
       fetchPolicy: "network-only",
       onCompleted(data) {
         autorization({ data: data.getChats, actionAdd: actionAddChats });
-        setPollIntervalOne(1000);
+        setPollIntervalOne(200);
       },
       onError(errorData) {
         error(errorData.message);
