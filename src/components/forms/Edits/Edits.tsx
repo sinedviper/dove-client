@@ -137,6 +137,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
     if (user?.username !== username) {
       obj = { username: input.username };
     }
+
     if (user?.name !== name) {
       obj = { ...obj, name: input.name };
     }
@@ -339,6 +340,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
             {...register("name", {
               minLength: 1,
               maxLength: 40,
+              pattern: /[A-Za-z0-9]+/g,
             })}
             text={name}
             setText={setName}
@@ -357,6 +359,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
             {...register("surname", {
               minLength: 1,
               maxLength: 40,
+              pattern: /[A-Za-z0-9]+/g,
             })}
             text={surname}
             setText={setSurname}
@@ -377,6 +380,11 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
             text={bio}
             setText={setBio}
           />
+          {errors.bio && (
+            <span className={styles.error}>
+              Bio must be between 1 and 40 characters
+            </span>
+          )}
         </div>
         <div className={styles.editInfo}>
           <p>Any details such as age, occupation or city.</p>
@@ -389,17 +397,21 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
             error={Boolean(errors.email)}
             placeholderName='Email'
             notification={true}
-            notificationText={"Email must be between 3 and 40 characters"}
+            notificationText={
+              "Email must be between 3 and 40 characters and have '@' and variant '.com'"
+            }
             {...register("email", {
               minLength: 3,
               maxLength: 40,
+              pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
             })}
             text={email}
             setText={setEmail}
           />
           {errors.email && (
             <span className={styles.error}>
-              Email must be between 3 and 40 characters
+              Email must be between 3 and 40 characters and have '@' and variant
+              '.com'
             </span>
           )}
         </div>

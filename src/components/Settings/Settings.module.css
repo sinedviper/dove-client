@@ -9,7 +9,6 @@
   transition: var(--transition);
   z-index: 2;
   flex-direction: column;
-
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;

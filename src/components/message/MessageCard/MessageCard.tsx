@@ -80,7 +80,12 @@ export const MessageCard = ({
             );
         }
       }}
-      onMouseLeave={() => setEditMessage(false)}
+      onMouseLeave={() => {
+        setEditMessage(false);
+      }}
+      onBlur={() => {
+        setEditMessage(false);
+      }}
       onMouseDown={(e) => message && handleMouseDown(e, message)}
       onContextMenu={(e) => {
         e.preventDefault();

@@ -31,6 +31,8 @@
   background: inherit;
   transition: var(--transition-input);
   border: 1px solid var(--border-first);
+  -webkit-border-before: 1px solid var(--border-first);
+  -moz-border-before: 1px solid var(--border-first);
   color: var(--text-first);
 }
 

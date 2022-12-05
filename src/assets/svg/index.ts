@@ -1,4 +1,3 @@
-import { ReactComponent as Telegram } from "./telegram.svg";
 import { ReactComponent as Search } from "./search.svg";
 import { ReactComponent as Remove } from "./remove.svg";
 import { ReactComponent as Settings } from "./settings.svg";
@@ -23,7 +22,6 @@ import { ReactComponent as Moon } from "./moon.svg";
 import { ReactComponent as Meteor } from "./meteor.svg";
 import { ReactComponent as Info } from "./information.svg";
 import { ReactComponent as AddUser } from "./addUser.svg";
-import { ReactComponent as Animal } from "./animal.svg";
 import { ReactComponent as Tail } from "./tail.svg";
 import { ReactComponent as Photo } from "./photo.svg";
 import { ReactComponent as BackPhoto } from "./backPhoto.svg";
@@ -31,7 +29,6 @@ import { ReactComponent as UpPhoto } from "./upPhoto.svg";
 import { ReactComponent as Check } from "./check.svg";
 import { ReactComponent as Bookmark } from "./bookmark.svg";
 
-export const TelegramIcon = Telegram;
 export const SearchIcon = Search;
 export const RemoveIcon = Remove;
 export const SettingsIcon = Settings;
@@ -56,7 +53,6 @@ export const MoonIcon = Moon;
 export const MeteorIcon = Meteor;
 export const InfoIcon = Info;
 export const AddUserIcon = AddUser;
-export const AnimalIcon = Animal;
 export const TailIcon = Tail;
 export const PhotoIcon = Photo;
 export const BackPhotoIcon = BackPhoto;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
@@ -45,6 +45,7 @@ export const MessageInput = ({
   const authorization = useAuthorization();
   const atorizationSearch = useAuthorizationSearch();
   const windowSize = useWindowSize();
+  let textareaRef = useRef<any>(null);
 
   const {
     message: { message, edit },
@@ -105,7 +106,9 @@ export const MessageInput = ({
   });
 
   const [emoji, setEmoji] = useState<boolean>(false);
-  const [send, setSend] = useState<string>(message ? message.text : "");
+  const [send, setSend] = useState<string>(
+    message !== undefined ? message.text : ""
+  );
   //add emoji in text function
   const handleEmoji = (emoji) => {
     setSend(send + String(emoji.native));
@@ -196,15 +199,18 @@ export const MessageInput = ({
   const handleRemoveEditMessage = () => {
     dispatch(actionClearMessageEdit());
   };
+
   //makes sure that in editing, if editing is true, then it adds text to the field, if not, it makes it empty
   useEffect(() => {
     if (message) {
       if (edit) setSend(message.text);
       if (!edit) setSend("");
-    } else {
-      setSend("");
     }
   }, [message, edit]);
+
+  useEffect(() => {
+    setSend(" ");
+  }, []);
 
   return (
     <div className={cn(styles.inputWrapper)}>
@@ -233,7 +239,7 @@ export const MessageInput = ({
       ) : null}
       <TextareaAutosize
         tabIndex={tabIndexSixth}
-        value={String(send)}
+        value={send}
         placeholder='Message'
         className={cn(className, styles.input)}
         onChange={(e) => {
@@ -246,6 +252,7 @@ export const MessageInput = ({
             handleSend(e);
           }
         }}
+        ref={textareaRef}
         maxLength={1000}
         style={{ overflow: send.length === 0 ? "hidden" : "" }}
         minRows={1}

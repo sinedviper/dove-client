@@ -19,7 +19,7 @@
   width: 100%;
   font-size: 16px;
   resize: none;
-  overflow: auto;
+  height: min-content;
   color: var(--text-first);
   background-color: var(--background-third);
 }
@@ -95,8 +95,8 @@
 .emojiWrapperOn {
   display: block;
   opacity: 1;
-  pointer-events: all;
-  user-select: all;
+  pointer-events: inherit;
+  user-select: inherit;
   transition: var(--transition);
   bottom: 70px;
   left: 0px;
@@ -162,4 +162,23 @@
 .textWrapper {
   max-width: 390px;
   width: 100%;
+}
+
+@media screen and (max-width: 1200px) {
+  .inputWrapper {
+    width: 100%;
+    align-items: left;
+    padding: 8px 0px;
+  }
+
+  .input {
+    margin-left: 10px;
+    margin-right: 50px;
+    max-width: 500px;
+    width: calc(100% - 60px);
+  }
+
+  .smileIconWrapper {
+    display: none;
+  }
 }
