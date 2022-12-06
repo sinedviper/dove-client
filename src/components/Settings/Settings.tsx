@@ -131,9 +131,7 @@ export const Settings = ({
         setPermission({ width: 0, height: 0 });
       } else {
         formData.append("image", file);
-        const { data } = await axios.post("/upload", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        const { data } = await axios.post("/upload", formData);
         auhtorization({ data, actionAdd: actionAddImageUser });
         setPermission({ width: 0, height: 0 });
         e.target.value = null;
