@@ -17,13 +17,14 @@
 .error {
   display: flex;
   gap: 20px;
-  padding: 5px 30px 5px 15px;
+  padding: 5px 15px 5px 15px;
   border-radius: 10px;
   align-items: center;
   border: 1px solid var(--border-second);
   background-color: var(--opacity-box-second);
   backdrop-filter: blur(30px);
   transition: var(--transition-static);
+  width: 100%;
 }
 
 .copy {
@@ -46,9 +47,7 @@
   font-size: 16px;
   font-weight: 600;
   color: var(--text-first);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  word-break: break-all;
   width: 100%;
 }
 
@@ -96,7 +95,7 @@
   border: none;
   background: none;
   cursor: pointer;
-  pointer-events: all;
+  pointer-events: fill;
   user-select: all;
 }
 

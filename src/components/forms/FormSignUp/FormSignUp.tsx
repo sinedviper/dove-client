@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import cn from "classnames";
 
@@ -13,14 +12,6 @@ import { FormSignUpProps } from "./FormSignUp.props";
 import styles from "./FormSignUp.module.css";
 import { useTheme } from "utils/context";
 
-interface IFormInput {
-  name: string;
-  surname: string;
-  username: string;
-  email: string;
-  password: string;
-}
-
 export const FormSignUp = ({
   className,
   ...props
@@ -28,28 +19,93 @@ export const FormSignUp = ({
   const navigate = useNavigate();
   const themeChange = useTheme();
   const error = useError();
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm<IFormInput>();
 
   const [mutateFunction, { loading: loadingMutation }] = useMutation(signUp);
 
-  const [password, setPassword] = useState<number>(0);
+  const [name, setName] = useState<string>("");
+  const [surname, setSurname] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const [errorName, setErrorName] = useState<boolean>(false);
+  const [errorSurname, setErrorSurname] = useState<boolean>(false);
+  const [errorUsername, setErrorUsername] = useState<boolean>(false);
+  const [errorEmail, setErrorEmail] = useState<boolean>(false);
+  const [errorPassword, setErrorPassword] = useState<boolean>(false);
+
+  const [passwordCheck, setPasswordCheck] = useState<number>(0);
   //send data in server when user sign up
-  const onSubmit = async (input: IFormInput): Promise<void> => {
-    if (password < 3) {
-      error("Password uncorrectly");
+  const onSubmit = async (): Promise<void> => {
+    let checkFields: boolean = true;
+    setErrorName(false);
+    setErrorSurname(false);
+    setErrorUsername(false);
+    setErrorEmail(false);
+    setErrorPassword(false);
+
+    if (
+      name.replaceAll(" ", "") === "" ||
+      name.replace(/[A-Za-z]+/g, "").length !== 0 ||
+      name.length < 1 ||
+      name.length > 40
+    ) {
+      checkFields = false;
+      setErrorName(true);
+      error("Name not correct");
     }
-    if (password === 3) {
-      await mutateFunction({ variables: { input } }).then((res) => {
+    if (surname.replace(/[A-Za-z]+/g, "").length !== 0 || surname.length > 40) {
+      checkFields = false;
+      setErrorSurname(true);
+      error("Surname not correct");
+    }
+    if (
+      username.replaceAll(" ", "") === "" ||
+      username.replace(/[A-Za-z0-9]+/g, "").length !== 0 ||
+      username.length < 3 ||
+      username.length > 40
+    ) {
+      checkFields = false;
+      setErrorUsername(true);
+      error("Username not correct");
+    }
+    if (
+      email.replaceAll(" ", "") === "" ||
+      // eslint-disable-next-line no-useless-escape
+      email.replace(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g, "").length !== 0 ||
+      email.length < 3 ||
+      email.length > 40
+    ) {
+      checkFields = false;
+      setErrorEmail(true);
+      error("Email not correct");
+    }
+
+    if (password.length < 8 || password.length > 40 || passwordCheck < 3) {
+      checkFields = false;
+      setErrorPassword(true);
+      error("Password not correct");
+    }
+
+    if (checkFields) {
+      await mutateFunction({
+        variables: { input: { name, surname, username, email, password } },
+      }).then((res) => {
         const data = res?.data.signupUser;
-        data.status === "Invalid" && error(data.message);
-        data.status === "Success" && navigate("/login");
+        if (data.status === "Invalid") {
+          setErrorUsername(true);
+          setErrorEmail(true);
+          error(data.message);
+        }
+        if (data.status === "Success") {
+          setErrorUsername(false);
+          setErrorEmail(false);
+          navigate("/login");
+        }
       });
     }
   };
+
   //keeps track of the theme of the system
   useEffect(() => {
     if (
@@ -74,94 +130,61 @@ export const FormSignUp = ({
       <p className={styles.text}>
         Please fill in all fields, if you don't want to then go fuck yourself
       </p>
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.login}>
+      <div className={styles.login}>
         <Input
           placeholderName={"Name"}
-          error={Boolean(errors.name)}
+          text={name}
+          setText={setName}
+          error={errorName}
           notification={true}
-          notificationText={"Name must be between 1 and 40 characters"}
-          {...register("name", {
-            required: true,
-            minLength: 1,
-            maxLength: 40,
-          })}
+          notificationText={
+            "Name must be between 1 and 40 characters and have a letters"
+          }
         />
-        {errors.name && (
-          <span className={styles.error}>
-            Name must be between 1 and 40 characters
-          </span>
-        )}
         <Input
+          text={surname}
+          setText={setSurname}
           placeholderName={"Surname(optional)"}
-          error={Boolean(errors.surname)}
+          error={errorSurname}
           notification={true}
-          notificationText={"Surname must be between 1 and 40 characters"}
-          {...register("surname", {
-            required: false,
-            minLength: 1,
-            maxLength: 40,
-          })}
+          notificationText={
+            "Surname must be between 1 and 40 characters and have a letters"
+          }
         />
-        {errors.surname && (
-          <span className={styles.error}>
-            Surname must be between 1 and 40 characters
-          </span>
-        )}
         <Input
+          text={username}
+          setText={setUsername}
           placeholderName={"Username"}
-          error={Boolean(errors.username)}
+          error={errorUsername}
           notification={true}
-          notificationText={"Username must be between 3 and 40 characters"}
-          {...register("username", {
-            required: true,
-            minLength: 3,
-            maxLength: 40,
-          })}
+          notificationText={
+            "Username must be between 3 and 40 characters and have a letters and a numbers"
+          }
         />
-        {errors.username && (
-          <span className={styles.error}>
-            Username must be between 3 and 40 characters
-          </span>
-        )}
         <Input
+          text={email}
+          setText={setEmail}
           placeholderName={"Email"}
-          error={Boolean(errors.email)}
+          error={errorEmail}
           notification={true}
-          notificationText={"Email must be between 3 and 40 characters"}
-          {...register("email", {
-            required: true,
-            minLength: 3,
-            maxLength: 40,
-          })}
+          notificationText={
+            "Email must be between 3 and 40 characters and have correctly email standart"
+          }
         />
-        {errors.email && (
-          <span className={styles.error}>
-            Email must be between 3 and 40 characters
-          </span>
-        )}
         <Input
-          error={Boolean(errors.password)}
+          text={password}
+          setText={setPassword}
+          error={errorPassword}
           placeholderName={"Password"}
-          setPassword={setPassword}
+          setPassword={setPasswordCheck}
           notification={true}
           notificationText={
             "Password must be between 8 and 40 characters and have a capital letter and a number"
           }
-          {...register("password", {
-            required: true,
-            minLength: 8,
-            maxLength: 40,
-          })}
           check={true}
           password={true}
         />
-        {errors.password && (
-          <span className={styles.error}>
-            Password must be between 8 and 40 characters and have a capital
-            letter and a number
-          </span>
-        )}
-        <button type='submit' className={styles.button}>
+        <button onClick={onSubmit} className={styles.button}>
           <p>SIGN UP</p>
           <span className={styles.loading}>
             {loadingMutation ? <LoadingIcon /> : ""}
@@ -181,7 +204,7 @@ export const FormSignUp = ({
             LOGIN
           </span>
         </p>
-      </form>
+      </div>
     </section>
   );
 };

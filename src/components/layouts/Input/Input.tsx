@@ -186,7 +186,7 @@ export const Input = forwardRef(
         ) : (
           ""
         )}
-        {!error && notification && (
+        {notification && (
           <>
             <span
               className={styles.infoIcon}

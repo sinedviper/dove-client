@@ -16,13 +16,12 @@ function App(): JSX.Element {
       {!user && (
         <Notification
           style={{
-            bottom: "auto",
-            top: "40px",
+            bottom: "40px",
             right: "50%",
             left: "50%",
             position: "fixed",
-            maxWidth: "280px",
-            transform: "translate(-50%, -50%)",
+            maxWidth: "350px",
+            transform: "translate(-50%, 0)",
           }}
         />
       )}

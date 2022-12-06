@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
-import { useForm } from "react-hook-form";
 import cn from "classnames";
 
 import { SERVER_LINK } from "utils/constants";
@@ -31,23 +30,7 @@ import axios from "../../../axios";
 import { EditsProps } from "./Edits.props";
 import styles from "./Edits.module.css";
 
-interface IFormInput {
-  name: string;
-  surname: string;
-  username: string;
-  email: string;
-  bio: string;
-  mainPassword: string;
-  newPassword: string;
-  repeatPassword: string;
-}
-
 export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm<IFormInput>();
   const dispatch = useAppDispatch();
   const auhtorization = useAuthorization();
   const error = useError();
@@ -56,9 +39,14 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
   const [mutateFunction] = useMutation(updateUser, {
     onCompleted(data) {
       auhtorization({ data: data.updateUser, actionAdd: actionAddUser });
-      setPassword("");
-      setPasswordNew("");
-      setPasswordReapeat("");
+      setErrorUsername(false);
+      setErrorName(false);
+      setErrorSurname(false);
+      setErrorEmail(false);
+      setErrorBio(false);
+      setErrorPassword(false);
+      setErrorPasswordNew(false);
+      setErrorPasswordReapeat(false);
       setSubmit(false);
       dispatch(actionAddTabIndexFiveth(-1));
       dispatch(actionAddTabIndexFourth(0));
@@ -86,14 +74,19 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
   );
   const [email, setEmail] = useState<string>(user?.email ? user?.email : "");
   const [bio, setBio] = useState<string>(user?.bio ? user?.bio : "");
-
   const [password, setPassword] = useState<string>("");
   const [passwordNew, setPasswordNew] = useState<string>("");
   const [passwordReapeat, setPasswordReapeat] = useState<string>("");
 
-  const [errorPassword, setErrorPassword] = useState<string>("");
-  const [errorPasswordNew, setErrorPasswordNew] = useState<string>("");
-  const [errorPasswordReapeat, setErrorPasswordReapeat] = useState<string>("");
+  const [errorUsername, setErrorUsername] = useState<boolean>(false);
+  const [errorName, setErrorName] = useState<boolean>(false);
+  const [errorSurname, setErrorSurname] = useState<boolean>(false);
+  const [errorEmail, setErrorEmail] = useState<boolean>(false);
+  const [errorBio, setErrorBio] = useState<boolean>(false);
+  const [errorPassword, setErrorPassword] = useState<boolean>(false);
+  const [errorPasswordNew, setErrorPasswordNew] = useState<boolean>(false);
+  const [errorPasswordReapeat, setErrorPasswordReapeat] =
+    useState<boolean>(false);
 
   const [passwordCheck, setPasswordCheck] = useState<number>(0);
 
@@ -131,43 +124,109 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
     }
   };
 
-  const onSubmit = async (input: IFormInput): Promise<void> => {
+  const onSubmit = async (): Promise<void> => {
+    let checkFields: boolean = true;
     let obj = {};
+    setErrorUsername(false);
+    setErrorName(false);
+    setErrorSurname(false);
+    setErrorEmail(false);
+    setErrorBio(false);
+    setErrorPassword(false);
+    setErrorPasswordNew(false);
+    setErrorPasswordReapeat(false);
     //Check main input on value
     if (user?.username !== username) {
-      obj = { username: input.username };
+      if (
+        username.replaceAll(" ", "") === "" ||
+        username.replace(/[A-Za-z0-9]+/g, "").length !== 0 ||
+        username.length < 3 ||
+        username.length > 40
+      ) {
+        checkFields = false;
+        setErrorUsername(true);
+        error("Username not correct");
+      } else {
+        obj = { username };
+      }
     }
-
     if (user?.name !== name) {
-      obj = { ...obj, name: input.name };
+      if (
+        name.replaceAll(" ", "") === "" ||
+        name.replace(/[A-Za-z]+/g, "").length !== 0 ||
+        name.length < 1 ||
+        name.length > 40
+      ) {
+        checkFields = false;
+        setErrorName(true);
+        error("Name not correct");
+      } else {
+        obj = { ...obj, name };
+      }
     }
     if (user?.surname !== surname) {
-      obj = { ...obj, surname: input.surname };
+      if (
+        surname.replace(/[A-Za-z]+/g, "").length !== 0 ||
+        surname.length > 40
+      ) {
+        checkFields = false;
+        setErrorSurname(true);
+        error("Surname not correct");
+      } else {
+        obj = { ...obj, surname };
+      }
     }
     if (user?.email !== email) {
-      obj = { ...obj, email: input.email };
+      if (
+        email.replaceAll(" ", "") === "" ||
+        // eslint-disable-next-line no-useless-escape
+        email.replace(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g, "").length !== 0 ||
+        email.length < 3 ||
+        email.length > 40
+      ) {
+        checkFields = false;
+        setErrorEmail(true);
+        error("Email not correct");
+      } else {
+        obj = { ...obj, email };
+      }
     }
     if (user?.bio !== bio) {
-      obj = { ...obj, bio: input.bio };
+      if (
+        bio.replaceAll(" ", "") === "" ||
+        // eslint-disable-next-line no-useless-escape
+        bio.replace(/[A-Za-z0-9\.]+/g, "").length !== 0 ||
+        bio.length < 1 ||
+        bio.length > 40
+      ) {
+        checkFields = false;
+        setErrorBio(true);
+        error("Bio not correct");
+      } else {
+        obj = { ...obj, bio };
+      }
     }
     //Check password on value
-    if (input.mainPassword && input.newPassword && input.repeatPassword) {
+    if (
+      passwordNew.replaceAll(" ", "") !== "" &&
+      password.replaceAll(" ", "") !== "" &&
+      passwordReapeat.replaceAll(" ", "") !== ""
+    ) {
       if (passwordCheck === 3) {
-        if (input.newPassword === input.repeatPassword) {
-          setErrorPassword("");
-          setErrorPasswordNew("");
-          setErrorPasswordReapeat("");
+        if (passwordNew === passwordReapeat) {
+          setErrorPassword(false);
+          setErrorPasswordNew(false);
+          setErrorPasswordReapeat(false);
           obj = {
             ...obj,
-            password: input.mainPassword,
-            passwordNew: input.newPassword,
+            password,
+            passwordNew,
           };
         }
 
-        if (input.newPassword !== input.repeatPassword) {
-          setErrorPassword("");
-          setErrorPasswordNew("");
-          setErrorPasswordReapeat("Please correct repeat password");
+        if (passwordNew !== passwordReapeat) {
+          setErrorPasswordReapeat(true);
+          error("Please correct repeat password");
         }
       }
       if (passwordCheck < 3) {
@@ -175,38 +234,38 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
       }
     }
     //displaying information about an incorrect password
-    if (!input.mainPassword && input.newPassword && input.repeatPassword) {
-      setErrorPassword("Please enter your main password");
-      setErrorPasswordNew("");
-      setErrorPasswordReapeat("");
+    if (!password && passwordNew && passwordReapeat) {
+      setErrorPassword(true);
+      error("Please enter your main password");
     }
-    if (input.mainPassword && !input.newPassword && input.repeatPassword) {
-      setErrorPassword("");
-      setErrorPasswordNew("Please enter your new password");
-      setErrorPasswordReapeat("");
+    if (password && !passwordNew && passwordReapeat) {
+      setErrorPasswordNew(true);
+      error("Please enter your new password");
     }
-    if (input.mainPassword && input.newPassword && !input.repeatPassword) {
-      setErrorPassword("");
-      setErrorPasswordNew("");
-      setErrorPasswordReapeat("Please enter your repeat password");
+    if (password && passwordNew && !passwordReapeat) {
+      setErrorPasswordReapeat(true);
+      error("Please enter your repeat password");
     }
-    if (input.mainPassword && !input.newPassword && !input.repeatPassword) {
-      setErrorPassword("");
-      setErrorPasswordNew("Please enter your new password");
-      setErrorPasswordReapeat("Please enter your repeat password");
+    if (password && !passwordNew && !passwordReapeat) {
+      setErrorPasswordNew(true);
+      setErrorPasswordReapeat(true);
+      error("Please enter your new password and repeat password");
     }
-    if (!input.mainPassword && !input.newPassword && input.repeatPassword) {
-      setErrorPassword("Please enter your main password");
-      setErrorPasswordNew("Please enter your new password");
-      setErrorPasswordReapeat("");
+    if (!password && !passwordNew && passwordReapeat) {
+      setErrorPassword(true);
+      setErrorPasswordNew(true);
+      error("Please enter your main password and new password");
     }
-    if (!input.mainPassword && input.newPassword && !input.repeatPassword) {
-      setErrorPassword("Please enter your main password");
-      setErrorPasswordNew("Please enter your new password");
-      setErrorPasswordReapeat("Please enter your repeat password");
+    if (!password && passwordNew && !passwordReapeat) {
+      setErrorPassword(true);
+      setErrorPasswordNew(true);
+      setErrorPasswordReapeat(true);
+      error("Please enter all password fields");
     }
     //Update user
-    await mutateFunction({ variables: { input: obj } });
+    if (checkFields) {
+      await mutateFunction({ variables: { input: obj } });
+    }
   };
 
   //Check values in input, changed or not, when changed button has see
@@ -260,6 +319,14 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
             tabIndex={tabIndexFivth}
             className={styles.back}
             onClick={() => {
+              setErrorUsername(false);
+              setErrorName(false);
+              setErrorSurname(false);
+              setErrorEmail(false);
+              setErrorBio(false);
+              setErrorPassword(false);
+              setErrorPasswordNew(false);
+              setErrorPasswordReapeat(false);
               dispatch(actionMenuEdit(false));
               dispatch(actionAddTabIndexFiveth(-1));
               dispatch(actionAddTabIndexFourth(0));
@@ -270,7 +337,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
           <h2>Edit Profile</h2>
         </div>
       </div>
-      <form
+      <div
         className={cn(styles.contactsList, {
           [styles.swiper]: swiper === true,
         })}
@@ -333,58 +400,29 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
           </div>
           <Input
             tabIndex={tabIndexFivth}
-            error={Boolean(errors.name)}
+            error={errorName}
             placeholderName='Name'
             notification={true}
             notificationText={"Name must be between 1 and 40 characters"}
-            {...register("name", {
-              minLength: 1,
-              maxLength: 40,
-              pattern: /[A-Za-z0-9]+/g,
-            })}
             text={name}
             setText={setName}
           />
-          {errors.name && (
-            <span className={styles.error}>
-              Name must be between 1 and 40 characters
-            </span>
-          )}
           <Input
             tabIndex={tabIndexFivth}
-            error={Boolean(errors.surname)}
+            error={errorSurname}
             placeholderName='Surname(optional)'
             notification={true}
             notificationText={"Surname must be between 1 and 40 characters"}
-            {...register("surname", {
-              minLength: 1,
-              maxLength: 40,
-              pattern: /[A-Za-z0-9]+/g,
-            })}
             text={surname}
             setText={setSurname}
           />
-          {errors.surname && (
-            <span className={styles.error}>
-              Surname must be between 1 and 40 characters
-            </span>
-          )}
           <Input
             tabIndex={tabIndexFivth}
             placeholderName='Bio(optional)'
-            error={Boolean(errors.bio)}
-            {...register("bio", {
-              minLength: 0,
-              maxLength: 40,
-            })}
+            error={errorBio}
             text={bio}
             setText={setBio}
           />
-          {errors.bio && (
-            <span className={styles.error}>
-              Bio must be between 1 and 40 characters
-            </span>
-          )}
         </div>
         <div className={styles.editInfo}>
           <p>Any details such as age, occupation or city.</p>
@@ -394,26 +432,15 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
           <h2 className={styles.usernameEdit}>Email</h2>
           <Input
             tabIndex={tabIndexFivth}
-            error={Boolean(errors.email)}
+            error={errorEmail}
             placeholderName='Email'
             notification={true}
             notificationText={
               "Email must be between 3 and 40 characters and have '@' and variant '.com'"
             }
-            {...register("email", {
-              minLength: 3,
-              maxLength: 40,
-              pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
-            })}
             text={email}
             setText={setEmail}
           />
-          {errors.email && (
-            <span className={styles.error}>
-              Email must be between 3 and 40 characters and have '@' and variant
-              '.com'
-            </span>
-          )}
         </div>
         <div className={styles.editInfo}>
           <p>You can change the your email on Dove.</p>
@@ -422,22 +449,13 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
           <h2 className={styles.usernameEdit}>Username</h2>
           <Input
             tabIndex={tabIndexFivth}
-            error={Boolean(errors.username)}
+            error={errorUsername}
             placeholderName='Username'
             notification={true}
             notificationText={"Username must be between 3 and 40 characters"}
-            {...register("username", {
-              minLength: 3,
-              maxLength: 40,
-            })}
             text={username}
             setText={setUsername}
           />
-          {errors.username && (
-            <span className={styles.error}>
-              Username must be between 3 and 40 characters
-            </span>
-          )}
         </div>
         <div className={styles.editInfo}>
           <p>
@@ -449,81 +467,38 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
           <h2 className={styles.usernameEdit}>Password</h2>
           <Input
             tabIndex={tabIndexFivth}
-            error={Boolean(errorPassword ? errorPassword : errors.mainPassword)}
+            error={errorPassword}
             placeholderName='Main password'
             notification={true}
             notificationText={"Password must be between 8 and 40 characters"}
-            {...register("mainPassword", {
-              minLength: 8,
-              maxLength: 40,
-            })}
             password={true}
             text={password}
             setText={setPassword}
           />
-          {errors.mainPassword && (
-            <span className={styles.error}>
-              Password must be between 8 and 40 characters
-            </span>
-          )}
-          {errorPassword && (
-            <span className={styles.error}>{errorPassword}</span>
-          )}
           <Input
             tabIndex={tabIndexFivth}
-            error={Boolean(
-              errorPasswordNew ? errorPasswordNew : errors.newPassword
-            )}
+            error={errorPasswordNew}
             placeholderName='New password'
             setPassword={setPasswordCheck}
             notification={true}
             notificationText={
               "Password must be between 8 and 40 characters and have a capital letter and a number"
             }
-            {...register("newPassword", {
-              minLength: 8,
-              maxLength: 40,
-            })}
             password={true}
             text={passwordNew}
             setText={setPasswordNew}
           />
-          {errors.newPassword && (
-            <span className={styles.error}>
-              Password must be between 8 and 40 characters and have a capital
-              letter and a number
-            </span>
-          )}
-          {errorPasswordNew && (
-            <span className={styles.error}>{errorPasswordNew}</span>
-          )}
           <Input
             tabIndex={tabIndexFivth}
-            error={Boolean(
-              errorPasswordReapeat
-                ? errorPasswordReapeat
-                : errors.repeatPassword
-            )}
+            error={errorPasswordReapeat}
             placeholderName='Repeat password'
             textCheckPassNew={passwordNew}
             notification={true}
             notificationText={"Please re-enter your password correctly"}
-            {...register("repeatPassword", {
-              minLength: 8,
-              maxLength: 40,
-            })}
             password={true}
             text={passwordReapeat}
             setText={setPasswordReapeat}
           />
-          {errors.repeatPassword && (
-            <span className={styles.error}>
-              Please re-enter your password correctly
-            </span>
-          )}
-          {errorPasswordReapeat && (
-            <span className={styles.error}>{errorPasswordReapeat}</span>
-          )}
         </div>
         <div className={cn(styles.editInfo, styles.info)}>
           <p>You can change the your password on Dove.</p>
@@ -533,16 +508,11 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
           className={cn(styles.supheed, {
             [styles.submit]: submit === true,
           })}
-          onClick={handleSubmit(onSubmit)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleSubmit(onSubmit);
-            }
-          }}
+          onClick={onSubmit}
         >
           <SupheedIcon />
         </button>
-      </form>
+      </div>
     </section>
   );
 };

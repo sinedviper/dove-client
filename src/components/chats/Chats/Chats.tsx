@@ -12,10 +12,8 @@ import {
   useError,
   useWindowSize,
 } from "utils/hooks";
-import { colorCard } from "utils/helpers";
 import { getUsersSearch } from "resolvers/user";
 import { LoadingIcon } from "assets";
-import { SERVER_LINK } from "utils/constants";
 import { CardChat, ChatsHeader } from "components/chats";
 import { CardContact } from "components/contacts";
 import {
@@ -36,6 +34,7 @@ import {
 
 import { ChatsProps } from "./Chats.props";
 import styles from "./Chats.module.css";
+import { ContactSearch } from "components/layouts";
 
 export const Chats = ({
   searchContact,
@@ -65,7 +64,7 @@ export const Chats = ({
     onError(errorData) {
       error(errorData.message);
     },
-    pollInterval: 500,
+    pollInterval: 300,
   });
   //store
   let searchUsers: IUser[] | undefined = dataSearch
@@ -74,7 +73,6 @@ export const Chats = ({
       })
     : undefined;
 
-  const [click, setClick] = useState<boolean>(false);
   const [swiper, setSwiper] = useState<boolean>(false);
   const [searchUser, setSearchUser] = useState<boolean>(false);
   //function to process the request when clicking on the chat
@@ -131,62 +129,17 @@ export const Chats = ({
             })}
           >
             {contacts &&
-              contacts.map((contact) => {
-                const { color1, color2 } = colorCard(
-                  contact.name.toUpperCase()[0]
-                );
-                return (
-                  <div
-                    key={contact.id}
-                    className={cn(styles.contactWrapper, {
-                      [styles.contactWrapperOn]: username === contact.username,
-                      [styles.contactWrapperClick]: click === true,
-                    })}
-                    onTouchStart={() => {
-                      setClick(true);
-                    }}
-                    onMouseDown={() => setClick(true)}
-                    onMouseUp={() => {
-                      setClick(false);
-                      handleFocus(contact);
-                    }}
-                    onTouchEnd={() => {
-                      setClick(false);
-                      handleFocus(contact);
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        handleFocus(contact);
-                        if (windowSize[0] < 1000) {
-                          dispatch(actionAddTabIndexFirst(-1));
-                          dispatch(actionAddTabIndexSixth(0));
-                        }
-                      }
-                    }}
-                    tabIndex={tabIndexSecond}
-                  >
-                    <div
-                      className={styles.contactPhoto}
-                      style={{
-                        background: contact.file
-                          ? ""
-                          : `linear-gradient(${color1}, ${color2})`,
-                      }}
-                    >
-                      {contact.file ? (
-                        <img
-                          className={styles.contactImage}
-                          src={`${SERVER_LINK}/images/${contact.file}`}
-                          alt='contact img'
-                        />
-                      ) : (
-                        <span>{contact.name.toUpperCase()[0]}</span>
-                      )}
-                    </div>
-                    <p>{contact.name}</p>
-                  </div>
-                );
-              })}
+              contacts.map((contact) => (
+                <ContactSearch
+                  dispatch={dispatch}
+                  handleFocus={handleFocus}
+                  contact={contact}
+                  tabIndex={tabIndexSecond}
+                  key={contact.id}
+                  windowSize={windowSize[0]}
+                  username={String(username)}
+                />
+              ))}
           </div>
         )}
         {searchUsers && searchUsers.length !== 0 && (

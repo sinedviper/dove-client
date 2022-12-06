@@ -1,0 +1,61 @@
+.contactWrapper {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 5px;
+  width: 75px;
+  border-radius: 10px;
+  transition: var(--transition);
+  text-align: center;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events: fill;
+}
+
+.contactWrapper:hover {
+  transition: var(--transition-static);
+  background-color: var(--opacity-box);
+}
+
+.contactWrapperOn,
+.contactWrapperOn:hover {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+.contactWrapperClick,
+.contactWrapperClick:hover {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+.contactPhoto {
+  display: flex;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  color: var(--white);
+  font-weight: 600;
+  align-items: center;
+  justify-content: center;
+}
+
+.contactWrapper p {
+  font-size: 13px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.contactImage {
+  width: 55px;
+  height: 55px;
+  object-fit: cover;
+  border-radius: 50%;
+  object-position: center center;
+}

@@ -18,7 +18,6 @@ import { IUser } from "utils/interface";
 import { getContact } from "resolvers/contacts";
 import { updateUserOnline } from "resolvers/user";
 import { getChats } from "resolvers/chats";
-import { getUploads } from "resolvers/upload";
 import { Contacts } from "components/contacts";
 import { Edits } from "components/forms";
 import { Chats } from "components/chats";
@@ -27,7 +26,6 @@ import {
   actionAddChats,
   actionAddContact,
   actionAddFetch,
-  actionAddImageUser,
   actionAddLoading,
   actionAddTabIndexSixth,
   actionAddUser,
@@ -50,63 +48,41 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   const sizeWindow = useWindowSize();
 
   const [pollIntervalOne, setPollIntervalOne] = useState<number>(200);
-  const [pollIntervalTwo, setPollIntervalTwo] = useState<number>(1000);
 
-  const [mutationUserOnlineFunction, { error: errorMutationUserOnline }] =
-    useMutation(updateUserOnline, {
-      fetchPolicy: "no-cache",
-      onCompleted(data) {
-        autorization({ data: data.updateUserOnline, actionAdd: actionAddUser });
-      },
-      onError(errorData) {
-        error(errorData.message);
-      },
-    });
+  const [mutationUserOnlineFunction] = useMutation(updateUserOnline, {
+    fetchPolicy: "no-cache",
+    onCompleted(data) {
+      autorization({ data: data.updateUserOnline, actionAdd: actionAddUser });
+    },
+    onError(errorData) {
+      error(errorData.message);
+    },
+  });
 
-  const { loading: loadQueryImage, error: errorQueryImage } = useQuery(
-    getUploads,
-    {
-      fetchPolicy: "network-only",
-      onCompleted(data) {
-        autorization({ data: data.getUpload, actionAdd: actionAddImageUser });
-        setPollIntervalTwo(10000);
-      },
-      onError(errorData) {
-        error(errorData.message);
-        setPollIntervalTwo(100000);
-      },
-      pollInterval: pollIntervalTwo,
-    }
-  );
+  const { loading: loadQueryContact } = useQuery(getContact, {
+    fetchPolicy: "network-only",
+    onCompleted: async (data) => {
+      autorization({ data: data.getContacts, actionAdd: actionAddContact });
+      dispatch(actionAddFetch(false));
+    },
+    onError(errorData) {
+      error(errorData.message);
+    },
+  });
 
-  const { loading: loadQueryContact, error: errorQueryContact } = useQuery(
-    getContact,
-    {
-      fetchPolicy: "network-only",
-      onCompleted: async (data) => {
-        autorization({ data: data.getContacts, actionAdd: actionAddContact });
-      },
-      onError(errorData) {
-        error(errorData.message);
-      },
-    }
-  );
-
-  const { loading: loadQueryChat, error: errorQueryChats } = useQuery(
-    getChats,
-    {
-      fetchPolicy: "network-only",
-      onCompleted(data) {
-        autorization({ data: data.getChats, actionAdd: actionAddChats });
-        setPollIntervalOne(200);
-      },
-      onError(errorData) {
-        error(errorData.message);
-        setPollIntervalOne(10000);
-      },
-      pollInterval: pollIntervalOne,
-    }
-  );
+  const { loading: loadQueryChat } = useQuery(getChats, {
+    fetchPolicy: "network-only",
+    onCompleted(data) {
+      autorization({ data: data.getChats, actionAdd: actionAddChats });
+      setPollIntervalOne(200);
+      dispatch(actionAddFetch(false));
+    },
+    onError(errorData) {
+      error(errorData.message);
+      setPollIntervalOne(10000);
+    },
+    pollInterval: pollIntervalOne,
+  });
 
   let searchContact = useRef<HTMLInputElement>(null);
 
@@ -118,23 +94,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   const debouncedMutation = useDebounce(() => {
     mutationUserOnlineFunction({ variables: { input: { online: "ping" } } });
   }, 300000);
-  //here we update refacte when error have or haven't
-  useEffect(() => {
-    if (
-      !errorQueryContact &&
-      !errorQueryChats &&
-      !errorMutationUserOnline &&
-      !errorQueryImage
-    ) {
-      dispatch(actionAddFetch(false));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    errorQueryContact,
-    errorQueryChats,
-    errorMutationUserOnline,
-    errorQueryImage,
-  ]);
+
   //here if size many 1000 to block left have show in display
   useEffect(() => {
     if (sizeWindow[0] > 1000) {
@@ -142,15 +102,15 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sizeWindow[0]]);
+
   //here we push in store true when data loading
   useEffect(() => {
     //loading
-    if (loadQueryContact || loadQueryChat || loadQueryImage)
-      dispatch(actionAddLoading(true));
-    if (!loadQueryContact && !loadQueryChat && !loadQueryImage)
-      dispatch(actionAddLoading(false));
+    if (loadQueryContact || loadQueryChat) dispatch(actionAddLoading(true));
+    if (!loadQueryContact && !loadQueryChat) dispatch(actionAddLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadQueryChat, loadQueryContact, loadQueryImage]);
+  }, [loadQueryChat, loadQueryContact]);
+
   //here change theme when user change theme in menu in left block
   useEffect(() => {
     themeChange?.changeTheme(
@@ -161,6 +121,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.animation, user?.theme]);
+
   //when user open site first that dispatch in store what meny show and right block not tab because in right block not have chat
   useEffect(() => {
     if (sizeWindow[0] < 1000) {

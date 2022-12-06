@@ -25,14 +25,13 @@
 .input {
   width: 100%;
   border-radius: 10px;
+  -webkit-border-radius: 10px;
   border: none;
   padding: 15px;
   font-size: 17px;
   background: inherit;
   transition: var(--transition-input);
   border: 1px solid var(--border-first);
-  -webkit-border-before: 1px solid var(--border-first);
-  -moz-border-before: 1px solid var(--border-first);
   color: var(--text-first);
 }
 
@@ -131,6 +130,7 @@
   right: -10px;
   width: 20px;
   height: 20px;
+  border-radius: 50%;
   cursor: pointer;
   user-select: none;
   background-color: var(--background-first);
@@ -146,14 +146,14 @@
   position: absolute;
   bottom: 60px;
   right: 10px;
-  border: 1px solid var(--border-second);
   word-wrap: break-word;
+  text-align: center;
   padding: 10px;
   font-size: 14px;
   font-weight: 600;
   border-radius: 10px;
   color: var(--text-first);
-  background: var(--background-third);
+  background: var(--primary);
   transition: var(--transition-static);
   z-index: 3;
 }

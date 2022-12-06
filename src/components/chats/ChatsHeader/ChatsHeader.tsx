@@ -17,6 +17,7 @@ import { getContact } from "resolvers/contacts";
 import { ButtonMenuMain, Search } from "components/layouts";
 import {
   actionAddContact,
+  actionAddImageUser,
   actionAddTabIndexFirst,
   actionAddTabIndexFourth,
   actionAddTabIndexSecond,
@@ -35,6 +36,7 @@ import {
 
 import { ChatsHeaderProps } from "./ChatsHeader.props";
 import styles from "./ChatsHeader.module.css";
+import { getUploads } from "resolvers/upload";
 
 export const ChatsHeader = ({
   searchContact,
@@ -86,6 +88,16 @@ export const ChatsHeader = ({
     },
   });
 
+  const [queryFunctionImageGet] = useLazyQuery(getUploads, {
+    fetchPolicy: "network-only",
+    onCompleted(data) {
+      autorization({ data: data.getUpload, actionAdd: actionAddImageUser });
+    },
+    onError(errorData) {
+      error(errorData.message);
+    },
+  });
+
   const [menu, setMenu] = useState<boolean>(false);
   //the function of obtaining contacts when opened in the menu
   const handleContact = async () => {
@@ -97,7 +109,8 @@ export const ChatsHeader = ({
     dispatch(actionAddTabIndexThree(0));
   };
   //the function of opening settings, and downloading data to the store
-  const handleSettings = () => {
+  const handleSettings = async () => {
+    await queryFunctionImageGet();
     dispatch(actionMenuSetting(true));
     setMenu(false);
     dispatch(actionAddTabIndexFirst(-1));

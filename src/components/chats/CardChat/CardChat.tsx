@@ -162,7 +162,13 @@ export const CardChat = ({
       </div>
       <div className={styles.contactInfo}>
         <span className={styles.contactName}>
-          {user.name && user.name} {user?.surname && user.surname}
+          {userMain?.username === user.username ? (
+            "Saved Message"
+          ) : (
+            <>
+              {user.name && user.name} {user?.surname && user.surname}
+            </>
+          )}
         </span>
         <span className={styles.contactMessage}>
           {lastMessage && lastMessage.text}

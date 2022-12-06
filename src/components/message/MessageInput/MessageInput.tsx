@@ -23,11 +23,13 @@ import {
   actionAddTabIndexFirst,
   actionAddTabIndexSixth,
   actionClearMessageEdit,
+  getChat,
   getMessageEdit,
   getRecipient,
   getTabIndexEighth,
   getTabIndexFirst,
   getTabIndexSixth,
+  getUser,
 } from "store";
 import { EditIcon, RemoveIcon, ReplyIcon, SendIcon, SmileIcon } from "assets";
 
@@ -35,9 +37,8 @@ import { MessageInputProps } from "./MessageInput.props";
 import styles from "./MessageInput.module.css";
 
 export const MessageInput = ({
-  chat,
-  user,
   className,
+  main,
   ...props
 }: MessageInputProps): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -45,12 +46,17 @@ export const MessageInput = ({
   const authorization = useAuthorization();
   const atorizationSearch = useAuthorizationSearch();
   const windowSize = useWindowSize();
-  let textareaRef = useRef<any>(null);
+
+  const textarea = useRef<HTMLTextAreaElement>(null);
 
   const {
     message: { message, edit },
   } = useAppSelector(getMessageEdit);
+  const user: IUser | undefined = useAppSelector(getUser);
   const sender: IUser | undefined = useAppSelector(getRecipient);
+  const chat: IChat | undefined = useAppSelector(getChat)?.filter(
+    (chat) => chat?.user?.id === sender?.id
+  )[0];
   const tabIndexEighth: number = useAppSelector(getTabIndexEighth);
   const tabIndexSixth: number = useAppSelector(getTabIndexSixth);
   const tabIndexFirst: number = useAppSelector(getTabIndexFirst);
@@ -209,8 +215,15 @@ export const MessageInput = ({
   }, [message, edit]);
 
   useEffect(() => {
-    setSend(" ");
+    setSend("");
   }, []);
+
+  useEffect(() => {
+    if (main === false) {
+      textarea?.current?.focus();
+      setSend(" ");
+    }
+  }, [main]);
 
   return (
     <div className={cn(styles.inputWrapper)}>
@@ -241,7 +254,9 @@ export const MessageInput = ({
         tabIndex={tabIndexSixth}
         value={send}
         placeholder='Message'
-        className={cn(className, styles.input)}
+        className={cn(className, styles.input, {
+          [styles.textareaOff]: send === "",
+        })}
         onChange={(e) => {
           setSend(e.target.value);
           setEmoji(false);
@@ -252,11 +267,11 @@ export const MessageInput = ({
             handleSend(e);
           }
         }}
-        ref={textareaRef}
         maxLength={1000}
         style={{ overflow: send.length === 0 ? "hidden" : "" }}
         minRows={1}
         maxRows={21}
+        ref={textarea}
       />
       <button
         className={cn(styles.smileIconWrapper)}

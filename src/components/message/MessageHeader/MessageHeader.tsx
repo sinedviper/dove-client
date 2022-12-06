@@ -26,7 +26,7 @@ import {
   getTabIndexSixth,
   getUser,
 } from "store";
-import { AddUserIcon, BackIcon, RemoveUserIcon } from "assets";
+import { AddUserIcon, BackIcon, BookmarkIcon, RemoveUserIcon } from "assets";
 
 import { MessageHeaderProps } from "./MessageHeader.props";
 import styles from "./MessageHeader.module.css";
@@ -129,68 +129,75 @@ export const MessageHeader = ({
           })}
         />
       </button>
-      <div
-        className={styles.headerWrapper}
-        onClick={() => {
-          setSettings(true);
-          dispatch(actionAddTabIndexSeventh(0));
-          dispatch(actionAddTabIndexFirst(-1));
-          dispatch(actionAddTabIndexSixth(-1));
-          if (settings === true) dispatch(actionMenuMain(false));
-        }}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            setSettings(true);
-            dispatch(actionAddTabIndexSeventh(0));
-            dispatch(actionAddTabIndexFirst(-1));
-            dispatch(actionAddTabIndexSixth(-1));
-            if (settings === true) dispatch(actionMenuMain(false));
-          }
-        }}
-        onKeyUp={(e) => {
-          if (e.key === "Enter") {
-            setSettings(true);
-            if (settings === true) dispatch(actionMenuMain(false));
-          }
-        }}
-        tabIndex={tabIndexSixth}
-      >
-        <div className={styles.headerReceiptPhoto}>
-          {receipt?.file ? (
-            <img
-              src={`${SERVER_LINK}/images/${receipt?.file}`}
-              alt='sender'
-              className={styles.imageSender}
-            />
-          ) : (
-            <span
-              className={styles.receiptNamePhoto}
-              style={{
-                background: receipt?.file
-                  ? ""
-                  : `linear-gradient(${color?.color1}, ${color?.color2})`,
-              }}
-            >
-              {receipt?.name && receipt?.name.toUpperCase()[0]}
-              {receipt?.surname && receipt?.surname.toUpperCase()[0]}
-            </span>
-          )}
-        </div>
-        <div className={styles.headerReceiptInfo}>
-          <p className={styles.infoName}>
-            {receipt?.name && receipt?.name}{" "}
-            {receipt?.surname && receipt?.surname}
-          </p>
-          <p className={styles.infoDate}>
-            {receipt?.online &&
-              formateDateOnline(new Date(receipt?.online)).toLowerCase()}
-          </p>
-        </div>
-      </div>
       {username === user?.username ? (
-        ""
+        <div className={styles.headerWrapper}>
+          <div className={styles.headerWrapper}>
+            <BookmarkIcon className={styles.bookmarkIconHeaderMessageWrapper} />
+            <div className={styles.headerReceiptInfo}>
+              <p className={styles.infoName}>Saved Message</p>
+            </div>
+          </div>
+        </div>
       ) : (
         <>
+          <div
+            className={styles.headerWrapper}
+            onClick={() => {
+              setSettings(true);
+              dispatch(actionAddTabIndexSeventh(0));
+              dispatch(actionAddTabIndexFirst(-1));
+              dispatch(actionAddTabIndexSixth(-1));
+              if (settings === true) dispatch(actionMenuMain(false));
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                setSettings(true);
+                dispatch(actionAddTabIndexSeventh(0));
+                dispatch(actionAddTabIndexFirst(-1));
+                dispatch(actionAddTabIndexSixth(-1));
+                if (settings === true) dispatch(actionMenuMain(false));
+              }
+            }}
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
+                setSettings(true);
+                if (settings === true) dispatch(actionMenuMain(false));
+              }
+            }}
+            tabIndex={tabIndexSixth}
+          >
+            <div className={styles.headerReceiptPhoto}>
+              {receipt?.file ? (
+                <img
+                  src={`${SERVER_LINK}/images/${receipt?.file}`}
+                  alt='sender'
+                  className={styles.imageSender}
+                />
+              ) : (
+                <span
+                  className={styles.receiptNamePhoto}
+                  style={{
+                    background: receipt?.file
+                      ? ""
+                      : `linear-gradient(${color?.color1}, ${color?.color2})`,
+                  }}
+                >
+                  {receipt?.name && receipt?.name.toUpperCase()[0]}
+                  {receipt?.surname && receipt?.surname.toUpperCase()[0]}
+                </span>
+              )}
+            </div>
+            <div className={styles.headerReceiptInfo}>
+              <p className={styles.infoName}>
+                {receipt?.name && receipt?.name}{" "}
+                {receipt?.surname && receipt?.surname}
+              </p>
+              <p className={styles.infoDate}>
+                {receipt?.online &&
+                  formateDateOnline(new Date(receipt?.online)).toLowerCase()}
+              </p>
+            </div>
+          </div>
           <button
             className={styles.delete}
             onClick={() => setmenuMessage(!menuMessage)}

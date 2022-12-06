@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import cn from "classnames";
-import { v4 as uuidv4 } from "uuid";
 
 import { IUser } from "utils/interface";
 import { useAppDispatch, useAppSelector, useWindowSize } from "utils/hooks";
@@ -108,7 +107,7 @@ export const Contacts = ({
               .map((contact: IUser) => (
                 <CardContact
                   contact={contact}
-                  key={uuidv4()}
+                  key={contact.id}
                   setValue={setValueContact}
                   handleFocus={handleFocus}
                   tabIndex={tabIndexThree}

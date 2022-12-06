@@ -9,7 +9,6 @@
   justify-content: space-between;
   background-color: var(--background-first);
   border-bottom: 1px solid var(--border-second);
-  cursor: pointer;
 
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -23,6 +22,8 @@
   display: flex;
   gap: 20px;
   width: 100%;
+  align-items: center;
+  cursor: pointer;
 }
 
 .headerReceiptPhoto {
@@ -203,6 +204,15 @@
 .menuMainOn {
   transform: rotateY(180deg);
   transition: var(--transition);
+}
+
+.bookmarkIconHeaderMessageWrapper {
+  min-width: 40px;
+  height: 40px;
+  padding: 5px;
+  fill: var(--white);
+  background-color: var(--primary);
+  border-radius: 50%;
 }
 
 @media screen and (max-width: 1000px) {

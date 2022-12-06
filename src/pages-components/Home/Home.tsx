@@ -44,6 +44,7 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const authorization = useAuthorization();
   const authorizationHave = useAuthorizationSearch();
+
   //store
   const user: IUser | undefined = useAppSelector(getUser);
   const sender: IUser | undefined = useAppSelector(getRecipient);
@@ -57,23 +58,20 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
   const tabIndexSeventh: number = useAppSelector(getTabIndexSeventh);
   const [haveMessage, setHaveMassge] = useState<Date | null>(null);
 
-  const [getFindLastMessage, { loading: dataFindLastMessage }] = useLazyQuery(
-    getfindMessageDate,
-    {
-      fetchPolicy: "network-only",
-      onCompleted(data) {
-        authorization({
-          data: data.findMessageDate,
-          actionAdd: actionAddMessagesLast,
-        });
-      },
-      onError(errorData) {
-        chat && error(errorData.message);
-      },
-    }
-  );
+  const [getFindLastMessage] = useLazyQuery(getfindMessageDate, {
+    fetchPolicy: "network-only",
+    onCompleted(data) {
+      authorization({
+        data: data.findMessageDate,
+        actionAdd: actionAddMessagesLast,
+      });
+    },
+    onError(errorData) {
+      chat && error(errorData.message);
+    },
+  });
 
-  const { error: errorQueryMessage } = useQuery(getMessage, {
+  const { loading: loadingMessage } = useQuery(getMessage, {
     variables: {
       message: {
         chatId: Number(chat?.id),
@@ -83,6 +81,7 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
     fetchPolicy: "network-only",
     onCompleted(data) {
       authorization({ data: data.getMessages, actionAdd: actionAddMessages });
+      dispatch(actionAddFetch(false));
     },
     onError(errorData) {
       chat && error(errorData.message);
@@ -90,7 +89,8 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
     pollInterval: chat === undefined ? 300000 : 200,
   });
 
-  const { error: errorQueryDateMessage } = useQuery(getHaveMessages, {
+  // eslint-disable-next-line no-empty-pattern
+  const {} = useQuery(getHaveMessages, {
     variables: {
       message: {
         id: Number(
@@ -111,10 +111,11 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
     },
   });
 
-  const { error: errorSender } = useQuery(getUserSender, {
+  const { loading: loadingSender } = useQuery(getUserSender, {
     variables: { input: { username } },
     onCompleted(data) {
       authorization({ data: data.getUser, actionAdd: actionAddRecipient });
+      dispatch(actionAddFetch(false));
     },
     onError(errorData) {
       error(errorData.message);
@@ -124,18 +125,16 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
   });
 
   const [settings, setSettings] = useState<boolean>(false);
-  //here we show the loading of the latest messages
+
   useEffect(() => {
-    if (dataFindLastMessage) dispatch(actionAddLoading(true));
-    if (!dataFindLastMessage) dispatch(actionAddLoading(false));
+    if (loadingMessage || loadingSender) {
+      dispatch(actionAddLoading(true));
+    }
+    if (!loadingMessage || !loadingSender) {
+      dispatch(actionAddLoading(false));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataFindLastMessage]);
-  //this removes the load connection to the server
-  useEffect(() => {
-    if (!errorQueryMessage && !errorSender && !errorQueryDateMessage)
-      dispatch(actionAddFetch(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [errorQueryMessage, errorSender, errorQueryDateMessage]);
+  }, [loadingMessage, loadingSender]);
 
   return (
     <section
@@ -264,7 +263,7 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
           </ul>
         </section>
         <div className={styles.inputWrap}>
-          <MessageInput chat={chat} user={user} />
+          <MessageInput main={main} />
         </div>
       </section>
       <section

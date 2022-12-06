@@ -9,6 +9,7 @@
   cursor: pointer;
   justify-content: left;
   align-items: center;
+  pointer-events: fill;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;

@@ -1,22 +1,21 @@
 import { v4 as uuidv4 } from "uuid";
 
 import { actionAddError, actionAddFetch, actionDeleteError } from "store";
-import { useAppDispatch, useDebounce } from "utils/hooks";
+import { useAppDispatch } from "utils/hooks";
 
 //take string and push in notification, then delete this notification
 export function useError() {
   const dispatch = useAppDispatch();
-  const debouncedError = useDebounce((id, dispatch) => {
-    dispatch(actionDeleteError(id));
-  }, 3000);
 
-  return function (text): void {
+  return function (text: string): void {
     const id = uuidv4();
     if (text === "Failed to fetch") {
       dispatch(actionAddFetch(true));
     } else {
       dispatch(actionAddError({ id, text }));
-      debouncedError(id, dispatch);
+      setTimeout(() => {
+        dispatch(actionDeleteError(id));
+      }, 3000);
       dispatch(actionAddFetch(false));
     }
   };

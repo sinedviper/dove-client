@@ -12,6 +12,7 @@
 }
 
 .input {
+  position: relative;
   padding: 10px;
   border: none;
   outline: none;
@@ -19,9 +20,12 @@
   width: 100%;
   font-size: 16px;
   resize: none;
-  height: min-content;
   color: var(--text-first);
   background-color: var(--background-third);
+}
+
+.texareaOff {
+  max-height: 40px;
 }
 
 .smileIconWrapper {

@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation, useLazyQuery } from "@apollo/client";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import cn from "classnames";
 
@@ -14,11 +13,6 @@ import { DoveIcon, LoadingIcon } from "assets";
 import { FormLoginProps } from "./FormLogin.props";
 import styles from "./FormLogin.module.css";
 
-interface IFormInput {
-  email: string;
-  password: string;
-}
-
 export const FormLogin = ({
   className,
   ...props
@@ -28,11 +22,11 @@ export const FormLogin = ({
   const error = useError();
   const autorization = useAuthorization();
 
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm<IFormInput>();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const [errorEmail, setErrorEmail] = useState<boolean>(false);
+  const [errorPassword, setErrorPassword] = useState<boolean>(false);
 
   const [queryFunctionUser, { loading: loadingQueryUser }] = useLazyQuery(
     getMe,
@@ -53,15 +47,38 @@ export const FormLogin = ({
     { fetchPolicy: "network-only" }
   );
   //when a user logs in sends data and receives a user token
-  const onSubmit = async (input: IFormInput): Promise<void> => {
-    await mutateFunction({ variables: { input } }).then(async (res) => {
-      const data = res?.data.loginUser;
-      data.status === "Invalid" && error(data.message);
-      if (data.status === "Success") {
-        localStorage.setItem("token", data.access_token);
-        await queryFunctionUser();
-      }
-    });
+  const onSubmit = async (): Promise<void> => {
+    if (
+      password.replaceAll(" ", "") === "" ||
+      password.length < 8 ||
+      password.length > 40 ||
+      email.replaceAll(" ", "") === "" ||
+      email.length < 3 ||
+      email.length > 40
+    ) {
+      setErrorEmail(true);
+      setErrorPassword(true);
+      error("Please enter the correct fields");
+    } else {
+      setErrorEmail(false);
+      setErrorPassword(false);
+      await mutateFunction({ variables: { input: { password, email } } }).then(
+        async (res) => {
+          const data = res?.data.loginUser;
+          if (data.status === "Invalid") {
+            setErrorEmail(true);
+            setErrorPassword(true);
+            error(data.message);
+          }
+          if (data.status === "Success") {
+            setErrorEmail(false);
+            setErrorPassword(false);
+            localStorage.setItem("token", data.access_token);
+            await queryFunctionUser();
+          }
+        }
+      );
+    }
   };
   //keeps track of the theme of the system
   useEffect(() => {
@@ -92,37 +109,25 @@ export const FormLogin = ({
           Note that you need an existing account to log in to Dove. To sign up
           for Dove, use the link down.
         </p>
-        <form onSubmit={handleSubmit(onSubmit)} className={styles.login}>
+        <div className={styles.login}>
           <Input
+            text={email}
+            setText={setEmail}
             placeholderName={"Email"}
-            error={Boolean(errors.email)}
-            {...register("email", {
-              required: true,
-              minLength: 3,
-              maxLength: 40,
-            })}
+            error={errorEmail}
+            notification={true}
+            notificationText={"Email must be between 3 and 40 characters"}
           />
-          {errors.email && (
-            <span className={styles.error}>
-              Email must be between 3 and 40 characters
-            </span>
-          )}
           <Input
-            error={Boolean(errors.password)}
+            text={password}
+            setText={setPassword}
+            error={errorPassword}
             placeholderName={"Password"}
-            {...register("password", {
-              required: true,
-              minLength: 8,
-              maxLength: 40,
-            })}
             password={true}
+            notification={true}
+            notificationText={"Password must be between 8 and 40 characters"}
           />
-          {errors.password && (
-            <span className={styles.error}>
-              Password must be between 8 and 40 characters
-            </span>
-          )}
-          <button type='submit' className={styles.button}>
+          <button onClick={onSubmit} className={styles.button}>
             <p>NEXT</p>
             <span className={styles.loading}>
               {loadingMutation || loadingQueryUser ? <LoadingIcon /> : ""}
@@ -142,7 +147,7 @@ export const FormLogin = ({
               SIGN UP
             </span>
           </p>
-        </form>
+        </div>
       </section>
     </>
   );

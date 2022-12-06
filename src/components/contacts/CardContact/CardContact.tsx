@@ -76,7 +76,7 @@ export const CardContact = ({
       })}
       onKeyDown={(e) => {
         if (e.key === "Enter") {
-          handleFocus(contact);
+          handleFocus && handleFocus(contact);
           if (sizeWindow[0] < 1000) {
             dispatch(actionAddTabIndexFirst(-1));
             dispatch(actionAddTabIndexSixth(0));
@@ -98,7 +98,7 @@ export const CardContact = ({
         }, 1000);
       }}
       onClick={() => {
-        handleFocus(contact);
+        handleFocus && handleFocus(contact);
       }}
       onMouseUp={() => {
         setClick(false);
@@ -106,7 +106,7 @@ export const CardContact = ({
       onTouchEnd={() => {
         setClick(false);
         if (!menu) {
-          handleFocus(contact);
+          handleFocus && handleFocus(contact);
           clearTimeout(timer);
         }
       }}
