@@ -84,7 +84,7 @@ export const ChatsHeader = ({
       autorization({ data: data.getContact, actionAdd: actionAddContact });
     },
     onError(errorData) {
-      error(errorData.message);
+      error(errorData.message + " getContact");
     },
   });
 
@@ -94,7 +94,7 @@ export const ChatsHeader = ({
       autorization({ data: data.getUpload, actionAdd: actionAddImageUser });
     },
     onError(errorData) {
-      error(errorData.message);
+      error(errorData.message + " getUploads");
     },
   });
 

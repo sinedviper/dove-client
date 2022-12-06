@@ -62,7 +62,7 @@ export const Chats = ({
       input: { username: String(valueAll) },
     },
     onError(errorData) {
-      error(errorData.message);
+      error(errorData.message + " getUsersSearch");
     },
     pollInterval: 300,
   });

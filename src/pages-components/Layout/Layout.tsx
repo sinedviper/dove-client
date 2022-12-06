@@ -55,7 +55,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
       autorization({ data: data.updateUserOnline, actionAdd: actionAddUser });
     },
     onError(errorData) {
-      error(errorData.message);
+      error(errorData.message + " updateUserOnline");
     },
   });
 
@@ -66,7 +66,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
       dispatch(actionAddFetch(false));
     },
     onError(errorData) {
-      error(errorData.message);
+      error(errorData.message + " getContact");
     },
   });
 
@@ -78,7 +78,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
       dispatch(actionAddFetch(false));
     },
     onError(errorData) {
-      error(errorData.message);
+      error(errorData.message + " getChats");
       setPollIntervalOne(10000);
     },
     pollInterval: pollIntervalOne,

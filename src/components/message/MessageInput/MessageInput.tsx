@@ -67,7 +67,7 @@ export const MessageInput = ({
       authorization({ data: data.getChats, actionAdd: actionAddChats });
     },
     onError(errorData) {
-      error(errorData.message);
+      error(errorData.message + " getChats");
     },
   });
 

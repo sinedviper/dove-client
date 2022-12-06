@@ -78,7 +78,7 @@ export const Settings = ({
     fetchPolicy: "network-only",
     onCompleted: exit,
     onError(errorData) {
-      error(errorData.message);
+      error(errorData.message + " deleteUser");
     },
   });
 
@@ -91,7 +91,7 @@ export const Settings = ({
       });
     },
     onError(errorData) {
-      error(errorData.message);
+      error(errorData.message + " deleteUpload");
     },
   });
 
