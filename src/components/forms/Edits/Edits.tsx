@@ -377,7 +377,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
             ) : (
               <div
                 className={styles.uploadWrapper}
-                style={{ display: imageUser ? "block" : "none" }}
+                style={{ display: !imageUser ? "block" : "none" }}
               >
                 <div
                   className={styles.wrapperLoadNoPhoto}
