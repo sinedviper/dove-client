@@ -9,7 +9,6 @@ import {
   useAppDispatch,
   useAppSelector,
   useAuthorizationSearch,
-  useError,
   useWindowSize,
 } from "utils/hooks";
 import { getUsersSearch } from "resolvers/user";
@@ -44,7 +43,6 @@ export const Chats = ({
   const { username } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const error = useError();
   const windowSize = useWindowSize();
   const autorizationSearch = useAuthorizationSearch();
   //store
@@ -60,9 +58,6 @@ export const Chats = ({
   const { data: dataSearch } = useQuery(getUsersSearch, {
     variables: {
       input: { username: String(valueAll) },
-    },
-    onError(errorData) {
-      error(errorData.message + " getUsersSearch");
     },
     pollInterval: 300,
   });

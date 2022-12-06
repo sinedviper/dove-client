@@ -67,7 +67,7 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
       });
     },
     onError(errorData) {
-      chat && error(errorData.message + " getfindMessageDate");
+      chat && error(errorData.message);
     },
   });
 
@@ -82,9 +82,6 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
     onCompleted(data) {
       authorization({ data: data.getMessages, actionAdd: actionAddMessages });
       dispatch(actionAddFetch(false));
-    },
-    onError(errorData) {
-      chat && error(errorData.message + " getMessage");
     },
     pollInterval: chat === undefined ? 300000 : 200,
   });
@@ -107,7 +104,7 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
       setHaveMassge(authorizationHave({ data: data.haveMessageFind }));
     },
     onError(errorData) {
-      chat && error(errorData.message + " getHaveMessages");
+      chat && error(errorData.message);
     },
   });
 
@@ -116,9 +113,6 @@ export const Home = ({ className, ...props }: HomeProps): JSX.Element => {
     onCompleted(data) {
       authorization({ data: data.getUser, actionAdd: actionAddRecipient });
       dispatch(actionAddFetch(false));
-    },
-    onError(errorData) {
-      error(errorData.message + " getUserSender");
     },
     fetchPolicy: "network-only",
     pollInterval: 5000,

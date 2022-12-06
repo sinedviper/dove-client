@@ -9,7 +9,6 @@ import {
   useAppSelector,
   useAuthorization,
   useDebounce,
-  useError,
   useExit,
   useWindowSize,
 } from "utils/hooks";
@@ -44,7 +43,6 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
   const themeChange = useTheme();
   const exit = useExit();
   const autorization = useAuthorization();
-  const error = useError();
   const sizeWindow = useWindowSize();
 
   const [pollIntervalOne, setPollIntervalOne] = useState<number>(200);
@@ -54,9 +52,6 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
     onCompleted(data) {
       autorization({ data: data.updateUserOnline, actionAdd: actionAddUser });
     },
-    onError(errorData) {
-      error(errorData.message + " updateUserOnline");
-    },
   });
 
   const { loading: loadQueryContact } = useQuery(getContact, {
@@ -64,9 +59,6 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
     onCompleted: async (data) => {
       autorization({ data: data.getContacts, actionAdd: actionAddContact });
       dispatch(actionAddFetch(false));
-    },
-    onError(errorData) {
-      error(errorData.message + " getContact");
     },
   });
 
@@ -77,8 +69,7 @@ export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
       setPollIntervalOne(200);
       dispatch(actionAddFetch(false));
     },
-    onError(errorData) {
-      error(errorData.message + " getChats");
+    onError() {
       setPollIntervalOne(10000);
     },
     pollInterval: pollIntervalOne,

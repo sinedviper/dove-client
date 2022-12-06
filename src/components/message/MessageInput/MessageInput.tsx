@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
 import cn from "classnames";
@@ -14,7 +14,7 @@ import {
   useWindowSize,
 } from "utils/hooks";
 import { IChat, IUser } from "utils/interface";
-import { addChat, getChats } from "resolvers/chats";
+import { addChat } from "resolvers/chats";
 import { addMessages, updateMessages } from "resolvers/messages";
 import {
   actionAddChats,
@@ -60,16 +60,6 @@ export const MessageInput = ({
   const tabIndexEighth: number = useAppSelector(getTabIndexEighth);
   const tabIndexSixth: number = useAppSelector(getTabIndexSixth);
   const tabIndexFirst: number = useAppSelector(getTabIndexFirst);
-
-  const [queryFunctionChat] = useLazyQuery(getChats, {
-    fetchPolicy: "network-only",
-    onCompleted(data) {
-      authorization({ data: data.getChats, actionAdd: actionAddChats });
-    },
-    onError(errorData) {
-      error(errorData.message + " getChats");
-    },
-  });
 
   const [mutationFunctionAddMessage] = useMutation(addMessages, {
     fetchPolicy: "network-only",
@@ -158,7 +148,6 @@ export const MessageInput = ({
           },
         },
       });
-      await queryFunctionChat();
       dispatch(actionClearMessageEdit());
     }
   };
