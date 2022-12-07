@@ -1,0 +1,56 @@
+.settingsWrapper {
+  position: absolute;
+  top: 0;
+  right: -425px;
+  width: 420px;
+  height: 100vh;
+  background-color: var(--background-second);
+  display: flex;
+  transition: var(--transition);
+  z-index: 2;
+  flex-direction: column;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.profile {
+  width: 320px;
+  position: relative;
+  right: 0px;
+  border-left: 1px solid var(--border-second);
+}
+
+.settingsWrapperOpen {
+  right: 0px;
+  transition: var(--transition);
+}
+
+@media screen and (max-width: 1350px) and (min-width: 1275px) {
+  .profile {
+    width: 320px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .settingsWrapper {
+    position: absolute;
+    top: 0;
+    right: -102%;
+    width: 100%;
+  }
+
+  .profile {
+    position: relative;
+    right: 0px;
+    border-left: 1px solid var(--border-second);
+  }
+
+  .settingsWrapperOpen {
+    right: 0px;
+    transition: var(--transition);
+  }
+}

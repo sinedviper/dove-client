@@ -76,3 +76,14 @@ export const updateUserOnline = gql`
     }
   }
 `;
+
+export const confirmationAccount = gql`
+  mutation Mutation($token: String!) {
+    confirmationUser(token: $token) {
+      status
+      code
+      message
+      access_token
+    }
+  }
+`;

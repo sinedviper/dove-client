@@ -1,0 +1,109 @@
+.svg {
+  width: 160px;
+  height: 160px;
+  margin: 0 auto;
+
+  fill: var(--primary);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: 15px;
+  text-align: center;
+  margin: 100px auto 0px;
+  width: 100%;
+  padding: 0px 10px 50px 10px;
+  max-width: 360px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.head {
+  margin-top: 30px;
+  font-size: 30px;
+  cursor: default;
+  word-wrap: break-word;
+  user-select: none;
+}
+.text {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-second);
+  cursor: default;
+  word-wrap: break-word;
+  user-select: none;
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  gap: 30px;
+}
+
+.button {
+  position: relative;
+  width: 100%;
+  padding: 18px 0;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--white);
+  background-color: var(--primary);
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-static);
+}
+
+.loading {
+  position: absolute;
+  stroke: var(--white);
+  top: -24px;
+  right: -24px;
+}
+
+.loading svg circle {
+  stroke: var(--white);
+}
+
+.button:hover {
+  transition: var(--transition-static);
+  background-color: var(--primary-dark);
+}
+
+.errorInput {
+  border-color: var(--error);
+}
+.error {
+  font-size: 13px;
+  margin-top: -20px;
+  color: var(--error);
+}
+.link {
+  font-size: 14px;
+  margin-top: -15px;
+  color: var(--text-second);
+  cursor: default;
+  pointer-events: none;
+}
+.reg {
+  color: var(--primary);
+  cursor: pointer;
+  pointer-events: all;
+}
+
+@media screen and (max-width: 600px) {
+  .form {
+    margin-top: 30px;
+  }
+
+  .svg {
+    width: 130px;
+    height: 130px;
+  }
+}

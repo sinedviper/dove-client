@@ -90,37 +90,21 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
 
   const [passwordCheck, setPasswordCheck] = useState<number>(0);
 
-  const [permission, setPermission] = useState<{
-    width: number;
-    height: number;
-  }>({ width: 0, height: 0 });
   //getting a color for a user if they don't have a photo
   const color = colorCard(String(user?.name.toUpperCase().slice()[0]));
   //load photo
   const handleLoadPhoto = async (e) => {
     const formData = new FormData();
     const file = e.target.files[0];
-    if (e.target.files[0] > 5000000) {
-      error("The file is over 5MB");
+    if (e.target.files[0].size > 3000000) {
+      error("File have many size, please select file with 3MB");
       e.target.value = null;
     }
-    if (e.target.files[0] < 5000000) {
-      const URL = window.URL || window.webkitURL;
-      const img = new Image();
-      img.src = URL.createObjectURL(file);
-      img.onload = (e: any) => {
-        setPermission({ width: e.path[0].width, height: e.path[0].height });
-      };
-      if (permission.width > 1200 || permission.height > 800) {
-        error("Choose a different photo, the resolution is too high");
-        setPermission({ width: 0, height: 0 });
-      } else {
-        formData.append("image", file);
-        const { data } = await axios.post("/upload", formData);
-        auhtorization({ data, actionAdd: actionAddImageUser });
-        setPermission({ width: 0, height: 0 });
-        e.target.value = null;
-      }
+    if (e.target.files[0].size < 3000000) {
+      formData.append("image", file);
+      const { data } = await axios.post("/upload", formData);
+      auhtorization({ data, actionAdd: actionAddImageUser });
+      e.target.value = null;
     }
   };
 

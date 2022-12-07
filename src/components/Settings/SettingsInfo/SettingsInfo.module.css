@@ -1,0 +1,205 @@
+.userPhoto {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--white);
+  font-size: 40px;
+}
+
+.wrapperImage {
+  height: 240px;
+  width: 100%;
+  max-width: 420px;
+  overflow: hidden;
+}
+
+.userImageWrapper {
+  height: 240px;
+  max-width: 420px;
+  width: 100%;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+}
+
+.userImage {
+  display: block;
+  height: 240px;
+  min-width: 420px;
+  background-position: center;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+}
+
+.buttonWrapperRemove {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transition: var(--transition-static);
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.buttonWrapperRemove:hover {
+  transition: var(--transition-static);
+  background: var(--opacity-box-dark);
+}
+
+.removeIconButton {
+  width: 40px;
+  height: 40px;
+  fill: var(--text-eighth);
+}
+
+.iconButton {
+  fill: rgba(255, 255, 255, 0.5);
+  width: 40px;
+  height: 40px;
+  transition: var(--transition-static);
+}
+
+.iconButton:hover {
+  transition: var(--transition-static);
+  fill: var(--white);
+}
+
+.photoFIO {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  font-size: 19px;
+  display: flex;
+  gap: 5px;
+  font-weight: 600;
+  bottom: 15px;
+  left: 25px;
+  width: 85%;
+  pointer-events: none;
+  user-select: none;
+}
+
+.photoFIO p {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.userOnline {
+  font-size: 14px;
+  color: var(--text-eighth);
+}
+
+.uploadWrapper {
+  position: absolute;
+  bottom: -25px;
+  right: 20px;
+}
+
+.uploadPhoto {
+  position: relative;
+  min-width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  overflow: hidden;
+}
+
+.iconPhotoWrapper {
+  top: -1px;
+  position: absolute;
+  z-index: 1;
+  min-width: 55px;
+  height: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary);
+  transition: var(--transition-static);
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.iconPhotoWrapper:hover {
+  transition: var(--transition-static);
+  background-color: var(--primary-dark);
+}
+
+.uploadPhoto svg {
+  width: 25px;
+  height: 25px;
+}
+
+.uploadPhoto svg path {
+  fill: var(--white);
+}
+
+.input {
+  cursor: pointer;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 55px;
+  height: 55px;
+  display: none;
+}
+
+.infoLast {
+  background-color: var(--background-first);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 5px var(--opacity-box-dark);
+}
+
+.info {
+  display: flex;
+  width: 100%;
+  padding: 10px 15px;
+  gap: 20px;
+  border-radius: 10px;
+  transition: var(--transition-static);
+  cursor: pointer;
+}
+
+.info:hover {
+  transition: var(--transition-static);
+  background-color: var(--opacity-box);
+}
+
+.iconInfo {
+  width: 26px;
+  height: 26px;
+  stroke: var(--icon-first);
+}
+
+.info > span {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.firstInfo {
+  color: var(--text-first);
+  font-size: 17px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.secondInfo {
+  font-size: 14px;
+  color: var(--text-sixth);
+}

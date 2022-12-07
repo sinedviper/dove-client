@@ -1,2 +1,2 @@
-export * from "./Settings/Settings";
+export * from "./Settings";
 export * from "./notification/Notification";

@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-import { LoginPage, SignUpPage } from "page";
+import { ConfirmationPage, LoginPage, SignUpPage } from "page";
 import { Notification } from "components";
 import { SideRight, SideLeft } from "pages-components";
 import { IUser } from "utils/interface";
@@ -33,6 +33,7 @@ function App(): JSX.Element {
           </Route>
           <Route path='/login' element={<LoginPage />} />
           <Route path='/sigup' element={<SignUpPage />} />
+          <Route path='/confirmation' element={<ConfirmationPage />} />
         </Routes>
       </Router>
     </>

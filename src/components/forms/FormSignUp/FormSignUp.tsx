@@ -100,7 +100,7 @@ export const FormSignUp = ({
         if (data.status === "Success") {
           setErrorUsername(false);
           setErrorEmail(false);
-          navigate("/login");
+          navigate("/confirmation");
         }
       });
     }
