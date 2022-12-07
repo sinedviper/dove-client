@@ -34,11 +34,14 @@ import {
   getUser,
 } from "store";
 
-import { LayoutProps } from "./Layout.props";
-import styles from "./Layout.module.css";
+import { SideLeftProps } from "./SideLeft.props";
+import styles from "./SideLeft.module.css";
 
 // that left block in dispaly, here all function what update data in store
-export const Layout = ({ className, ...props }: LayoutProps): JSX.Element => {
+export const SideLeft = ({
+  className,
+  ...props
+}: SideLeftProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const themeChange = useTheme();
   const exit = useExit();

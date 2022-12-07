@@ -225,38 +225,46 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
         }
 
         if (passwordNew !== passwordReapeat) {
+          checkFields = false;
           setErrorPasswordReapeat(true);
           error("Please correct repeat password");
         }
       }
       if (passwordCheck < 3) {
+        checkFields = false;
         error("Please correct new password");
       }
     }
     //displaying information about an incorrect password
     if (!password && passwordNew && passwordReapeat) {
+      checkFields = false;
       setErrorPassword(true);
       error("Please enter your main password");
     }
     if (password && !passwordNew && passwordReapeat) {
+      checkFields = false;
       setErrorPasswordNew(true);
       error("Please enter your new password");
     }
     if (password && passwordNew && !passwordReapeat) {
+      checkFields = false;
       setErrorPasswordReapeat(true);
       error("Please enter your repeat password");
     }
     if (password && !passwordNew && !passwordReapeat) {
+      checkFields = false;
       setErrorPasswordNew(true);
       setErrorPasswordReapeat(true);
       error("Please enter your new password and repeat password");
     }
     if (!password && !passwordNew && passwordReapeat) {
+      checkFields = false;
       setErrorPassword(true);
       setErrorPasswordNew(true);
       error("Please enter your main password and new password");
     }
     if (!password && passwordNew && !passwordReapeat) {
+      checkFields = false;
       setErrorPassword(true);
       setErrorPasswordNew(true);
       setErrorPasswordReapeat(true);
@@ -485,6 +493,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
               "Password must be between 8 and 40 characters and have a capital letter and a number"
             }
             password={true}
+            check={true}
             text={passwordNew}
             setText={setPasswordNew}
           />

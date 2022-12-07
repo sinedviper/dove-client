@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import { LoginPage, SignUpPage } from "page";
 import { Notification } from "components";
-import { Home, Layout } from "pages-components";
+import { SideRight, SideLeft } from "pages-components";
 import { IUser } from "utils/interface";
 import { useAppSelector } from "utils/hooks";
 import { getUser } from "store";
@@ -28,8 +28,8 @@ function App(): JSX.Element {
 
       <Router>
         <Routes>
-          <Route path='/' element={<Layout />}>
-            <Route path=':username' element={<Home />} />
+          <Route path='/' element={<SideLeft />}>
+            <Route path=':username' element={<SideRight />} />
           </Route>
           <Route path='/login' element={<LoginPage />} />
           <Route path='/sigup' element={<SignUpPage />} />

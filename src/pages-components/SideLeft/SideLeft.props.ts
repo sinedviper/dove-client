@@ -1,4 +1,4 @@
 import { DetailedHTMLProps, HTMLAttributes } from "react";
 
-export interface LayoutProps
+export interface SideLeftProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {}

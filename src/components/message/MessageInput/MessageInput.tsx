@@ -1,28 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useMutation } from "@apollo/client";
 import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
 import cn from "classnames";
 import TextareaAutosize from "react-textarea-autosize";
 
-import {
-  useAppDispatch,
-  useAppSelector,
-  useAuthorization,
-  useAuthorizationSearch,
-  useError,
-  useWindowSize,
-} from "utils/hooks";
+import { useAppDispatch, useAppSelector, useWindowSize } from "utils/hooks";
 import { IChat, IUser } from "utils/interface";
-import { addChat } from "resolvers/chats";
-import { addMessages, updateMessages } from "resolvers/messages";
 import {
-  actionAddChats,
-  actionAddMessages,
   actionAddTabIndexEighth,
   actionAddTabIndexFirst,
   actionAddTabIndexSixth,
-  actionClearMessageEdit,
   getChat,
   getMessageEdit,
   getRecipient,
@@ -33,6 +20,7 @@ import {
 } from "store";
 import { EditIcon, RemoveIcon, ReplyIcon, SendIcon, SmileIcon } from "assets";
 
+import { useMessageInput } from "./useMessageInput";
 import { MessageInputProps } from "./MessageInput.props";
 import styles from "./MessageInput.module.css";
 
@@ -42,9 +30,6 @@ export const MessageInput = ({
   ...props
 }: MessageInputProps): JSX.Element => {
   const dispatch = useAppDispatch();
-  const error = useError();
-  const authorization = useAuthorization();
-  const atorizationSearch = useAuthorizationSearch();
   const windowSize = useWindowSize();
 
   const textarea = useRef<HTMLTextAreaElement>(null);
@@ -61,139 +46,13 @@ export const MessageInput = ({
   const tabIndexSixth: number = useAppSelector(getTabIndexSixth);
   const tabIndexFirst: number = useAppSelector(getTabIndexFirst);
 
-  const [mutationFunctionAddMessage] = useMutation(addMessages, {
-    fetchPolicy: "network-only",
-    onCompleted(data) {
-      authorization({
-        data: data.addMessage,
-        actionAdd: actionAddMessages,
-      });
-    },
-    onError(errorData) {
-      error(errorData.message);
-    },
-  });
-
-  const [mutationFunctionAddChat] = useMutation(addChat, {
-    fetchPolicy: "network-only",
-    onCompleted: async (data) => {
-      authorization({ data: data.addChat, actionAdd: actionAddChats });
-      const chat: IChat | undefined = atorizationSearch({
-        data: data.addChat,
-      })?.filter((chat) => chat?.user?.id === sender?.id)[0];
-      if (send.replaceAll(" ", "") !== "") await handleMessageAdd(chat);
-    },
-    onError(errorData) {
-      error(errorData.message);
-    },
-  });
-
-  const [mutationFunctionUpdateMessage] = useMutation(updateMessages, {
-    fetchPolicy: "network-only",
-    onCompleted(data) {
-      authorization({
-        data: data.updateMessages,
-        actionAdd: actionAddMessages,
-      });
-    },
-    onError(errorData) {
-      error(errorData.message);
-    },
-  });
-
   const [emoji, setEmoji] = useState<boolean>(false);
   const [send, setSend] = useState<string>(
     message !== undefined ? message.text : ""
   );
-  //add emoji in text function
-  const handleEmoji = (emoji) => {
-    setSend(send + String(emoji.native));
-  };
-  //add chat with user
-  const handleAddChat = async () => {
-    await mutationFunctionAddChat({
-      variables: {
-        chat: { sender: Number(user?.id), recipient: Number(sender?.id) },
-      },
-    });
-  };
-  //function edit message
-  const handleMessageUpdate = async () => {
-    if (chat) {
-      setSend("");
-      await mutationFunctionUpdateMessage({
-        variables: {
-          message: {
-            id: Number(message?.id),
-            chatId: Number(chat?.id),
-            text: send,
-            senderMessage: Number(user?.id),
-          },
-        },
-      });
-      dispatch(actionClearMessageEdit());
-    }
-  };
-  //function add message
-  const handleMessageAdd = async (chat) => {
-    if (chat) {
-      setSend("");
-      await mutationFunctionAddMessage({
-        variables: {
-          message: {
-            text: send,
-            senderMessage: Number(user?.id),
-            chatId: Number(chat?.id),
-            reply: message && Number(message?.id),
-          },
-        },
-      });
-      dispatch(actionClearMessageEdit());
-    }
-  };
-  //send processing function
-  const handleSend = async (e) => {
-    if (chat) {
-      if (message) {
-        if (e.code === "Enter") {
-          e.preventDefault();
-          edit && (await handleMessageUpdate());
-          !edit && (await handleMessageAdd(chat));
-        }
-      } else {
-        if (send.replaceAll(" ", "") !== "")
-          if (e.code === "Enter") {
-            e.preventDefault();
-            await handleMessageAdd(chat);
-          }
-      }
-    } else {
-      if (send.replaceAll(" ", "") !== "" && e.code === "Enter") {
-        await handleAddChat();
-      }
-    }
-  };
-  //send processing function for click
-  const handleSendClick = async () => {
-    if (chat) {
-      if (message) {
-        edit && (await handleMessageUpdate());
-        !edit && (await handleMessageAdd(chat));
-      } else {
-        if (send.replaceAll(" ", "") !== "") {
-          await handleMessageAdd(chat);
-        }
-      }
-    } else {
-      if (send.replaceAll(" ", "") !== "") {
-        await handleAddChat();
-      }
-    }
-  };
-  //when have edit message but wont delete and not edit message
-  const handleRemoveEditMessage = () => {
-    dispatch(actionClearMessageEdit());
-  };
+  //all functional what need work for input message
+  const { handleEmoji, handleSend, handleSendClick, handleRemoveEditMessage } =
+    useMessageInput(chat, send, sender, setSend, message, user, Boolean(edit));
 
   //makes sure that in editing, if editing is true, then it adds text to the field, if not, it makes it empty
   useEffect(() => {
@@ -209,7 +68,6 @@ export const MessageInput = ({
 
   useEffect(() => {
     if (main === false) {
-      textarea?.current?.focus();
       setSend(" ");
     }
   }, [main]);

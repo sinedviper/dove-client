@@ -1,0 +1,56 @@
+.chatsWrapper {
+  display: flex;
+  flex-direction: column-reverse;
+  width: 100%;
+  height: 100vh;
+  align-items: center;
+  padding: 10px;
+  overflow-y: overlay;
+  overflow-x: hidden;
+}
+
+.messageWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 500px;
+  min-height: min-content;
+}
+
+.buttonLoadMessage {
+  margin: 20px auto;
+  width: 150px;
+  padding: 8px 0px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  background: var(--primary);
+  color: var(--white);
+  transition: var(--transition-static);
+}
+
+.wrapperWithDate {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dateMessage {
+  font-size: 14px;
+  background-color: var(--background-second);
+  color: var(--text-sixth);
+  padding: 5px 10px;
+  width: 110px;
+  text-align: center;
+  border-radius: 10px;
+  margin: 10px auto;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
