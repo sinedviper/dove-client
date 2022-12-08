@@ -9,6 +9,8 @@ import { CheckIcon, TailIcon } from "assets";
 
 import { MessageCardProps } from "./MessageCard.props";
 import styles from "./MessageCard.module.css";
+import { useAppDispatch, useAppSelector } from "utils/hooks";
+import { actionMenuMessage, getMenuMessage } from "store";
 
 export const MessageCard = ({
   chat,
@@ -20,6 +22,9 @@ export const MessageCard = ({
   ...props
 }: MessageCardProps): JSX.Element => {
   const { username } = useParams();
+  const dispatch = useAppDispatch();
+
+  const getMenuEdit: number | null = useAppSelector(getMenuMessage);
 
   const [editMessage, setEditMessage] = useState<boolean>(false);
   const [clientX, setClientX] = useState<number>(0);
@@ -42,19 +47,22 @@ export const MessageCard = ({
   //keeps track of the right mouse button, if pressed, it sends data to the interaction menu block with the sent message, also fixed to the screen size
   const handleMouseDown = (e, message: IMessage) => {
     if (e.buttons === 2) {
-      setEditMessage(true);
-      setClientX(e.nativeEvent.layerX);
-      setClientY(e.nativeEvent.layerY);
-      if (e.nativeEvent.screenY > 400) {
-        setPosition(true);
+      if (getMenuEdit === null) {
+        dispatch(actionMenuMessage(message?.id));
+        setEditMessage(true);
+        setClientX(e.nativeEvent.layerX);
+        setClientY(e.nativeEvent.layerY);
+        if (e.nativeEvent.screenY > 400) {
+          setPosition(true);
+        }
+        setClient({
+          id: message?.id,
+          chatId: chat?.id ? chat.id : 0,
+          senderMessage: message?.senderMessage.id,
+          user: Number(user?.id),
+          text: message?.text,
+        });
       }
-      setClient({
-        id: message?.id,
-        chatId: chat?.id ? chat.id : 0,
-        senderMessage: message?.senderMessage.id,
-        user: Number(user?.id),
-        text: message?.text,
-      });
     }
   };
 
@@ -81,9 +89,11 @@ export const MessageCard = ({
         }
       }}
       onMouseLeave={() => {
+        dispatch(actionMenuMessage(null));
         setEditMessage(false);
       }}
       onBlur={() => {
+        dispatch(actionMenuMessage(null));
         setEditMessage(false);
       }}
       onMouseDown={(e) => message && handleMouseDown(e, message)}
@@ -96,19 +106,21 @@ export const MessageCard = ({
       }}
       onTouchStart={(e: any) => {
         timer = setTimeout(() => {
-          setEditMessage(true);
-          setClientX(e.nativeEvent.layerX);
-          setClientY(e.nativeEvent.layerY);
-          if (e.nativeEvent.screenY > 400) {
-            setPosition(true);
+          if (getMenuEdit === null) {
+            setEditMessage(true);
+            setClientX(e.nativeEvent.layerX);
+            setClientY(e.nativeEvent.layerY);
+            if (e.nativeEvent.screenY > 400) {
+              setPosition(true);
+            }
+            setClient({
+              id: message?.id,
+              chatId: chat?.id ? chat.id : 0,
+              senderMessage: message?.senderMessage?.id,
+              user: Number(user?.id),
+              text: message?.text,
+            });
           }
-          setClient({
-            id: message?.id,
-            chatId: chat?.id ? chat.id : 0,
-            senderMessage: message?.senderMessage?.id,
-            user: Number(user?.id),
-            text: message?.text,
-          });
         }, 1000);
       }}
       {...props}

@@ -8,6 +8,7 @@ interface IMenuState {
   edit: boolean;
   main: boolean;
   bugs: boolean;
+  menuMessage: number | null;
 }
 
 const initialState: IMenuState = {
@@ -16,6 +17,7 @@ const initialState: IMenuState = {
   edit: false,
   main: false,
   bugs: false,
+  menuMessage: null,
 };
 
 export const menuSlice = createSlice({
@@ -38,6 +40,9 @@ export const menuSlice = createSlice({
     actionMenuBugs: (state, action) => {
       state.bugs = action.payload;
     },
+    actionMenuMessage: (state, action) => {
+      state.menuMessage = action.payload;
+    },
   },
 });
 
@@ -50,6 +55,7 @@ export const {
   actionMenuEdit,
   actionMenuMain,
   actionMenuBugs,
+  actionMenuMessage,
 } = menuSlice.actions;
 
 export const getMenuSetting = (state: RootState) => state.menu.setting;
@@ -57,3 +63,4 @@ export const getMenuContact = (state: RootState) => state.menu.contact;
 export const getMenuEdit = (state: RootState) => state.menu.edit;
 export const getMenuMain = (state: RootState) => state.menu.main;
 export const getMenuBugs = (state: RootState) => state.menu.bugs;
+export const getMenuMessage = (state: RootState) => state.menu.menuMessage;
