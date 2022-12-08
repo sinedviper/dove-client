@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import cn from "classnames";
 
 import {
+  BookmarkIcon,
+  BugIcon,
   ContactsIcon,
   LogoutIcon,
   MeteorIcon,
@@ -45,6 +47,8 @@ export const ButtonMenuMain = ({
         {action === "out" && (
           <LogoutIcon className={cn(styles.cardIcon, styles.logout)} />
         )}
+        {action === "saved" && <BookmarkIcon className={cn(styles.cardIcon)} />}
+        {action === "bugs" && <BugIcon className={cn(styles.cardIcon)} />}
         <span>{text}</span>
       </div>
       {animation !== undefined && (

@@ -15,7 +15,7 @@
   margin: 100px auto 0px;
   width: 100%;
   padding: 0px 10px 50px 10px;
-  max-width: 360px;
+  max-width: 400px;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -60,6 +60,11 @@
   transition: var(--transition-static);
 }
 
+.button:hover {
+  transition: var(--transition-static);
+  background-color: var(--primary-dark);
+}
+
 .loading {
   position: absolute;
   top: -24px;
@@ -70,19 +75,6 @@
   stroke: var(--white);
 }
 
-.button:hover {
-  transition: var(--transition-static);
-  background-color: var(--primary-dark);
-}
-
-.errorInput {
-  border-color: var(--error);
-}
-.error {
-  font-size: 13px;
-  margin-top: -20px;
-  color: var(--error);
-}
 .link {
   font-size: 14px;
   margin-top: -15px;
@@ -94,6 +86,64 @@
   color: var(--primary);
   cursor: pointer;
   pointer-events: all;
+}
+
+.input {
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 17px;
+  resize: none;
+  background-color: var(--background-first);
+  color: var(--text-first);
+  outline: none;
+  width: 100%;
+}
+
+.input:hover {
+  border: 1px solid var(--primary);
+}
+
+.input::placeholder {
+  font-size: 17px;
+}
+
+.informationUser {
+  width: 100%;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  padding: 5px;
+  border-radius: 10px;
+  border: 1px solid var(--border-first);
+}
+
+.informationUser img {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.informationUser span {
+  display: flex;
+  gap: 10px;
+}
+
+.informationUser div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  text-align: left;
+  overflow: hidden;
+}
+
+.informationUser p {
+  font-weight: 600;
+  color: var(--text-first);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 @media screen and (max-width: 600px) {

@@ -24,6 +24,7 @@ import {
   actionAddTabIndexSixth,
   actionAddTabIndexThree,
   actionAddUser,
+  actionMenuBugs,
   actionMenuContact,
   actionMenuSetting,
   getTabIndexFirst,
@@ -37,6 +38,7 @@ import {
 import { ChatsHeaderProps } from "./ChatsHeader.props";
 import styles from "./ChatsHeader.module.css";
 import { getUploads } from "resolvers/upload";
+import { useNavigate } from "react-router-dom";
 
 export const ChatsHeader = ({
   searchContact,
@@ -49,6 +51,7 @@ export const ChatsHeader = ({
   ...props
 }: ChatsHeaderProps): JSX.Element => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const themeChange = useTheme();
   const error = useError();
   const exit = useExit();
@@ -133,6 +136,19 @@ export const ChatsHeader = ({
       variables: { input: { animation: !user?.animation } },
     });
 
+  const handleSavedMessage = () => {
+    setMenu(false);
+    dispatch(actionAddTabIndexFirst(windowSize[0] < 1000 ? -1 : 0));
+    dispatch(actionAddTabIndexSixth(0));
+    navigate(`${user?.username}`);
+  };
+
+  const handleBugs = () => {
+    dispatch(actionMenuBugs(true));
+    setMenu(false);
+    navigate(`/bugs`);
+  };
+
   return (
     <nav
       className={cn(className, styles.menuWrapper)}
@@ -197,6 +213,11 @@ export const ChatsHeader = ({
         style={{ display: menu ? "block" : "none" }}
       >
         <ButtonMenuMain
+          text={"Saved Message"}
+          handleAction={handleSavedMessage}
+          action={"saved"}
+        />
+        <ButtonMenuMain
           text={"Contacts"}
           handleAction={handleContact}
           action={"contact"}
@@ -217,6 +238,11 @@ export const ChatsHeader = ({
           handleAction={handleAnimation}
           action={"animation"}
           theme={user?.animation}
+        />
+        <ButtonMenuMain
+          text={"Bugs report"}
+          handleAction={handleBugs}
+          action={"bugs"}
         />
         <ButtonMenuMain
           text={"Log Out"}

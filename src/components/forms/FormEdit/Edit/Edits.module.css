@@ -1,0 +1,34 @@
+.editWrapper {
+  position: absolute;
+  top: 0;
+  right: -425px;
+  width: 420px;
+  height: 100vh;
+  background-color: var(--background-second);
+  display: flex;
+  transition: var(--transition);
+  z-index: 2;
+  flex-direction: column;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.editWrapperOpen {
+  right: 0px;
+  transition: var(--transition);
+}
+
+@media screen and (max-width: 600px) {
+  .editWrapper {
+    right: -105%;
+    width: 100%;
+  }
+
+  .editWrapperOpen {
+    right: 0px;
+  }
+}

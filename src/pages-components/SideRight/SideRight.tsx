@@ -21,6 +21,7 @@ import {
   actionAddMessages,
   actionAddRecipient,
   getChat,
+  getFetch,
   getMenuMain,
   getMessages,
   getMessagesBefore,
@@ -43,6 +44,7 @@ export const SideRight = ({
   const authorizationHave = useAuthorizationSearch();
 
   //store
+  const fetch: boolean = useAppSelector(getFetch);
   const user: IUser | undefined = useAppSelector(getUser);
   const sender: IUser | undefined = useAppSelector(getRecipient);
   const chat: IChat | undefined = useAppSelector(getChat)?.filter(
@@ -61,7 +63,7 @@ export const SideRight = ({
       setHaveMassge(authorizationHave({ data: data.haveMessageFind }));
     },
     onError(errorData) {
-      chat && error(errorData.message);
+      chat !== undefined && error(errorData.message);
     },
   });
 
@@ -74,8 +76,11 @@ export const SideRight = ({
     },
     fetchPolicy: "network-only",
     onCompleted: async (data) => {
-      authorization({ data: data.getMessages, actionAdd: actionAddMessages });
-      dispatch(actionAddFetch(false));
+      authorization({
+        data: data.getMessages,
+        actionAdd: actionAddMessages,
+      });
+      fetch && dispatch(actionAddFetch(false));
       await loadHaveMessage({
         variables: {
           message: {
@@ -90,14 +95,14 @@ export const SideRight = ({
         },
       });
     },
-    pollInterval: chat === undefined ? 300000 : 200,
+    pollInterval: chat === undefined ? 30000 : 200,
   });
 
   const { loading: loadingSender } = useQuery(getUserSender, {
     variables: { input: { username } },
     onCompleted(data) {
       authorization({ data: data.getUser, actionAdd: actionAddRecipient });
-      dispatch(actionAddFetch(false));
+      fetch && dispatch(actionAddFetch(false));
     },
     fetchPolicy: "network-only",
     pollInterval: 5000,

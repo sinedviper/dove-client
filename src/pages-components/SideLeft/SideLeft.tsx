@@ -28,7 +28,9 @@ import {
   actionAddLoading,
   actionAddTabIndexSixth,
   actionAddUser,
+  actionMenuBugs,
   actionMenuMain,
+  getFetch,
   getMenuMain,
   getTabIndexFourth,
   getUser,
@@ -61,7 +63,7 @@ export const SideLeft = ({
     fetchPolicy: "network-only",
     onCompleted: async (data) => {
       autorization({ data: data.getContacts, actionAdd: actionAddContact });
-      dispatch(actionAddFetch(false));
+      fetch && dispatch(actionAddFetch(false));
     },
   });
 
@@ -70,7 +72,7 @@ export const SideLeft = ({
     onCompleted(data) {
       autorization({ data: data.getChats, actionAdd: actionAddChats });
       setPollIntervalOne(200);
-      dispatch(actionAddFetch(false));
+      fetch && dispatch(actionAddFetch(false));
     },
     onError() {
       setPollIntervalOne(10000);
@@ -80,6 +82,7 @@ export const SideLeft = ({
 
   let searchContact = useRef<HTMLInputElement>(null);
 
+  const fetch: boolean = useAppSelector(getFetch);
   const user: IUser | undefined = useAppSelector(getUser);
   const token: string | null = localStorage.getItem("token");
   const main: boolean = useAppSelector(getMenuMain);
@@ -122,6 +125,7 @@ export const SideLeft = ({
       dispatch(actionMenuMain(true));
       dispatch(actionAddTabIndexSixth(-1));
     }
+    dispatch(actionMenuBugs(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -149,7 +153,7 @@ export const SideLeft = ({
             })
           : debouncedMutation;
       }}
-      onMouseDown={() => {
+      onTouchStart={() => {
         return user?.online &&
           minutesFormat(new Date(), new Date(user?.online)) > 4
           ? mutationUserOnlineFunction({

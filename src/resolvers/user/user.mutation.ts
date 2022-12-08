@@ -87,3 +87,12 @@ export const confirmationAccount = gql`
     }
   }
 `;
+export const sendReportBugs = gql`
+  mutation Mutation($text: String!) {
+    sendReport(text: $text) {
+      status
+      code
+      message
+    }
+  }
+`;

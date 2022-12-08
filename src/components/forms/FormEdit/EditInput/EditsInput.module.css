@@ -1,0 +1,153 @@
+.contactsList {
+  overflow-y: hidden;
+}
+
+.swiper {
+  overflow-y: overlay;
+}
+
+.editUser {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  padding: 20px;
+  background-color: var(--background-first);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.editPhoto {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  font-weight: 600;
+  margin: 10px auto;
+  color: var(--white);
+  min-width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  position: relative;
+}
+
+.uploadWrapper {
+  position: relative;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+}
+
+.userImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  z-index: 2;
+  pointer-events: none;
+  display: block;
+  object-fit: cover;
+}
+
+.iconPhotoWrapper {
+  top: 0;
+  position: absolute;
+  z-index: 2;
+  min-width: 120px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.input {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 120px;
+  height: 120px;
+  display: none;
+}
+
+.uploadWrapper:hover svg {
+  width: 50px;
+  height: 50px;
+  transition: var(--transition-static);
+}
+
+.iconPhotoWrapper svg path {
+  fill: var(--white);
+}
+
+.wrapperLoadNoPhoto {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+}
+
+.iconPhotoWrapper svg {
+  width: 40px;
+  height: 40px;
+  transition: var(--transition-static);
+}
+
+.editInfo {
+  text-align: left;
+  color: var(--text-sixth);
+  font-size: 13px;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+}
+
+.usernameEdit {
+  font-size: 15px;
+  color: var(--primary);
+}
+
+.info {
+  padding-bottom: 20px;
+}
+
+.supheed {
+  display: flex;
+  pointer-events: none;
+  width: 50px;
+  height: 50px;
+  border: none;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  justify-content: center;
+  align-items: center;
+  box-shadow: 1px 1px 5px var(--opacity-box-dark);
+  opacity: 0;
+  fill: var(--white);
+  transition: var(--transition-static);
+}
+
+.supheed svg {
+  width: 35px;
+  height: 35px;
+}
+
+.submit {
+  cursor: pointer;
+  pointer-events: all;
+  opacity: 1;
+  transition: var(--transition-static);
+}
+
+@media screen and (min-height: 1250px) {
+  .contactsList {
+    overflow-y: hidden;
+  }
+}

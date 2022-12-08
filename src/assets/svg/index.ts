@@ -28,6 +28,7 @@ import { ReactComponent as BackPhoto } from "./backPhoto.svg";
 import { ReactComponent as UpPhoto } from "./upPhoto.svg";
 import { ReactComponent as Check } from "./check.svg";
 import { ReactComponent as Bookmark } from "./bookmark.svg";
+import { ReactComponent as Bug } from "./bug.svg";
 
 export const SearchIcon = Search;
 export const RemoveIcon = Remove;
@@ -59,3 +60,4 @@ export const BackPhotoIcon = BackPhoto;
 export const UpPhotoIcon = UpPhoto;
 export const CheckIcon = Check;
 export const BookmarkIcon = Bookmark;
+export const BugIcon = Bug;
