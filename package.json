@@ -1,6 +1,6 @@
 {
   "name": "dove",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "client for dove project",
   "homepage": "https://dove-client.vercel.app",
   "private": true,

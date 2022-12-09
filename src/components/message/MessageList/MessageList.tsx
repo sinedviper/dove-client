@@ -1,18 +1,18 @@
 import React from "react";
 import cn from "classnames";
+import { useLazyQuery } from "@apollo/client";
 
+import { formatDay } from "utils/helpers";
+import { useAppSelector, useAuthorization, useError } from "utils/hooks";
+import { getfindMessageDate } from "resolvers/messages";
+import { actionAddMessagesLast, getHaveMessage } from "store";
+
+import { MessageCard } from "../";
 import { MessageListProps } from "./MessageList.props";
 import styles from "./MessageList.module.css";
-import { MessageCard } from "../MessageCard/MessageCard";
-import { formatDay } from "utils/helpers";
-import { useLazyQuery } from "@apollo/client";
-import { useAuthorization, useError } from "utils/hooks";
-import { getfindMessageDate } from "resolvers/messages";
-import { actionAddMessagesLast } from "store";
 
 export const MessageList = ({
   chat,
-  haveMessage,
   user,
   messagesBegore,
   messages,
@@ -21,6 +21,8 @@ export const MessageList = ({
 }: MessageListProps): JSX.Element => {
   const error = useError();
   const authorization = useAuthorization();
+
+  const haveMessage: Date | null = useAppSelector(getHaveMessage);
 
   const [getFindLastMessage] = useLazyQuery(getfindMessageDate, {
     fetchPolicy: "network-only",

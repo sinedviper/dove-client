@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import cn from "classnames";
 
 import {
@@ -20,6 +20,7 @@ import {
   actionAddLoading,
   actionAddMessages,
   actionAddRecipient,
+  actionHaveMessage,
   getChat,
   getFetch,
   getMenuMain,
@@ -55,12 +56,26 @@ export const SideRight = ({
     useAppSelector(getMessagesBefore);
   const main: boolean = useAppSelector(getMenuMain);
   const tabIndexSeventh: number = useAppSelector(getTabIndexSeventh);
-  const [haveMessage, setHaveMassge] = useState<Date | null>(null);
 
-  const [loadHaveMessage] = useLazyQuery(getHaveMessages, {
+  const [pollIntervalOne, setPollIntervalOne] = useState<number>(200);
+
+  const { loading: loadingHaveMessage } = useQuery(getHaveMessages, {
+    variables: {
+      message: {
+        id: Number(
+          messagesBegore !== undefined
+            ? messagesBegore?.[0]?.id
+            : messages?.[0]?.id
+        ),
+        chatId: Number(chat?.id),
+        senderMessage: Number(user?.id),
+      },
+    },
     fetchPolicy: "network-only",
     onCompleted(data) {
-      setHaveMassge(authorizationHave({ data: data.haveMessageFind }));
+      dispatch(
+        actionHaveMessage(authorizationHave({ data: data.haveMessageFind }))
+      );
     },
     onError(errorData) {
       chat !== undefined && error(errorData.message);
@@ -80,22 +95,13 @@ export const SideRight = ({
         data: data.getMessages,
         actionAdd: actionAddMessages,
       });
+      setPollIntervalOne(200);
       fetch && dispatch(actionAddFetch(false));
-      await loadHaveMessage({
-        variables: {
-          message: {
-            id: Number(
-              messagesBegore !== undefined
-                ? messagesBegore?.[0]?.id
-                : messages?.[0]?.id
-            ),
-            chatId: Number(chat?.id),
-            senderMessage: Number(user?.id),
-          },
-        },
-      });
     },
-    pollInterval: chat === undefined ? 30000 : 200,
+    onError() {
+      setPollIntervalOne(10000);
+    },
+    pollInterval: pollIntervalOne,
   });
 
   const { loading: loadingSender } = useQuery(getUserSender, {
@@ -111,10 +117,10 @@ export const SideRight = ({
   const [settings, setSettings] = useState<boolean>(false);
 
   useEffect(() => {
-    if (loadingMessage || loadingSender) {
+    if (loadingMessage || loadingSender || loadingHaveMessage) {
       dispatch(actionAddLoading(true));
     }
-    if (!loadingMessage || !loadingSender) {
+    if ((!loadingMessage && !loadingSender) || !loadingHaveMessage) {
       dispatch(actionAddLoading(false));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -136,7 +142,6 @@ export const SideRight = ({
         <MessageHeader setSettings={setSettings} settings={settings} />
         <MessageList
           chat={chat}
-          haveMessage={haveMessage}
           user={user}
           messagesBegore={messagesBegore}
           messages={messages}

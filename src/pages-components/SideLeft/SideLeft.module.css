@@ -16,10 +16,10 @@
   transition: var(--transition);
 }
 
-@media screen and (min-width: 1400px) {
+@media screen and (min-width: 1500px) {
   .main {
     margin: 0 auto;
-    width: 1400px;
+    width: 1500px;
     border-right: 1px solid;
     border-left: 1px solid;
     border-color: var(--border-second);

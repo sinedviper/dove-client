@@ -9,6 +9,7 @@ interface IMenuState {
   main: boolean;
   bugs: boolean;
   menuMessage: number | null;
+  haveMessage: Date | null;
 }
 
 const initialState: IMenuState = {
@@ -18,6 +19,7 @@ const initialState: IMenuState = {
   main: false,
   bugs: false,
   menuMessage: null,
+  haveMessage: null,
 };
 
 export const menuSlice = createSlice({
@@ -43,6 +45,9 @@ export const menuSlice = createSlice({
     actionMenuMessage: (state, action) => {
       state.menuMessage = action.payload;
     },
+    actionHaveMessage: (state, action) => {
+      state.haveMessage = action.payload;
+    },
   },
 });
 
@@ -56,6 +61,7 @@ export const {
   actionMenuMain,
   actionMenuBugs,
   actionMenuMessage,
+  actionHaveMessage,
 } = menuSlice.actions;
 
 export const getMenuSetting = (state: RootState) => state.menu.setting;
@@ -64,3 +70,4 @@ export const getMenuEdit = (state: RootState) => state.menu.edit;
 export const getMenuMain = (state: RootState) => state.menu.main;
 export const getMenuBugs = (state: RootState) => state.menu.bugs;
 export const getMenuMessage = (state: RootState) => state.menu.menuMessage;
+export const getHaveMessage = (state: RootState) => state.menu.haveMessage;
