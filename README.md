@@ -1,46 +1,44 @@
-# Getting Started with Create React App
+# Dove-Client
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### :pushpin: About project
+<p align="justify">This project was created as a copy of the well-known telegram, in it I tried to make the minimum functionality from the same telegram, for communication, searching and adding to contacts. Data is loaded through the Apollo library using graphs, unfortunately it did not work out to make web sockets, since this library is poorly described for web sockets on the Apollo server, I tried to implement it through the TypeGraphql library, but unfortunately I can’t find more detailed information to configure it under chat rooms. As a result, the project is built on ordinary requests and which for messages make a call every 200 milliseconds. In this project, I did the upload of the photo through axios, since Apollo did not work for me with the graphql-upload library. The rest of the functionality works fine. All pages are built on styled components, and typescript, with data typing.
 
-## Available Scripts
+The pages are also adapted to resizing the screen, and there is a switch from the keyboard</p>
 
-In the project directory, you can run:
+---
 
-### `npm start`
+### :book: Libraries
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- @apollo/client
+- axios
+- graphql,
+- react,
+- react-dom
+- react-redux
+- reduxtoolkit
+- react-router-dom
+- redux-persist
+- styled-components
+- webpack
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+---
 
-### `npm test`
+### :pizza: Commands
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+ - npm run dev: <strong>run in development mode
+- npm run build: <strong>assemble the project
+- npm run start: <strong>run the built project
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+<div id="badges" align="center">  
+<a href="https://www.linkedin.com/in/sinedviper"> 
+<img src="https://img.shields.io/badge/LinkedIn-blue?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn Badge"/> 
+</a> 
+<a href="https://www.instagram.com/sinedviper"> 
+<img src="https://img.shields.io/badge/Instagram-orange?style=for-the-badge&logo=instagram&logoColor=white" alt="Twitter Badge"/> 
+</a>
+<a href="https://www.t.me/sinedviper"> 
+<img src="https://img.shields.io/badge/Telegram-purple?style=for-the-badge&logo=telegram&logoColor=white" alt="Twitter Badge"/> 
+</a>
+ </div>
