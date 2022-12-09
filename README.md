@@ -25,9 +25,9 @@ The pages are also adapted to resizing the screen, and there is a switch from th
 
 ### :pizza: Commands
 
-- npm run dev: <strong>run in development mode
-- npm run build: <strong>assemble the project
-- npm run start: <strong>run the built project
+- npm run dev: <strong>run in development mode</strong>
+- npm run build: <strong>assemble the project</strong>
+- npm run start: <strong>run the built project</strong>
 
 ---
 
