@@ -11,8 +11,8 @@ The pages are also adapted to resizing the screen, and there is a switch from th
 
 - @apollo/client
 - axios
-- graphql,
-- react,
+- graphql
+- react
 - react-dom
 - react-redux
 - reduxtoolkit
@@ -25,7 +25,7 @@ The pages are also adapted to resizing the screen, and there is a switch from th
 
 ### :pizza: Commands
 
- - npm run dev: <strong>run in development mode
+- npm run dev: <strong>run in development mode
 - npm run build: <strong>assemble the project
 - npm run start: <strong>run the built project
 
