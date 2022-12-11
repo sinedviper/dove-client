@@ -1,1 +1,1 @@
-export const TRACKING_ID = "G-BDZ6SF69BR";
+export const TRACKING_ID = "UA-229954556-1";
