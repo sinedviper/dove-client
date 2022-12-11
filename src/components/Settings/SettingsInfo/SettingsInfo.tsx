@@ -94,6 +94,7 @@ export const SettingsInfo = ({
               </div>
             ) : (
               <Carousel
+                style={{ flexWrap: "wrap", display: "flex" }}
                 defaultControlsConfig={{
                   nextButtonText: <UpPhotoIcon className={styles.iconButton} />,
                   nextButtonStyle: {

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
 import cn from "classnames";
 
@@ -49,6 +49,7 @@ export const SideLeft = ({
   const exit = useExit();
   const autorization = useAuthorization();
   const sizeWindow = useWindowSize();
+  const navigate = useNavigate();
 
   const [pollIntervalOne, setPollIntervalOne] = useState<number>(200);
 
@@ -129,10 +130,12 @@ export const SideLeft = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!token) {
-    exit();
-    return <Navigate to='/login' />;
-  }
+  useEffect(() => {
+    if (!token) {
+      exit();
+      navigate("/login");
+    }
+  }, [exit, navigate, token]);
 
   return (
     <main

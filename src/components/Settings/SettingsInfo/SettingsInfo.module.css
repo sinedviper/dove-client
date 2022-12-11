@@ -203,3 +203,47 @@
   font-size: 14px;
   color: var(--text-sixth);
 }
+
+@media screen and (max-width: 600px) {
+  .userPhoto {
+    height: 350px;
+  }
+  .wrapperImage {
+    height: 350px;
+    width: 100%;
+    max-width: 600px;
+    overflow: hidden;
+  }
+
+  .userImageWrapper {
+    height: 350px;
+    max-width: 600px;
+    width: 100vw;
+    display: block;
+  }
+
+  .userImage {
+    display: block;
+    height: 350px;
+    width: 100%;
+    max-width: 600px;
+    min-width: 300px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .userPhoto {
+    height: 300px;
+  }
+  .wrapperImage {
+    height: 300px;
+  }
+
+  .userImageWrapper {
+    height: 300px;
+  }
+
+  .userImage {
+    height: 300px;
+  }
+}

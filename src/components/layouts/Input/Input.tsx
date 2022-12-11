@@ -1,4 +1,10 @@
-import React, { ForwardedRef, forwardRef, useState } from "react";
+import React, {
+  ForwardedRef,
+  forwardRef,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import cn from "classnames";
 
 import { EyeCloseIcon, EyeIcon, InfoIcon } from "assets";
@@ -17,7 +23,7 @@ export const Input = forwardRef(
       placeholderName,
       className,
       tabIndex,
-      setPassword,
+      setPassword = undefined,
       notification = false,
       notificationText = "Please enter correctly",
       textCheckPassNew,
@@ -30,7 +36,7 @@ export const Input = forwardRef(
     const [value, setValue] = useState<string>("");
     const [notifica, setNotifica] = useState<boolean>(false);
 
-    const handleCheckPass = (): number => {
+    const handleCheckPass = useCallback((): number => {
       let check = 0;
       let flagOne = false;
       let flagTwo = false;
@@ -74,10 +80,15 @@ export const Input = forwardRef(
         flagThree = false;
       }
 
-      setPassword && setPassword(check);
-
       return check;
-    };
+    }, [text, value]);
+
+    useEffect(() => {
+      if (check)
+        if (setPassword !== undefined) {
+          setPassword(handleCheckPass());
+        }
+    }, [check, setPassword, handleCheckPass]);
 
     return (
       <div className={cn(styles.wrapper)}>
