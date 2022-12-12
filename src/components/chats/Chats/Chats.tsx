@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { useNavigate, useParams } from "react-router-dom";
 import cn from "classnames";
@@ -61,17 +61,22 @@ export const Chats = ({
     },
     pollInterval: 300,
   });
-  //store
-  let searchUsers: IUser[] | undefined = dataSearch
-    ? autorizationSearch({
-        data: dataSearch?.searchUsers,
-      })
-    : undefined;
+
+  const [searchUsers, setSearchUsers] = useState<IUser[] | undefined>(
+    undefined
+  );
+  // //store
+  // let searchUsers: IUser[] | undefined = dataSearch
+  //   ? autorizationSearch({
+  //       data: dataSearch?.searchUsers,
+  //     })
+  //   : undefined;
 
   const [swiper, setSwiper] = useState<boolean>(false);
   const [searchUser, setSearchUser] = useState<boolean>(false);
   //function to process the request when clicking on the chat
   const handleFocus = async (contact: IUser) => {
+    setSearchUsers(undefined);
     if (String(contact.username) !== String(username)) {
       setValueAll("");
       setSearchUser(false);
@@ -96,6 +101,14 @@ export const Chats = ({
       dispatch(actionAddTabIndexSixth(0));
     }
   };
+
+  useEffect(() => {
+    setSearchUsers(
+      autorizationSearch({
+        data: dataSearch?.searchUsers,
+      })
+    );
+  }, [autorizationSearch, dataSearch]);
 
   return (
     <section

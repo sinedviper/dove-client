@@ -26,13 +26,14 @@
   width: 100%;
   border-radius: 10px;
   -webkit-border-radius: 10px;
-  border: none;
+  -moz-border-radius: 10px;
   padding: 15px;
   font-size: 17px;
   background: inherit;
   transition: var(--transition-input);
   border: 1px solid var(--border-first);
   color: var(--text-first);
+  outline: none;
 }
 
 .input:hover {
@@ -43,7 +44,7 @@
 .input:focus {
   transition: var(--transition-input);
   border: 1px solid var(--primary);
-  outline: var(--primary) solid 1px;
+  box-shadow: 0px 0px 0px 1px var(--primary);
 }
 
 .error {
