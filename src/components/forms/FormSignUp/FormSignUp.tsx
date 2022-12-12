@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import cn from "classnames";
+import ReactGA from "react-ga";
 
 import { signUp } from "resolvers/user";
 import { Input } from "components/layouts";
@@ -35,6 +36,9 @@ export const FormSignUp = ({
   const [errorPassword, setErrorPassword] = useState<boolean>(false);
 
   const [passwordCheck, setPasswordCheck] = useState<number>(0);
+
+  ReactGA.pageview("/signup");
+
   //send data in server when user sign up
   const onSubmit = async (): Promise<void> => {
     let checkFields: boolean = true;

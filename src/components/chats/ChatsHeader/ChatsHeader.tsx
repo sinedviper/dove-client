@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import cn from "classnames";
+import ReactGA from "react-ga";
 
 import { IUser } from "utils/interface";
 import {
@@ -104,6 +105,7 @@ export const ChatsHeader = ({
   const [menu, setMenu] = useState<boolean>(false);
   //the function of obtaining contacts when opened in the menu
   const handleContact = async () => {
+    ReactGA.pageview("/contact");
     await queryFunctionContactGet();
     dispatch(actionMenuContact(true));
     setMenu(false);
@@ -113,6 +115,7 @@ export const ChatsHeader = ({
   };
   //the function of opening settings, and downloading data to the store
   const handleSettings = async () => {
+    ReactGA.pageview("/setting");
     await queryFunctionImageGet();
     dispatch(actionMenuSetting(true));
     setMenu(false);
@@ -126,10 +129,11 @@ export const ChatsHeader = ({
     setSwiper(false);
   };
   //them function for change theme
-  const handleTheme = async () =>
+  const handleTheme = async () => {
     await mutationFunctionUser({
       variables: { input: { theme: !user?.theme } },
     });
+  };
   //the function for change animation
   const handleAnimation = async () =>
     await mutationFunctionUser({
@@ -137,6 +141,7 @@ export const ChatsHeader = ({
     });
 
   const handleSavedMessage = () => {
+    ReactGA.pageview("/savemessage");
     setMenu(false);
     dispatch(actionAddTabIndexFirst(windowSize[0] < 1000 ? -1 : 0));
     dispatch(actionAddTabIndexSixth(0));
@@ -144,6 +149,7 @@ export const ChatsHeader = ({
   };
 
   const handleBugs = () => {
+    ReactGA.pageview("/bugs");
     dispatch(actionMenuBugs(true));
     setMenu(false);
     navigate(`/bugs`);

@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
 import cn from "classnames";
+import ReactGA from "react-ga";
 
 import { minutesFormat } from "utils/helpers";
 import {
@@ -52,6 +53,8 @@ export const SideLeft = ({
   const navigate = useNavigate();
 
   const [pollIntervalOne, setPollIntervalOne] = useState<number>(200);
+
+  ReactGA.pageview("/");
 
   const [mutationUserOnlineFunction] = useMutation(updateUserOnline, {
     fetchPolicy: "no-cache",

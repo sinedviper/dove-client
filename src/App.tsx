@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ReactGA from "react-ga";
 
@@ -15,10 +15,6 @@ ReactGA.initialize(TRACKING_ID);
 function App(): JSX.Element {
   const user: IUser | undefined = useAppSelector(getUser);
   const bugs = useAppSelector(getMenuBugs);
-
-  useEffect(() => {
-    ReactGA.pageview(window.location.pathname + window.location.search);
-  }, []);
 
   return (
     <>

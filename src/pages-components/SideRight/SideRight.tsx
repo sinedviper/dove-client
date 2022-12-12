@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import cn from "classnames";
+import ReactGA from "react-ga";
 
 import {
   useAppDispatch,
@@ -58,6 +59,8 @@ export const SideRight = ({
   const tabIndexSeventh: number = useAppSelector(getTabIndexSeventh);
 
   const [pollIntervalOne, setPollIntervalOne] = useState<number>(200);
+
+  ReactGA.pageview("/chattingwithuser");
 
   const { loading: loadingHaveMessage } = useQuery(getHaveMessages, {
     variables: {

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useMutation, useLazyQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import cn from "classnames";
+import ReactGA from "react-ga";
 
 import { useAuthorization, useError } from "utils/hooks";
 import { useTheme } from "utils/context";
@@ -46,6 +47,9 @@ export const FormLogin = ({
     loginUser,
     { fetchPolicy: "network-only" }
   );
+
+  ReactGA.pageview("/login");
+
   //when a user logs in sends data and receives a user token
   const onSubmit = async (): Promise<void> => {
     if (

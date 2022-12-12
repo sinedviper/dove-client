@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import cn from "classnames";
+import ReactGA from "react-ga";
 
 import { useAppDispatch, useWindowSize } from "utils/hooks";
 import {
@@ -84,6 +85,7 @@ export const SettingsImage = ({
           <button
             className={styles.edit}
             onClick={() => {
+              ReactGA.pageview("/edits");
               setSettings ? setSettings(false) : dispatch(actionMenuEdit(true));
               setDeleteUser(false);
               dispatch(actionAddTabIndexFourth(-1));
