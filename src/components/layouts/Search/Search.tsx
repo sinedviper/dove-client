@@ -75,7 +75,10 @@ export const Search = forwardRef(
           })}
         />
         <button
-          onClick={() => setValue("")}
+          onClick={() => {
+            setValue("");
+            setFocus(false);
+          }}
           tabIndex={tabIndex}
           onFocus={() => {
             setFocus(true);

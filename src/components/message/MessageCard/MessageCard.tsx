@@ -174,16 +174,18 @@ export const MessageCard = ({
           >
             {message && formatHours(new Date(message?.createdAt))}
           </span>
-          <span
-            className={cn(styles.messageRead, {
-              [styles.readMessage]: message?.read === true,
-              [styles.readMessageUser]:
-                message?.read === true &&
-                username !== message?.senderMessage?.username,
-            })}
-          >
-            <CheckIcon />
-          </span>
+          {username !== message?.senderMessage?.username && (
+            <span
+              className={cn(styles.messageRead, {
+                [styles.readMessage]: message?.read === true,
+                [styles.readMessageUser]:
+                  message?.read === true &&
+                  username !== message?.senderMessage?.username,
+              })}
+            >
+              <CheckIcon />
+            </span>
+          )}
         </div>
       </div>
       <TailIcon

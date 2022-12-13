@@ -36,6 +36,8 @@
   height: 21px;
   fill: var(--icon-first);
   transition: var(--transition-static);
+  user-select: none;
+  pointer-events: none;
 }
 
 .focusSearch {
@@ -62,6 +64,7 @@
   cursor: pointer;
   background: none;
   border-radius: 50%;
+  pointer-events: none;
 }
 
 .buttonRemove:hover {
@@ -70,4 +73,5 @@
 
 .focusRemove {
   opacity: 1;
+  pointer-events: inherit;
 }

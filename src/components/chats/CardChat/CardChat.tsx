@@ -175,16 +175,18 @@ export const CardChat = ({
         </span>
       </div>
       <div className={styles.contactDate}>
-        <CheckIcon
-          className={cn(styles.wrapperIcon, {
-            [styles.wrapperIconOne]:
-              username !== user.username && lastMessage?.read === true,
-            [styles.wrapperIconMark]:
-              username === user.username && lastMessage?.read === true,
-            [styles.wrapperIconMarkNotRead]:
-              username === user.username && lastMessage?.read === false,
-          })}
-        />
+        {userMain?.username !== user.username && (
+          <CheckIcon
+            className={cn(styles.wrapperIcon, {
+              [styles.wrapperIconOne]:
+                username !== user.username && lastMessage?.read === true,
+              [styles.wrapperIconMark]:
+                username === user.username && lastMessage?.read === true,
+              [styles.wrapperIconMarkNotRead]:
+                username === user.username && lastMessage?.read === false,
+            })}
+          />
+        )}
         <span>
           {lastMessage && formateDate(new Date(lastMessage.createdAt))}
         </span>

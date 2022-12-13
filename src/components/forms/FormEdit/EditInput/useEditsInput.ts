@@ -158,7 +158,7 @@ export const useEditsInput = ({
       if (
         bio.replaceAll(" ", "") === "" ||
         // eslint-disable-next-line no-useless-escape
-        bio.replace(/[A-Za-z0-9\.]+/g, "").length !== 0 ||
+        bio.replace(/[A-Za-z0-9\.\, ]+/g, "").length !== 0 ||
         bio.length < 1 ||
         bio.length > 40
       ) {

@@ -27,7 +27,9 @@ import {
   actionAddUser,
   actionMenuBugs,
   actionMenuContact,
+  actionMenuMain,
   actionMenuSetting,
+  getMenuMain,
   getTabIndexFirst,
   getTabIndexFiveth,
   getTabIndexFourth,
@@ -65,6 +67,7 @@ export const ChatsHeader = ({
   const tabIndexFourth: number = useAppSelector(getTabIndexFourth);
   const tabIndexFiveth: number = useAppSelector(getTabIndexFiveth);
   const tabIndexSixth: number = useAppSelector(getTabIndexSixth);
+  const main: boolean = useAppSelector(getMenuMain);
 
   const [mutationFunctionUser] = useMutation(updateUser, {
     fetchPolicy: "network-only",
@@ -145,6 +148,7 @@ export const ChatsHeader = ({
     setMenu(false);
     dispatch(actionAddTabIndexFirst(windowSize[0] < 1000 ? -1 : 0));
     dispatch(actionAddTabIndexSixth(0));
+    dispatch(actionMenuMain(!main));
     navigate(`${user?.username}`);
   };
 

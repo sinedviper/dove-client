@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import cn from "classnames";
 
 import { useAppSelector } from "utils/hooks";
@@ -54,6 +54,26 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
   };
 
   const [data, setData] = useState<IData>(initialData);
+
+  useEffect(() => {
+    if (edit === false) {
+      if (user?.username && user?.username !== data.username) {
+        setData({ ...data, username: user?.username });
+      }
+      if (user?.name && user?.name !== data.name) {
+        setData({ ...data, name: user?.name });
+      }
+      if (user?.surname && user?.surname !== data.surname) {
+        setData({ ...data, surname: user?.surname });
+      }
+      if (user?.email && user?.email !== data.email) {
+        setData({ ...data, email: user?.email });
+      }
+      if (user?.bio && user?.bio !== data.bio) {
+        setData({ ...data, bio: user?.bio });
+      }
+    }
+  }, [user, data, edit]);
 
   return (
     <section
