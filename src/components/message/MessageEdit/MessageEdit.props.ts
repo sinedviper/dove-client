@@ -2,7 +2,7 @@ import { DetailedHTMLProps, HTMLAttributes } from "react";
 
 export interface MessageEditProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-  setEditMessage: Function;
+  setEditMessage: (val: boolean) => void;
   editMessage: boolean;
   clientX: number;
   clientY: number;

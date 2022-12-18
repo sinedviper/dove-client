@@ -169,11 +169,9 @@ export const SettingsInfo = ({
         <div
           className={styles.info}
           onClick={() => handleCopy(String(user?.email))}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleCopy(String(user?.email));
-            }
-          }}
+          onKeyDown={(e) =>
+            e.key === "Enter" && handleCopy(String(user?.email))
+          }
           tabIndex={tabIndex}
         >
           <MailIcon className={styles.iconInfo} />
@@ -185,11 +183,9 @@ export const SettingsInfo = ({
         <div
           className={styles.info}
           onClick={() => handleCopy(String(user?.username))}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleCopy(String(user?.username));
-            }
-          }}
+          onKeyDown={(e) =>
+            e.key === "Enter" && handleCopy(String(user?.username))
+          }
           tabIndex={tabIndex}
         >
           <UsernameIcon className={styles.iconInfo} />
@@ -202,11 +198,9 @@ export const SettingsInfo = ({
           <div
             className={styles.info}
             onClick={() => handleCopy(String(user?.bio))}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleCopy(String(user?.bio));
-              }
-            }}
+            onKeyDown={(e) =>
+              e.key === "Enter" && handleCopy(String(user?.bio))
+            }
             tabIndex={tabIndex}
           >
             <InfoIcon className={styles.iconInfo} />

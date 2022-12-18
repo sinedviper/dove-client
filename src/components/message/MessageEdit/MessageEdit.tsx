@@ -10,7 +10,8 @@ import {
 } from "utils/hooks";
 import { IUser } from "utils/interface";
 import { deleteMessages } from "resolvers/messages";
-import { actionAddMessageEdit, actionAddMessages, getUser } from "store";
+import { getUser } from "store/select";
+import { actionAddMessages, actionAddMessageEdit } from "store/slice";
 import { CopyIcon, DeleteIcon, EditIcon, ReplyIcon } from "assets";
 
 import { MessageEditProps } from "./MessageEdit.props";
@@ -42,11 +43,11 @@ export const MessageEdit = ({
     },
   });
   //copy string
-  const handleCopy = (value: string) => {
+  const handleCopy = (value: string): void => {
     navigator.clipboard.writeText(value);
   };
   //remove messega
-  const handleDelete = async () => {
+  const handleDelete = async (): Promise<void> => {
     setEditMessage(false);
     await mutationFunction({
       variables: {
@@ -59,7 +60,7 @@ export const MessageEdit = ({
     });
   };
   //add edit message in store
-  const handleMessage = (edit) => {
+  const handleMessage = (edit: boolean): void => {
     dispatch(
       actionAddMessageEdit({
         message: {
@@ -72,25 +73,24 @@ export const MessageEdit = ({
     );
   };
 
+  const stylePostion = (): { top: number; left: number } => {
+    return position
+      ? {
+          top: user?.id === client.senderMessage ? clientY - 120 : clientY - 65,
+          left: clientX,
+        }
+      : {
+          top: clientY,
+          left: clientX,
+        };
+  };
+
   return (
     <div
       className={cn(className, styles.messageWrapperEdit, {
-        [styles.messageWrapperEditOn]: editMessage === true,
+        [styles.messageWrapperEditOn]: editMessage,
       })}
-      style={
-        position
-          ? {
-              top:
-                user?.id === client.senderMessage
-                  ? clientY - 120
-                  : clientY - 65,
-              left: clientX,
-            }
-          : {
-              top: clientY,
-              left: clientX,
-            }
-      }
+      style={stylePostion()}
       {...props}
     >
       <span

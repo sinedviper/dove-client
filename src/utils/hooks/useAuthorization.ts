@@ -31,7 +31,7 @@ export const useAuthorization = () => {
 };
 
 //that hook check also token and return data
-export const useAuthorizationSearch = () => {
+export const useAuthorizationData = () => {
   const navigate = useNavigate();
   const exit = useExit();
   const error = useError();

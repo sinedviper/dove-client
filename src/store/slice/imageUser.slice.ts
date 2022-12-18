@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { IImage } from "utils/interface";
-import { RootState } from "store";
 
 interface IImagesState {
   images: IImage[] | undefined;
@@ -26,5 +25,3 @@ export const iamgeUserReducer = imageUserSlice.reducer;
 
 export const { actionClearImageUser, actionAddImageUser } =
   imageUserSlice.actions;
-
-export const getImageUser = (state: RootState) => state.imageUser.images;

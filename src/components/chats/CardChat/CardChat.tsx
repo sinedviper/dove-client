@@ -24,8 +24,8 @@ import {
   actionClearMessages,
   actionClearRecipient,
   actionMenuMain,
-  getUser,
-} from "store";
+} from "store/slice";
+import { getUser } from "store/select";
 
 import { CardChatProps } from "./CardChat.props";
 import styles from "./CardChat.module.css";
@@ -64,7 +64,7 @@ export const CardChat = ({
 
   const color = colorCard(user.name.toUpperCase().split("")[0]);
   //function to process the request when clicking on the chat
-  const handleFocus = () => {
+  const handleFocus = (): void => {
     if (String(user.username) !== String(username)) {
       dispatch(actionClearMessages());
       dispatch(actionClearRecipient());
@@ -78,8 +78,37 @@ export const CardChat = ({
     }
   };
   //function delete chat
-  const handleDeleteChat = async () =>
+  const handleDeleteChat = async (): Promise<void> => {
     await mutationFunction({ variables: { idChat: Number(id) } });
+  };
+
+  const handleOnMouseMove = (e): void => {
+    if (!menu) {
+      setTop(e.nativeEvent.layerY);
+      if (e.nativeEvent.layerX > 210) {
+        setLeft(e.nativeEvent.layerX - 200);
+      } else setLeft(e.nativeEvent.layerX);
+    }
+  };
+
+  const handleTouchStart = (): void => {
+    timer = setTimeout(() => {
+      setMenu(true);
+    }, 1000);
+  };
+
+  const handleKeyDown = (e): void => {
+    if (e.key === "Enter") {
+      handleFocus();
+      if (windowSize[0] < 1000) {
+        dispatch(actionAddTabIndexFirst(-1));
+        dispatch(actionAddTabIndexSixth(0));
+      }
+    }
+    if (e.key === "Delete") {
+      setMenu(!menu);
+    }
+  };
 
   return (
     <li
@@ -87,45 +116,13 @@ export const CardChat = ({
       className={cn(className, styles.contacts, {
         [styles.contactActive]: username === user.username,
       })}
-      onClick={() => {
-        handleFocus();
-      }}
-      onKeyDown={(e) => {
-        if (e.key === "Enter") {
-          handleFocus();
-          if (windowSize[0] < 1000) {
-            dispatch(actionAddTabIndexFirst(-1));
-            dispatch(actionAddTabIndexSixth(0));
-          }
-        }
-        if (e.key === "Delete") {
-          setMenu(!menu);
-        }
-      }}
-      onTouchStart={() => {
-        timer = setTimeout(() => {
-          setMenu(true);
-        }, 1000);
-      }}
-      onTouchEnd={() => {
-        if (!menu) {
-          clearTimeout(timer);
-        }
-      }}
-      onMouseMoveCapture={(e: any) => {
-        if (!menu) {
-          setTop(e.nativeEvent.layerY);
-          if (e.nativeEvent.layerX > 210) {
-            setLeft(e.nativeEvent.layerX - 200);
-          } else setLeft(e.nativeEvent.layerX);
-        }
-      }}
+      onClick={handleFocus}
+      onKeyDown={handleKeyDown}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={() => !menu && clearTimeout(timer)}
+      onMouseMoveCapture={handleOnMouseMove}
       onMouseLeave={() => setMenu(false)}
-      onMouseDown={(e) => {
-        if (e.buttons === 2) {
-          setMenu(true);
-        }
-      }}
+      onMouseDown={(e) => e.buttons === 2 && setMenu(true)}
       onContextMenu={(e) => {
         e.preventDefault();
         return false;
@@ -179,11 +176,11 @@ export const CardChat = ({
           <CheckIcon
             className={cn(styles.wrapperIcon, {
               [styles.wrapperIconOne]:
-                username !== user.username && lastMessage?.read === true,
+                username !== user.username && lastMessage?.read,
               [styles.wrapperIconMark]:
-                username === user.username && lastMessage?.read === true,
+                username === user.username && lastMessage?.read,
               [styles.wrapperIconMarkNotRead]:
-                username === user.username && lastMessage?.read === false,
+                username === user.username && !lastMessage?.read,
             })}
           />
         )}

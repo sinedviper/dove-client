@@ -1,4 +1,4 @@
-import { IData } from "./../Edit/Edits";
+import { IData } from "../Edit/Edits";
 import { useMutation } from "@apollo/client";
 import axios from "axios";
 import { updateUser } from "resolvers/user";
@@ -8,7 +8,7 @@ import {
   actionAddTabIndexFourth,
   actionMenuEdit,
   actionAddImageUser,
-} from "store";
+} from "store/slice";
 import { useAppDispatch, useAuthorization, useError } from "utils/hooks";
 import { IUser } from "utils/interface";
 
@@ -57,7 +57,7 @@ export const useEditsInput = ({
   });
 
   //load photo
-  const handleLoadPhoto = async (e) => {
+  const handleLoadPhoto = async (e): Promise<void> => {
     const formData = new FormData();
     const file = e.target.files[0];
     if (e.target.files[0].size > 3000000) {

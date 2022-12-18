@@ -15,17 +15,19 @@ import {
 import { IUser } from "utils/interface";
 import { addContact, deleteContact } from "resolvers/contacts";
 import {
+  getRecipient,
+  getContacts,
+  getUser,
+  getMenuMain,
+  getTabIndexSixth,
+} from "store/select";
+import {
   actionAddContact,
+  actionMenuMain,
+  actionAddTabIndexSixth,
   actionAddTabIndexFirst,
   actionAddTabIndexSeventh,
-  actionAddTabIndexSixth,
-  actionMenuMain,
-  getContacts,
-  getMenuMain,
-  getRecipient,
-  getTabIndexSixth,
-  getUser,
-} from "store";
+} from "store/slice";
 import { AddUserIcon, BackIcon, BookmarkIcon, RemoveUserIcon } from "assets";
 
 import { MessageHeaderProps } from "./MessageHeader.props";
@@ -80,7 +82,7 @@ export const MessageHeader = ({
     color = colorCard(receipt?.name && receipt?.name.toUpperCase()[0]);
   }
 
-  const handleEditContact = async () => {
+  const handleEditContact = async (): Promise<void> => {
     if (contact) {
       await mutationFunctionDelete({
         variables: {
@@ -97,6 +99,29 @@ export const MessageHeader = ({
     }
   };
 
+  const handleButtonBack = (): void => {
+    if (windowSize[0] < 1000) {
+      dispatch(actionMenuMain(!main));
+      dispatch(actionAddTabIndexSixth(tabIndexSixth === -1 ? 0 : -1));
+      dispatch(actionAddTabIndexFirst(0));
+      if (windowSize[0] < 600) {
+        dispatch(actionAddTabIndexSixth(-1));
+        dispatch(actionAddTabIndexFirst(0));
+      }
+      if (settings) {
+        setSettings(false);
+      }
+    }
+  };
+
+  const handleOpenInfo = (): void => {
+    setSettings(true);
+    dispatch(actionAddTabIndexSeventh(0));
+    dispatch(actionAddTabIndexFirst(-1));
+    dispatch(actionAddTabIndexSixth(-1));
+    if (settings) dispatch(actionMenuMain(false));
+  };
+
   return (
     <section
       className={cn(className, styles.headerReceiptWrapper)}
@@ -106,20 +131,7 @@ export const MessageHeader = ({
       {...props}
     >
       <button
-        onClick={() => {
-          if (windowSize[0] < 1000) {
-            dispatch(actionMenuMain(!main));
-            dispatch(actionAddTabIndexSixth(tabIndexSixth === -1 ? 0 : -1));
-            dispatch(actionAddTabIndexFirst(0));
-            if (windowSize[0] < 600) {
-              dispatch(actionAddTabIndexSixth(-1));
-              dispatch(actionAddTabIndexFirst(0));
-            }
-            if (settings === true) {
-              setSettings(false);
-            }
-          }
-        }}
+        onClick={handleButtonBack}
         tabIndex={windowSize[0] < 1000 ? tabIndexSixth : -1}
         className={cn(styles.buttonBackMain)}
       >
@@ -142,26 +154,12 @@ export const MessageHeader = ({
         <>
           <div
             className={styles.headerWrapper}
-            onClick={() => {
-              setSettings(true);
-              dispatch(actionAddTabIndexSeventh(0));
-              dispatch(actionAddTabIndexFirst(-1));
-              dispatch(actionAddTabIndexSixth(-1));
-              if (settings === true) dispatch(actionMenuMain(false));
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                setSettings(true);
-                dispatch(actionAddTabIndexSeventh(0));
-                dispatch(actionAddTabIndexFirst(-1));
-                dispatch(actionAddTabIndexSixth(-1));
-                if (settings === true) dispatch(actionMenuMain(false));
-              }
-            }}
+            onClick={handleOpenInfo}
+            onKeyDown={(e) => e.key === "Enter" && handleOpenInfo()}
             onKeyUp={(e) => {
               if (e.key === "Enter") {
                 setSettings(true);
-                if (settings === true) dispatch(actionMenuMain(false));
+                if (settings) dispatch(actionMenuMain(false));
               }
             }}
             tabIndex={tabIndexSixth}
@@ -207,7 +205,7 @@ export const MessageHeader = ({
           </button>
           <div
             className={cn(styles.menuMessageWrapper, {
-              [styles.menuMessageWrapperOn]: menuMessage === true,
+              [styles.menuMessageWrapperOn]: menuMessage,
             })}
             style={{ display: menuMessage ? "block" : "none" }}
           >

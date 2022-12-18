@@ -10,9 +10,9 @@ export interface InputProps
   password?: boolean;
   text?: string;
   check?: boolean;
-  setText?: Function;
+  setText?: (val: string) => void;
   notification?: boolean;
   notificationText?: string;
   textCheckPassNew?: string;
-  setPassword?: Function;
+  setPassword?: (val: number) => void;
 }

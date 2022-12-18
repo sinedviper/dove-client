@@ -3,20 +3,16 @@ import cn from "classnames";
 
 import { SERVER_LINK } from "utils/constants";
 import { Input } from "components/layouts";
-import {
-  actionMenuEdit,
-  getImageUser,
-  getTabIndexFiveth,
-  getUser,
-} from "store";
+import { getImageUser, getTabIndexFiveth, getUser } from "store/select";
+import { actionMenuEdit } from "store/slice";
 import { useAppDispatch, useAppSelector } from "utils/hooks";
 import { colorCard } from "utils/helpers";
 import { IUser, IImage } from "utils/interface";
 import { PhotoIcon, SupheedIcon } from "assets";
 
+import { useEditsInput } from "./useEditsInput";
 import { EditsInputProps } from "./EditsInput.props";
 import styles from "./EditsInput.module.css";
-import { useEditsInput } from "./useEditsInput";
 
 export const EditsInput = ({
   edit,
@@ -68,6 +64,18 @@ export const EditsInput = ({
     initialData,
   });
 
+  const handleInput = (e): void => {
+    handleLoadPhoto(e);
+    setData({
+      ...data,
+      password: "",
+      passwordNew: "",
+      passwordRepeat: "",
+    });
+    setSubmit(false);
+    dispatch(actionMenuEdit(false));
+  };
+
   //Check values in input, changed or not, when changed button has see
   useEffect(() => {
     if (
@@ -109,7 +117,7 @@ export const EditsInput = ({
   return (
     <div
       className={cn(styles.contactsList, {
-        [styles.swiper]: swiper === true,
+        [styles.swiper]: swiper,
       })}
       onMouseLeave={() => setSwiper(false)}
       onMouseOut={() => setSwiper(true)}
@@ -133,17 +141,7 @@ export const EditsInput = ({
               <input
                 className={styles.input}
                 accept='.jpg, .jpeg, .png'
-                onChange={(e) => {
-                  handleLoadPhoto(e);
-                  setData({
-                    ...data,
-                    password: "",
-                    passwordNew: "",
-                    passwordRepeat: "",
-                  });
-                  setSubmit(false);
-                  dispatch(actionMenuEdit(false));
-                }}
+                onChange={handleInput}
                 type='file'
                 id='loadphotod'
               />
@@ -281,7 +279,7 @@ export const EditsInput = ({
       <button
         tabIndex={tabIndexFivth}
         className={cn(styles.supheed, {
-          [styles.submit]: submit === true,
+          [styles.submit]: submit,
         })}
         onClick={onSubmit}
       >

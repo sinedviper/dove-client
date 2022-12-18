@@ -7,7 +7,7 @@ import { useAuthorization, useError } from "utils/hooks";
 import { useTheme } from "utils/context";
 import { confirmationAccount, getMe } from "resolvers/user";
 import { Input } from "components/layouts";
-import { actionAddUser } from "store";
+import { actionAddUser } from "store/slice";
 import { DoveIcon, LoadingIcon } from "assets";
 
 import { FormConfirmationProps } from "./FormConfirmation.props";

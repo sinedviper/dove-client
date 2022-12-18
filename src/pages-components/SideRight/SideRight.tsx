@@ -8,7 +8,7 @@ import {
   useAppDispatch,
   useAppSelector,
   useAuthorization,
-  useAuthorizationSearch,
+  useAuthorizationData,
   useError,
 } from "utils/hooks";
 import { IChat, IMessage, IUser } from "utils/interface";
@@ -17,20 +17,22 @@ import { getUserSender } from "resolvers/user";
 import { MessageHeader, MessageInput, MessageList } from "components/message";
 import { Settings } from "components";
 import {
-  actionAddFetch,
-  actionAddLoading,
-  actionAddMessages,
-  actionAddRecipient,
-  actionHaveMessage,
-  getChat,
   getFetch,
-  getMenuMain,
+  getUser,
+  getRecipient,
+  getChat,
   getMessages,
   getMessagesBefore,
-  getRecipient,
+  getMenuMain,
   getTabIndexSeventh,
-  getUser,
-} from "store";
+} from "store/select";
+import {
+  actionHaveMessage,
+  actionAddMessages,
+  actionAddFetch,
+  actionAddRecipient,
+  actionAddLoading,
+} from "store/slice";
 
 import { SideRightProps } from "./SideRight.props";
 import styles from "./SideRight.module.css";
@@ -43,7 +45,7 @@ export const SideRight = ({
   const error = useError();
   const dispatch = useAppDispatch();
   const authorization = useAuthorization();
-  const authorizationHave = useAuthorizationSearch();
+  const authorizationHave = useAuthorizationData();
 
   //store
   const fetch: boolean = useAppSelector(getFetch);
@@ -132,7 +134,7 @@ export const SideRight = ({
   return (
     <section
       className={cn(className, styles.wrapper, {
-        [styles.wrapperMainOn]: main === true,
+        [styles.wrapperMainOn]: main,
       })}
       {...props}
     >
@@ -155,7 +157,7 @@ export const SideRight = ({
       </section>
       <section
         className={cn(styles.profileWrap, {
-          [styles.profileOn]: settings === true,
+          [styles.profileOn]: settings,
         })}
       >
         <Settings

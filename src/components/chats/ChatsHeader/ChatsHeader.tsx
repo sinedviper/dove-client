@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import cn from "classnames";
 import ReactGA from "react-ga";
+import { useNavigate } from "react-router-dom";
 
 import { IUser } from "utils/interface";
 import {
@@ -12,36 +13,38 @@ import {
   useExit,
   useWindowSize,
 } from "utils/hooks";
-import { useTheme, theme, animation } from "utils/context";
+import { getUploads } from "resolvers/upload";
+import { useTheme } from "utils/context";
+import { animation, theme } from "utils/constants";
 import { updateUser } from "resolvers/user";
 import { getContact } from "resolvers/contacts";
 import { ButtonMenuMain, Search } from "components/layouts";
 import {
+  getUser,
+  getTabIndexFirst,
+  getTabIndexThree,
+  getTabIndexFourth,
+  getTabIndexFiveth,
+  getTabIndexSixth,
+  getMenuMain,
+} from "store/select";
+import {
+  actionAddUser,
   actionAddContact,
   actionAddImageUser,
-  actionAddTabIndexFirst,
-  actionAddTabIndexFourth,
-  actionAddTabIndexSecond,
-  actionAddTabIndexSixth,
-  actionAddTabIndexThree,
-  actionAddUser,
-  actionMenuBugs,
   actionMenuContact,
-  actionMenuMain,
+  actionAddTabIndexFirst,
+  actionAddTabIndexThree,
   actionMenuSetting,
-  getMenuMain,
-  getTabIndexFirst,
-  getTabIndexFiveth,
-  getTabIndexFourth,
-  getTabIndexSixth,
-  getTabIndexThree,
-  getUser,
-} from "store";
+  actionAddTabIndexFourth,
+  actionAddTabIndexSixth,
+  actionMenuMain,
+  actionMenuBugs,
+  actionAddTabIndexSecond,
+} from "store/slice";
 
 import { ChatsHeaderProps } from "./ChatsHeader.props";
 import styles from "./ChatsHeader.module.css";
-import { getUploads } from "resolvers/upload";
-import { useNavigate } from "react-router-dom";
 
 export const ChatsHeader = ({
   searchContact,
@@ -60,6 +63,9 @@ export const ChatsHeader = ({
   const exit = useExit();
   const autorization = useAuthorization();
   const windowSize = useWindowSize();
+
+  const [menu, setMenu] = useState<boolean>(false);
+
   //store
   const user: IUser | undefined = useAppSelector(getUser);
   const tabIndexFirst: number = useAppSelector(getTabIndexFirst);
@@ -68,6 +74,18 @@ export const ChatsHeader = ({
   const tabIndexFiveth: number = useAppSelector(getTabIndexFiveth);
   const tabIndexSixth: number = useAppSelector(getTabIndexSixth);
   const main: boolean = useAppSelector(getMenuMain);
+  const tabIndexButton: number =
+    tabIndexThree === 0 || tabIndexFourth === 0 || tabIndexFiveth === 0
+      ? -1
+      : 0;
+  const tabIndexSearch: number =
+    menu === true
+      ? -1
+      : tabIndexSixth === 0
+      ? -1
+      : tabIndexThree === 0 || tabIndexFourth === 0 || tabIndexFiveth === 0
+      ? -1
+      : 0;
 
   const [mutationFunctionUser] = useMutation(updateUser, {
     fetchPolicy: "network-only",
@@ -105,9 +123,8 @@ export const ChatsHeader = ({
     },
   });
 
-  const [menu, setMenu] = useState<boolean>(false);
   //the function of obtaining contacts when opened in the menu
-  const handleContact = async () => {
+  const handleContact = async (): Promise<void> => {
     ReactGA.pageview("/contact");
     await queryFunctionContactGet();
     dispatch(actionMenuContact(true));
@@ -117,7 +134,7 @@ export const ChatsHeader = ({
     dispatch(actionAddTabIndexThree(0));
   };
   //the function of opening settings, and downloading data to the store
-  const handleSettings = async () => {
+  const handleSettings = async (): Promise<void> => {
     ReactGA.pageview("/setting");
     await queryFunctionImageGet();
     dispatch(actionMenuSetting(true));
@@ -127,23 +144,24 @@ export const ChatsHeader = ({
     dispatch(actionAddTabIndexSixth(-1));
   };
   //the function for mouse
-  const handleLeavMouseInBlockChats = () => {
+  const handleLeavMouseInBlockChats = (): void => {
     menu && setMenu(false);
     setSwiper(false);
   };
   //them function for change theme
-  const handleTheme = async () => {
+  const handleTheme = async (): Promise<void> => {
     await mutationFunctionUser({
       variables: { input: { theme: !user?.theme } },
     });
   };
   //the function for change animation
-  const handleAnimation = async () =>
+  const handleAnimation = async (): Promise<void> => {
     await mutationFunctionUser({
       variables: { input: { animation: !user?.animation } },
     });
+  };
 
-  const handleSavedMessage = () => {
+  const handleSavedMessage = (): void => {
     ReactGA.pageview("/savemessage");
     setMenu(false);
     dispatch(actionAddTabIndexFirst(windowSize[0] < 1000 ? -1 : 0));
@@ -152,11 +170,32 @@ export const ChatsHeader = ({
     navigate(`${user?.username}`);
   };
 
-  const handleBugs = () => {
+  const handleBugs = (): void => {
     ReactGA.pageview("/bugs");
     dispatch(actionMenuBugs(true));
     setMenu(false);
     navigate(`/bugs`);
+  };
+
+  const handleClick = (): void => {
+    if (searchUser) {
+      setSearchUser(false);
+      setValueAll("");
+      dispatch(actionAddTabIndexFirst(0));
+      dispatch(actionAddTabIndexSecond(-1));
+      dispatch(actionAddTabIndexSixth(0));
+      if (windowSize[0] < 1000) {
+        dispatch(actionAddTabIndexSixth(-1));
+      }
+    }
+    if (searchUser === false) {
+      setMenu(!menu);
+      dispatch(actionAddTabIndexFirst(tabIndexFirst === 0 ? -1 : 0));
+      dispatch(actionAddTabIndexSixth(tabIndexSixth === 0 ? -1 : 0));
+      if (windowSize[0] < 1000) {
+        dispatch(actionAddTabIndexSixth(-1));
+      }
+    }
   };
 
   return (
@@ -167,35 +206,12 @@ export const ChatsHeader = ({
     >
       <button
         className={styles.menu}
-        tabIndex={
-          tabIndexThree === 0 || tabIndexFourth === 0 || tabIndexFiveth === 0
-            ? -1
-            : 0
-        }
-        onClick={() => {
-          if (searchUser) {
-            setSearchUser(false);
-            setValueAll("");
-            dispatch(actionAddTabIndexFirst(0));
-            dispatch(actionAddTabIndexSecond(-1));
-            dispatch(actionAddTabIndexSixth(0));
-            if (windowSize[0] < 1000) {
-              dispatch(actionAddTabIndexSixth(-1));
-            }
-          }
-          if (searchUser === false) {
-            setMenu(!menu);
-            dispatch(actionAddTabIndexFirst(tabIndexFirst === 0 ? -1 : 0));
-            dispatch(actionAddTabIndexSixth(tabIndexSixth === 0 ? -1 : 0));
-            if (windowSize[0] < 1000) {
-              dispatch(actionAddTabIndexSixth(-1));
-            }
-          }
-        }}
+        tabIndex={tabIndexButton}
+        onClick={handleClick}
       >
         <span
           className={cn(styles.line, {
-            [styles.lineBack]: searchUser === true,
+            [styles.lineBack]: searchUser,
           })}
         ></span>
       </button>
@@ -204,21 +220,11 @@ export const ChatsHeader = ({
         setValue={setValueAll}
         setSearchUser={setSearchUser}
         setMenu={setMenu}
-        tabIndex={
-          menu === true
-            ? -1
-            : tabIndexSixth === 0
-            ? -1
-            : tabIndexThree === 0 ||
-              tabIndexFourth === 0 ||
-              tabIndexFiveth === 0
-            ? -1
-            : 0
-        }
+        tabIndex={tabIndexSearch}
       />
       <div
         className={cn(styles.menuClose, {
-          [styles.menuOpen]: menu === true,
+          [styles.menuOpen]: menu,
         })}
         style={{ display: menu ? "block" : "none" }}
       >

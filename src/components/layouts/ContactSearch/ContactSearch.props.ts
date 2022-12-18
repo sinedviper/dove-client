@@ -7,6 +7,5 @@ export interface ContactSearchProps
   handleFocus: (cotanct: IUser) => void;
   contact: IUser;
   windowSize: number;
-  dispatch: Function;
   username: string;
 }

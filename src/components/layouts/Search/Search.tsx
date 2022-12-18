@@ -2,15 +2,15 @@ import React, { useState, forwardRef, ForwardedRef } from "react";
 import cn from "classnames";
 
 import { RemoveIcon, SearchIcon } from "assets";
-
-import { SearchProps } from "./Search.props";
-import styles from "./Search.module.css";
 import { useAppDispatch } from "utils/hooks";
 import {
   actionAddTabIndexFirst,
   actionAddTabIndexSecond,
   actionAddTabIndexSixth,
-} from "store";
+} from "store/slice";
+
+import { SearchProps } from "./Search.props";
+import styles from "./Search.module.css";
 
 export const Search = forwardRef(
   (
@@ -29,6 +29,18 @@ export const Search = forwardRef(
 
     const [focus, setFocus] = useState<boolean>(false);
 
+    const handleClick = () => {
+      if (setSearchUser) {
+        setSearchUser(true);
+        dispatch(actionAddTabIndexFirst(-1));
+        dispatch(actionAddTabIndexSecond(0));
+        dispatch(actionAddTabIndexSixth(-1));
+      }
+      if (setMenu) {
+        setMenu(false);
+      }
+    };
+
     return (
       <div className={cn(styles.searchWrapper)}>
         <input
@@ -36,33 +48,9 @@ export const Search = forwardRef(
           ref={ref}
           type='text'
           className={cn(className, styles.search)}
-          onFocus={() => {
-            setFocus(true);
-          }}
-          onClick={() => {
-            if (setSearchUser) {
-              setSearchUser(true);
-              dispatch(actionAddTabIndexFirst(-1));
-              dispatch(actionAddTabIndexSecond(0));
-              dispatch(actionAddTabIndexSixth(-1));
-            }
-            if (setMenu) {
-              setMenu(false);
-            }
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              if (setSearchUser) {
-                setSearchUser(true);
-                dispatch(actionAddTabIndexFirst(-1));
-                dispatch(actionAddTabIndexSecond(0));
-                dispatch(actionAddTabIndexSixth(-1));
-              }
-              if (setMenu) {
-                setMenu(false);
-              }
-            }
-          }}
+          onFocus={() => setFocus(true)}
+          onClick={handleClick}
+          onKeyDown={(e) => e.key === "Enter" && handleClick()}
           onBlur={() => setFocus(false)}
           placeholder='Search'
           value={value}
@@ -71,7 +59,7 @@ export const Search = forwardRef(
         />
         <SearchIcon
           className={cn(styles.iconSearch, {
-            [styles.focusSearch]: focus === true,
+            [styles.focusSearch]: focus,
           })}
         />
         <button
@@ -80,12 +68,10 @@ export const Search = forwardRef(
             setFocus(false);
           }}
           tabIndex={tabIndex}
-          onFocus={() => {
-            setFocus(true);
-          }}
+          onFocus={() => setFocus(true)}
           onBlur={() => setFocus(false)}
           className={cn(styles.buttonRemove, {
-            [styles.focusRemove]: focus === true,
+            [styles.focusRemove]: focus,
           })}
         >
           <RemoveIcon className={styles.iconRemove} />

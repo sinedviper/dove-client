@@ -1,12 +1,12 @@
 import React from "react";
 
 import { useAppDispatch, useAppSelector } from "utils/hooks";
+import { getTabIndexFiveth } from "store/select";
 import {
+  actionMenuEdit,
   actionAddTabIndexFiveth,
   actionAddTabIndexFourth,
-  actionMenuEdit,
-  getTabIndexFiveth,
-} from "store";
+} from "store/slice";
 import { BackIcon } from "assets";
 
 import { EditsHeaderProps } from "./EditsHeader.props";
@@ -24,7 +24,7 @@ export const EditsHeader = ({
   //store
   const tabIndexFivth: number = useAppSelector(getTabIndexFiveth);
 
-  const handleClick = () => {
+  const handleClick = (): void => {
     setData({
       username:
         data.username !== initialData.username

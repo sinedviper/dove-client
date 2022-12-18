@@ -5,7 +5,8 @@ import { useLazyQuery } from "@apollo/client";
 import { formatDay } from "utils/helpers";
 import { useAppSelector, useAuthorization, useError } from "utils/hooks";
 import { getfindMessageDate } from "resolvers/messages";
-import { actionAddMessagesLast, getHaveMessage } from "store";
+import { getHaveMessage } from "store/select";
+import { actionAddMessagesLast } from "store/slice";
 
 import { MessageCard } from "../";
 import { MessageListProps } from "./MessageList.props";

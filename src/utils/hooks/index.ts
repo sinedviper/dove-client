@@ -1,5 +1,5 @@
 export * from "./useRedux";
-export * from "./useTimer";
+export * from "./useDebounce";
 export * from "./useError";
 export * from "./useExit";
 export * from "./useAuthorization";

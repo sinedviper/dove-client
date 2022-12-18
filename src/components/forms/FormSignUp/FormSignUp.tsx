@@ -8,10 +8,10 @@ import { signUp } from "resolvers/user";
 import { Input } from "components/layouts";
 import { DoveIcon, LoadingIcon } from "assets";
 import { useError } from "utils/hooks";
+import { useTheme } from "utils/context";
 
 import { FormSignUpProps } from "./FormSignUp.props";
 import styles from "./FormSignUp.module.css";
-import { useTheme } from "utils/context";
 
 export const FormSignUp = ({
   className,

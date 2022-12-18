@@ -1,28 +1,26 @@
 import React, { useState } from "react";
 import cn from "classnames";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { IUser } from "utils/interface";
 import { useAppDispatch, useAppSelector, useWindowSize } from "utils/hooks";
 import { CardContact } from "components/contacts";
 import { Search } from "components/layouts";
+import { getContacts, getMenuContact, getTabIndexThree } from "store/select";
 import {
-  actionAddRecipient,
-  actionAddTabIndexFirst,
-  actionAddTabIndexSixth,
-  actionAddTabIndexThree,
+  actionMenuContact,
   actionClearMessages,
   actionClearRecipient,
-  actionMenuContact,
+  actionAddRecipient,
+  actionAddTabIndexFirst,
+  actionAddTabIndexThree,
+  actionAddTabIndexSixth,
   actionMenuMain,
-  getContacts,
-  getMenuContact,
-  getTabIndexThree,
-} from "store";
+} from "store/slice";
 import { BackIcon } from "assets";
 
 import { ContactsProps } from "./Contacts.props";
 import styles from "./Contacts.module.css";
-import { useNavigate, useParams } from "react-router-dom";
 
 export const Contacts = ({
   className,
@@ -41,7 +39,7 @@ export const Contacts = ({
   const [valueContact, setValueContact] = useState<string>("");
   const [swiper, setSwiper] = useState<boolean>(false);
   //processing the transition to the chat with the user, if the users are not equal then it reloads the messages, if they are equal, then it clears the tabs
-  const handleFocus = (contact: IUser) => {
+  const handleFocus = (contact: IUser): void => {
     if (String(contact.username) !== String(username)) {
       dispatch(actionMenuContact(false));
       dispatch(actionClearMessages());
@@ -64,10 +62,20 @@ export const Contacts = ({
     }
   };
 
+  const handleClick = (): void => {
+    dispatch(actionMenuContact(false));
+    dispatch(actionAddTabIndexThree(-1));
+    dispatch(actionAddTabIndexFirst(0));
+    dispatch(actionAddTabIndexSixth(0));
+    if (windowSize[0] < 1000) {
+      dispatch(actionAddTabIndexSixth(-1));
+    }
+  };
+
   return (
     <section
       className={cn(className, styles.contactsWrapper, {
-        [styles.contactWrapperOpen]: contact === true,
+        [styles.contactWrapperOpen]: contact,
       })}
       {...props}
     >
@@ -75,15 +83,7 @@ export const Contacts = ({
         <button
           tabIndex={tabIndexThree}
           className={styles.back}
-          onClick={() => {
-            dispatch(actionMenuContact(false));
-            dispatch(actionAddTabIndexThree(-1));
-            dispatch(actionAddTabIndexFirst(0));
-            dispatch(actionAddTabIndexSixth(0));
-            if (windowSize[0] < 1000) {
-              dispatch(actionAddTabIndexSixth(-1));
-            }
-          }}
+          onClick={handleClick}
         >
           <BackIcon className={styles.backIcon} />
         </button>
@@ -96,7 +96,7 @@ export const Contacts = ({
       </div>
       <section
         className={cn(styles.contactsList, {
-          [styles.swiper]: swiper === true,
+          [styles.swiper]: swiper,
         })}
         onMouseLeave={() => setSwiper(false)}
         onMouseOut={() => setSwiper(true)}

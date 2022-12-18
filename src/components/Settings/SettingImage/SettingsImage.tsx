@@ -5,13 +5,13 @@ import ReactGA from "react-ga";
 import { useAppDispatch, useWindowSize } from "utils/hooks";
 import {
   actionAddTabIndexFirst,
-  actionAddTabIndexFiveth,
-  actionAddTabIndexFourth,
-  actionAddTabIndexSeventh,
   actionAddTabIndexSixth,
-  actionMenuEdit,
+  actionAddTabIndexSeventh,
   actionMenuSetting,
-} from "store";
+  actionAddTabIndexFourth,
+  actionMenuEdit,
+  actionAddTabIndexFiveth,
+} from "store/slice";
 import { BackIcon, EditIcon, RemoveIcon, RemoveUserIcon } from "assets";
 
 import { SettingsImageProps } from "./SettingsImage.props";
@@ -30,6 +30,41 @@ export const SettingsImage = ({
 
   const [deleteUsera, setDeleteUser] = useState<boolean>(false);
 
+  const handleClickRemove = (): void => {
+    if (setSettings) {
+      setSettings(false);
+      dispatch(actionAddTabIndexFirst(0));
+      dispatch(actionAddTabIndexSixth(0));
+      dispatch(actionAddTabIndexSeventh(-1));
+      if (windowSize[0] < 1000) {
+        dispatch(actionAddTabIndexFirst(-1));
+        dispatch(actionAddTabIndexSixth(0));
+      }
+    }
+    if (!setSettings) {
+      dispatch(actionMenuSetting(false));
+    }
+  };
+
+  const handleClickBack = (): void => {
+    setSettings ? setSettings(false) : dispatch(actionMenuSetting(false));
+    setDeleteUser(false);
+    dispatch(actionAddTabIndexFourth(-1));
+    dispatch(actionAddTabIndexFirst(0));
+    dispatch(actionAddTabIndexSixth(0));
+    if (windowSize[0] < 1000) {
+      dispatch(actionAddTabIndexSixth(-1));
+    }
+  };
+
+  const handleClickEdit = (): void => {
+    ReactGA.pageview("/edits");
+    setSettings ? setSettings(false) : dispatch(actionMenuEdit(true));
+    setDeleteUser(false);
+    dispatch(actionAddTabIndexFourth(-1));
+    dispatch(actionAddTabIndexFiveth(0));
+  };
+
   return (
     <div
       className={styles.settingsHead}
@@ -39,39 +74,14 @@ export const SettingsImage = ({
         {profile ? (
           <button
             className={cn(styles.back, styles.backCorrcet)}
-            onClick={() => {
-              if (setSettings) {
-                setSettings(false);
-                dispatch(actionAddTabIndexFirst(0));
-                dispatch(actionAddTabIndexSixth(0));
-                dispatch(actionAddTabIndexSeventh(-1));
-                if (windowSize[0] < 1000) {
-                  dispatch(actionAddTabIndexFirst(-1));
-                  dispatch(actionAddTabIndexSixth(0));
-                }
-              }
-              if (!setSettings) {
-                dispatch(actionMenuSetting(false));
-              }
-            }}
+            onClick={handleClickRemove}
             tabIndex={tabIndex}
           >
             <RemoveIcon className={styles.removeIcon} />
           </button>
         ) : (
           <button
-            onClick={() => {
-              setSettings
-                ? setSettings(false)
-                : dispatch(actionMenuSetting(false));
-              setDeleteUser(false);
-              dispatch(actionAddTabIndexFourth(-1));
-              dispatch(actionAddTabIndexFirst(0));
-              dispatch(actionAddTabIndexSixth(0));
-              if (windowSize[0] < 1000) {
-                dispatch(actionAddTabIndexSixth(-1));
-              }
-            }}
+            onClick={handleClickBack}
             className={styles.back}
             tabIndex={tabIndex}
           >
@@ -84,13 +94,7 @@ export const SettingsImage = ({
         {!profile && (
           <button
             className={styles.edit}
-            onClick={() => {
-              ReactGA.pageview("/edits");
-              setSettings ? setSettings(false) : dispatch(actionMenuEdit(true));
-              setDeleteUser(false);
-              dispatch(actionAddTabIndexFourth(-1));
-              dispatch(actionAddTabIndexFiveth(0));
-            }}
+            onClick={handleClickEdit}
             tabIndex={tabIndex}
           >
             <EditIcon className={styles.editIcon} />
@@ -107,13 +111,13 @@ export const SettingsImage = ({
             </button>
             <div
               className={cn(styles.deleteWrapper, {
-                [styles.openDelWrap]: deleteUsera === true,
+                [styles.openDelWrap]: deleteUsera,
               })}
             >
               <button
                 className={styles.deleteButton}
                 onClick={handleRemoveUser}
-                tabIndex={deleteUsera === true ? 0 : -1}
+                tabIndex={deleteUsera ? 0 : -1}
               >
                 <RemoveUserIcon className={styles.removeIcon} />
                 <span>Delete account</span>

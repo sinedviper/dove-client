@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { IUser } from "utils/interface";
-import { RootState } from "store";
 
 interface IUserState {
   user: IUser | undefined;
@@ -25,5 +24,3 @@ export const userSlice = createSlice({
 export const userReducer = userSlice.reducer;
 
 export const { actionClearUser, actionAddUser } = userSlice.actions;
-
-export const getUser = (state: RootState) => state.user.user;

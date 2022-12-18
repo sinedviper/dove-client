@@ -19,7 +19,7 @@ export const ButtonMenu = ({
   return (
     <div
       className={cn(className, styles.menuChat, {
-        [styles.menuChatOn]: menu === true,
+        [styles.menuChatOn]: menu,
       })}
       style={{ top: top, left: left }}
       {...props}
@@ -27,11 +27,7 @@ export const ButtonMenu = ({
       <span
         className={styles.menuCard}
         onClick={handleDelete}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            handleDelete();
-          }
-        }}
+        onKeyDown={(e) => e.key === "Enter" && handleDelete()}
         tabIndex={tabIndex}
       >
         <DeleteIcon className={styles.iconDeleteMenu} />

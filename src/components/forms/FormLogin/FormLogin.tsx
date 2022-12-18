@@ -8,7 +8,7 @@ import { useAuthorization, useError } from "utils/hooks";
 import { useTheme } from "utils/context";
 import { getMe, loginUser } from "resolvers/user";
 import { Input } from "components/layouts";
-import { actionAddUser } from "store";
+import { actionAddUser } from "store/slice";
 import { DoveIcon, LoadingIcon } from "assets";
 
 import { FormLoginProps } from "./FormLogin.props";
@@ -141,11 +141,7 @@ export const FormLogin = ({
             <span
               className={styles.reg}
               onClick={() => navigate("/sigup")}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  navigate("/sigup");
-                }
-              }}
+              onKeyDown={(e) => e.key === "Enter" && navigate("/sigup")}
               tabIndex={0}
             >
               SIGN UP
@@ -155,11 +151,7 @@ export const FormLogin = ({
             <span
               className={styles.reg}
               onClick={() => navigate("/confirmation")}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  navigate("/confirmation");
-                }
-              }}
+              onKeyDown={(e) => e.key === "Enter" && navigate("/confirmation")}
               tabIndex={0}
             >
               CONFIRMATION

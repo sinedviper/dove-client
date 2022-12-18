@@ -1,7 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { RootState } from "store";
-
 interface error {
   text: string;
   id: any;
@@ -56,8 +54,3 @@ export const {
   actionDeleteError,
   actionAddCopy,
 } = notificationSlice.actions;
-
-export const getLoading = (state: RootState) => state.notification.loading;
-export const getFetch = (state: RootState) => state.notification.fetch;
-export const getErrors = (state: RootState) => state.notification.errors;
-export const getCopy = (state: RootState) => state.notification.copy;

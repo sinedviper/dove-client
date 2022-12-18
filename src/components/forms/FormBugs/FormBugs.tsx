@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import cn from "classnames";
+import { useMutation } from "@apollo/client";
+import ReactTextareaAutosize from "react-textarea-autosize";
 
 import { DoveIcon, LoadingIcon } from "assets";
-
-import { FormBugsProps } from "./FormBugs.props";
-import styles from "./FormBugs.module.css";
-import ReactTextareaAutosize from "react-textarea-autosize";
+import { useTheme } from "utils/context";
 import { IImage, IUser } from "utils/interface";
 import {
   useAppDispatch,
   useAppSelector,
-  useAuthorizationSearch,
+  useAuthorizationData,
   useError,
 } from "utils/hooks";
-import { actionMenuBugs, getImageUser, getUser } from "store";
 import { SERVER_LINK } from "utils/constants";
-import { useMutation } from "@apollo/client";
 import { sendReportBugs } from "resolvers/user";
-import { useTheme } from "utils/context";
+import { getUser, getImageUser } from "store/select";
+import { actionMenuBugs } from "store/slice";
+
+import { FormBugsProps } from "./FormBugs.props";
+import styles from "./FormBugs.module.css";
 
 export const FormBugs = ({
   className,
@@ -27,7 +28,7 @@ export const FormBugs = ({
   const navigate = useNavigate();
   const error = useError();
   const dispatch = useAppDispatch();
-  const autorizationData = useAuthorizationSearch();
+  const autorizationData = useAuthorizationData();
   const themeChange = useTheme();
 
   const [sendReportBugsMutation, { loading: loadingSendBugs }] = useMutation(
@@ -57,6 +58,11 @@ export const FormBugs = ({
     } else {
       await sendReportBugsMutation({ variables: { text: bugs } });
     }
+  };
+
+  const handleClick = (): void => {
+    dispatch(actionMenuBugs(false));
+    navigate("/");
   };
 
   useEffect(() => {
@@ -107,16 +113,8 @@ export const FormBugs = ({
           <p className={styles.link}>
             <span
               className={styles.reg}
-              onClick={() => {
-                dispatch(actionMenuBugs(false));
-                navigate("/");
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  dispatch(actionMenuBugs(false));
-                  navigate("/");
-                }
-              }}
+              onClick={handleClick}
+              onKeyDown={(e) => e.key === "Enter" && handleClick()}
               tabIndex={0}
             >
               BACK

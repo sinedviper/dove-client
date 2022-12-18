@@ -1,4 +1,3 @@
-import { IUser } from "./../../../utils/interface/IUser";
 import { useMutation } from "@apollo/client";
 
 import { addChat } from "resolvers/chats";
@@ -7,14 +6,14 @@ import {
   actionAddChats,
   actionAddMessages,
   actionClearMessageEdit,
-} from "store";
+} from "store/slice";
 import {
   useAppDispatch,
   useAuthorization,
-  useAuthorizationSearch,
+  useAuthorizationData,
   useError,
 } from "utils/hooks";
-import { IChat, IMessage } from "utils/interface";
+import { IChat, IMessage, IUser } from "utils/interface";
 
 export const useMessageInput = (
   chat: IChat | undefined,
@@ -28,7 +27,7 @@ export const useMessageInput = (
   const dispatch = useAppDispatch();
   const error = useError();
   const authorization = useAuthorization();
-  const atorizationSearch = useAuthorizationSearch();
+  const autorizationData = useAuthorizationData();
 
   const [mutationFunctionAddMessage] = useMutation(addMessages, {
     fetchPolicy: "network-only",
@@ -47,9 +46,9 @@ export const useMessageInput = (
     fetchPolicy: "network-only",
     onCompleted: async (data) => {
       authorization({ data: data.addChat, actionAdd: actionAddChats });
-      const chat: IChat | undefined = atorizationSearch({
+      const chat: IChat = autorizationData({
         data: data.addChat,
-      })?.filter((chat) => chat?.user?.id === sender?.id)[0];
+      })?.filter((chat: IChat) => chat?.user?.id === sender?.id)[0];
       if (send.replaceAll(" ", "") !== "") await handleMessageAdd(chat);
     },
     onError(errorData) {
@@ -71,11 +70,11 @@ export const useMessageInput = (
   });
 
   //add emoji in text function
-  const handleEmoji = (emoji) => {
+  const handleEmoji = (emoji): void => {
     setSend(send + String(emoji.native));
   };
   //add chat with user
-  const handleAddChat = async () => {
+  const handleAddChat = async (): Promise<void> => {
     await mutationFunctionAddChat({
       variables: {
         chat: { sender: Number(user?.id), recipient: Number(sender?.id) },
@@ -83,7 +82,7 @@ export const useMessageInput = (
     });
   };
   //function edit message
-  const handleMessageUpdate = async () => {
+  const handleMessageUpdate = async (): Promise<void> => {
     if (chat) {
       setSend("");
       await mutationFunctionUpdateMessage({
@@ -100,7 +99,7 @@ export const useMessageInput = (
     }
   };
   //function add message
-  const handleMessageAdd = async (chat) => {
+  const handleMessageAdd = async (chat: IChat): Promise<void> => {
     if (chat) {
       setSend("");
       await mutationFunctionAddMessage({
@@ -117,7 +116,7 @@ export const useMessageInput = (
     }
   };
   //send processing function
-  const handleSend = async (e) => {
+  const handleSend = async (e): Promise<void> => {
     if (chat) {
       if (message) {
         if (e.code === "Enter") {
@@ -139,7 +138,7 @@ export const useMessageInput = (
     }
   };
   //send processing function for click
-  const handleSendClick = async () => {
+  const handleSendClick = async (): Promise<void> => {
     if (chat) {
       if (message) {
         edit && (await handleMessageUpdate());

@@ -7,17 +7,19 @@ import TextareaAutosize from "react-textarea-autosize";
 import { useAppDispatch, useAppSelector, useWindowSize } from "utils/hooks";
 import { IChat, IUser } from "utils/interface";
 import {
+  getMessageEdit,
+  getUser,
+  getRecipient,
+  getChat,
+  getTabIndexEighth,
+  getTabIndexSixth,
+  getTabIndexFirst,
+} from "store/select";
+import {
   actionAddTabIndexEighth,
   actionAddTabIndexFirst,
   actionAddTabIndexSixth,
-  getChat,
-  getMessageEdit,
-  getRecipient,
-  getTabIndexEighth,
-  getTabIndexFirst,
-  getTabIndexSixth,
-  getUser,
-} from "store";
+} from "store/slice";
 import { EditIcon, RemoveIcon, ReplyIcon, SendIcon, SmileIcon } from "assets";
 
 import { useMessageInput } from "./useMessageInput";
@@ -53,6 +55,16 @@ export const MessageInput = ({
   //all functional what need work for input message
   const { handleEmoji, handleSend, handleSendClick, handleRemoveEditMessage } =
     useMessageInput(chat, send, sender, setSend, message, user, Boolean(edit));
+
+  const handleButtonOpenEmoji = (): void => {
+    setEmoji(!emoji);
+    dispatch(actionAddTabIndexEighth(tabIndexEighth === 0 ? -1 : 0));
+    dispatch(actionAddTabIndexFirst(tabIndexFirst === 0 ? -1 : 0));
+    dispatch(actionAddTabIndexSixth(tabIndexSixth === 0 ? -1 : 0));
+    if (windowSize[0] < 1000) {
+      dispatch(actionAddTabIndexFirst(-1));
+    }
+  };
 
   //makes sure that in editing, if editing is true, then it adds text to the field, if not, it makes it empty
   useEffect(() => {
@@ -123,19 +135,11 @@ export const MessageInput = ({
       <button
         className={cn(styles.smileIconWrapper)}
         tabIndex={tabIndexEighth === -1 ? (tabIndexSixth === 0 ? 0 : -1) : 0}
-        onClick={() => {
-          setEmoji(!emoji);
-          dispatch(actionAddTabIndexEighth(tabIndexEighth === 0 ? -1 : 0));
-          dispatch(actionAddTabIndexFirst(tabIndexFirst === 0 ? -1 : 0));
-          dispatch(actionAddTabIndexSixth(tabIndexSixth === 0 ? -1 : 0));
-          if (windowSize[0] < 1000) {
-            dispatch(actionAddTabIndexFirst(-1));
-          }
-        }}
+        onClick={handleButtonOpenEmoji}
       >
         <SmileIcon
           className={cn(styles.smileIcon, {
-            [styles.emojiIconOn]: emoji === true,
+            [styles.emojiIconOn]: emoji,
           })}
         />
       </button>
@@ -148,7 +152,7 @@ export const MessageInput = ({
       </button>
       <div
         className={cn(styles.emojiWrapper, {
-          [styles.emojiWrapperOn]: emoji === true,
+          [styles.emojiWrapperOn]: emoji,
         })}
         tabIndex={tabIndexEighth}
       >

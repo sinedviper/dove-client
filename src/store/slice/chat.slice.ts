@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { IChat } from "utils/interface";
-import { RootState } from "store";
 
 interface IChatsState {
   chats: IChat[] | undefined;
@@ -34,5 +33,3 @@ export const chatsReducer = chatsSlice.reducer;
 
 export const { actionClearChats, actionAddChats, actionUpdateChatsMessage } =
   chatsSlice.actions;
-
-export const getChat = (state: RootState) => state.chats.chats;

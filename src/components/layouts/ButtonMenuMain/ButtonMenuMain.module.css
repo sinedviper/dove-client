@@ -34,9 +34,17 @@
   height: 22px;
 }
 
+.contact path {
+  fill: var(--icon-second);
+}
+
 .logout {
   width: 21px;
   height: 21px;
+}
+
+.logout path {
+  fill: var(--icon-second);
 }
 
 .cardIcon path {

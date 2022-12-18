@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { actionAddError, actionAddFetch, actionDeleteError } from "store";
+import { actionAddError, actionAddFetch, actionDeleteError } from "store/slice";
 import { useAppDispatch } from "utils/hooks";
 
 //take string and push in notification, then delete this notification

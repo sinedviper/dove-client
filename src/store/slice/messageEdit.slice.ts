@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { IMessage } from "utils/interface";
-import { RootState } from "store";
 
 interface IMessageState {
   message: {
@@ -32,5 +31,3 @@ export const messageEditReducer = messageEditSlice.reducer;
 
 export const { actionClearMessageEdit, actionAddMessageEdit } =
   messageEditSlice.actions;
-
-export const getMessageEdit = (state: RootState) => state.message;

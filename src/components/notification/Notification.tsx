@@ -2,8 +2,9 @@ import React from "react";
 import cn from "classnames";
 
 import { useAppDispatch, useAppSelector } from "utils/hooks";
-import { actionDeleteError, getCopy, getErrors, getLoading } from "store";
 import { CopyIcon, LoadingIcon, InfoIcon, RemoveIcon } from "assets";
+import { getErrors, getLoading, getCopy } from "store/select";
+import { actionDeleteError } from "store/slice";
 
 import { NotificationProps } from "./Notification.props";
 import styles from "./Notification.module.css";
@@ -18,7 +19,7 @@ export const Notification = ({
   const loading: boolean = useAppSelector(getLoading);
   const copy: boolean = useAppSelector(getCopy);
   //remove error layout
-  const handleRemove = (id) => {
+  const handleRemove = (id: number): void => {
     dispatch(actionDeleteError(id));
   };
 

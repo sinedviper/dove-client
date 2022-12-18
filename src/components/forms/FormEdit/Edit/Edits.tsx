@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import cn from "classnames";
 
 import { useAppSelector } from "utils/hooks";
-import { getMenuEdit, getUser } from "store";
+import { getMenuEdit, getUser } from "store/select";
 import { IUser } from "utils/interface";
 
 import { EditsHeader } from "../EditHeader/EditsHeader";
@@ -78,7 +78,7 @@ export const Edits = ({ className, ...props }: EditsProps): JSX.Element => {
   return (
     <section
       className={cn(className, styles.editWrapper, {
-        [styles.editWrapperOpen]: edit === true,
+        [styles.editWrapperOpen]: edit,
       })}
       {...props}
     >

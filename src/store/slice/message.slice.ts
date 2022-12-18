@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { IMessage } from "utils/interface";
-import { RootState } from "store";
 
 interface IMessageState {
   messages: IMessage[] | undefined;
@@ -33,7 +32,3 @@ export const messagesReducer = messagesSlice.reducer;
 
 export const { actionClearMessages, actionAddMessages, actionAddMessagesLast } =
   messagesSlice.actions;
-
-export const getMessages = (state: RootState) => state.messages.messages;
-export const getMessagesBefore = (state: RootState) =>
-  state.messages.messagesBefore;

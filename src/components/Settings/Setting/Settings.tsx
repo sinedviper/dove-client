@@ -13,14 +13,9 @@ import {
 } from "utils/hooks";
 import { deleteUser } from "resolvers/user";
 import { deleteUpload } from "resolvers/upload";
-import {
-  actionAddCopy,
-  actionAddImageUser,
-  getImageUser,
-  getMenuSetting,
-  getUser,
-} from "store";
-import axios from "../../../axios";
+import { getUser, getMenuSetting, getImageUser } from "store/select";
+import { actionAddImageUser, actionAddCopy } from "store/slice";
+import { axiosSet } from "utils/service";
 
 import { SettingsImage } from "../SettingImage/SettingsImage";
 import { SettingsInfo } from "../SettingsInfo/SettingsInfo";
@@ -72,15 +67,17 @@ export const Settings = ({
     dispatch(actionAddCopy(false));
   }, 3000);
   //copy string
-  const handleCopy = (value: string) => {
+  const handleCopy = (value: string): void => {
     navigator.clipboard.writeText(value);
     dispatch(actionAddCopy(true));
     debouncedMutation();
   };
   //delete user function
-  const handleRemoveUser = async () => await mutationFunction();
+  const handleRemoveUser = async (): Promise<void> => {
+    await mutationFunction();
+  };
   //load img function in server
-  const handleLoadPhoto = async (e) => {
+  const handleLoadPhoto = async (e): Promise<void> => {
     const formData = new FormData();
     const file = e.target.files[0];
     if (e.target.files[0].size > 3000000) {
@@ -89,13 +86,16 @@ export const Settings = ({
     }
     if (e.target.files[0].size < 3000000) {
       formData.append("image", file);
-      const { data } = await axios.post("/upload", formData);
+      const { data } = await axiosSet.post("/upload", formData);
       auhtorization({ data, actionAdd: actionAddImageUser });
       e.target.value = null;
     }
   };
   //delete photo
-  const handleRemovePhoto = async (idPhoto: number, file: string) => {
+  const handleRemovePhoto = async (
+    idPhoto: number,
+    file: string
+  ): Promise<void> => {
     await mutationFunctionDeletePhoto({
       variables: { idPhoto: Number(idPhoto), file: String(file) },
     });
@@ -104,8 +104,8 @@ export const Settings = ({
   return (
     <section
       className={cn(className, styles.settingsWrapper, {
-        [styles.settingsWrapperOpen]: !profile && settings === true,
-        [styles.profile]: profile === true,
+        [styles.settingsWrapperOpen]: !profile && settings,
+        [styles.profile]: profile,
       })}
       {...props}
     >

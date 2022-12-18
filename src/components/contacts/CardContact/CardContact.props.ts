@@ -5,6 +5,6 @@ export interface CardContactProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLLIElement> {
   contact: IUser;
   handleFocus?: (contact: IUser) => void;
-  setValue: Function;
+  setValue: (val: string) => void;
   search?: boolean;
 }

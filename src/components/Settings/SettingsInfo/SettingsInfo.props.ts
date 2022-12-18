@@ -6,8 +6,8 @@ export interface SettingsInfoProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   imageUser: IImage[] | undefined;
   user: IUser | undefined;
-  handleRemovePhoto: Function;
+  handleRemovePhoto: (id: number, file: string) => void;
   profile: boolean;
   handleLoadPhoto: (e: any) => void;
-  handleCopy: Function;
+  handleCopy: (val: string) => void;
 }

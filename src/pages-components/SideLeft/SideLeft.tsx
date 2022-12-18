@@ -13,7 +13,8 @@ import {
   useExit,
   useWindowSize,
 } from "utils/hooks";
-import { useTheme, theme, animation } from "utils/context";
+import { useTheme } from "utils/context";
+import { theme, animation } from "utils/constants";
 import { IUser } from "utils/interface";
 import { getContact } from "resolvers/contacts";
 import { updateUserOnline } from "resolvers/user";
@@ -23,19 +24,21 @@ import { Edits } from "components/forms";
 import { Chats } from "components/chats";
 import { Settings, Notification } from "components";
 import {
-  actionAddChats,
-  actionAddContact,
-  actionAddFetch,
-  actionAddLoading,
-  actionAddTabIndexSixth,
-  actionAddUser,
-  actionMenuBugs,
-  actionMenuMain,
   getFetch,
+  getUser,
   getMenuMain,
   getTabIndexFourth,
-  getUser,
-} from "store";
+} from "store/select";
+import {
+  actionAddUser,
+  actionAddContact,
+  actionAddFetch,
+  actionAddChats,
+  actionMenuMain,
+  actionAddLoading,
+  actionAddTabIndexSixth,
+  actionMenuBugs,
+} from "store/slice";
 
 import { SideLeftProps } from "./SideLeft.props";
 import styles from "./SideLeft.module.css";
@@ -96,6 +99,13 @@ export const SideLeft = ({
     mutationUserOnlineFunction({ variables: { input: { online: "ping" } } });
   }, 300000);
 
+  const userOnlineUpdate = () =>
+    user?.online && minutesFormat(new Date(), new Date(user?.online)) > 4
+      ? mutationUserOnlineFunction({
+          variables: { input: { online: "ping" } },
+        })
+      : debouncedMutation;
+
   //here if size many 1000 to block left have show in display
   useEffect(() => {
     if (sizeWindow[0] > 1000) {
@@ -143,36 +153,15 @@ export const SideLeft = ({
   return (
     <main
       className={cn(className, styles.main)}
-      onMouseMove={() => {
-        return user?.online &&
-          minutesFormat(new Date(), new Date(user?.online)) > 4
-          ? mutationUserOnlineFunction({
-              variables: { input: { online: "ping" } },
-            })
-          : debouncedMutation;
-      }}
-      onKeyDown={() => {
-        return user?.online &&
-          minutesFormat(new Date(), new Date(user?.online)) > 4
-          ? mutationUserOnlineFunction({
-              variables: { input: { online: "ping" } },
-            })
-          : debouncedMutation;
-      }}
-      onTouchStart={() => {
-        return user?.online &&
-          minutesFormat(new Date(), new Date(user?.online)) > 4
-          ? mutationUserOnlineFunction({
-              variables: { input: { online: "ping" } },
-            })
-          : debouncedMutation;
-      }}
+      onMouseMove={userOnlineUpdate}
+      onKeyDown={userOnlineUpdate}
+      onTouchStart={userOnlineUpdate}
       {...props}
     >
       <Notification />
       <section
         className={cn(styles.chatWrapper, {
-          [styles.chatWrapperOn]: main === true,
+          [styles.chatWrapperOn]: main,
         })}
       >
         <Chats searchContact={searchContact} />

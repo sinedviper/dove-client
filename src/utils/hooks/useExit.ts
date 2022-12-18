@@ -7,7 +7,7 @@ import {
   actionClearMessages,
   actionClearRecipient,
   actionClearUser,
-} from "store";
+} from "store/slice";
 
 //that hook for clere store and delete token when user exit
 export const useExit = () => {

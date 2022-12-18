@@ -14,12 +14,12 @@ import {
 import { IUser } from "utils/interface";
 import { deleteContact } from "resolvers/contacts";
 import { ButtonMenu } from "components/layouts";
+import { getUser } from "store/select";
 import {
   actionAddContact,
   actionAddTabIndexFirst,
   actionAddTabIndexSixth,
-  getUser,
-} from "store";
+} from "store/slice";
 
 import { CardContactProps } from "./CardContact.props";
 import styles from "./CardContact.module.css";
@@ -56,7 +56,7 @@ export const CardContact = ({
   const [click, setClick] = useState<boolean>(false);
   let timer: any = undefined;
   //function delete contact
-  const handleDeleteContact = async () => {
+  const handleDeleteContact = async (): Promise<void> => {
     if (!search) {
       await mutationFunctionDelete({
         variables: {
@@ -68,56 +68,60 @@ export const CardContact = ({
 
   const color = colorCard(contact?.name.toUpperCase().split("")[0]);
 
+  const handleOnKeyDown = (e): void => {
+    if (e.key === "Enter") {
+      handleFocus && handleFocus(contact);
+      if (sizeWindow[0] < 1000) {
+        dispatch(actionAddTabIndexFirst(-1));
+        dispatch(actionAddTabIndexSixth(0));
+      }
+    }
+    if (e.key === "Delete") {
+      setMenu(!menu);
+    }
+  };
+
+  const handleOnTouchEnd = (): void => {
+    setClick(false);
+    if (!menu) {
+      handleFocus && handleFocus(contact);
+      clearTimeout(timer);
+    }
+  };
+
+  const handleMouseMove = (e): void => {
+    if (!menu) {
+      setTop(e.nativeEvent.layerY);
+      if (e.nativeEvent.layerX > 210) {
+        setLeft(e.nativeEvent.layerX - 200);
+      } else setLeft(e.nativeEvent.layerX);
+    }
+  };
+
+  const handleOnTouchStart = (): void => {
+    setClick(true);
+    timer = setTimeout(() => {
+      setMenu(true);
+    }, 1000);
+  };
+
   return (
     <li
       {...props}
       className={cn(className, styles.contacts, {
-        [styles.contactActive]: click === true,
+        [styles.contactActive]: click,
       })}
-      onKeyDown={(e) => {
-        if (e.key === "Enter") {
-          handleFocus && handleFocus(contact);
-          if (sizeWindow[0] < 1000) {
-            dispatch(actionAddTabIndexFirst(-1));
-            dispatch(actionAddTabIndexSixth(0));
-          }
-        }
-        if (e.key === "Delete") {
-          setMenu(!menu);
-        }
-      }}
+      onKeyDown={handleOnKeyDown}
       onMouseDown={(e) => {
         if (e.buttons === 2) {
           setMenu(true);
         }
       }}
-      onTouchStart={() => {
-        setClick(true);
-        timer = setTimeout(() => {
-          setMenu(true);
-        }, 1000);
-      }}
-      onClick={() => {
-        handleFocus && handleFocus(contact);
-      }}
-      onMouseUp={() => {
-        setClick(false);
-      }}
-      onTouchEnd={() => {
-        setClick(false);
-        if (!menu) {
-          handleFocus && handleFocus(contact);
-          clearTimeout(timer);
-        }
-      }}
-      onMouseMoveCapture={(e: any) => {
-        if (!menu) {
-          setTop(e.nativeEvent.layerY);
-          if (e.nativeEvent.layerX > 210) {
-            setLeft(e.nativeEvent.layerX - 200);
-          } else setLeft(e.nativeEvent.layerX);
-        }
-      }}
+      onTouchStart={handleOnTouchStart}
+      onClick={() => handleFocus && handleFocus(contact)}
+      onMouseUp={() => setClick(false)}
+      onTouchEnd={handleOnTouchEnd}
+      onMouseMoveCapture={handleMouseMove}
       onMouseLeave={() => setMenu(false)}
       onContextMenu={(e) => {
         e.preventDefault();
@@ -165,7 +169,7 @@ export const CardContact = ({
           left={left}
           handleDelete={handleDeleteContact}
           text={"Delete"}
-          tabIndex={menu === true ? 0 : -1}
+          tabIndex={menu ? 0 : -1}
         />
       )}
     </li>

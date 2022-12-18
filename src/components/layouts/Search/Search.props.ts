@@ -6,7 +6,7 @@ export interface SearchProps
     HTMLInputElement
   > {
   value: string;
-  setValue: Function;
-  setSearchUser?: Function;
-  setMenu?: Function;
+  setValue: (val: string) => void;
+  setSearchUser?: (val: boolean) => void;
+  setMenu?: (val: boolean) => void;
 }

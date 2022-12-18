@@ -7,7 +7,7 @@ import { Notification } from "components";
 import { SideRight, SideLeft } from "pages-components";
 import { IUser } from "utils/interface";
 import { useAppSelector } from "utils/hooks";
-import { getMenuBugs, getUser } from "store";
+import { getMenuBugs, getUser } from "store/select";
 import { TRACKING_ID } from "utils/constants";
 
 ReactGA.initialize(TRACKING_ID);

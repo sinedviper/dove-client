@@ -27,8 +27,8 @@ export const ButtonMenuMain = ({
 
   return (
     <button
-      className={cn(className, styles.menuCard, styles.menuCardCheck, {
-        [styles.menuClick]: click === true,
+      className={cn(className, styles.menuCard, {
+        [styles.menuClick]: click,
       })}
       onClick={handleAction}
       onMouseDown={() => setClick(true)}
@@ -36,25 +36,19 @@ export const ButtonMenuMain = ({
       {...props}
     >
       <div>
-        {action === "contact" && (
-          <ContactsIcon className={cn(styles.cardIcon, styles.contact)} />
-        )}
+        {action === "contact" && <ContactsIcon className={styles.contact} />}
         {action === "setting" && <SettingsIcon className={styles.cardIcon} />}
-        {action === "theme" && <MoonIcon className={cn(styles.cardIcon)} />}
-        {action === "animation" && (
-          <MeteorIcon className={cn(styles.cardIcon)} />
-        )}
-        {action === "out" && (
-          <LogoutIcon className={cn(styles.cardIcon, styles.logout)} />
-        )}
-        {action === "saved" && <BookmarkIcon className={cn(styles.cardIcon)} />}
-        {action === "bugs" && <BugIcon className={cn(styles.cardIcon)} />}
+        {action === "theme" && <MoonIcon className={styles.cardIcon} />}
+        {action === "animation" && <MeteorIcon className={styles.cardIcon} />}
+        {action === "out" && <LogoutIcon className={styles.logout} />}
+        {action === "saved" && <BookmarkIcon className={styles.cardIcon} />}
+        {action === "bugs" && <BugIcon className={styles.cardIcon} />}
         <span>{text}</span>
       </div>
       {animation !== undefined && (
         <div
           className={cn(styles.checkBox, {
-            [styles.checkBoxClick]: animation === true,
+            [styles.checkBoxClick]: animation,
           })}
         >
           <input type='checkbox' checked={animation} onChange={() => {}} />
@@ -64,7 +58,7 @@ export const ButtonMenuMain = ({
       {theme !== undefined && (
         <div
           className={cn(styles.checkBox, {
-            [styles.checkBoxClick]: theme === true,
+            [styles.checkBoxClick]: theme,
           })}
         >
           <input type='checkbox' checked={theme} onChange={() => {}} />

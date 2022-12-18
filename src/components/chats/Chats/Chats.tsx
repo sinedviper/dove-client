@@ -8,32 +8,34 @@ import { IChat, IUser } from "utils/interface";
 import {
   useAppDispatch,
   useAppSelector,
-  useAuthorizationSearch,
+  useAuthorizationData,
   useWindowSize,
 } from "utils/hooks";
 import { getUsersSearch } from "resolvers/user";
 import { LoadingIcon } from "assets";
 import { CardChat, ChatsHeader } from "components/chats";
 import { CardContact } from "components/contacts";
+import { ContactSearch } from "components/layouts";
 import {
-  actionAddRecipient,
-  actionAddTabIndexFirst,
-  actionAddTabIndexSecond,
-  actionAddTabIndexSixth,
-  actionClearMessages,
-  actionClearRecipient,
-  actionMenuMain,
-  getChat,
-  getContacts,
   getFetch,
+  getUser,
+  getContacts,
+  getChat,
   getTabIndexFirst,
   getTabIndexSecond,
-  getUser,
-} from "store";
+} from "store/select";
+import {
+  actionClearMessages,
+  actionClearRecipient,
+  actionAddRecipient,
+  actionAddTabIndexFirst,
+  actionAddTabIndexSixth,
+  actionAddTabIndexSecond,
+  actionMenuMain,
+} from "store/slice";
 
 import { ChatsProps } from "./Chats.props";
 import styles from "./Chats.module.css";
-import { ContactSearch } from "components/layouts";
 
 export const Chats = ({
   searchContact,
@@ -44,7 +46,7 @@ export const Chats = ({
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const windowSize = useWindowSize();
-  const autorizationSearch = useAuthorizationSearch();
+  const autorizationSearch = useAuthorizationData();
   //store
   const fetch: boolean = useAppSelector(getFetch);
   const user: IUser | undefined = useAppSelector(getUser);
@@ -65,17 +67,11 @@ export const Chats = ({
   const [searchUsers, setSearchUsers] = useState<IUser[] | undefined>(
     undefined
   );
-  // //store
-  // let searchUsers: IUser[] | undefined = dataSearch
-  //   ? autorizationSearch({
-  //       data: dataSearch?.searchUsers,
-  //     })
-  //   : undefined;
 
   const [swiper, setSwiper] = useState<boolean>(false);
   const [searchUser, setSearchUser] = useState<boolean>(false);
   //function to process the request when clicking on the chat
-  const handleFocus = async (contact: IUser) => {
+  const handleFocus = async (contact: IUser): Promise<void> => {
     setSearchUsers(undefined);
     if (String(contact.username) !== String(username)) {
       setValueAll("");
@@ -126,7 +122,7 @@ export const Chats = ({
       />
       <section
         className={cn(styles.searchWrapperUsers, {
-          [styles.searchWrapperUsersOn]: searchUser === true,
+          [styles.searchWrapperUsersOn]: searchUser,
         })}
       >
         {contacts?.length !== 0 && valueAll.replaceAll(" ", "") === "" && (
@@ -139,7 +135,6 @@ export const Chats = ({
             {contacts &&
               contacts.map((contact) => (
                 <ContactSearch
-                  dispatch={dispatch}
                   handleFocus={handleFocus}
                   contact={contact}
                   tabIndex={tabIndexSecond}
@@ -173,7 +168,7 @@ export const Chats = ({
       </section>
       <section
         className={cn(styles.contactsList, {
-          [styles.swiper]: swiper === true,
+          [styles.swiper]: swiper,
         })}
       >
         <ul>
