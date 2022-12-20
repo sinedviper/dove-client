@@ -114,7 +114,7 @@ export const MessageCard = ({
     messageSenderUsernameNext !== messageSenderUsername &&
     messageSenderUsernameNext !== undefined;
 
-  const styleTailMath = (): void => {
+  const styleTailMath = () => {
     if (messageSenderUsernameNext !== user?.username && matchUserUsername()) {
       return styles.messageStyleLeft;
     }
