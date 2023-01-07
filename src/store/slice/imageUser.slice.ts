@@ -1,27 +1,25 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit'
 
-import { IImage } from "utils/interface";
+import { IImage } from 'utils/interface'
 
 interface IImagesState {
-  images: IImage[] | undefined;
+  images: IImage[] | undefined
 }
 
 const initialState: IImagesState = {
   images: undefined,
-};
+}
 
 export const imageUserSlice = createSlice({
   initialState,
-  name: "@@imageUserSlice",
+  name: '@@imageUserSlice',
   reducers: {
-    actionClearImageUser: () => initialState,
-    actionAddImageUser: (state, action) => {
-      state.images = action.payload;
+    actionAddImageUser: (state: Draft<IImagesState>, action: PayloadAction<IImage[]>) => {
+      state.images = action.payload
     },
   },
-});
+})
 
-export const iamgeUserReducer = imageUserSlice.reducer;
+export const imageUserReducer = imageUserSlice.reducer
 
-export const { actionClearImageUser, actionAddImageUser } =
-  imageUserSlice.actions;
+export const { actionAddImageUser } = imageUserSlice.actions

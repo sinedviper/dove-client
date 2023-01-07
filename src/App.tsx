@@ -49,7 +49,7 @@ function App(): JSX.Element {
             <Route path=':username' element={<SideRight />} />
           </Route>
           <Route path='/login' element={<LoginPage />} />
-          <Route path='/sigup' element={<SignUpPage />} />
+          <Route path='/signup' element={<SignUpPage />} />
           <Route path='/confirmation' element={<ConfirmationPage />} />
           <Route path='/bugs' element={<BugsPage />} />
         </Routes>

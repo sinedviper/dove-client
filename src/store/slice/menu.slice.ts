@@ -1,13 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit'
 
 interface IMenuState {
-  setting: boolean;
-  contact: boolean;
-  edit: boolean;
-  main: boolean;
-  bugs: boolean;
-  menuMessage: number | null;
-  haveMessage: Date | null;
+  setting: boolean
+  contact: boolean
+  edit: boolean
+  main: boolean
+  bugs: boolean
+  menuMessage: number | null
+  haveMessage: Date | null
 }
 
 const initialState: IMenuState = {
@@ -18,41 +18,39 @@ const initialState: IMenuState = {
   bugs: false,
   menuMessage: null,
   haveMessage: null,
-};
+}
 
 export const menuSlice = createSlice({
   initialState,
-  name: "@@menuSlice",
+  name: '@@menuSlice',
   reducers: {
-    actionMenuClear: () => initialState,
-    actionMenuContact: (state, action) => {
-      state.contact = action.payload;
+    actionMenuContact: (state: Draft<IMenuState>, action: PayloadAction<boolean>) => {
+      state.contact = action.payload
     },
-    actionMenuSetting: (state, action) => {
-      state.setting = action.payload;
+    actionMenuSetting: (state: Draft<IMenuState>, action: PayloadAction<boolean>) => {
+      state.setting = action.payload
     },
-    actionMenuEdit: (state, action) => {
-      state.edit = action.payload;
+    actionMenuEdit: (state: Draft<IMenuState>, action: PayloadAction<boolean>) => {
+      state.edit = action.payload
     },
-    actionMenuMain: (state, action) => {
-      state.main = action.payload;
+    actionMenuMain: (state: Draft<IMenuState>, action: PayloadAction<boolean>) => {
+      state.main = action.payload
     },
-    actionMenuBugs: (state, action) => {
-      state.bugs = action.payload;
+    actionMenuBugs: (state: Draft<IMenuState>, action: PayloadAction<boolean>) => {
+      state.bugs = action.payload
     },
-    actionMenuMessage: (state, action) => {
-      state.menuMessage = action.payload;
+    actionMenuMessage: (state: Draft<IMenuState>, action: PayloadAction<number | null>) => {
+      state.menuMessage = action.payload
     },
-    actionHaveMessage: (state, action) => {
-      state.haveMessage = action.payload;
+    actionHaveMessage: (state: Draft<IMenuState>, action: PayloadAction<Date>) => {
+      state.haveMessage = action.payload
     },
   },
-});
+})
 
-export const menuReducer = menuSlice.reducer;
+export const menuReducer = menuSlice.reducer
 
 export const {
-  actionMenuClear,
   actionMenuContact,
   actionMenuSetting,
   actionMenuEdit,
@@ -60,4 +58,4 @@ export const {
   actionMenuBugs,
   actionMenuMessage,
   actionHaveMessage,
-} = menuSlice.actions;
+} = menuSlice.actions

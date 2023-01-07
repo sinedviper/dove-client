@@ -25,7 +25,7 @@ import {
   userReducer,
   recipientReducer,
   menuReducer,
-  iamgeUserReducer,
+  imageUserReducer,
 } from "./slice";
 import { notificationReducer } from "./slice/notification.slice";
 
@@ -38,7 +38,7 @@ const reducer = combineReducers({
   recipient: recipientReducer,
   menu: menuReducer,
   notification: notificationReducer,
-  imageUser: iamgeUserReducer,
+  imageUser: imageUserReducer,
   tabIndexGroupe: tabIndexGroupeReducer,
 });
 

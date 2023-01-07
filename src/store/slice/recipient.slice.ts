@@ -1,27 +1,26 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit'
 
-import { IUser } from "utils/interface";
+import { IUser } from 'utils/interface'
 
 interface IRecipientState {
-  recipient: IUser | undefined;
+  recipient: IUser | undefined
 }
 
 const initialState: IRecipientState = {
   recipient: undefined,
-};
+}
 
 export const recipientSlice = createSlice({
   initialState,
-  name: "@@recipientSlice",
+  name: '@@recipientSlice',
   reducers: {
     actionClearRecipient: () => initialState,
-    actionAddRecipient: (state, action) => {
-      state.recipient = action.payload;
+    actionAddRecipient: (state: Draft<IRecipientState>, action: PayloadAction<IUser>) => {
+      state.recipient = action.payload
     },
   },
-});
+})
 
-export const recipientReducer = recipientSlice.reducer;
+export const recipientReducer = recipientSlice.reducer
 
-export const { actionClearRecipient, actionAddRecipient } =
-  recipientSlice.actions;
+export const { actionClearRecipient, actionAddRecipient } = recipientSlice.actions

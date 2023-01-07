@@ -20,7 +20,7 @@ export const useMessageInput = (
   send: string,
   sender: IUser | undefined,
   setSend: (send: string) => void,
-  message: IMessage | undefined,
+  message: Pick<IMessage, "chatId" | "id" | "text"> | undefined,
   user: IUser | undefined,
   edit: boolean
 ) => {

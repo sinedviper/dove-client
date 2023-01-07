@@ -1,15 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit'
 
 interface error {
-  text: string;
-  id: any;
+  text: string
+  id: string
 }
 
 interface INotificationState {
-  loading: boolean;
-  fetch: boolean;
-  errors: error[];
-  copy: boolean;
+  loading: boolean
+  fetch: boolean
+  errors: error[]
+  copy: boolean
 }
 
 const initialState: INotificationState = {
@@ -17,34 +17,32 @@ const initialState: INotificationState = {
   fetch: false,
   errors: [],
   copy: false,
-};
+}
 
 export const notificationSlice = createSlice({
   initialState,
-  name: "@@notificationSlice",
+  name: '@@notificationSlice',
   reducers: {
     actionClearNotification: () => initialState,
-    actionAddLoading: (state, action) => {
-      state.loading = action.payload;
+    actionAddLoading: (state: Draft<INotificationState>, action: PayloadAction<boolean>) => {
+      state.loading = action.payload
     },
-    actionAddCopy: (state, action) => {
-      state.copy = action.payload;
+    actionAddCopy: (state: Draft<INotificationState>, action: PayloadAction<boolean>) => {
+      state.copy = action.payload
     },
-    actionAddFetch: (state, action) => {
-      state.fetch = action.payload;
+    actionAddFetch: (state: Draft<INotificationState>, action: PayloadAction<boolean>) => {
+      state.fetch = action.payload
     },
-    actionAddError: (state, action) => {
-      state.errors.push(action.payload);
+    actionAddError: (state: Draft<INotificationState>, action: PayloadAction<error>) => {
+      state.errors.push(action.payload)
     },
-    actionDeleteError: (state, action) => {
-      state.errors = state.errors.filter(
-        (error) => String(error.id) !== String(action.payload)
-      );
+    actionDeleteError: (state: Draft<INotificationState>, action: PayloadAction<number>) => {
+      state.errors = state.errors.filter((error) => String(error.id) !== String(action.payload))
     },
   },
-});
+})
 
-export const notificationReducer = notificationSlice.reducer;
+export const notificationReducer = notificationSlice.reducer
 
 export const {
   actionClearNotification,
@@ -53,4 +51,4 @@ export const {
   actionAddError,
   actionDeleteError,
   actionAddCopy,
-} = notificationSlice.actions;
+} = notificationSlice.actions

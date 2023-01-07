@@ -3,7 +3,7 @@ export interface IMessage {
   id: number;
   text: string;
   senderMessage: IUser;
-  chatId: IChat;
+  chatId: IChat | number;
   read: boolean;
   reply: IMessage;
   createdAt: Date;

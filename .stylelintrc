@@ -1,0 +1,15 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-order-config-standard"
+  ],
+  "plugins": [
+    "stylelint-order"
+  ],
+  "rules": {
+    "selector-class-pattern": null,
+    "no-empty-source": null,
+    "no-descending-specificity": null,
+    "media-feature-parentheses-space-inside": "always"
+  }
+}

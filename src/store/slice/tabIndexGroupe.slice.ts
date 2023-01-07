@@ -1,16 +1,16 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit'
 
 interface ITabIndexGroupeState {
   tabIndexGroupe: {
-    tabIndexFirst: number;
-    tabIndexSecond: number;
-    tabIndexThree: number;
-    tabIndexFourth: number;
-    tabIndexFiveth: number;
-    tabIndexSixth: number;
-    tabIndexSeventh: number;
-    tabIndexEighth: number;
-  };
+    tabIndexFirst: number
+    tabIndexSecond: number
+    tabIndexThree: number
+    tabIndexFourth: number
+    tabIndexFiveth: number
+    tabIndexSixth: number
+    tabIndexSeventh: number
+    tabIndexEighth: number
+  }
 }
 
 const initialState: ITabIndexGroupeState = {
@@ -24,41 +24,65 @@ const initialState: ITabIndexGroupeState = {
     tabIndexSeventh: -1,
     tabIndexEighth: -1,
   },
-};
+}
 
 export const tabIndexGroupeSlice = createSlice({
   initialState,
-  name: "@@tabIndexGroupeSlice",
+  name: '@@tabIndexGroupeSlice',
   reducers: {
     actionClearTabIndexGroupe: () => initialState,
-    actionAddTabIndexFirst: (state, action) => {
-      state.tabIndexGroupe.tabIndexFirst = action.payload;
+    actionAddTabIndexFirst: (
+      state: Draft<ITabIndexGroupeState>,
+      action: PayloadAction<1 | 0 | -1>,
+    ) => {
+      state.tabIndexGroupe.tabIndexFirst = action.payload
     },
-    actionAddTabIndexSecond: (state, action) => {
-      state.tabIndexGroupe.tabIndexSecond = action.payload;
+    actionAddTabIndexSecond: (
+      state: Draft<ITabIndexGroupeState>,
+      action: PayloadAction<1 | 0 | -1>,
+    ) => {
+      state.tabIndexGroupe.tabIndexSecond = action.payload
     },
-    actionAddTabIndexThree: (state, action) => {
-      state.tabIndexGroupe.tabIndexThree = action.payload;
+    actionAddTabIndexThree: (
+      state: Draft<ITabIndexGroupeState>,
+      action: PayloadAction<1 | 0 | -1>,
+    ) => {
+      state.tabIndexGroupe.tabIndexThree = action.payload
     },
-    actionAddTabIndexFourth: (state, action) => {
-      state.tabIndexGroupe.tabIndexFourth = action.payload;
+    actionAddTabIndexFourth: (
+      state: Draft<ITabIndexGroupeState>,
+      action: PayloadAction<1 | 0 | -1>,
+    ) => {
+      state.tabIndexGroupe.tabIndexFourth = action.payload
     },
-    actionAddTabIndexFiveth: (state, action) => {
-      state.tabIndexGroupe.tabIndexFiveth = action.payload;
+    actionAddTabIndexFiveth: (
+      state: Draft<ITabIndexGroupeState>,
+      action: PayloadAction<1 | 0 | -1>,
+    ) => {
+      state.tabIndexGroupe.tabIndexFiveth = action.payload
     },
-    actionAddTabIndexSixth: (state, action) => {
-      state.tabIndexGroupe.tabIndexSixth = action.payload;
+    actionAddTabIndexSixth: (
+      state: Draft<ITabIndexGroupeState>,
+      action: PayloadAction<1 | 0 | -1>,
+    ) => {
+      state.tabIndexGroupe.tabIndexSixth = action.payload
     },
-    actionAddTabIndexSeventh: (state, action) => {
-      state.tabIndexGroupe.tabIndexSeventh = action.payload;
+    actionAddTabIndexSeventh: (
+      state: Draft<ITabIndexGroupeState>,
+      action: PayloadAction<1 | 0 | -1>,
+    ) => {
+      state.tabIndexGroupe.tabIndexSeventh = action.payload
     },
-    actionAddTabIndexEighth: (state, action) => {
-      state.tabIndexGroupe.tabIndexEighth = action.payload;
+    actionAddTabIndexEighth: (
+      state: Draft<ITabIndexGroupeState>,
+      action: PayloadAction<1 | 0 | -1>,
+    ) => {
+      state.tabIndexGroupe.tabIndexEighth = action.payload
     },
   },
-});
+})
 
-export const tabIndexGroupeReducer = tabIndexGroupeSlice.reducer;
+export const tabIndexGroupeReducer = tabIndexGroupeSlice.reducer
 
 export const {
   actionClearTabIndexGroupe,
@@ -70,4 +94,4 @@ export const {
   actionAddTabIndexSixth,
   actionAddTabIndexSeventh,
   actionAddTabIndexEighth,
-} = tabIndexGroupeSlice.actions;
+} = tabIndexGroupeSlice.actions

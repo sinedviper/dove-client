@@ -3,16 +3,17 @@ import React, { useContext } from "react";
 import { changeCssColor, changeCssTransition } from "utils/helpers";
 
 const ThemeContext = React.createContext<{
-  changeTheme: Function;
-  changeAnimation: Function;
+  changeTheme: (val:string)=>void;
+  changeAnimation: (val:string)=>void;
 } | null>(null);
 
-export const ThemeProvider = ({ children, ...props }) => {
-  const changeTheme = (name) => {
+
+export const ThemeProvider = ({ children, ...props }:{children: React.ReactNode}) => {
+  const changeTheme = (name:string) => {
     changeCssColor(name);
   };
 
-  const changeAnimation = (name) => {
+  const changeAnimation = (name: string) => {
     changeCssTransition(name);
   };
 
@@ -22,7 +23,5 @@ export const ThemeProvider = ({ children, ...props }) => {
     </ThemeContext.Provider>
   );
 };
-
-export default ThemeProvider;
 
 export const useTheme = () => useContext(ThemeContext);

@@ -1,12 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit'
 
-import { IMessage } from "utils/interface";
+import { IMessage } from 'utils/interface'
 
 interface IMessageState {
   message: {
-    message: IMessage | undefined;
-    edit: boolean | undefined;
-  };
+    message: Pick<IMessage, 'chatId' | 'id' | 'text'> | undefined
+    edit: boolean | undefined
+  }
 }
 
 const initialState: IMessageState = {
@@ -14,20 +14,22 @@ const initialState: IMessageState = {
     message: undefined,
     edit: undefined,
   },
-};
+}
 
 export const messageEditSlice = createSlice({
   initialState,
-  name: "@@messagesEditSlice",
+  name: '@@messagesEditSlice',
   reducers: {
     actionClearMessageEdit: () => initialState,
-    actionAddMessageEdit: (state, action) => {
-      state.message = action.payload;
+    actionAddMessageEdit: (
+      state: Draft<IMessageState>,
+      action: PayloadAction<{ message: Pick<IMessage, 'chatId' | 'id' | 'text'>; edit: boolean }>,
+    ) => {
+      state.message = action.payload
     },
   },
-});
+})
 
-export const messageEditReducer = messageEditSlice.reducer;
+export const messageEditReducer = messageEditSlice.reducer
 
-export const { actionClearMessageEdit, actionAddMessageEdit } =
-  messageEditSlice.actions;
+export const { actionClearMessageEdit, actionAddMessageEdit } = messageEditSlice.actions
