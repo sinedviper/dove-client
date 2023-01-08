@@ -1,11 +1,6 @@
-import { tabIndexGroupeReducer } from "./slice/tabIndexGroupe.slice";
-import {
-  Action,
-  configureStore,
-  ThunkAction,
-  combineReducers,
-} from "@reduxjs/toolkit";
-import storage from "redux-persist/lib/storage";
+import { tabIndexGroupeReducer } from './slice/tabIndexGroupe.slice'
+import { Action, configureStore, ThunkAction, combineReducers } from '@reduxjs/toolkit'
+import storage from 'redux-persist/lib/storage'
 import {
   persistStore,
   persistReducer,
@@ -15,7 +10,7 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
-} from "redux-persist";
+} from 'redux-persist'
 
 import {
   chatsReducer,
@@ -26,8 +21,8 @@ import {
   recipientReducer,
   menuReducer,
   imageUserReducer,
-} from "./slice";
-import { notificationReducer } from "./slice/notification.slice";
+} from './slice'
+import { notificationReducer } from './slice/notification.slice'
 
 const reducer = combineReducers({
   user: userReducer,
@@ -40,43 +35,43 @@ const reducer = combineReducers({
   notification: notificationReducer,
   imageUser: imageUserReducer,
   tabIndexGroupe: tabIndexGroupeReducer,
-});
+})
 
 const persistConfig = {
-  key: "root",
+  key: 'root',
   storage,
   blacklist: [
-    "errors",
-    "loading",
-    "copy",
-    "menu",
-    "message",
-    "tabIndexGroupe",
-    "fetch",
-    "imageSender",
-    "imageContact",
+    'errors',
+    'loading',
+    'copy',
+    'menu',
+    'message',
+    'tabIndexGroupe',
+    'fetch',
+    'imageSender',
+    'imageContact',
   ],
-};
+}
 
-const persistedReducer = persistReducer(persistConfig, reducer);
+const persistedReducer = persistReducer(persistConfig, reducer)
 
 export const store = configureStore({
   reducer: persistedReducer,
-  devTools: false,
+  devTools: true,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
-});
+})
 
-export const persistor = persistStore(store);
-export type AppDispatch = typeof store.dispatch;
-export type RootState = ReturnType<typeof store.getState>;
+export const persistor = persistStore(store)
+export type AppDispatch = typeof store.dispatch
+export type RootState = ReturnType<typeof store.getState>
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
   unknown,
   Action<string>
->;
+>

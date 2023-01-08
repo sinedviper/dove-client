@@ -1,47 +1,42 @@
-import React from "react";
-import cn from "classnames";
-import { useLazyQuery } from "@apollo/client";
+import React from 'react'
+import cn from 'classnames'
+import { useLazyQuery } from '@apollo/client'
 
-import { formatDay } from "utils/helpers";
-import { useAppSelector, useAuthorization, useError } from "utils/hooks";
-import { getfindMessageDate } from "resolvers/messages";
-import { getHaveMessage } from "store/select";
-import { actionAddMessagesLast } from "store/slice";
+import { formatDay } from 'utils/helpers'
+import { IMessage } from 'utils/interface'
+import { useAppSelector, useAuthorization, useError } from 'utils/hooks'
+import { getfindMessageDate } from 'resolvers/messages'
+import { getHaveMessage } from 'store/select'
+import { actionAddMessagesLast } from 'store/slice'
 
-import { MessageCard } from "../";
-import { MessageListProps } from "./MessageList.props";
-import styles from "./MessageList.module.css";
+import { MessageCard } from '../'
+import { MessageListProps } from './MessageList.props'
+import styles from './MessageList.module.css'
 
 export const MessageList = ({
   chat,
   user,
-  messagesBegore,
+  messagesBefore,
   messages,
   className,
   ...props
 }: MessageListProps): JSX.Element => {
-  const error = useError();
-  const authorization = useAuthorization();
+  const error = useError()
+  const authorization = useAuthorization()
 
-  const haveMessage: Date | null = useAppSelector(getHaveMessage);
+  const haveMessage = useAppSelector(getHaveMessage)
 
   const [getFindLastMessage] = useLazyQuery(getfindMessageDate, {
-    fetchPolicy: "network-only",
-    onCompleted(data) {
-      authorization({
-        data: data.findMessageDate,
-        actionAdd: actionAddMessagesLast,
-      });
-    },
+    fetchPolicy: 'network-only',
     onError(errorData) {
-      chat && error(errorData.message);
+      chat && error(errorData.message)
     },
-  });
+  })
 
   return (
-    <section className={styles.chatsWrapper} {...props}>
+    <section className={cn(className, styles.chatsWrapper)} {...props}>
       <ul className={cn(styles.messageWrapper)}>
-        {chat && haveMessage !== null ? (
+        {chat && haveMessage ? (
           <button
             tabIndex={-1}
             onClick={async () =>
@@ -53,32 +48,33 @@ export const MessageList = ({
                     senderMessage: Number(user?.id),
                   },
                 },
+              }).then((data) => {
+                authorization<IMessage[]>(data.data.findMessageDate, actionAddMessagesLast)
               })
             }
             className={styles.buttonLoadMessage}
           >
-            {messagesBegore !== undefined
+            {messagesBefore
               ? formatDay(new Date(haveMessage))
               : messages && formatDay(new Date(haveMessage))}
           </button>
         ) : (
-          ""
+          ''
         )}
-        {chat && messagesBegore && messagesBegore?.length !== 0 && (
+        {chat && messagesBefore && messagesBefore.length !== 0 && (
           <div className={styles.wrapperWithDate}>
             <p className={styles.dateMessage}>
-              {messagesBegore[0] &&
-                formatDay(new Date(messagesBegore[0]?.createdAt))}
+              {messagesBefore[0] && formatDay(new Date(messagesBefore[0]?.createdAt))}
             </p>
           </div>
         )}
         {chat &&
-          messagesBegore &&
-          messagesBegore?.map((message, index) => {
-            if (messagesBegore[index + 1]?.createdAt)
+          messagesBefore &&
+          messagesBefore.map((message, index) => {
+            if (messagesBefore[index + 1]?.createdAt)
               if (
                 new Date(message?.createdAt).getDate() !==
-                new Date(messagesBegore[index + 1]?.createdAt).getDate()
+                new Date(messagesBefore[index + 1]?.createdAt).getDate()
               ) {
                 return (
                   <div key={message?.id} className={styles.wrapperWithDate}>
@@ -87,15 +83,13 @@ export const MessageList = ({
                       message={message}
                       index={index}
                       user={user}
-                      messages={messagesBegore}
+                      messages={messagesBefore}
                     />
                     <p className={styles.dateMessage}>
-                      {formatDay(
-                        new Date(messagesBegore[index + 1]?.createdAt)
-                      )}
+                      {formatDay(new Date(messagesBefore[index + 1]?.createdAt))}
                     </p>
                   </div>
-                );
+                )
               }
             return (
               <MessageCard
@@ -103,10 +97,10 @@ export const MessageList = ({
                 message={message}
                 index={index}
                 user={user}
-                messages={messagesBegore}
+                messages={messagesBefore}
                 key={message?.id}
               />
-            );
+            )
           })}
         {chat && messages && messages.length !== 0 && (
           <div className={styles.wrapperWithDate}>
@@ -115,9 +109,9 @@ export const MessageList = ({
             </p>
           </div>
         )}
-        {messages &&
-          chat &&
-          messages?.map((message, index) => {
+        {chat &&
+          messages &&
+          messages.map((message, index) => {
             if (messages[index + 1]?.createdAt)
               if (
                 new Date(message?.createdAt).getDate() !==
@@ -136,7 +130,7 @@ export const MessageList = ({
                       {formatDay(new Date(messages[index + 1].createdAt))}
                     </p>
                   </div>
-                );
+                )
               }
             return (
               <MessageCard
@@ -147,9 +141,9 @@ export const MessageList = ({
                 messages={messages}
                 key={message.id}
               />
-            );
+            )
           })}
       </ul>
     </section>
-  );
-};
+  )
+}

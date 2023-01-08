@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import cn from "classnames";
+import React, { useState } from 'react'
+import cn from 'classnames'
 
 import {
   BookmarkIcon,
@@ -9,10 +9,10 @@ import {
   MeteorIcon,
   MoonIcon,
   SettingsIcon,
-} from "assets";
+} from 'assets'
 
-import { ButtonMenuMainProps } from "./ButtonMenuMain.props";
-import styles from "./ButtonMenuMain.module.css";
+import { ButtonMenuMainProps } from './ButtonMenuMain.props'
+import styles from './ButtonMenuMain.module.css'
 
 export const ButtonMenuMain = ({
   handleAction,
@@ -23,7 +23,7 @@ export const ButtonMenuMain = ({
   className,
   ...props
 }: ButtonMenuMainProps): JSX.Element => {
-  const [click, setClick] = useState<boolean>(false);
+  const [click, setClick] = useState(false)
 
   return (
     <button
@@ -36,13 +36,13 @@ export const ButtonMenuMain = ({
       {...props}
     >
       <div>
-        {action === "contact" && <ContactsIcon className={styles.contact} />}
-        {action === "setting" && <SettingsIcon className={styles.cardIcon} />}
-        {action === "theme" && <MoonIcon className={styles.cardIcon} />}
-        {action === "animation" && <MeteorIcon className={styles.cardIcon} />}
-        {action === "out" && <LogoutIcon className={styles.logout} />}
-        {action === "saved" && <BookmarkIcon className={styles.cardIcon} />}
-        {action === "bugs" && <BugIcon className={styles.cardIcon} />}
+        {action === 'contact' && <ContactsIcon className={styles.contact} />}
+        {action === 'setting' && <SettingsIcon className={styles.cardIcon} />}
+        {action === 'theme' && <MoonIcon className={styles.cardIcon} />}
+        {action === 'animation' && <MeteorIcon className={styles.cardIcon} />}
+        {action === 'out' && <LogoutIcon className={styles.logout} />}
+        {action === 'saved' && <BookmarkIcon className={styles.cardIcon} />}
+        {action === 'bugs' && <BugIcon className={styles.cardIcon} />}
         <span>{text}</span>
       </div>
       {animation !== undefined && (
@@ -51,7 +51,13 @@ export const ButtonMenuMain = ({
             [styles.checkBoxClick]: animation,
           })}
         >
-          <input type='checkbox' checked={animation} onChange={() => {}} />
+          <input
+            type='checkbox'
+            checked={animation}
+            onChange={() => {
+              /**/
+            }}
+          />
           <label />
         </div>
       )}
@@ -61,10 +67,16 @@ export const ButtonMenuMain = ({
             [styles.checkBoxClick]: theme,
           })}
         >
-          <input type='checkbox' checked={theme} onChange={() => {}} />
+          <input
+            type='checkbox'
+            checked={theme}
+            onChange={() => {
+              /**/
+            }}
+          />
           <label />
         </div>
       )}
     </button>
-  );
-};
+  )
+}

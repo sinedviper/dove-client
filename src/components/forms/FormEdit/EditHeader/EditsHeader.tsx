@@ -1,16 +1,13 @@
-import React from "react";
+import React from 'react'
+import cn from 'classnames'
 
-import { useAppDispatch, useAppSelector } from "utils/hooks";
-import { getTabIndexFiveth } from "store/select";
-import {
-  actionMenuEdit,
-  actionAddTabIndexFiveth,
-  actionAddTabIndexFourth,
-} from "store/slice";
-import { BackIcon } from "assets";
+import { useAppDispatch, useAppSelector } from 'utils/hooks'
+import { getTabIndexFiveth } from 'store/select'
+import { actionMenuEdit, actionAddTabIndexFiveth, actionAddTabIndexFourth } from 'store/slice'
+import { BackIcon } from 'assets'
 
-import { EditsHeaderProps } from "./EditsHeader.props";
-import styles from "./EditsHeader.module.css";
+import { EditsHeaderProps } from './EditsHeader.props'
+import styles from './EditsHeader.module.css'
 
 export const EditsHeader = ({
   data,
@@ -19,32 +16,21 @@ export const EditsHeader = ({
   className,
   ...props
 }: EditsHeaderProps): JSX.Element => {
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
   //store
-  const tabIndexFivth: number = useAppSelector(getTabIndexFiveth);
+  const tabIndexFifth = useAppSelector(getTabIndexFiveth)
 
   const handleClick = (): void => {
     setData({
-      username:
-        data.username !== initialData.username
-          ? initialData.username
-          : data.username,
-      surname:
-        data.surname !== initialData.surname
-          ? initialData.surname
-          : data.surname,
+      username: data.username !== initialData.username ? initialData.username : data.username,
+      surname: data.surname !== initialData.surname ? initialData.surname : data.surname,
       name: data.name !== initialData.name ? initialData.name : data.name,
       email: data.email !== initialData.email ? initialData.email : data.email,
       bio: data.bio !== initialData.bio ? initialData.bio : data.bio,
-      password:
-        data.password !== initialData.password
-          ? initialData.password
-          : data.password,
+      password: data.password !== initialData.password ? initialData.password : data.password,
       passwordNew:
-        data.passwordNew !== initialData.passwordNew
-          ? initialData.passwordNew
-          : data.passwordNew,
+        data.passwordNew !== initialData.passwordNew ? initialData.passwordNew : data.passwordNew,
       passwordRepeat:
         data.passwordRepeat !== initialData.passwordRepeat
           ? initialData.passwordRepeat
@@ -57,24 +43,20 @@ export const EditsHeader = ({
       errorPasswordRepeat: false,
       errorSurname: false,
       errorUsername: false,
-    });
-    dispatch(actionMenuEdit(false));
-    dispatch(actionAddTabIndexFiveth(-1));
-    dispatch(actionAddTabIndexFourth(0));
-  };
+    })
+    dispatch(actionMenuEdit(false))
+    dispatch(actionAddTabIndexFiveth(-1))
+    dispatch(actionAddTabIndexFourth(0))
+  }
 
   return (
-    <div className={styles.editHead} {...props}>
+    <div className={cn(className, styles.editHead)} {...props}>
       <div>
-        <button
-          tabIndex={tabIndexFivth}
-          className={styles.back}
-          onClick={handleClick}
-        >
+        <button tabIndex={tabIndexFifth} className={styles.back} onClick={handleClick}>
           <BackIcon className={styles.backIcon} />
         </button>
         <h2>Edit Profile</h2>
       </div>
     </div>
-  );
-};
+  )
+}

@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "-f react-scripts build",
     "start": "serve -s build",
     "lint": "eslint ./src/**/*.{ts,tsx,json}",
     "lint:fix": "eslint --fix ./src/**/*.{ts,tsx,json}",
@@ -39,7 +39,6 @@
     "react-textarea-autosize": "^8.4.0",
     "redux-persist": "^6.0.0",
     "styled-components": "^5.3.6",
-    "typescript": "^4.9.3",
     "uuid": "^9.0.0",
     "web-vitals": "^2.1.4"
   },
@@ -62,6 +61,8 @@
     ]
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^2.16.3",
+    "@graphql-codegen/client-preset": "^1.2.5",
     "eslint": "^8.31.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-import-resolver-typescript": "^3.5.2",
@@ -70,10 +71,11 @@
     "eslint-plugin-react": "^7.31.11",
     "eslint-plugin-react-hooks": "^4.6.0",
     "prettier": "^2.8.2",
-    "stylelint": "^14.16.1",
+    "stylelint": "^13.0.0",
     "stylelint-config-standard": "^29.0.0",
     "stylelint-order": "^4.1.0",
     "stylelint-order-config-standard": "^0.1.3",
+    "typescript": "^4.9.4",
     "typescript-plugin-css-modules": "^3.4.0"
   }
 }

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useQuery } from "@apollo/client";
-import cn from "classnames";
-import ReactGA from "react-ga";
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { useQuery } from '@apollo/client'
+import cn from 'classnames'
+import ReactGA from 'react-ga'
 
 import {
   useAppDispatch,
@@ -10,82 +10,71 @@ import {
   useAuthorization,
   useAuthorizationData,
   useError,
-} from "utils/hooks";
-import { IChat, IMessage, IUser } from "utils/interface";
-import { getHaveMessages, getMessage } from "resolvers/messages";
-import { getUserSender } from "resolvers/user";
-import { MessageHeader, MessageInput, MessageList } from "components/message";
-import { Settings } from "components";
+} from 'utils/hooks'
+import { IMessage, IUser } from 'utils/interface'
+import { getHaveMessages, getMessage } from 'resolvers/messages'
+import { getUserSender } from 'resolvers/user'
+import { MessageHeader, MessageInput, MessageList } from 'components/message'
+import { Settings } from 'components'
 import {
   getFetch,
   getUser,
   getRecipient,
-  getChat,
   getMessages,
   getMessagesBefore,
   getMenuMain,
   getTabIndexSeventh,
-} from "store/select";
+  getChatUser,
+} from 'store/select'
 import {
   actionHaveMessage,
   actionAddMessages,
   actionAddFetch,
   actionAddRecipient,
   actionAddLoading,
-} from "store/slice";
+} from 'store/slice'
 
-import { SideRightProps } from "./SideRight.props";
-import styles from "./SideRight.module.css";
+import { SideRightProps } from './SideRight.props'
+import styles from './SideRight.module.css'
 
-export const SideRight = ({
-  className,
-  ...props
-}: SideRightProps): JSX.Element => {
-  const { username } = useParams();
-  const error = useError();
-  const dispatch = useAppDispatch();
-  const authorization = useAuthorization();
-  const authorizationHave = useAuthorizationData();
+export const SideRight = ({ className, ...props }: SideRightProps): JSX.Element => {
+  const { username } = useParams()
+  const error = useError()
+  const dispatch = useAppDispatch()
+  const authorization = useAuthorization()
+  const authorizationHave = useAuthorizationData()
 
   //store
-  const fetch: boolean = useAppSelector(getFetch);
-  const user: IUser | undefined = useAppSelector(getUser);
-  const sender: IUser | undefined = useAppSelector(getRecipient);
-  const chat: IChat | undefined = useAppSelector(getChat)?.filter(
-    (chat) => chat?.user?.id === sender?.id
-  )[0];
-  const messages: IMessage[] | undefined = useAppSelector(getMessages);
-  const messagesBegore: IMessage[] | undefined =
-    useAppSelector(getMessagesBefore);
-  const main: boolean = useAppSelector(getMenuMain);
-  const tabIndexSeventh: number = useAppSelector(getTabIndexSeventh);
+  const fetch = useAppSelector(getFetch)
+  const user = useAppSelector(getUser)
+  const sender = useAppSelector(getRecipient)
+  const chat = useAppSelector((state) => getChatUser(state, sender?.id))
+  const messages = useAppSelector(getMessages)
+  const messagesBefore = useAppSelector(getMessagesBefore)
+  const main = useAppSelector(getMenuMain)
+  const tabIndexSeventh = useAppSelector(getTabIndexSeventh)
 
-  const [pollIntervalOne, setPollIntervalOne] = useState<number>(200);
+  const [pollIntervalOne, setPollIntervalOne] = useState(200)
 
-  ReactGA.pageview("/chattingwithuser");
+  ReactGA.pageview('/chattingwithuser')
 
   const { loading: loadingHaveMessage } = useQuery(getHaveMessages, {
     variables: {
       message: {
-        id: Number(
-          messagesBegore !== undefined
-            ? messagesBegore?.[0]?.id
-            : messages?.[0]?.id
-        ),
+        id: Number(messagesBefore !== undefined ? messagesBefore?.[0]?.id : messages?.[0]?.id),
         chatId: Number(chat?.id),
         senderMessage: Number(user?.id),
       },
     },
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
     onCompleted(data) {
-      dispatch(
-        actionHaveMessage(authorizationHave({ data: data.haveMessageFind }))
-      );
+      const haveMessage = authorizationHave<Date | null>(data.haveMessageFind)
+      if (haveMessage || haveMessage === null) dispatch(actionHaveMessage(haveMessage))
     },
     onError(errorData) {
-      chat !== undefined && error(errorData.message);
+      chat !== undefined && error(errorData.message)
     },
-  });
+  })
 
   const { loading: loadingMessage } = useQuery(getMessage, {
     variables: {
@@ -94,42 +83,39 @@ export const SideRight = ({
         senderMessage: Number(user?.id),
       },
     },
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
     onCompleted: async (data) => {
-      authorization({
-        data: data.getMessages,
-        actionAdd: actionAddMessages,
-      });
-      setPollIntervalOne(200);
-      fetch && dispatch(actionAddFetch(false));
+      authorization<IMessage[]>(data.getMessages, actionAddMessages)
+      setPollIntervalOne(200)
+      fetch && dispatch(actionAddFetch(false))
     },
     onError() {
-      setPollIntervalOne(10000);
+      setPollIntervalOne(10000)
     },
     pollInterval: pollIntervalOne,
-  });
+  })
 
   const { loading: loadingSender } = useQuery(getUserSender, {
     variables: { input: { username } },
     onCompleted(data) {
-      authorization({ data: data.getUser, actionAdd: actionAddRecipient });
-      fetch && dispatch(actionAddFetch(false));
+      authorization<IUser>(data.getUser, actionAddRecipient)
+      fetch && dispatch(actionAddFetch(false))
     },
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
     pollInterval: 5000,
-  });
+  })
 
-  const [settings, setSettings] = useState<boolean>(false);
+  const [settings, setSettings] = useState<boolean>(false)
 
   useEffect(() => {
     if (loadingMessage || loadingSender || loadingHaveMessage) {
-      dispatch(actionAddLoading(true));
+      dispatch(actionAddLoading(true))
     }
     if ((!loadingMessage && !loadingSender) || !loadingHaveMessage) {
-      dispatch(actionAddLoading(false));
+      dispatch(actionAddLoading(false))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadingMessage, loadingSender]);
+  }, [loadingMessage, loadingSender])
 
   return (
     <section
@@ -145,12 +131,7 @@ export const SideRight = ({
       )}
       <section className={styles.chatWrapper}>
         <MessageHeader setSettings={setSettings} settings={settings} />
-        <MessageList
-          chat={chat}
-          user={user}
-          messagesBegore={messagesBegore}
-          messages={messages}
-        />
+        <MessageList chat={chat} user={user} messagesBefore={messagesBefore} messages={messages} />
         <div className={styles.inputWrap}>
           <MessageInput main={main} />
         </div>
@@ -168,5 +149,5 @@ export const SideRight = ({
         />
       </section>
     </section>
-  );
-};
+  )
+}

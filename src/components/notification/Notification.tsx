@@ -1,27 +1,24 @@
-import React from "react";
-import cn from "classnames";
+import React from 'react'
+import cn from 'classnames'
 
-import { useAppDispatch, useAppSelector } from "utils/hooks";
-import { CopyIcon, LoadingIcon, InfoIcon, RemoveIcon } from "assets";
-import { getErrors, getLoading, getCopy } from "store/select";
-import { actionDeleteError } from "store/slice";
+import { useAppDispatch, useAppSelector } from 'utils/hooks'
+import { CopyIcon, LoadingIcon, InfoIcon, RemoveIcon } from 'assets'
+import { getErrors, getLoading, getCopy } from 'store/select'
+import { actionDeleteError } from 'store/slice'
 
-import { NotificationProps } from "./Notification.props";
-import styles from "./Notification.module.css";
+import { NotificationProps } from './Notification.props'
+import styles from './Notification.module.css'
 
-export const Notification = ({
-  className,
-  ...props
-}: NotificationProps): JSX.Element => {
-  const dispatch = useAppDispatch();
+export const Notification = ({ className, ...props }: NotificationProps): JSX.Element => {
+  const dispatch = useAppDispatch()
 
-  const errors: { text: string; id: any }[] = useAppSelector(getErrors);
-  const loading: boolean = useAppSelector(getLoading);
-  const copy: boolean = useAppSelector(getCopy);
+  const errors = useAppSelector(getErrors)
+  const loading: boolean = useAppSelector(getLoading)
+  const copy: boolean = useAppSelector(getCopy)
   //remove error layout
-  const handleRemove = (id: number): void => {
-    dispatch(actionDeleteError(id));
-  };
+  const handleRemove = (id: string): void => {
+    dispatch(actionDeleteError(id))
+  }
 
   return (
     <section className={cn(className, styles.loadingWrapper)} {...props}>
@@ -41,16 +38,16 @@ export const Notification = ({
           <p>Loading data...</p>
         </div>
       )}
-      {errors !== null &&
+      {errors &&
         errors.map((error) => (
-          <div key={error?.id} className={styles.error}>
+          <div key={error.id} className={styles.error}>
             <span className={styles.errorIcon}>
               <InfoIcon />
             </span>
             <p>{error?.text}</p>
             <button
               className={styles.removeWrapper}
-              onClick={() => handleRemove(error?.id)}
+              onClick={() => handleRemove(error.id)}
               tabIndex={0}
             >
               <RemoveIcon className={styles.removeIcon} />
@@ -58,5 +55,5 @@ export const Notification = ({
           </div>
         ))}
     </section>
-  );
-};
+  )
+}

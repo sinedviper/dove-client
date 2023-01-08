@@ -42,7 +42,7 @@ export const menuSlice = createSlice({
     actionMenuMessage: (state: Draft<IMenuState>, action: PayloadAction<number | null>) => {
       state.menuMessage = action.payload
     },
-    actionHaveMessage: (state: Draft<IMenuState>, action: PayloadAction<Date>) => {
+    actionHaveMessage: (state: Draft<IMenuState>, action: PayloadAction<Date | null>) => {
       state.haveMessage = action.payload
     },
   },

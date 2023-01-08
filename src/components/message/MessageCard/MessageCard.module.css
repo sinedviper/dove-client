@@ -64,7 +64,7 @@
   flex-direction: row;
 }
 
-.bottoMessage {
+.bottomMessage {
   display: flex;
   gap: 5px;
   height: 16px;

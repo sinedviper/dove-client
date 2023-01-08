@@ -1,36 +1,35 @@
-import React, { useEffect, useState } from "react";
-import cn from "classnames";
+import React, { useEffect, useState } from 'react'
+import cn from 'classnames'
 
-import { SERVER_LINK } from "utils/constants";
-import { Input } from "components/layouts";
-import { getImageUser, getTabIndexFiveth, getUser } from "store/select";
-import { actionMenuEdit } from "store/slice";
-import { useAppDispatch, useAppSelector } from "utils/hooks";
-import { colorCard } from "utils/helpers";
-import { IUser, IImage } from "utils/interface";
-import { PhotoIcon, SupheedIcon } from "assets";
+import { SERVER_LINK } from 'utils/constants'
+import { Input } from 'components/layouts'
+import { getImageUser, getTabIndexFiveth, getUser } from 'store/select'
+import { actionMenuEdit } from 'store/slice'
+import { useAppDispatch, useAppSelector } from 'utils/hooks'
+import { colorCard } from 'utils/helpers'
+import { IUser, IImage } from 'utils/interface'
+import { PhotoIcon, SupheedIcon } from 'assets'
 
-import { useEditsInput } from "./useEditsInput";
-import { EditsInputProps } from "./EditsInput.props";
-import styles from "./EditsInput.module.css";
+import { useEditsInput } from './useEditsInput'
+import { EditsInputProps } from './EditsInput.props'
+import styles from './EditsInput.module.css'
 
 export const EditsInput = ({
-  edit,
   data,
   setData,
   initialData,
   className,
   ...props
 }: EditsInputProps): JSX.Element => {
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
   //store
-  const user: IUser | undefined = useAppSelector(getUser);
-  const imageUser: IImage | undefined = useAppSelector(getImageUser)?.[0];
-  const tabIndexFivth: number = useAppSelector(getTabIndexFiveth);
+  const user: IUser | undefined = useAppSelector(getUser)
+  const imageUser: IImage | undefined = useAppSelector(getImageUser)?.[0]
+  const tabIndexFifth: number = useAppSelector(getTabIndexFiveth)
 
-  const [swiper, setSwiper] = useState<boolean>(false);
-  const [submit, setSubmit] = useState<boolean>(false);
+  const [swiper, setSwiper] = useState<boolean>(false)
+  const [submit, setSubmit] = useState<boolean>(false)
 
   const {
     username,
@@ -49,12 +48,12 @@ export const EditsInput = ({
     errorUsername,
     errorPasswordNew,
     errorPasswordRepeat,
-  } = data;
+  } = data
 
   //getting a color for a user if they don't have a photo
-  const color = colorCard(String(user?.name.toUpperCase().slice()[0]));
+  const color = colorCard(String(user?.name.toUpperCase().slice()[0]))
 
-  const [passwordCheck, setPasswordCheck] = useState<number>(0);
+  const [passwordCheck, setPasswordCheck] = useState<number>(0)
 
   const { onSubmit, handleLoadPhoto } = useEditsInput({
     passwordCheck,
@@ -62,19 +61,19 @@ export const EditsInput = ({
     user,
     setData,
     initialData,
-  });
+  })
 
-  const handleInput = (e): void => {
-    handleLoadPhoto(e);
+  const handleInput = async (e): Promise<void> => {
+    await handleLoadPhoto(e)
     setData({
       ...data,
-      password: "",
-      passwordNew: "",
-      passwordRepeat: "",
-    });
-    setSubmit(false);
-    dispatch(actionMenuEdit(false));
-  };
+      password: '',
+      passwordNew: '',
+      passwordRepeat: '',
+    })
+    setSubmit(false)
+    dispatch(actionMenuEdit(false))
+  }
 
   //Check values in input, changed or not, when changed button has see
   useEffect(() => {
@@ -84,11 +83,11 @@ export const EditsInput = ({
       surname !== user?.surname ||
       email !== user?.email ||
       bio !== user?.bio ||
-      password !== "" ||
-      passwordNew !== "" ||
-      passwordRepeat !== ""
+      password !== '' ||
+      passwordNew !== '' ||
+      passwordRepeat !== ''
     ) {
-      setSubmit(true);
+      setSubmit(true)
     }
     if (
       username === user?.username &&
@@ -96,27 +95,17 @@ export const EditsInput = ({
       surname === user?.surname &&
       email === user?.email &&
       bio === user?.bio &&
-      password === "" &&
-      passwordNew === "" &&
-      passwordRepeat === ""
+      password === '' &&
+      passwordNew === '' &&
+      passwordRepeat === ''
     ) {
-      setSubmit(false);
+      setSubmit(false)
     }
-  }, [
-    username,
-    user,
-    name,
-    surname,
-    email,
-    bio,
-    password,
-    passwordNew,
-    passwordRepeat,
-  ]);
+  }, [username, user, name, surname, email, bio, password, passwordNew, passwordRepeat])
 
   return (
     <div
-      className={cn(styles.contactsList, {
+      className={cn(className, styles.contactsList, {
         [styles.swiper]: swiper,
       })}
       onMouseLeave={() => setSwiper(false)}
@@ -126,10 +115,7 @@ export const EditsInput = ({
       <div className={styles.editUser}>
         <div className={styles.editPhoto}>
           {imageUser ? (
-            <div
-              className={styles.uploadWrapper}
-              style={{ display: imageUser ? "block" : "none" }}
-            >
+            <div className={styles.uploadWrapper} style={{ display: imageUser ? 'block' : 'none' }}>
               <img
                 className={styles.userImage}
                 src={`${SERVER_LINK}/images/` + imageUser.file}
@@ -149,7 +135,7 @@ export const EditsInput = ({
           ) : (
             <div
               className={styles.uploadWrapper}
-              style={{ display: !imageUser ? "block" : "none" }}
+              style={{ display: !imageUser ? 'block' : 'none' }}
             >
               <div
                 className={styles.wrapperLoadNoPhoto}
@@ -171,25 +157,25 @@ export const EditsInput = ({
           )}
         </div>
         <Input
-          tabIndex={tabIndexFivth}
+          tabIndex={tabIndexFifth}
           error={errorName}
           placeholderName='Name'
           notification={true}
-          notificationText={"Name must be between 1 and 40 characters"}
+          notificationText={'Name must be between 1 and 40 characters'}
           text={name}
           setText={(name) => setData({ ...data, name })}
         />
         <Input
-          tabIndex={tabIndexFivth}
+          tabIndex={tabIndexFifth}
           error={errorSurname}
           placeholderName='Surname(optional)'
           notification={true}
-          notificationText={"Surname must be between 1 and 40 characters"}
+          notificationText={'Surname must be between 1 and 40 characters'}
           text={surname}
           setText={(surname) => setData({ ...data, surname })}
         />
         <Input
-          tabIndex={tabIndexFivth}
+          tabIndex={tabIndexFifth}
           placeholderName='Bio(optional)'
           error={errorBio}
           text={bio}
@@ -203,7 +189,7 @@ export const EditsInput = ({
       <div className={styles.editUser}>
         <h2 className={styles.usernameEdit}>Email</h2>
         <Input
-          tabIndex={tabIndexFivth}
+          tabIndex={tabIndexFifth}
           error={errorEmail}
           placeholderName='Email'
           notification={true}
@@ -220,41 +206,41 @@ export const EditsInput = ({
       <div className={styles.editUser}>
         <h2 className={styles.usernameEdit}>Username</h2>
         <Input
-          tabIndex={tabIndexFivth}
+          tabIndex={tabIndexFifth}
           error={errorUsername}
           placeholderName='Username'
           notification={true}
-          notificationText={"Username must be between 3 and 40 characters"}
+          notificationText={'Username must be between 3 and 40 characters'}
           text={username}
           setText={(username) => setData({ ...data, username })}
         />
       </div>
       <div className={styles.editInfo}>
         <p>
-          You can choose a username on Dove. If you do people will be able to
-          find you by this username.
+          You can choose a username on Dove. If you do people will be able to find you by this
+          username.
         </p>
       </div>
       <div className={styles.editUser}>
         <h2 className={styles.usernameEdit}>Password</h2>
         <Input
-          tabIndex={tabIndexFivth}
+          tabIndex={tabIndexFifth}
           error={errorPassword}
           placeholderName='Main password'
           notification={true}
-          notificationText={"Password must be between 8 and 40 characters"}
+          notificationText={'Password must be between 8 and 40 characters'}
           password={true}
           text={password}
           setText={(password) => setData({ ...data, password })}
         />
         <Input
-          tabIndex={tabIndexFivth}
+          tabIndex={tabIndexFifth}
           error={errorPasswordNew}
           placeholderName='New password'
           setPassword={setPasswordCheck}
           notification={true}
           notificationText={
-            "Password must be between 8 and 40 characters and have a capital letter and a number"
+            'Password must be between 8 and 40 characters and have a capital letter and a number'
           }
           password={true}
           check={true}
@@ -262,12 +248,12 @@ export const EditsInput = ({
           setText={(passwordNew) => setData({ ...data, passwordNew })}
         />
         <Input
-          tabIndex={tabIndexFivth}
+          tabIndex={tabIndexFifth}
           error={errorPasswordRepeat}
           placeholderName='Repeat password'
           textCheckPassNew={passwordNew}
           notification={true}
-          notificationText={"Please re-enter your password correctly"}
+          notificationText={'Please re-enter your password correctly'}
           password={true}
           text={passwordRepeat}
           setText={(passwordRepeat) => setData({ ...data, passwordRepeat })}
@@ -277,7 +263,7 @@ export const EditsInput = ({
         <p>You can change the your password on Dove.</p>
       </div>
       <button
-        tabIndex={tabIndexFivth}
+        tabIndex={tabIndexFifth}
         className={cn(styles.supheed, {
           [styles.submit]: submit,
         })}
@@ -286,5 +272,5 @@ export const EditsInput = ({
         <SupheedIcon />
       </button>
     </div>
-  );
-};
+  )
+}

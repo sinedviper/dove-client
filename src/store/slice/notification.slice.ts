@@ -36,7 +36,7 @@ export const notificationSlice = createSlice({
     actionAddError: (state: Draft<INotificationState>, action: PayloadAction<error>) => {
       state.errors.push(action.payload)
     },
-    actionDeleteError: (state: Draft<INotificationState>, action: PayloadAction<number>) => {
+    actionDeleteError: (state: Draft<INotificationState>, action: PayloadAction<string>) => {
       state.errors = state.errors.filter((error) => String(error.id) !== String(action.payload))
     },
   },

@@ -1,37 +1,31 @@
-import React, { useState } from "react";
-import { useMutation } from "@apollo/client";
-import cn from "classnames";
-import { useParams } from "react-router-dom";
+import React, { useState } from 'react'
+import { useMutation } from '@apollo/client'
+import cn from 'classnames'
+import { useParams } from 'react-router-dom'
 
-import { SERVER_LINK } from "utils/constants";
-import { colorCard, formateDateOnline } from "utils/helpers";
+import { SERVER_LINK } from 'utils/constants'
+import { colorCard, formateDateOnline } from 'utils/helpers'
 import {
   useAppDispatch,
   useAppSelector,
   useAuthorization,
   useError,
   useWindowSize,
-} from "utils/hooks";
-import { IUser } from "utils/interface";
-import { addContact, deleteContact } from "resolvers/contacts";
-import {
-  getRecipient,
-  getContacts,
-  getUser,
-  getMenuMain,
-  getTabIndexSixth,
-} from "store/select";
+} from 'utils/hooks'
+import { IUser } from 'utils/interface'
+import { addContact, deleteContact } from 'resolvers/contacts'
+import { getRecipient, getUser, getMenuMain, getTabIndexSixth, getContactUser } from 'store/select'
 import {
   actionAddContact,
   actionMenuMain,
   actionAddTabIndexSixth,
   actionAddTabIndexFirst,
   actionAddTabIndexSeventh,
-} from "store/slice";
-import { AddUserIcon, BackIcon, BookmarkIcon, RemoveUserIcon } from "assets";
+} from 'store/slice'
+import { AddUserIcon, BackIcon, BookmarkIcon, RemoveUserIcon } from 'assets'
 
-import { MessageHeaderProps } from "./MessageHeader.props";
-import styles from "./MessageHeader.module.css";
+import { MessageHeaderProps } from './MessageHeader.props'
+import styles from './MessageHeader.module.css'
 
 export const MessageHeader = ({
   setSettings,
@@ -39,47 +33,42 @@ export const MessageHeader = ({
   className,
   ...props
 }: MessageHeaderProps): JSX.Element => {
-  const { username } = useParams();
-  const error = useError();
-  const dispatch = useAppDispatch();
-  const authorization = useAuthorization();
-  const windowSize = useWindowSize();
-  let color = colorCard();
+  const { username } = useParams()
+  const error = useError()
+  const dispatch = useAppDispatch()
+  const authorization = useAuthorization()
+  const windowSize = useWindowSize()
+  let color = colorCard()
   //store
-  const receipt: IUser | undefined = useAppSelector(getRecipient);
-  const contact: IUser | undefined = useAppSelector(getContacts)?.filter(
-    (contact) => contact.id === receipt?.id
-  )[0];
-  const user: IUser | undefined = useAppSelector(getUser);
-  const main: boolean = useAppSelector(getMenuMain);
-  const tabIndexSixth = useAppSelector(getTabIndexSixth);
+  const receipt = useAppSelector(getRecipient)
+  const contact = useAppSelector((state) => getContactUser(state, receipt?.id))
+  const user = useAppSelector(getUser)
+  const main = useAppSelector(getMenuMain)
+  const tabIndexSixth = useAppSelector(getTabIndexSixth)
 
   const [mutationFunctionDelete] = useMutation(deleteContact, {
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
     onCompleted(data) {
-      authorization({
-        data: data.deleteContact,
-        actionAdd: actionAddContact,
-      });
+      authorization<IUser[]>(data.deleteContact, actionAddContact)
     },
     onError(errorData) {
-      error(errorData.message);
+      error(errorData.message)
     },
-  });
+  })
   const [mutationFunctionAdd] = useMutation(addContact, {
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
     onCompleted(data) {
-      authorization({ data: data.addContact, actionAdd: actionAddContact });
+      authorization<IUser[]>(data.addContact, actionAddContact)
     },
     onError(errorData) {
-      error(errorData.message);
+      error(errorData.message)
     },
-  });
+  })
 
-  const [menuMessage, setmenuMessage] = useState<boolean>(false);
+  const [menuMessage, setMenuMessage] = useState(false)
 
   if (receipt) {
-    color = colorCard(receipt?.name && receipt?.name.toUpperCase()[0]);
+    color = colorCard(receipt.name.toUpperCase()[0])
   }
 
   const handleEditContact = async (): Promise<void> => {
@@ -88,45 +77,45 @@ export const MessageHeader = ({
         variables: {
           contact: { userId: Number(user?.id), contactId: Number(receipt?.id) },
         },
-      });
+      })
     }
     if (!contact) {
       await mutationFunctionAdd({
         variables: {
           contact: { userId: Number(user?.id), contactId: Number(receipt?.id) },
         },
-      });
+      })
     }
-  };
+  }
 
   const handleButtonBack = (): void => {
     if (windowSize[0] < 1000) {
-      dispatch(actionMenuMain(!main));
-      dispatch(actionAddTabIndexSixth(tabIndexSixth === -1 ? 0 : -1));
-      dispatch(actionAddTabIndexFirst(0));
+      dispatch(actionMenuMain(!main))
+      dispatch(actionAddTabIndexSixth(tabIndexSixth === -1 ? 0 : -1))
+      dispatch(actionAddTabIndexFirst(0))
       if (windowSize[0] < 600) {
-        dispatch(actionAddTabIndexSixth(-1));
-        dispatch(actionAddTabIndexFirst(0));
+        dispatch(actionAddTabIndexSixth(-1))
+        dispatch(actionAddTabIndexFirst(0))
       }
       if (settings) {
-        setSettings(false);
+        setSettings(false)
       }
     }
-  };
+  }
 
   const handleOpenInfo = (): void => {
-    setSettings(true);
-    dispatch(actionAddTabIndexSeventh(0));
-    dispatch(actionAddTabIndexFirst(-1));
-    dispatch(actionAddTabIndexSixth(-1));
-    if (settings) dispatch(actionMenuMain(false));
-  };
+    setSettings(true)
+    dispatch(actionAddTabIndexSeventh(0))
+    dispatch(actionAddTabIndexFirst(-1))
+    dispatch(actionAddTabIndexSixth(-1))
+    if (settings) dispatch(actionMenuMain(false))
+  }
 
   return (
     <section
       className={cn(className, styles.headerReceiptWrapper)}
       onMouseLeave={() => {
-        setmenuMessage(false);
+        setMenuMessage(false)
       }}
       {...props}
     >
@@ -155,11 +144,11 @@ export const MessageHeader = ({
           <div
             className={styles.headerWrapper}
             onClick={handleOpenInfo}
-            onKeyDown={(e) => e.key === "Enter" && handleOpenInfo()}
+            onKeyDown={(e) => e.key === 'Enter' && handleOpenInfo()}
             onKeyUp={(e) => {
-              if (e.key === "Enter") {
-                setSettings(true);
-                if (settings) dispatch(actionMenuMain(false));
+              if (e.key === 'Enter') {
+                setSettings(true)
+                if (settings) dispatch(actionMenuMain(false))
               }
             }}
             tabIndex={tabIndexSixth}
@@ -176,7 +165,7 @@ export const MessageHeader = ({
                   className={styles.receiptNamePhoto}
                   style={{
                     background: receipt?.file
-                      ? ""
+                      ? ''
                       : `linear-gradient(${color?.color1}, ${color?.color2})`,
                   }}
                 >
@@ -187,18 +176,16 @@ export const MessageHeader = ({
             </div>
             <div className={styles.headerReceiptInfo}>
               <p className={styles.infoName}>
-                {receipt?.name && receipt?.name}{" "}
-                {receipt?.surname && receipt?.surname}
+                {receipt?.name && receipt?.name} {receipt?.surname && receipt?.surname}
               </p>
               <p className={styles.infoDate}>
-                {receipt?.online &&
-                  formateDateOnline(new Date(receipt?.online)).toLowerCase()}
+                {receipt?.online && formateDateOnline(new Date(receipt?.online)).toLowerCase()}
               </p>
             </div>
           </div>
           <button
             className={styles.delete}
-            onClick={() => setmenuMessage(!menuMessage)}
+            onClick={() => setMenuMessage(!menuMessage)}
             tabIndex={tabIndexSixth}
           >
             <span className={styles.dot}></span>
@@ -207,7 +194,7 @@ export const MessageHeader = ({
             className={cn(styles.menuMessageWrapper, {
               [styles.menuMessageWrapperOn]: menuMessage,
             })}
-            style={{ display: menuMessage ? "block" : "none" }}
+            style={{ display: menuMessage ? 'block' : 'none' }}
           >
             <button
               className={styles.deleteButton}
@@ -230,5 +217,5 @@ export const MessageHeader = ({
         </>
       )}
     </section>
-  );
-};
+  )
+}

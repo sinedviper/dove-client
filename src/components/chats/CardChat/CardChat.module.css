@@ -2,7 +2,7 @@
   position: relative;
   width: 100%;
   min-width: 290px;
-  padding: 10px 0px;
+  padding: 10px 0;
   border-radius: 10px;
   transition: var(--transition);
   display: flex;

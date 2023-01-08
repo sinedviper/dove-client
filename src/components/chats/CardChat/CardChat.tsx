@@ -1,21 +1,21 @@
-import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useMutation } from "@apollo/client";
-import cn from "classnames";
+import React, { useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useMutation } from '@apollo/client'
+import cn from 'classnames'
 
-import { BookmarkIcon, CheckIcon } from "assets";
-import { IUser } from "utils/interface";
-import { SERVER_LINK } from "utils/constants";
-import { colorCard, formateDate } from "utils/helpers";
+import { BookmarkIcon, CheckIcon } from 'assets'
+import { IChat } from 'utils/interface'
+import { SERVER_LINK } from 'utils/constants'
+import { colorCard, formateDate } from 'utils/helpers'
 import {
   useAppDispatch,
   useAppSelector,
   useAuthorization,
   useError,
   useWindowSize,
-} from "utils/hooks";
-import { removeChat } from "resolvers/chats";
-import { ButtonMenu } from "components/layouts";
+} from 'utils/hooks'
+import { removeChat } from 'resolvers/chats'
+import { ButtonMenu } from 'components/layouts'
 import {
   actionAddChats,
   actionAddRecipient,
@@ -24,11 +24,11 @@ import {
   actionClearMessages,
   actionClearRecipient,
   actionMenuMain,
-} from "store/slice";
-import { getUser } from "store/select";
+} from 'store/slice'
+import { getUser } from 'store/select'
 
-import { CardChatProps } from "./CardChat.props";
-import styles from "./CardChat.module.css";
+import { CardChatProps } from './CardChat.props'
+import styles from './CardChat.module.css'
 
 export const CardChat = ({
   className,
@@ -36,79 +36,83 @@ export const CardChat = ({
   chat: { id, user, lastMessage, image },
   ...props
 }: CardChatProps): JSX.Element => {
-  const { username } = useParams();
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const error = useError();
-  const autorization = useAuthorization();
-  const windowSize = useWindowSize();
+  const { username } = useParams()
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const error = useError()
+  const authorization = useAuthorization()
+  const windowSize = useWindowSize()
 
   const [mutationFunction] = useMutation(removeChat, {
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
     onCompleted(data) {
-      autorization({ data: data.deleteChat, actionAdd: actionAddChats });
-      dispatch(actionAddTabIndexSixth(-1));
-      navigate("");
+      authorization<IChat[]>(data.deleteChat, actionAddChats)
+      dispatch(actionAddTabIndexSixth(-1))
+      navigate('')
     },
     onError(errorData) {
-      error(errorData.message);
+      error(errorData.message)
     },
-  });
+  })
   //store
-  const userMain: IUser | undefined = useAppSelector(getUser);
+  const userMain = useAppSelector(getUser)
 
-  const [top, setTop] = useState<number>(0);
-  const [left, setLeft] = useState<number>(0);
-  const [menu, setMenu] = useState<boolean>(false);
-  let timer: any;
+  const [top, setTop] = useState(0)
+  const [left, setLeft] = useState(0)
+  const [menu, setMenu] = useState(false)
+  let timer
 
-  const color = colorCard(user.name.toUpperCase().split("")[0]);
+  const color = colorCard(user.name.toUpperCase()[0])
   //function to process the request when clicking on the chat
   const handleFocus = (): void => {
     if (String(user.username) !== String(username)) {
-      dispatch(actionClearMessages());
-      dispatch(actionClearRecipient());
-      dispatch(actionAddRecipient(user));
-      dispatch(actionAddTabIndexSixth(0));
-      navigate(`${user.username}`);
+      dispatch(actionClearMessages())
+      dispatch(actionClearRecipient())
+      dispatch(actionAddRecipient(user))
+      dispatch(actionAddTabIndexSixth(0))
+      navigate(`${user.username}`)
     }
     if (windowSize[0] < 1000) {
-      dispatch(actionMenuMain(false));
-      dispatch(actionAddTabIndexFirst(-1));
+      dispatch(actionMenuMain(false))
+      dispatch(actionAddTabIndexFirst(-1))
     }
-  };
+  }
   //function delete chat
   const handleDeleteChat = async (): Promise<void> => {
-    await mutationFunction({ variables: { idChat: Number(id) } });
-  };
+    await mutationFunction({ variables: { idChat: Number(id) } })
+  }
 
-  const handleOnMouseMove = (e): void => {
-    if (!menu) {
-      setTop(e.nativeEvent.layerY);
-      if (e.nativeEvent.layerX > 210) {
-        setLeft(e.nativeEvent.layerX - 200);
-      } else setLeft(e.nativeEvent.layerX);
-    }
-  };
+  const handleSetPosition = (e): void => {
+    setTop(e.nativeEvent.layerY)
+    if (e.nativeEvent.layerX > 210) {
+      setLeft(e.nativeEvent.layerX - 200)
+    } else setLeft(e.nativeEvent.layerX)
+  }
 
-  const handleTouchStart = (): void => {
+  const handleTouchStart = (e): void => {
     timer = setTimeout(() => {
-      setMenu(true);
-    }, 1000);
-  };
+      setMenu(true)
+      handleSetPosition(e)
+    }, 1000)
+  }
+
+  const handleMouseDown = (e): void => {
+    setMenu(true)
+    handleSetPosition(e)
+  }
 
   const handleKeyDown = (e): void => {
-    if (e.key === "Enter") {
-      handleFocus();
+    if (e.key === 'Enter') {
+      handleFocus()
       if (windowSize[0] < 1000) {
-        dispatch(actionAddTabIndexFirst(-1));
-        dispatch(actionAddTabIndexSixth(0));
+        dispatch(actionAddTabIndexFirst(-1))
+        dispatch(actionAddTabIndexSixth(0))
       }
     }
-    if (e.key === "Delete") {
-      setMenu(!menu);
+    if (e.key === 'Delete') {
+      setMenu(!menu)
     }
-  };
+  }
 
   return (
     <li
@@ -120,22 +124,18 @@ export const CardChat = ({
       onKeyDown={handleKeyDown}
       onTouchStart={handleTouchStart}
       onTouchEnd={() => !menu && clearTimeout(timer)}
-      onMouseMoveCapture={handleOnMouseMove}
       onMouseLeave={() => setMenu(false)}
-      onMouseDown={(e) => e.buttons === 2 && setMenu(true)}
+      onMouseDown={(e) => e.buttons === 2 && handleMouseDown(e)}
       onContextMenu={(e) => {
-        e.preventDefault();
-        return false;
+        e.preventDefault()
+        return false
       }}
       {...props}
     >
       <div
         className={styles.contactsPhoto}
         style={{
-          background:
-            image === null
-              ? `linear-gradient(${color?.color1}, ${color?.color2})`
-              : "",
+          background: !image ? `linear-gradient(${color?.color1}, ${color?.color2})` : '',
         }}
       >
         {userMain?.username === user.username ? (
@@ -146,10 +146,10 @@ export const CardChat = ({
           >
             <BookmarkIcon />
           </span>
-        ) : image === null ? (
+        ) : !image ? (
           <span>
-            {user.name && user.name.toUpperCase().split("")[0]}
-            {user.surname && user.surname.toUpperCase().split("")[0]}
+            {user.name && user.name.toUpperCase()[0]}
+            {user.surname && user.surname.toUpperCase()[0]}
           </span>
         ) : (
           <span>
@@ -160,42 +160,35 @@ export const CardChat = ({
       <div className={styles.contactInfo}>
         <span className={styles.contactName}>
           {userMain?.username === user.username ? (
-            "Saved Message"
+            'Saved Message'
           ) : (
-            <>
-              {user.name && user.name} {user?.surname && user.surname}
-            </>
+            <>{`${user.name && user.name} ${user?.surname && user.surname}`}</>
           )}
         </span>
-        <span className={styles.contactMessage}>
-          {lastMessage && lastMessage.text}
-        </span>
+        <span className={styles.contactMessage}>{lastMessage && lastMessage.text}</span>
       </div>
       <div className={styles.contactDate}>
         {userMain?.username !== user.username && (
           <CheckIcon
             className={cn(styles.wrapperIcon, {
-              [styles.wrapperIconOne]:
-                username !== user.username && lastMessage?.read,
-              [styles.wrapperIconMark]:
-                username === user.username && lastMessage?.read,
-              [styles.wrapperIconMarkNotRead]:
-                username === user.username && !lastMessage?.read,
+              [styles.wrapperIconOne]: username !== user.username && lastMessage?.read,
+              [styles.wrapperIconMark]: username === user.username && lastMessage?.read,
+              [styles.wrapperIconMarkNotRead]: username === user.username && !lastMessage?.read,
             })}
           />
         )}
-        <span>
-          {lastMessage && formateDate(new Date(lastMessage.createdAt))}
-        </span>
+        <span>{lastMessage && formateDate(new Date(lastMessage.createdAt))}</span>
       </div>
-      <ButtonMenu
-        top={top}
-        left={left}
-        menu={menu}
-        handleDelete={handleDeleteChat}
-        text={"Delete"}
-        tabIndex={menu === true ? 0 : -1}
-      />
+      {menu && (
+        <ButtonMenu
+          top={top}
+          left={left}
+          menu={menu}
+          handleDelete={handleDeleteChat}
+          text={'Delete'}
+          tabIndex={menu ? 0 : -1}
+        />
+      )}
     </li>
-  );
-};
+  )
+}

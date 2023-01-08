@@ -1,21 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { useQuery } from "@apollo/client";
-import { useNavigate, useParams } from "react-router-dom";
-import cn from "classnames";
-import { v4 as uuidv4 } from "uuid";
+import React, { useEffect, useState } from 'react'
+import { useQuery } from '@apollo/client'
+import { useNavigate, useParams } from 'react-router-dom'
+import cn from 'classnames'
+import { v4 as uuidv4 } from 'uuid'
 
-import { IChat, IUser } from "utils/interface";
-import {
-  useAppDispatch,
-  useAppSelector,
-  useAuthorizationData,
-  useWindowSize,
-} from "utils/hooks";
-import { getUsersSearch } from "resolvers/user";
-import { LoadingIcon } from "assets";
-import { CardChat, ChatsHeader } from "components/chats";
-import { CardContact } from "components/contacts";
-import { ContactSearch } from "components/layouts";
+import { IChat, IUser } from 'utils/interface'
+import { useAppDispatch, useAppSelector, useAuthorizationData, useWindowSize } from 'utils/hooks'
+import { getUsersSearch } from 'resolvers/user'
+import { LoadingIcon } from 'assets'
+import { CardChat, ChatsHeader } from 'components/chats'
+import { CardContact } from 'components/contacts'
+import { ContactSearch } from 'components/layouts'
 import {
   getFetch,
   getUser,
@@ -23,7 +18,7 @@ import {
   getChat,
   getTabIndexFirst,
   getTabIndexSecond,
-} from "store/select";
+} from 'store/select'
 import {
   actionClearMessages,
   actionClearRecipient,
@@ -32,86 +27,72 @@ import {
   actionAddTabIndexSixth,
   actionAddTabIndexSecond,
   actionMenuMain,
-} from "store/slice";
+} from 'store/slice'
 
-import { ChatsProps } from "./Chats.props";
-import styles from "./Chats.module.css";
+import { ChatsProps } from './Chats.props'
+import styles from './Chats.module.css'
 
-export const Chats = ({
-  searchContact,
-  className,
-  ...props
-}: ChatsProps): JSX.Element => {
-  const { username } = useParams();
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const windowSize = useWindowSize();
-  const autorizationSearch = useAuthorizationData();
+export const Chats = ({ searchContact, className, ...props }: ChatsProps): JSX.Element => {
+  const { username } = useParams()
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const windowSize = useWindowSize()
+  const authorizationHave = useAuthorizationData()
   //store
-  const fetch: boolean = useAppSelector(getFetch);
-  const user: IUser | undefined = useAppSelector(getUser);
-  const contacts: IUser[] | undefined = useAppSelector(getContacts);
-  const chats: IChat[] | undefined = useAppSelector(getChat);
-  const tabIndexFirst: number = useAppSelector(getTabIndexFirst);
-  const tabIndexSecond: number = useAppSelector(getTabIndexSecond);
+  const fetch: boolean = useAppSelector(getFetch)
+  const user: IUser | undefined = useAppSelector(getUser)
+  const contacts: IUser[] | undefined = useAppSelector(getContacts)
+  const chats: IChat[] | undefined = useAppSelector(getChat)
+  const tabIndexFirst: number = useAppSelector(getTabIndexFirst)
+  const tabIndexSecond: number = useAppSelector(getTabIndexSecond)
 
-  const [valueAll, setValueAll] = useState<string>("");
+  const [valueAll, setValueAll] = useState('')
 
   const { data: dataSearch } = useQuery(getUsersSearch, {
     variables: {
       input: { username: String(valueAll) },
     },
     pollInterval: 300,
-  });
+  })
 
-  const [searchUsers, setSearchUsers] = useState<IUser[] | undefined>(
-    undefined
-  );
+  const [searchUsers, setSearchUsers] = useState<IUser[] | undefined>(undefined)
 
-  const [swiper, setSwiper] = useState<boolean>(false);
-  const [searchUser, setSearchUser] = useState<boolean>(false);
+  const [swiper, setSwiper] = useState(false)
+  const [searchUser, setSearchUser] = useState(false)
   //function to process the request when clicking on the chat
   const handleFocus = async (contact: IUser): Promise<void> => {
-    setSearchUsers(undefined);
+    setSearchUsers(undefined)
     if (String(contact.username) !== String(username)) {
-      setValueAll("");
-      setSearchUser(false);
-      dispatch(actionClearMessages());
-      dispatch(actionClearRecipient());
-      dispatch(actionAddRecipient(contact));
-      dispatch(actionAddTabIndexFirst(0));
-      dispatch(actionAddTabIndexSixth(0));
-      dispatch(actionAddTabIndexSecond(-1));
-      navigate(`${contact?.username}`);
+      setValueAll('')
+      setSearchUser(false)
+      dispatch(actionClearMessages())
+      dispatch(actionClearRecipient())
+      dispatch(actionAddRecipient(contact))
+      dispatch(actionAddTabIndexFirst(0))
+      dispatch(actionAddTabIndexSixth(0))
+      dispatch(actionAddTabIndexSecond(-1))
+      navigate(`${contact?.username}`)
     }
     if (String(contact.username) === String(username)) {
-      setValueAll("");
-      setSearchUser(false);
-      dispatch(actionAddTabIndexFirst(0));
-      dispatch(actionAddTabIndexSixth(0));
-      dispatch(actionAddTabIndexSecond(-1));
+      setValueAll('')
+      setSearchUser(false)
+      dispatch(actionAddTabIndexFirst(0))
+      dispatch(actionAddTabIndexSixth(0))
+      dispatch(actionAddTabIndexSecond(-1))
     }
     if (windowSize[0] < 1000) {
-      dispatch(actionMenuMain(false));
-      dispatch(actionAddTabIndexFirst(-1));
-      dispatch(actionAddTabIndexSixth(0));
+      dispatch(actionMenuMain(false))
+      dispatch(actionAddTabIndexFirst(-1))
+      dispatch(actionAddTabIndexSixth(0))
     }
-  };
+  }
 
   useEffect(() => {
-    setSearchUsers(
-      autorizationSearch({
-        data: dataSearch?.searchUsers,
-      })
-    );
-  }, [autorizationSearch, dataSearch]);
+    setSearchUsers(authorizationHave<IUser[] | undefined>(dataSearch?.searchUsers) ?? undefined)
+  }, [authorizationHave, dataSearch])
 
   return (
-    <section
-      className={className}
-      onMouseOut={() => setSwiper(true)}
-      {...props}
-    >
+    <section className={className} onMouseOut={() => setSwiper(true)} {...props}>
       <ChatsHeader
         searchContact={searchContact}
         setSwiper={setSwiper}
@@ -125,11 +106,10 @@ export const Chats = ({
           [styles.searchWrapperUsersOn]: searchUser,
         })}
       >
-        {contacts?.length !== 0 && valueAll.replaceAll(" ", "") === "" && (
+        {contacts?.length !== 0 && valueAll.trim().length === 0 && (
           <div
             className={cn(styles.contactListWrapper, {
-              [styles.contactListWrapperOn]:
-                valueAll.replaceAll(" ", "") !== "",
+              [styles.contactListWrapperOn]: valueAll.trim().length !== 0,
             })}
           >
             {contacts &&
@@ -153,11 +133,10 @@ export const Chats = ({
                 key={user.id}
                 contact={user}
                 handleFocus={() => handleFocus(user)}
-                setValue={setValueAll}
                 search={true}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handleFocus(user);
+                onKeyDown={async (e) => {
+                  if (e.key === 'Enter') {
+                    await handleFocus(user)
                   }
                 }}
                 tabIndex={tabIndexSecond}
@@ -193,5 +172,5 @@ export const Chats = ({
         </ul>
       </section>
     </section>
-  );
-};
+  )
+}

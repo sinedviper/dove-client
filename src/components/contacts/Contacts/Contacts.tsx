@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import cn from "classnames";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState } from 'react'
+import cn from 'classnames'
+import { useNavigate, useParams } from 'react-router-dom'
 
-import { IUser } from "utils/interface";
-import { useAppDispatch, useAppSelector, useWindowSize } from "utils/hooks";
-import { CardContact } from "components/contacts";
-import { Search } from "components/layouts";
-import { getContacts, getMenuContact, getTabIndexThree } from "store/select";
+import { IUser } from 'utils/interface'
+import { useAppDispatch, useAppSelector, useWindowSize } from 'utils/hooks'
+import { CardContact } from 'components/contacts'
+import { Search } from 'components/layouts'
+import { getContacts, getMenuContact, getTabIndexThree } from 'store/select'
 import {
   actionMenuContact,
   actionClearMessages,
@@ -16,61 +16,57 @@ import {
   actionAddTabIndexThree,
   actionAddTabIndexSixth,
   actionMenuMain,
-} from "store/slice";
-import { BackIcon } from "assets";
+} from 'store/slice'
+import { BackIcon } from 'assets'
 
-import { ContactsProps } from "./Contacts.props";
-import styles from "./Contacts.module.css";
+import { ContactsProps } from './Contacts.props'
+import styles from './Contacts.module.css'
 
-export const Contacts = ({
-  className,
-  searchContact,
-  ...props
-}: ContactsProps): JSX.Element => {
-  const { username } = useParams();
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const windowSize = useWindowSize();
+export const Contacts = ({ className, searchContact, ...props }: ContactsProps): JSX.Element => {
+  const { username } = useParams()
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const windowSize = useWindowSize()
   //store
-  const contacts: IUser[] | undefined = useAppSelector(getContacts);
-  const contact: boolean = useAppSelector(getMenuContact);
-  const tabIndexThree = useAppSelector(getTabIndexThree);
+  const contacts = useAppSelector(getContacts)
+  const contact = useAppSelector(getMenuContact)
+  const tabIndexThree = useAppSelector(getTabIndexThree)
 
-  const [valueContact, setValueContact] = useState<string>("");
-  const [swiper, setSwiper] = useState<boolean>(false);
+  const [valueContact, setValueContact] = useState('')
+  const [swiper, setSwiper] = useState(false)
   //processing the transition to the chat with the user, if the users are not equal then it reloads the messages, if they are equal, then it clears the tabs
   const handleFocus = (contact: IUser): void => {
     if (String(contact.username) !== String(username)) {
-      dispatch(actionMenuContact(false));
-      dispatch(actionClearMessages());
-      dispatch(actionClearRecipient());
-      dispatch(actionAddRecipient(contact));
-      dispatch(actionAddTabIndexFirst(0));
-      dispatch(actionAddTabIndexThree(-1));
-      dispatch(actionAddTabIndexSixth(0));
-      navigate(`${contact?.username}`);
+      dispatch(actionMenuContact(false))
+      dispatch(actionClearMessages())
+      dispatch(actionClearRecipient())
+      dispatch(actionAddRecipient(contact))
+      dispatch(actionAddTabIndexFirst(0))
+      dispatch(actionAddTabIndexThree(-1))
+      dispatch(actionAddTabIndexSixth(0))
+      navigate(`${contact?.username}`)
     }
     if (String(contact.username) === String(username)) {
-      dispatch(actionMenuContact(false));
-      dispatch(actionAddTabIndexFirst(0));
-      dispatch(actionAddTabIndexThree(-1));
-      dispatch(actionAddTabIndexSixth(0));
+      dispatch(actionMenuContact(false))
+      dispatch(actionAddTabIndexFirst(0))
+      dispatch(actionAddTabIndexThree(-1))
+      dispatch(actionAddTabIndexSixth(0))
     }
     if (windowSize[0] < 1000) {
-      dispatch(actionMenuMain(false));
-      dispatch(actionAddTabIndexFirst(-1));
+      dispatch(actionMenuMain(false))
+      dispatch(actionAddTabIndexFirst(-1))
     }
-  };
+  }
 
   const handleClick = (): void => {
-    dispatch(actionMenuContact(false));
-    dispatch(actionAddTabIndexThree(-1));
-    dispatch(actionAddTabIndexFirst(0));
-    dispatch(actionAddTabIndexSixth(0));
+    dispatch(actionMenuContact(false))
+    dispatch(actionAddTabIndexThree(-1))
+    dispatch(actionAddTabIndexFirst(0))
+    dispatch(actionAddTabIndexSixth(0))
     if (windowSize[0] < 1000) {
-      dispatch(actionAddTabIndexSixth(-1));
+      dispatch(actionAddTabIndexSixth(-1))
     }
-  };
+  }
 
   return (
     <section
@@ -80,11 +76,7 @@ export const Contacts = ({
       {...props}
     >
       <div className={styles.contactSearch}>
-        <button
-          tabIndex={tabIndexThree}
-          className={styles.back}
-          onClick={handleClick}
-        >
+        <button tabIndex={tabIndexThree} className={styles.back} onClick={handleClick}>
           <BackIcon className={styles.backIcon} />
         </button>
         <Search
@@ -108,32 +100,26 @@ export const Contacts = ({
                 <CardContact
                   contact={contact}
                   key={contact.id}
-                  setValue={setValueContact}
                   handleFocus={handleFocus}
                   tabIndex={tabIndexThree}
                 />
               ))
               .filter((val) => {
-                if (valueContact.replaceAll(" ", "") === "") {
-                  return true;
-                }
-                if (valueContact.replaceAll(" ", "") !== "") {
-                  const contact: IUser = val?.props?.contact;
+                if (valueContact.trim().length === 0) return true
+
+                if (valueContact.trim().length !== 0) {
+                  const contact: IUser = val?.props?.contact
                   if (
-                    contact.name
-                      .toLowerCase()
-                      .includes(valueContact.toLowerCase()) ||
-                    contact.surname
-                      .toLowerCase()
-                      .includes(valueContact.toLowerCase())
+                    contact.name.toLowerCase().includes(valueContact.toLowerCase()) ||
+                    contact.surname.toLowerCase().includes(valueContact.toLowerCase())
                   ) {
-                    return true;
+                    return true
                   }
                 }
-                return false;
+                return false
               })}
         </ul>
       </section>
     </section>
-  );
-};
+  )
+}

@@ -1,21 +1,16 @@
-import React from "react";
-import { useMutation } from "@apollo/client";
-import cn from "classnames";
+import React from 'react'
+import { useMutation } from '@apollo/client'
+import cn from 'classnames'
 
-import {
-  useAppDispatch,
-  useAppSelector,
-  useAuthorization,
-  useError,
-} from "utils/hooks";
-import { IUser } from "utils/interface";
-import { deleteMessages } from "resolvers/messages";
-import { getUser } from "store/select";
-import { actionAddMessages, actionAddMessageEdit } from "store/slice";
-import { CopyIcon, DeleteIcon, EditIcon, ReplyIcon } from "assets";
+import { useAppDispatch, useAppSelector, useAuthorization, useError } from 'utils/hooks'
+import { IMessage } from 'utils/interface'
+import { deleteMessages } from 'resolvers/messages'
+import { getUser } from 'store/select'
+import { actionAddMessages, actionAddMessageEdit } from 'store/slice'
+import { CopyIcon, DeleteIcon, EditIcon, ReplyIcon } from 'assets'
 
-import { MessageEditProps } from "./MessageEdit.props";
-import styles from "./MessageEdit.module.css";
+import { MessageEditProps } from './MessageEdit.props'
+import styles from './MessageEdit.module.css'
 
 export const MessageEdit = ({
   setEditMessage,
@@ -27,28 +22,28 @@ export const MessageEdit = ({
   className,
   ...props
 }: MessageEditProps): JSX.Element => {
-  const dispatch = useAppDispatch();
-  const autorization = useAuthorization();
-  const error = useError();
+  const dispatch = useAppDispatch()
+  const authorization = useAuthorization()
+  const error = useError()
   //store
-  const user: IUser | undefined = useAppSelector(getUser);
+  const user = useAppSelector(getUser)
 
   const [mutationFunction] = useMutation(deleteMessages, {
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
     onCompleted(data) {
-      autorization({ data: data.addMessages, actionAdd: actionAddMessages });
+      authorization<IMessage[]>(data.addMessages, actionAddMessages)
     },
     onError(errorData) {
-      error(errorData.message);
+      error(errorData.message)
     },
-  });
+  })
   //copy string
-  const handleCopy = (value: string): void => {
-    navigator.clipboard.writeText(value);
-  };
-  //remove messega
+  const handleCopy = async (value: string): Promise<void> => {
+    await navigator.clipboard.writeText(value)
+  }
+  //remove message
   const handleDelete = async (): Promise<void> => {
-    setEditMessage(false);
+    setEditMessage(false)
     await mutationFunction({
       variables: {
         message: {
@@ -57,8 +52,8 @@ export const MessageEdit = ({
           senderMessage: Number(client.user),
         },
       },
-    });
-  };
+    })
+  }
   //add edit message in store
   const handleMessage = (edit: boolean): void => {
     dispatch(
@@ -69,11 +64,11 @@ export const MessageEdit = ({
           chatId: Number(client.chatId),
         },
         edit,
-      })
-    );
-  };
+      }),
+    )
+  }
 
-  const stylePostion = (): { top: number; left: number } => {
+  const stylePosition = (): { top: number; left: number } => {
     return position
       ? {
           top: user?.id === client.senderMessage ? clientY - 120 : clientY - 65,
@@ -82,23 +77,20 @@ export const MessageEdit = ({
       : {
           top: clientY,
           left: clientX,
-        };
-  };
+        }
+  }
 
   return (
     <div
       className={cn(className, styles.messageWrapperEdit, {
         [styles.messageWrapperEditOn]: editMessage,
       })}
-      style={stylePostion()}
+      style={stylePosition()}
       {...props}
     >
       <span
         className={styles.editMessagePerson}
-        onClick={() => {
-          setEditMessage(false);
-          handleMessage(false);
-        }}
+        onClick={() => (setEditMessage(false), handleMessage(false))}
       >
         <ReplyIcon className={styles.editIconMessage} />
         <p>Reply</p>
@@ -106,36 +98,25 @@ export const MessageEdit = ({
       {user?.id === client.senderMessage ? (
         <span
           className={styles.editMessagePerson}
-          onClick={() => {
-            setEditMessage(false);
-            handleMessage(true);
-          }}
+          onClick={() => (setEditMessage(false), handleMessage(true))}
         >
-          <EditIcon
-            className={cn(styles.editIconMessage, styles.editIconMessageE)}
-          />
+          <EditIcon className={cn(styles.editIconMessage, styles.editIconMessageE)} />
           <p>Edit</p>
         </span>
       ) : null}
       <span
         className={styles.editMessagePerson}
-        onClick={() => {
-          setEditMessage(false);
-          handleCopy(client.text);
-        }}
+        onClick={async () => (setEditMessage(false), await handleCopy(client.text))}
       >
         <CopyIcon className={styles.editIconMessage} />
         <p>Copy</p>
       </span>
       {user?.id === client.senderMessage ? (
-        <span
-          className={cn(styles.editMessagePerson, styles.deleteMessage)}
-          onClick={handleDelete}
-        >
+        <span className={cn(styles.editMessagePerson, styles.deleteMessage)} onClick={handleDelete}>
           <DeleteIcon className={styles.editIconMessage} />
           <p>Delete</p>
         </span>
       ) : null}
     </div>
-  );
-};
+  )
+}
