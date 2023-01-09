@@ -30,7 +30,7 @@ export const useEditsInput = ({ passwordCheck, user, data, setData, initialData 
   const [mutateFunction] = useMutation(updateUser, {
     onCompleted(data) {
       authorization<IUser>(data.updateUser, actionAddUser)
-      setData(initialData)
+      //setData(initialData)
       dispatch(actionAddTabIndexFiveth(-1))
       dispatch(actionAddTabIndexFourth(0))
       dispatch(actionMenuEdit(false))
@@ -119,8 +119,7 @@ export const useEditsInput = ({ passwordCheck, user, data, setData, initialData 
     if (user?.bio !== bio) {
       if (
         // eslint-disable-next-line no-useless-escape
-        bio.replace(/[A-Za-z0-9\.\, ]+/g, '').length !== 0 ||
-        bio.trim().length < 1 ||
+        bio.replace(/[A-Za-z0-9\.\,]+/g, '').length !== 0 ||
         bio.trim().length > 40
       ) {
         checkFields = false
