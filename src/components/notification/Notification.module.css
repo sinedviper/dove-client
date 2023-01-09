@@ -1,30 +1,36 @@
 .loadingWrapper {
-  display: flex;
-  gap: 5px;
-  flex-direction: column;
-  z-index: 10;
   position: absolute;
-  left: 0px;
+  z-index: 10;
   bottom: 20px;
-  padding: 5px;
-  max-width: 420px;
-  pointer-events: none;
-  user-select: none;
+  left: 0;
+
+  display: flex;
+  flex-direction: column;
+
   width: 100%;
+  max-width: 420px;
+  padding: 5px;
+
+  user-select: none;
+  pointer-events: none;
+  gap: 5px;
 }
 
 .loading,
 .error {
   display: flex;
-  gap: 20px;
-  padding: 5px 15px 5px 15px;
-  border-radius: 10px;
   align-items: center;
-  border: 1px solid var(--border-second);
-  background-color: var(--opacity-box-second);
-  backdrop-filter: blur(30px);
-  transition: var(--transition-static);
+
   width: 100%;
+  padding: 5px 15px;
+
+  transition: var(--transition-static);
+
+  border: 1px solid var(--border-second);
+  border-radius: 10px;
+  background-color: var(--opacity-box-second);
+  gap: 20px;
+  backdrop-filter: blur(30px);
 }
 
 .copy {
@@ -32,34 +38,41 @@
 }
 
 .loading p {
-  font-size: 16px;
   color: var(--text-first);
+
+  font-size: 16px;
 }
 
 .error {
   width: 100%;
   padding: 5px 15px;
-  background-color: rgba(217, 72, 72, 0.4);
+
   border: 1px solid var(--error);
+  background-color: rgb(217 72 72 / 40%);
 }
 
 .error p {
+  width: 100%;
+
+  word-break: break-all;
+
+  color: var(--text-first);
+
   font-size: 16px;
   font-weight: 600;
-  color: var(--text-first);
-  word-break: break-all;
-  width: 100%;
 }
 
 .loadingIcon {
+  position: relative;
+
   width: 25px;
   height: 25px;
-  position: relative;
 }
 
 .errorIcon {
-  height: 25px;
   width: 25px;
+  height: 25px;
+
   transform: rotate(180deg);
 }
 
@@ -79,8 +92,10 @@
   top: 50%;
   bottom: 50%;
   left: -80%;
+
   width: 60px;
   height: 60px;
+
   pointer-events: none;
 }
 
@@ -91,31 +106,37 @@
 .removeWrapper {
   width: 25px;
   height: 25px;
-  border-radius: 50%;
-  border: none;
-  background: none;
+
   cursor: pointer;
-  pointer-events: fill;
   user-select: all;
+  pointer-events: fill;
+
+  border: none;
+  border-radius: 50%;
+  background: none;
 }
 
 .removeIcon {
   min-width: 25px;
   height: 25px;
+
   transition: var(--transition-static);
+
   border-radius: 50%;
 }
 
 .removeIcon:hover {
   transition: var(--transition-static);
+
   background-color: var(--opacity-box-dark);
 }
 
-@media screen and (max-width: 600px) {
+@media screen and ( max-width: 600px ) {
   .loadingWrapper {
-    width: 100%;
-    max-width: 600px;
     top: 40px;
     bottom: inherit;
+
+    width: 100%;
+    max-width: 600px;
   }
 }

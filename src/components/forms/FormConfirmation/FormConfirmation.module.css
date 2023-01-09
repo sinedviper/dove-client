@@ -7,57 +7,67 @@
 }
 
 .form {
+  position: relative;
+
   display: flex;
   flex-direction: column;
-  position: relative;
-  gap: 15px;
-  text-align: center;
-  margin: 100px auto 0px;
+
   width: 100%;
-  padding: 0px 10px 50px 10px;
   max-width: 360px;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+  margin: 100px auto 0;
+  padding: 0 10px 50px;
+
   user-select: none;
+  text-align: center;
+  gap: 15px;
+  -webkit-touch-callout: none;
 }
+
 .head {
   margin-top: 30px;
-  font-size: 30px;
+
   cursor: default;
-  word-wrap: break-word;
   user-select: none;
+  word-wrap: break-word;
+
+  font-size: 30px;
 }
+
 .text {
+  cursor: default;
+  user-select: none;
+  word-wrap: break-word;
+
+  color: var(--text-second);
+
   font-size: 15px;
   line-height: 1.5;
-  color: var(--text-second);
-  cursor: default;
-  word-wrap: break-word;
-  user-select: none;
 }
 
 .login {
   display: flex;
   flex-direction: column;
+
   margin-top: 20px;
   gap: 30px;
 }
 
 .button {
   position: relative;
+
   width: 100%;
   padding: 18px 0;
-  font-size: 17px;
-  font-weight: 600;
-  color: var(--white);
-  background-color: var(--primary);
-  border-radius: 10px;
-  border: none;
+
   cursor: pointer;
   transition: var(--transition-static);
+
+  color: var(--white);
+  border: none;
+  border-radius: 10px;
+  background-color: var(--primary);
+
+  font-size: 17px;
+  font-weight: 600;
 }
 
 .loading {
@@ -72,31 +82,41 @@
 
 .button:hover {
   transition: var(--transition-static);
+
   background-color: var(--primary-dark);
 }
 
 .errorInput {
   border-color: var(--error);
 }
+
 .error {
-  font-size: 13px;
   margin-top: -20px;
+
   color: var(--error);
-}
-.link {
-  font-size: 14px;
-  margin-top: -15px;
-  color: var(--text-second);
-  cursor: default;
-  pointer-events: none;
-}
-.reg {
-  color: var(--primary);
-  cursor: pointer;
-  pointer-events: all;
+
+  font-size: 13px;
 }
 
-@media screen and (max-width: 600px) {
+.link {
+  margin-top: -15px;
+
+  cursor: default;
+  pointer-events: none;
+
+  color: var(--text-second);
+
+  font-size: 14px;
+}
+
+.reg {
+  cursor: pointer;
+  pointer-events: all;
+
+  color: var(--primary);
+}
+
+@media screen and ( max-width: 600px ) {
   .form {
     margin-top: 30px;
   }

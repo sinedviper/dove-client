@@ -1,30 +1,32 @@
 .contacts {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: left;
+
   width: 100%;
   min-width: 290px;
   height: 75px;
-  border-radius: 15px;
-  transition: var(--transition);
-  display: flex;
+
   cursor: pointer;
-  justify-content: left;
-  align-items: center;
-  pointer-events: fill;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
-  position: relative;
+  transition: var(--transition);
+  pointer-events: fill;
+
+  border-radius: 15px;
+  -webkit-touch-callout: none;
 }
 
 .contacts:hover {
   transition: var(--transition-static);
+
   background-color: var(--opacity-box);
 }
 
 .contactActive {
   transition: var(--transition);
+
   color: var(--white);
   background-color: var(--primary);
 }
@@ -35,100 +37,123 @@
 
 .contactActive:hover {
   transition: var(--transition-static);
+
   color: var(--white);
   background-color: var(--primary);
 }
 
 .contactsPhoto {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+
   min-width: 50px;
   height: 50px;
-  border-radius: 50%;
   margin-left: 10px;
+
   pointer-events: none;
+
+  border-radius: 50%;
 }
 
 .contactsPhoto span {
   display: block;
+
   color: var(--white);
+
   font-weight: 600;
 }
 
 .contactInfo {
   position: relative;
+
   display: flex;
   flex-direction: column;
-  margin-left: 10px;
+
   width: 300px;
+  margin-left: 10px;
+
   pointer-events: none;
 }
 
 .contactName {
-  padding: 0 5px 0 0;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 15px;
   overflow: hidden;
+
+  padding: 0 5px 0 0;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
   color: var(--text-first);
+
+  font-size: 15px;
 }
 
 .contactMessage {
-  margin-top: 5px;
-  color: var(--text-second);
-  padding: 0 5px 0 0;
-  font-size: 14px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   overflow: hidden;
+
+  margin-top: 5px;
+  padding: 0 5px 0 0;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  color: var(--text-second);
+
+  font-size: 14px;
 }
 
 .menuChat {
   position: absolute;
-  background-color: var(--opacity-box-second);
-  backdrop-filter: blur(30px);
-  padding: 5px;
-  border-radius: 10px;
   z-index: 1;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+
   width: 200px;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+  padding: 5px;
+
   user-select: none;
-  opacity: 0;
-  pointer-events: none;
+  transition: var(--transition);
   transform-origin: left top;
-  transition: var(--transition);
+  pointer-events: none;
+
+  opacity: 0;
+  border-radius: 10px;
+  background-color: var(--opacity-box-second);
+  box-shadow: 0 2px 5px rgb(0 0 0 / 20%);
+  backdrop-filter: blur(30px);
+  -webkit-touch-callout: none;
 }
+
 .menuChatOn {
-  transition: var(--transition);
-  opacity: 1;
-  pointer-events: all;
   z-index: 5;
+
+  transition: var(--transition);
+  pointer-events: all;
+
+  opacity: 1;
 }
 
 .menuCard {
   display: flex;
-  transition: var(--transition-static);
-  border-radius: 5px;
   align-items: center;
+
   padding: 5px 15px;
-  gap: 20px;
 
   cursor: pointer;
+  transition: var(--transition-static);
+
+  border-radius: 5px;
+  gap: 20px;
 }
 
 .menuCard:hover {
   transition: var(--transition-static);
+
   background-color: var(--opacity-box);
 }
 
 .menuCard p {
   color: var(--text-first);
+
   font-size: 14px;
   font-weight: 600;
 }
@@ -142,6 +167,7 @@
 .imageContact {
   width: 55px;
   height: 55px;
+
   border-radius: 50%;
   object-fit: cover;
   object-position: center center;

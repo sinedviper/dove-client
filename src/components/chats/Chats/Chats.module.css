@@ -1,8 +1,10 @@
 .contactsList {
-  padding: 6px;
-  height: calc(100vh - 60px);
-  overflow-y: hidden;
   overflow-x: hidden;
+  overflow-y: hidden;
+
+  height: calc(100vh - 60px);
+  padding: 6px;
+
   background-color: var(--background-first);
 }
 
@@ -13,47 +15,58 @@
 .searchWrapperUsers {
   position: absolute;
   z-index: 0;
+
+  display: flex;
+  overflow-x: hidden;
+  overflow-y: overlay;
+  flex-direction: column;
+
   width: 100%;
   min-width: 300px;
-  background-color: var(--background-first);
   height: 92vh;
-  overflow-y: overlay;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  opacity: 0;
+
   transition: var(--transition);
   transform: scale(1.05);
   pointer-events: none;
+
+  opacity: 0;
+  background-color: var(--background-first);
 }
 
 .searchWrapperUsersOn {
-  opacity: 1;
   z-index: 1;
+
   transition: var(--transition);
-  pointer-events: all;
   transform: scale(1);
+  pointer-events: all;
+
+  opacity: 1;
 }
 
 .contactListWrapper {
   display: flex;
   overflow-x: overlay;
   overflow-y: hidden;
+
   padding: 6px;
-  gap: 5px;
-  border-bottom: 1px solid var(--border-second);
-  opacity: 1;
+
   transition: var(--transition);
+
+  opacity: 1;
+  border-bottom: 1px solid var(--border-second);
+  gap: 5px;
 }
 
 .contactListWrapperOn {
   transition: var(--transition);
   pointer-events: none;
+
   opacity: 0;
 }
 
 .searchWrapper p {
   padding: 20px;
+
   color: var(--text-second);
 }
 
@@ -62,29 +75,35 @@
 }
 
 .fetchError {
-  border-radius: 10px;
-  display: flex;
-  padding: 20px;
-  padding-left: 80px;
-  text-align: left;
-  align-items: center;
-  width: 100%;
   position: relative;
-  background-color: var(--fetch);
-  pointer-events: none;
-  user-select: none;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
   margin-bottom: 5px;
+  padding: 20px 0 0 80px;
+
+  user-select: none;
+  text-align: left;
+  pointer-events: none;
+
+  border-radius: 10px;
+  background-color: var(--fetch);
 }
 
 .fetchError p {
-  font-size: 18px;
   color: var(--black);
+
+  font-size: 18px;
 }
+
 .fetchErrorLoading {
-  width: 80px;
-  height: 80px;
   position: absolute;
   left: 0;
+
+  width: 80px;
+  height: 80px;
 }
 
 .fetchErrorLoading circle {

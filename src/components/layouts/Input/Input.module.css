@@ -4,68 +4,81 @@
 
 .placeholder {
   position: absolute;
-  color: var(--text-third);
-  font-size: 12px;
-  cursor: text;
   top: -7px;
   left: 15px;
+
   height: 9px;
-  background-color: var(--background-first);
   padding: 0 3px;
+
+  cursor: text;
   transition: var(--transition-input);
   pointer-events: none;
+
+  color: var(--text-third);
+  background-color: var(--background-first);
+
+  font-size: 12px;
 }
 
 .labelOn {
-  color: var(--primary);
   transition: var(--transition-input);
+
+  color: var(--primary);
+
   font-weight: 600;
 }
 
 .input {
   width: 100%;
-  border-radius: 10px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
   padding: 15px;
-  font-size: 17px;
-  background: inherit;
+
   transition: var(--transition-input);
-  border: 1px solid var(--border-first);
+
   color: var(--text-first);
+  border: 1px solid var(--border-first);
+  border-radius: 10px;
   outline: none;
+  background: inherit;
+
+  font-size: 17px;
 }
 
 .input:hover {
-  border: 1px solid var(--primary);
   transition: var(--transition-input);
+
+  border: 1px solid var(--primary);
 }
 
 .input:focus {
   transition: var(--transition-input);
+
   border: 1px solid var(--primary);
-  box-shadow: 0px 0px 0px 1px var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
 }
 
 .error {
   transition: var(--transition-input);
+
   border: 1px solid var(--error);
 }
 
 .error:hover {
   transition: var(--transition-input);
+
   border: 1px solid var(--error);
 }
 
 .error:focus {
   transition: var(--transition-input);
+
   border: 1px solid var(--error);
   outline: var(--error) solid 1px;
 }
 
 .errorLabel {
-  color: var(--error);
   transition: var(--transition-input);
+
+  color: var(--error);
 }
 
 .password {
@@ -74,14 +87,15 @@
 
 .eyeWrapper {
   position: absolute;
-  right: 10px;
   top: 12px;
+  right: 10px;
 }
 
 .eye {
   width: 30px;
   height: 30px;
   stroke: var(--icon-first);
+
   cursor: pointer;
 }
 
@@ -95,22 +109,26 @@
 
 .checkWrapper {
   position: absolute;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  left: 0;
   bottom: -8px;
+  left: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+
   transition: var(--transition-static);
 }
 
 .checkOne,
 .checkTwo,
 .checkThree {
-  height: 3px;
-  background-color: var(--border-first);
   width: 30%;
+  height: 3px;
+
   border-radius: 10px;
+  background-color: var(--border-first);
 }
 
 .checkOn {
@@ -129,11 +147,14 @@
   position: absolute;
   top: -10px;
   right: -10px;
+
   width: 20px;
   height: 20px;
-  border-radius: 50%;
+
   cursor: pointer;
   user-select: none;
+
+  border-radius: 50%;
   background-color: var(--background-first);
 }
 
@@ -145,18 +166,22 @@
 
 .notificaText {
   position: absolute;
-  bottom: 60px;
+  z-index: 3;
   right: 10px;
-  word-wrap: break-word;
-  text-align: center;
+  bottom: 60px;
+
   padding: 10px;
+
+  transition: var(--transition-static);
+  text-align: center;
+  word-wrap: break-word;
+
+  color: var(--text-first);
+  border-radius: 10px;
+  background: var(--primary);
+
   font-size: 14px;
   font-weight: 600;
-  border-radius: 10px;
-  color: var(--text-first);
-  background: var(--primary);
-  transition: var(--transition-static);
-  z-index: 3;
 }
 
 .checkPasswordNes {

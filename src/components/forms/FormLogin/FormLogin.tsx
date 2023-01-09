@@ -74,6 +74,23 @@ export const FormLogin = ({ className, ...props }: FormLoginProps): JSX.Element 
       })
     }
   }
+
+  const handleTest = async (): Promise<void> => {
+    const email = 'test@gmail.com'
+    const password = '1998Sinedviper'
+
+    await mutateFunction({ variables: { input: { password, email } } }).then(async (res) => {
+      const data = res?.data.loginUser
+      if (data.status === 'Invalid') {
+        error(data.message)
+      }
+      if (data.status === 'Success') {
+        localStorage.setItem('token', data.access_token)
+        await queryFunctionUser()
+      }
+    })
+  }
+
   //keeps track of the theme of the system
   useEffect(() => {
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -137,6 +154,16 @@ export const FormLogin = ({ className, ...props }: FormLoginProps): JSX.Element 
               tabIndex={0}
             >
               CONFIRMATION
+            </span>
+          </p>
+          <p className={styles.link}>
+            <span
+              className={styles.reg}
+              onClick={handleTest}
+              onKeyDown={(e) => e.key === 'Enter' && handleTest()}
+              tabIndex={0}
+            >
+              TEST LOGIN
             </span>
           </p>
         </div>

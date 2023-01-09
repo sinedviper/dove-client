@@ -84,7 +84,7 @@ export const MessageInput = ({ className, main }: MessageInputProps): JSX.Elemen
 
   return (
     <div className={cn(styles.inputWrapper)}>
-      {chat && message && Number(message.chatId) === Number(chat?.id) && (
+      {chat && message && Number(message?.chatId) === Number(chat?.id) && (
         <div className={styles.messageReply}>
           {edit ? (
             <EditIcon className={styles.iconEditMessage} />

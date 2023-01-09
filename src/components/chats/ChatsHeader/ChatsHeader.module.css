@@ -1,76 +1,93 @@
 .menuWrapper {
+  display: flex;
+
+  min-width: 300px;
   padding: 8px 15px;
+
+  user-select: none;
+
   border-bottom: 1px solid var(--border-second);
   background-color: var(--background-first);
-  display: flex;
   -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  min-width: 300px;
 }
 
 .menu {
   position: relative;
+
   min-width: 40px;
   height: 40px;
-  border-radius: 50%;
-  border: none;
-  background-color: inherit;
-  transition: var(--transition-static);
   margin-right: 7px;
+
   cursor: pointer;
+  transition: var(--transition-static);
+
+  border: none;
+  border-radius: 50%;
+  background-color: inherit;
 }
 
 .menu:hover {
   transition: var(--transition-static);
+
   background-color: var(--opacity-box);
 }
 
 .line {
-  pointer-events: none;
-  width: 18px;
-  height: 2px;
-  border-radius: 30px;
-  background-color: var(--icon-first);
-  display: block;
   position: absolute;
   top: 18px;
   left: 11px;
+
+  display: block;
+
+  width: 18px;
+  height: 2px;
+
   transition: var(--transition);
+  pointer-events: none;
+
+  border-radius: 30px;
+  background-color: var(--icon-first);
 }
 
 .line::after {
-  pointer-events: none;
   position: absolute;
   top: 5px;
-  content: "";
+
+  display: block;
+
   width: 18px;
   height: 2px;
+
+  content: "";
+  transition: var(--transition);
+  pointer-events: none;
+
   border-radius: 30px;
   background-color: var(--icon-first);
-  display: block;
-  transition: var(--transition);
 }
 
 .line::before {
-  pointer-events: none;
   position: absolute;
   top: -5px;
-  content: "";
+
+  display: block;
+
   width: 18px;
   height: 2px;
+
+  content: "";
+  transition: var(--transition);
+  pointer-events: none;
+
   border-radius: 30px;
   background-color: var(--icon-first);
-  display: block;
-  transition: var(--transition);
 }
 
 .lineBack {
   top: 18px;
+
   width: 18px;
+
   transition: var(--transition);
   transform: rotate(180deg);
 }
@@ -78,51 +95,63 @@
 .lineBack::after {
   top: 4px;
   left: 7px;
+
   width: 12px;
-  transform: rotate(-45deg);
+
   transition: var(--transition);
+  transform: rotate(-45deg);
 }
 
 .lineBack::before {
   top: -4px;
-  width: 12px;
   left: 7px;
-  transform: rotate(45deg);
+
+  width: 12px;
+
   transition: var(--transition);
+  transform: rotate(45deg);
 }
 
 .menuClose {
-  display: flex;
-  flex-direction: column;
   position: absolute;
   z-index: -1;
-  max-width: 300px;
-  width: 100%;
-  background-color: var(--opacity-box-second);
-  backdrop-filter: blur(30px);
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
-  padding: 5px;
-  border-radius: 10px;
   top: 55px;
   left: 15px;
-  text-align: center;
-  opacity: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  max-width: 300px;
+  padding: 5px;
+
   transition: var(--transition);
+  text-align: center;
+
+  opacity: 0;
+  border-radius: 10px;
+  background-color: var(--opacity-box-second);
+  box-shadow: 0 0 3px rgb(0 0 0 / 30%);
+  backdrop-filter: blur(30px);
 }
 
 .menuOpen {
-  transition: var(--transition);
   z-index: 10;
+
+  transition: var(--transition);
+
   opacity: 1;
 }
 
 .creator {
   margin: 10px 0 5px;
-  font-size: 15px;
+
   color: var(--primary);
+
+  font-size: 15px;
 }
 
-@media screen and (max-width: 400px) {
+@media screen and ( max-width: 400px ) {
   .menuClose {
     max-width: 250px;
   }

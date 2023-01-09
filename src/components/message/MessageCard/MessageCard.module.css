@@ -1,28 +1,29 @@
 .message {
-  display: flex;
   position: relative;
-  flex-direction: column;
-  background-color: var(--primary-light);
-  max-width: 480px;
-  justify-content: flex-end;
-  padding: 6px 10px;
-  border-radius: 10px;
+
+  display: flex;
   align-self: end;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  max-width: 480px;
   margin-top: 2px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 6px 10px;
+
+  user-select: none;
+
+  border-radius: 10px;
+  background-color: var(--primary-light);
+  box-shadow: 0 2px 5px rgb(0 0 0 / 20%);
 
   -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 
 .textMessageWrap {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
   pointer-events: none;
   gap: 5px;
 }
@@ -33,11 +34,13 @@
 
 .messageUser {
   align-self: start;
+
   background-color: var(--background-first);
 }
 
 .wrapperUserId {
   align-self: end;
+
   background-color: var(--primary-light);
 }
 
@@ -46,18 +49,20 @@
 }
 
 .messageText {
-  font-size: 16px;
   z-index: 1;
-  pointer-events: none;
+
   cursor: text;
   word-break: break-all;
   pointer-events: none;
+
   color: var(--text-first);
+
+  font-size: 16px;
 }
 
 .messageTextLen {
+  height: 0;
   margin-top: 8px;
-  height: 0px;
 }
 
 .messageTextReply {
@@ -66,25 +71,31 @@
 
 .bottomMessage {
   display: flex;
-  gap: 5px;
-  height: 16px;
-  white-space: nowrap;
-  justify-content: flex-end;
-  pointer-events: none;
   align-items: center;
+  justify-content: flex-end;
+
+  height: 16px;
+
+  white-space: nowrap;
+  pointer-events: none;
+  gap: 5px;
 }
 
 .messageEdit {
-  font-style: italic;
-  font-size: 12px;
-  color: var(--text-seventh);
   z-index: 1;
+
+  color: var(--text-seventh);
+
+  font-size: 12px;
+  font-style: italic;
 }
 
 .messageDate {
-  font-size: 12px;
-  color: var(--text-seventh);
   z-index: 1;
+
+  color: var(--text-seventh);
+
+  font-size: 12px;
 }
 
 .receipt {
@@ -97,66 +108,78 @@
 
 .messageStyleLeft,
 .messageStyleRight {
-  display: block;
-  pointer-events: none;
   position: absolute;
-
-  width: 20px;
-  height: 20px;
+  z-index: 0;
 
   right: -6px;
   bottom: -3px;
 
-  fill: var(--primary-light);
+  display: block;
+
+  width: 20px;
+  height: 20px;
+
   transform: rotate(2deg);
-  z-index: 0;
+  pointer-events: none;
+
+  fill: var(--primary-light);
 }
 
 .messageStyleRight {
-  display: block;
   right: auto;
   left: -6px;
+
+  display: block;
+
   transform: rotate(-2deg);
   fill: var(--background-first);
 }
 
 .messageReply {
-  max-width: 500px;
-  width: 100%;
   display: flex;
   align-items: center;
+
+  width: 100%;
+  max-width: 500px;
+
   user-select: none;
   pointer-events: none;
 }
 
 .textWrapper {
-  max-width: 390px;
   width: 100%;
+  max-width: 390px;
+
   pointer-events: none;
 }
 
 .textMessage {
-  font-size: 13px;
+  overflow: hidden;
+
   white-space: nowrap;
   text-overflow: ellipsis;
-  overflow: hidden;
+
+  font-size: 13px;
 }
 
 .textMessage,
 .messageWrapperEdit {
   padding-left: 5px;
-  border-left: 2px solid var(--primary);
+
   pointer-events: none;
+
+  border-left: 2px solid var(--primary);
 }
 
 .messageWrapperEdit {
-  font-size: 14px;
   color: var(--primary);
+
+  font-size: 14px;
 }
 
 .messageWrapperUser {
-  border-color: var(--text-first);
   color: var(--text-first);
+  border-color: var(--text-first);
 }
 
 .wrapperReply {

@@ -15,7 +15,7 @@ import { deleteUser } from 'resolvers/user'
 import { deleteUpload } from 'resolvers/upload'
 import { getUser, getMenuSetting, getImageUser } from 'store/select'
 import { actionAddImageUser, actionAddCopy } from 'store/slice'
-import { axiosSet } from 'utils/service'
+import { handleLoadPhoto } from 'utils/helpers'
 
 import { SettingsImage } from '../SettingImage'
 import { SettingsInfo } from '../SettingsInfo'
@@ -73,21 +73,7 @@ export const Settings = ({
   const handleRemoveUser = async (): Promise<void> => {
     await mutationFunction()
   }
-  //load img function in server
-  const handleLoadPhoto = async (e): Promise<void> => {
-    const formData = new FormData()
-    const file = e.target.files[0]
-    if (e.target.files[0].size > 3000000) {
-      error('File have many size, please select file with 3MB')
-      e.target.value = null
-    }
-    if (e.target.files[0].size < 3000000) {
-      formData.append('image', file)
-      const { data } = await axiosSet.post('/upload', formData)
-      authorization<IImage[]>(data, actionAddImageUser)
-      e.target.value = null
-    }
-  }
+
   //delete photo
   const handleRemovePhoto = async (idPhoto: number, file: string): Promise<void> => {
     await mutationFunctionDeletePhoto({
@@ -113,7 +99,7 @@ export const Settings = ({
         user={user}
         handleRemovePhoto={handleRemovePhoto}
         profile={profile}
-        handleLoadPhoto={handleLoadPhoto}
+        handleLoadPhoto={(e) => handleLoadPhoto(e, error, authorization)}
         handleCopy={handleCopy}
         tabIndex={tabIndex}
       />

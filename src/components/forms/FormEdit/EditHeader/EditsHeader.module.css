@@ -1,10 +1,13 @@
 .editHead {
-  display: flex;
-  padding: 9px 15px;
-  background-color: var(--background-first);
-  justify-content: space-between;
-  align-items: center;
   z-index: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 9px 15px;
+
+  background-color: var(--background-first);
 }
 
 .editHead div {
@@ -14,28 +17,35 @@
 
 .editHead h2 {
   margin-left: 15px;
-  font-size: 19px;
+
   pointer-events: none;
+
   color: var(--text-first);
+
+  font-size: 19px;
 }
 
 .back {
-  width: 40px;
-  height: 40px;
-  padding: 10px;
-  border-radius: 50%;
-  margin-right: 10px;
-  cursor: pointer;
-  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: none;
+
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  padding: 10px;
+
+  cursor: pointer;
   transition: var(--transition-static);
+
+  border: none;
+  border-radius: 50%;
+  background: none;
 }
 
 .back:hover {
   transition: var(--transition-static);
+
   background-color: var(--opacity-box);
 }
 

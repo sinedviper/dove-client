@@ -1,10 +1,13 @@
 .settingsHead {
   position: relative;
+
   display: flex;
-  padding: 8.5px 15px;
-  background-color: var(--background-first);
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+
+  padding: 8.5px 15px;
+
+  background-color: var(--background-first);
 }
 
 .settingsHead div {
@@ -14,24 +17,30 @@
 
 .settingsHead h2 {
   margin-left: 15px;
-  font-size: 19px;
+
   pointer-events: none;
+
   color: var(--text-first);
+
+  font-size: 19px;
 }
 
 .back {
-  width: 40px;
-  height: 40px;
-  padding: 10px;
-  border-radius: 50%;
-  margin-right: 10px;
-  cursor: pointer;
-  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: none;
+
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  padding: 10px;
+
+  cursor: pointer;
   transition: var(--transition-static);
+
+  border: none;
+  border-radius: 50%;
+  background: none;
 }
 
 .backCorrect {
@@ -40,6 +49,7 @@
 
 .back:hover {
   transition: var(--transition-static);
+
   background-color: var(--opacity-box);
 }
 
@@ -53,8 +63,9 @@
 }
 
 .removeIcon {
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 20px;
+  stroke: var(--icon-second);
 }
 
 .backIcon path,
@@ -63,21 +74,25 @@
 }
 
 .edit {
-  width: 40px;
-  height: 40px;
-  padding: 7.5px 3.5px;
-  border-radius: 50%;
-  cursor: pointer;
-  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: none;
+
+  width: 40px;
+  height: 40px;
+  padding: 7.5px 3.5px;
+
+  cursor: pointer;
   transition: var(--transition-static);
+
+  border: none;
+  border-radius: 50%;
+  background: none;
 }
 
 .edit:hover {
   transition: var(--transition-static);
+
   background-color: var(--opacity-box);
 }
 
@@ -92,96 +107,112 @@
 
 .delete {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  border: none;
-  background-color: initial;
+
   cursor: pointer;
   transition: var(--transition-static);
+
+  border: none;
+  border-radius: 50%;
+  background-color: initial;
 }
 
 .delete:hover {
   transition: var(--transition-static);
+
   background-color: var(--opacity-box);
 }
 
 .dot {
-  pointer-events: none;
   width: 5px;
   height: 5px;
+
+  pointer-events: none;
+
   border-radius: 50%;
   background-color: var(--icon-first);
 }
 
 .dot::before {
-  pointer-events: none;
-  content: "";
   display: block;
-  margin-top: 8px;
+
   width: 5px;
   height: 5px;
+  margin-top: 8px;
+
+  content: "";
+  pointer-events: none;
+
   border-radius: 50%;
   background-color: var(--icon-first);
 }
 
 .dot::after {
-  pointer-events: none;
-  content: "";
   display: block;
-  margin-top: -21px;
+
   width: 5px;
   height: 5px;
+  margin-top: -21px;
+
+  content: "";
+  pointer-events: none;
+
   border-radius: 50%;
   background-color: var(--icon-first);
 }
 
 .deleteWrapper {
-  z-index: 1;
-  opacity: 0;
-  pointer-events: none;
   position: absolute;
-  bottom: -40px;
+  z-index: 1;
   right: 15px;
+  bottom: -40px;
+
   padding: 5px;
+
+  transition: var(--transition);
+  pointer-events: none;
+
+  opacity: 0;
   border-radius: 10px;
   background-color: var(--opacity-box-second);
   backdrop-filter: blur(30px);
-  transition: var(--transition);
 }
 
 .openDelWrap {
-  opacity: 1;
-  pointer-events: all;
   transition: var(--transition);
-}
+  pointer-events: all;
 
-.removeIcon {
-  width: 20px;
-  height: 20px;
-  stroke: var(--icon-second);
+  opacity: 1;
 }
 
 .deleteButton {
-  padding: 5px 20px;
-  border-radius: 5px;
-  border: none;
   display: flex;
   align-items: center;
-  gap: 20px;
+
+  padding: 5px 20px;
+
   cursor: pointer;
-  background-color: initial;
   transition: var(--transition-static);
+
+  border: none;
+  border-radius: 5px;
+  background-color: initial;
+  gap: 20px;
 }
 
 .deleteButton:hover {
-  background-color: var(--opacity-box-dark);
   transition: var(--transition-static);
+
+  background-color: var(--opacity-box-dark);
 }
+
 .deleteButton span {
   color: var(--icon-second);
+
   font-size: 14px;
   font-weight: 600;
 }

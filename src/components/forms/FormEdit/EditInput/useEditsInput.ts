@@ -1,16 +1,15 @@
 import { IData } from '../Edit/Edits'
 import { useMutation } from '@apollo/client'
-import axios from 'axios'
+
 import { updateUser } from 'resolvers/user'
 import {
   actionAddUser,
   actionAddTabIndexFiveth,
   actionAddTabIndexFourth,
   actionMenuEdit,
-  actionAddImageUser,
 } from 'store/slice'
 import { useAppDispatch, useAuthorization, useError } from 'utils/hooks'
-import { IImage, IUser } from 'utils/interface'
+import { IUser } from 'utils/interface'
 
 interface IEditsInput {
   passwordCheck: number
@@ -40,22 +39,6 @@ export const useEditsInput = ({ passwordCheck, user, data, setData, initialData 
       error(errorData.message)
     },
   })
-
-  //load photo
-  const handleLoadPhoto = async (e): Promise<void> => {
-    const formData = new FormData()
-    const file = e.target.files[0]
-    if (e.target.files[0].size > 3000000) {
-      error('File have many size, please select file with 3MB')
-      e.target.value = null
-    }
-    if (e.target.files[0].size < 3000000) {
-      formData.append('image', file)
-      const { data } = await axios.post('/upload', formData)
-      authorization<IImage[]>(data, actionAddImageUser)
-      e.target.value = null
-    }
-  }
 
   const onSubmit = async (): Promise<void> => {
     let checkFields = true
@@ -244,5 +227,5 @@ export const useEditsInput = ({ passwordCheck, user, data, setData, initialData 
     }
   }
 
-  return { handleLoadPhoto, onSubmit }
+  return { onSubmit }
 }

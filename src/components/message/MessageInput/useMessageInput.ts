@@ -141,6 +141,7 @@ export const useMessageInput = (
   }
   //when have edit message but want to delete and not edit message
   const handleRemoveEditMessage = () => {
+    setSend('')
     dispatch(actionClearMessageEdit())
   }
 

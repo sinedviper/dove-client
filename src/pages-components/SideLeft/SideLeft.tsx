@@ -145,6 +145,7 @@ export const SideLeft = ({ className, ...props }: SideLeftProps): JSX.Element =>
   return (
     <main
       className={cn(className, styles.main)}
+      onMouseDown={userOnlineUpdate}
       onKeyDown={userOnlineUpdate}
       onTouchStart={userOnlineUpdate}
       {...props}

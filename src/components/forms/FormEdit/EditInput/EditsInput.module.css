@@ -10,71 +10,90 @@
   display: flex;
   flex-direction: column;
   gap: 25px;
+
   padding: 20px;
+
   background-color: var(--background-first);
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px rgb(0 0 0 / 10%);
 }
 
 .editPhoto {
+  position: relative;
+
   display: flex;
-  justify-content: center;
   align-items: center;
-  font-size: 25px;
-  font-weight: 600;
-  margin: 10px auto;
-  color: var(--white);
+  justify-content: center;
+
   min-width: 120px;
   height: 120px;
+  margin: 10px auto;
+
+  color: var(--white);
   border-radius: 50%;
-  position: relative;
+
+  font-size: 25px;
+  font-weight: 600;
 }
 
 .uploadWrapper {
   position: relative;
-  border-radius: 50%;
+
   width: 120px;
   height: 120px;
+
+  border-radius: 50%;
 }
 
 .userImage {
   position: absolute;
+  z-index: 2;
   top: 0;
   left: 0;
-  border-radius: 50%;
+
+  display: block;
+
   width: 120px;
   height: 120px;
-  z-index: 2;
+
   pointer-events: none;
-  display: block;
+
+  border-radius: 50%;
   object-fit: cover;
 }
 
 .iconPhotoWrapper {
-  top: 0;
   position: absolute;
   z-index: 2;
+  top: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   min-width: 120px;
   height: 120px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.2);
+
   cursor: pointer;
+
   border-radius: 50%;
+  background-color: rgb(0 0 0 / 20%);
 }
 
 .input {
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
+
+  display: none;
+
   width: 120px;
   height: 120px;
-  display: none;
 }
 
 .uploadWrapper:hover svg {
   width: 50px;
   height: 50px;
+
   transition: var(--transition-static);
 }
 
@@ -84,31 +103,38 @@
 
 .wrapperLoadNoPhoto {
   position: absolute;
+  z-index: 2;
   top: 0;
   left: 0;
-  z-index: 2;
+
   width: 120px;
   height: 120px;
+
   border-radius: 50%;
 }
 
 .iconPhotoWrapper svg {
   width: 40px;
   height: 40px;
+
   transition: var(--transition-static);
 }
 
 .editInfo {
-  text-align: left;
-  color: var(--text-sixth);
-  font-size: 13px;
-  padding: 10px 20px;
   margin-bottom: 10px;
+  padding: 10px 20px;
+
+  text-align: left;
+
+  color: var(--text-sixth);
+
+  font-size: 13px;
 }
 
 .usernameEdit {
-  font-size: 15px;
   color: var(--primary);
+
+  font-size: 15px;
 }
 
 .info {
@@ -116,22 +142,26 @@
 }
 
 .supheed {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+
   display: flex;
-  pointer-events: none;
+  align-items: center;
+  justify-content: center;
+
   width: 50px;
   height: 50px;
+
+  transition: var(--transition-static);
+  pointer-events: none;
+
+  opacity: 0;
   border: none;
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
   border-radius: 50%;
   background-color: var(--primary);
-  justify-content: center;
-  align-items: center;
   box-shadow: 1px 1px 5px var(--opacity-box-dark);
-  opacity: 0;
   fill: var(--white);
-  transition: var(--transition-static);
 }
 
 .supheed svg {
@@ -141,12 +171,13 @@
 
 .submit {
   cursor: pointer;
-  pointer-events: all;
-  opacity: 1;
   transition: var(--transition-static);
+  pointer-events: all;
+
+  opacity: 1;
 }
 
-@media screen and (min-height: 1250px) {
+@media screen and ( min-height: 1250px ) {
   .contactsList {
     overflow-y: hidden;
   }

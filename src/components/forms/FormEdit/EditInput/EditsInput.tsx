@@ -5,8 +5,8 @@ import { SERVER_LINK } from 'utils/constants'
 import { Input } from 'components/layouts'
 import { getImageUser, getTabIndexFiveth, getUser } from 'store/select'
 import { actionMenuEdit } from 'store/slice'
-import { useAppDispatch, useAppSelector } from 'utils/hooks'
-import { colorCard } from 'utils/helpers'
+import { useAppDispatch, useAppSelector, useAuthorization, useError } from 'utils/hooks'
+import { colorCard, handleLoadPhoto } from 'utils/helpers'
 import { IUser, IImage } from 'utils/interface'
 import { PhotoIcon, SupheedIcon } from 'assets'
 
@@ -22,6 +22,8 @@ export const EditsInput = ({
   ...props
 }: EditsInputProps): JSX.Element => {
   const dispatch = useAppDispatch()
+  const error = useError()
+  const authorization = useAuthorization()
 
   //store
   const user: IUser | undefined = useAppSelector(getUser)
@@ -51,11 +53,11 @@ export const EditsInput = ({
   } = data
 
   //getting a color for a user if they don't have a photo
-  const color = colorCard(String(user?.name.toUpperCase().slice()[0]))
+  const color = colorCard(String(user?.name.toUpperCase()[0]))
 
   const [passwordCheck, setPasswordCheck] = useState<number>(0)
 
-  const { onSubmit, handleLoadPhoto } = useEditsInput({
+  const { onSubmit } = useEditsInput({
     passwordCheck,
     data,
     user,
@@ -64,7 +66,7 @@ export const EditsInput = ({
   })
 
   const handleInput = async (e): Promise<void> => {
-    await handleLoadPhoto(e)
+    await handleLoadPhoto(e, error, authorization)
     setData({
       ...data,
       password: '',
@@ -114,47 +116,32 @@ export const EditsInput = ({
     >
       <div className={styles.editUser}>
         <div className={styles.editPhoto}>
-          {imageUser ? (
-            <div className={styles.uploadWrapper} style={{ display: imageUser ? 'block' : 'none' }}>
+          <div className={styles.uploadWrapper}>
+            {imageUser !== undefined ? (
               <img
                 className={styles.userImage}
                 src={`${SERVER_LINK}/images/` + imageUser.file}
                 alt='User'
               />
-              <label className={styles.iconPhotoWrapper} htmlFor='loadphotod'>
-                <PhotoIcon />
-              </label>
-              <input
-                className={styles.input}
-                accept='.jpg, .jpeg, .png'
-                onChange={handleInput}
-                type='file'
-                id='loadphotod'
-              />
-            </div>
-          ) : (
-            <div
-              className={styles.uploadWrapper}
-              style={{ display: !imageUser ? 'block' : 'none' }}
-            >
+            ) : (
               <div
                 className={styles.wrapperLoadNoPhoto}
                 style={{
                   background: `linear-gradient(${color?.color1}, ${color?.color2})`,
                 }}
               ></div>
-              <label className={styles.iconPhotoWrapper} htmlFor='loadphoto'>
-                <PhotoIcon />
-              </label>
-              <input
-                className={styles.input}
-                accept='.jpg, .jpeg, .png'
-                onChange={handleLoadPhoto}
-                type='file'
-                id='loadphoto'
-              />
-            </div>
-          )}
+            )}
+            <label className={styles.iconPhotoWrapper} htmlFor='loadphotod'>
+              <PhotoIcon />
+            </label>
+            <input
+              className={styles.input}
+              accept='.jpg, .jpeg, .png'
+              onChange={handleInput}
+              type='file'
+              id='loadphotod'
+            />
+          </div>
         </div>
         <Input
           tabIndex={tabIndexFifth}

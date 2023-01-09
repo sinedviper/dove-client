@@ -1,31 +1,32 @@
 .contacts {
   position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: left;
+
   width: 100%;
   min-width: 290px;
   padding: 10px 0;
-  border-radius: 10px;
-  transition: var(--transition);
-  display: flex;
+
   cursor: pointer;
-  justify-content: left;
-  align-items: center;
-  pointer-events: fill;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
-  position: relative;
+  transition: var(--transition);
+  pointer-events: fill;
+
+  border-radius: 10px;
+  -webkit-touch-callout: none;
 }
 
 .contacts:hover {
   transition: var(--transition-static);
+
   background-color: var(--opacity-box);
 }
 
 .contactActive {
   transition: var(--transition);
+
   color: var(--white);
   background-color: var(--primary);
 }
@@ -36,26 +37,30 @@
 
 .contactActive:hover {
   transition: var(--transition-static);
+
   color: var(--white);
   background-color: var(--primary);
 }
 
 .contactsPhoto {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+
   min-width: 50px;
   height: 50px;
-  border-radius: 50%;
   margin-left: 10px;
+
+  border-radius: 50%;
 }
 
 .bookMarkerWrapper {
   width: 100%;
   height: 100%;
-  background-color: var(--primary);
-  border-radius: 50%;
   padding: 7.5px;
+
+  border-radius: 50%;
+  background-color: var(--primary);
 }
 
 .bookMarkerWrapper svg {
@@ -74,56 +79,71 @@
 
 .contactsPhoto span {
   display: block;
+
   color: var(--white);
+
   font-weight: 600;
 }
 
 .contactsPhoto img {
   display: block;
+
   width: 50px;
   height: 50px;
   object-fit: cover;
+
   border-radius: 50%;
 }
 
 .contactInfo {
   display: flex;
-  flex-direction: column;
-  margin-left: 5px;
-  max-width: 300px;
-  width: 100%;
-  pointer-events: none;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   overflow: hidden;
+  flex-direction: column;
+
+  width: 100%;
+  max-width: 300px;
+  margin-left: 5px;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  pointer-events: none;
 }
 
 .contactName {
-  font-weight: 600;
-  padding: 0 5px 0 0;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   overflow: hidden;
+
+  padding: 0 5px 0 0;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  font-weight: 600;
 }
 
 .contactMessage {
-  margin-top: 5px;
-  color: var(--text-sixth);
-  padding: 0 5px 0 0;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   overflow: hidden;
+
+  margin-top: 5px;
+  padding: 0 5px 0 0;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  color: var(--text-sixth);
 }
 
 .contactDate {
-  display: flex;
   position: absolute;
-  right: 15px;
   top: 15px;
-  gap: 10px;
+  right: 15px;
+
+  display: flex;
   align-items: center;
-  font-size: 12px;
+
   color: var(--text-second);
+
+  font-size: 12px;
+  gap: 10px;
 }
 
 .wrapperIcon {
@@ -147,6 +167,7 @@
 .login {
   display: flex;
   flex-direction: column;
+
   margin-top: 20px;
   gap: 30px;
 }

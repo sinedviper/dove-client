@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import cn from 'classnames'
 import ReactGA from 'react-ga'
 
-import { useAppDispatch, useWindowSize } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useWindowSize } from 'utils/hooks'
+import { getUser } from 'store/select'
 import {
   actionAddTabIndexFirst,
   actionAddTabIndexSixth,
@@ -29,6 +30,10 @@ export const SettingsImage = ({
   const windowSize = useWindowSize()
 
   const [deleteUser, setDeleteUser] = useState(false)
+
+  const user = useAppSelector(getUser)
+
+  const email = user?.email === 'test@gmail.com'
 
   const handleClickRemove = (): void => {
     if (setSettings) {
@@ -93,7 +98,7 @@ export const SettingsImage = ({
             <EditIcon className={styles.editIcon} />
           </button>
         )}
-        {!profile && (
+        {!profile && !email && (
           <>
             <button
               className={styles.delete}
