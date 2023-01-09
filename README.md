@@ -7,6 +7,12 @@ The pages are also adapted to resizing the screen, and there is a switch from th
 
 ---
 
+### :minidisc: Site
+
+<a href="https://dove-client.vercel.app/">Project site</a>
+
+---
+
 ### :book: Libraries
 
 - @apollo/client
@@ -29,11 +35,6 @@ The pages are also adapted to resizing the screen, and there is a switch from th
 - npm run build: <strong>assemble the project</strong>
 - npm run start: <strong>run the built project</strong>
 
----
-
-### :minidisc: Site
-
-<a href="https://dove-client.vercel.app/">Site</a>
 
 ---
 
