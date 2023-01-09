@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "react-scripts start",
-    "build": "-f react-scripts build",
+    "build": "react-scripts build",
     "start": "serve -s build",
     "compile": "graphql-codegen",
     "watch": "graphql-codegen -w",
