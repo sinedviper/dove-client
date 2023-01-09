@@ -119,7 +119,7 @@ export const useEditsInput = ({ passwordCheck, user, data, setData, initialData 
     if (user?.bio !== bio) {
       if (
         // eslint-disable-next-line no-useless-escape
-        bio.replace(/[A-Za-z0-9\.\, ]+/g, '').length !== 0 ||
+        bio.replace(/[A-Za-z0-9\.\,]+/g, '').length !== 0 ||
         bio.trim().length > 40
       ) {
         checkFields = false
