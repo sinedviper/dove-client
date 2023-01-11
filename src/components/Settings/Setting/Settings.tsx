@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/client'
 import cn from 'classnames'
 
 import { IImage } from 'utils/interface'
+import { handleLoadPhoto } from 'utils/helpers'
 import {
   useAppDispatch,
   useAppSelector,
@@ -20,7 +21,6 @@ import { SettingsImage } from '../SettingImage'
 import { SettingsInfo } from '../SettingsInfo'
 import { SettingsProps } from './Settings.props'
 import styles from './Settings.module.css'
-import { axiosSet } from '../../../utils/service'
 
 export const Settings = ({
   className,
@@ -81,21 +81,6 @@ export const Settings = ({
     })
   }
 
-  const handleLoadPhoto = async (e) => {
-    const formData = new FormData()
-    const file = e.target.files[0]
-    if (e.target.files[0].size > 3000000) {
-      error('File have many size, please select file with 3MB')
-      e.target.value = null
-    }
-    if (e.target.files[0].size < 3000000) {
-      formData.append('image', file)
-      const { data } = await axiosSet.post('/upload', formData)
-      authorization<IImage[]>(data, actionAddImageUser)
-      e.target.value = null
-    }
-  }
-
   return (
     <section
       className={cn(className, styles.settingsWrapper, {
@@ -114,7 +99,7 @@ export const Settings = ({
         user={user}
         handleRemovePhoto={handleRemovePhoto}
         profile={profile}
-        handleLoadPhoto={handleLoadPhoto}
+        handleLoadPhoto={(e) => handleLoadPhoto(e, error, authorization)}
         handleCopy={handleCopy}
         tabIndex={tabIndex}
       />

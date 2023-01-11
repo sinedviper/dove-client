@@ -4,16 +4,15 @@ import cn from 'classnames'
 import { SERVER_LINK } from 'utils/constants'
 import { Input } from 'components/layouts'
 import { getImageUser, getTabIndexFiveth, getUser } from 'store/select'
-import { actionAddImageUser, actionMenuEdit } from 'store/slice'
+import { actionMenuEdit } from 'store/slice'
 import { useAppDispatch, useAppSelector, useAuthorization, useError } from 'utils/hooks'
-import { colorCard } from 'utils/helpers'
+import { colorCard, handleLoadPhoto } from 'utils/helpers'
 import { IUser, IImage } from 'utils/interface'
 import { PhotoIcon, SupheedIcon } from 'assets'
 
 import { useEditsInput } from './useEditsInput'
 import { EditsInputProps } from './EditsInput.props'
 import styles from './EditsInput.module.css'
-import { axiosSet } from '../../../../utils/service'
 
 export const EditsInput = ({
   data,
@@ -66,23 +65,8 @@ export const EditsInput = ({
     initialData,
   })
 
-  const handleLoadPhoto = async (e) => {
-    const formData = new FormData()
-    const file = e.target.files[0]
-    if (e.target.files[0].size > 3000000) {
-      error('File have many size, please select file with 3MB')
-      e.target.value = null
-    }
-    if (e.target.files[0].size < 3000000) {
-      formData.append('image', file)
-      const { data } = await axiosSet.post('/upload', formData)
-      authorization<IImage[]>(data, actionAddImageUser)
-      e.target.value = null
-    }
-  }
-
   const handleInput = async (e): Promise<void> => {
-    await handleLoadPhoto(e)
+    await handleLoadPhoto(e, error, authorization)
     setData({
       ...data,
       password: '',
