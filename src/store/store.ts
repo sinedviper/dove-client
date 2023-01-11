@@ -23,6 +23,7 @@ import {
   imageUserReducer,
 } from './slice'
 import { notificationReducer } from './slice/notification.slice'
+import { production } from '../utils/constants'
 
 const reducer = combineReducers({
   user: userReducer,
@@ -57,7 +58,7 @@ const persistedReducer = persistReducer(persistConfig, reducer)
 
 export const store = configureStore({
   reducer: persistedReducer,
-  devTools: true,
+  devTools: !production,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {

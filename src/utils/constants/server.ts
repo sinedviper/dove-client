@@ -1,4 +1,5 @@
-export const SERVER_LINK = 'https://dove-server-production.up.railway.app'
+export const production = true
 
-//"https://dove-server-production.up.railway.app"
-//"http://localhost:3001"
+export const SERVER_LINK = production
+  ? 'https://dove-server-production.up.railway.app'
+  : 'http://localhost:3001'
